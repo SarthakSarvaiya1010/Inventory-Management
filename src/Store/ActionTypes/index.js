@@ -1,0 +1,10 @@
+export const PRODUCT_LIST = "PRODUCT_LIST";
+export const CUSTOMER_LIST = "CUSTOMER_LIST";
+export const AUTH = "AUTH";
+export const AUTHFAILED = "AUTHFAILED";
+export const FAILED_ADMIN_LIST = "FAILED_ADMIN_LIST";
+export const PRODUCT_EDIT = "PRODUCT_EDIT";
+export const CUSTOMER_EDIT = "CUSTOMER_EDIT";
+export const PRODUCT_ADD = "PRODUCT_ADD";
+export const PRODUCT_DELETE = "PRODUCT_DELETE";
+export const PRODUCT_EDIT_DATA = "PRODUCT_EDIT_DATA";
