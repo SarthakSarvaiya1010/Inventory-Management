@@ -1,53 +1,51 @@
 import React, { useEffect } from "react";
-// import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
 import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductDeleteListAction } from "../../../Store/Action/ProductAction/index";
+import { CustomerDelectListAction } from "../../../Store/Action/CustomerAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 
-function DeletedProductList() {
+function DeletedCustomerList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const data = [];
 
+  const CustomerData = useSelector((state) => state?.CustomerEdit);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const productData = useSelector((state) => state?.ProductEdit);
-  console.log("successLoginData", productData);
 
+  console.log("data", CustomerData.customerDeletedList);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken) {
       dispatch(
-        ProductDeleteListAction(successLoginData?.LoginData?.accessToken)
+        CustomerDelectListAction(successLoginData?.LoginData?.accessToken)
       );
     }
   }, [dispatch, successLoginData?.LoginData?.accessToken]);
+  const data = [];
 
+  // eslint-disable-next-line array-callback-return
+  CustomerData?.customerDeletedList.map((e) => {
+    let test = {};
+    test["Name"] = e.customer_name;
+    test["Mobile Number"] = e.mobile_no;
+    test["Email Id"] = e.email;
+    data.push(test);
+  });
   const headalEdit = (data) => {
-    console.log("data", data, productData?.productDeletList[data - 1]);
+    console.log(data, CustomerData?.CoustomerList[data - 1]);
+
     navigate(
-      `/product/edit/${productData?.productDeletList[data - 1]?.product_id}`
+      `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
     );
   };
 
-  productData.productDeletList.map((e) => {
-    let elements = {};
-    elements["Product Name"] = e.product_name;
-    elements["Price"] = e?.price || "--";
-    elements["HSN"] = e.hsn;
-    elements["Weight [ In Grams ]"] = e.weight;
-
-    data.push(elements);
-  });
-
   return (
     <div>
-      {productData?.productDeletList?.length ? (
+      {CustomerData?.customerDeletedList?.length ? (
         <Container fixed>
-          <Header name={"Delete Product List"} SearchBar={true} />
+          <Header name={"Deleted Customer List"} SearchBar={true} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"
@@ -61,7 +59,7 @@ function DeletedProductList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/productList");
+                  navigate("/customerList");
                 }}
               >
                 back
@@ -72,12 +70,13 @@ function DeletedProductList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addproduct");
+                  navigate("/addcustomer");
                 }}
               >
-                add product
+                Add New Customer
               </Button>
             </Stack>
+
             <Table data={data} headalEdit={headalEdit} />
           </Container>
         </Container>
@@ -96,4 +95,4 @@ function DeletedProductList() {
   );
 }
 
-export default DeletedProductList;
+export default DeletedCustomerList;

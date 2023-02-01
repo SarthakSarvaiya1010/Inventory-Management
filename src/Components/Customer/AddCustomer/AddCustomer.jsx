@@ -44,7 +44,7 @@ function AddCustomer() {
   }, [dispatch, id, successLoginData?.LoginData?.accessToken]);
   return (
     <div>
-      {test ? (
+      {CustomerEditData.loder || !id ? (
         <Container fixed>
           <Header name={"Add Customer"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>

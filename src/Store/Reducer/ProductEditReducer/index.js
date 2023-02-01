@@ -4,10 +4,12 @@ import {
   PRODUCT_ADD,
   PRODUCT_DELETE,
   PRODUCT_EDIT_DATA,
+  PRODUCT_DELETE_LIST,
 } from "../../ActionTypes";
 
 const initialstate = {
   productEdit: [],
+  productDeletList: [],
   loder: true,
 };
 
@@ -38,6 +40,11 @@ const ProductEditReducer = (state = initialstate, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case PRODUCT_DELETE_LIST:
+      return {
+        ...state,
+        productDeletList: action.payload,
       };
     default:
       return state;

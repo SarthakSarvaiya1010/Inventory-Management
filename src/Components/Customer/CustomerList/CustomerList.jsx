@@ -60,11 +60,18 @@ function CustomerList() {
                   navigate("/addcustomer");
                 }}
               >
-                Add New Container
+                Add New Customer
               </Button>
 
-              <Button variant="text" color="success" sx={{ fontSize: 16 }}>
-                view deleted Container
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/deletedcustomer");
+                }}
+              >
+                view deleted Customer
               </Button>
             </Stack>
 

@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CustomizedTables(props) {
   const classes = useStyles();
   const { data, headalEdit, headalDelete } = props;
-  console.log(data);
+  console.log(data, "headalEdit", Object.keys(data).length);
   const column = Object.keys(data[0]);
   return (
     <TableContainer component={Paper}>
@@ -75,19 +75,25 @@ export default function CustomizedTables(props) {
                   <StyledTableCell align="right">{row[v]}</StyledTableCell>
                 ))}
                 <StyledTableCell align="right" className={classes.cell_long}>
-                  <IconButton onClick={() => headalEdit(index)}>
-                    <EditIcon fontSize="17px" />
-                    <Typography
-                      variant="h6"
-                      component="text"
-                      sx={{
-                        fontSize: "17px",
-                        marginLeft: "5px",
-                      }}
-                    >
-                      Edit
-                    </Typography>
-                  </IconButton>
+                  {data.Price || Object.keys(data).length ? (
+                    <>
+                      <IconButton onClick={() => headalEdit(index)}>
+                        <EditIcon fontSize="17px" />
+                        <Typography
+                          variant="h6"
+                          component="text"
+                          sx={{
+                            fontSize: "17px",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Edit
+                        </Typography>
+                      </IconButton>
+                    </>
+                  ) : (
+                    ""
+                  )}
                   <IconButton onClick={() => headalDelete(index)}>
                     <DeleteIcon fontSize="17px" />
 

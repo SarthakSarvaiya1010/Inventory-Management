@@ -18,20 +18,9 @@ function ProductList() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductList);
+  const data = [];
   console.log("successLoginData", productData);
-  const tableData = [];
-  const findActiveproduct = productData?.productList.filter(
-    (data) => data.delete_flag === "1"
-  );
-  // eslint-disable-next-line array-callback-return
-  findActiveproduct?.map((e) => {
-    let test = {};
-    test["Product Name"] = e.product_name;
-    test["HSN"] = e.hsn;
-    test["Weight [In Grams]"] = e.weight;
-    tableData.push(test);
-  });
-  console.log(findActiveproduct, "test");
+
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
@@ -46,18 +35,26 @@ function ProductList() {
     dispatch,
     successLoginData?.LoginData?.accessToken,
   ]);
+  // eslint-disable-next-line array-callback-return
+  productData.productList.map((e) => {
+    let elements = {};
+    elements["Product Name"] = e.product_name;
+    elements["HSN"] = e.hsn;
+    elements["Weight [ In Grams ]"] = e.weight;
+    data.push(elements);
+  });
 
   const headalEdit = (data) => {
-    console.log("data", data, findActiveproduct[data - 1]?.product_id);
-    navigate(`/product/edit/${findActiveproduct[data - 1]?.product_id}`);
+    console.log("data", data, productData[data - 1]?.product_id);
+    navigate(`/product/edit/${productData[data - 1]?.product_id}`);
   };
 
   const headalDelete = (data) => {
-    console.log("data", findActiveproduct[data - 1]?.product_id);
+    console.log("data", productData[data - 1]?.product_id);
     dispatch(
       ProductDeleteAction(
         successLoginData?.LoginData?.accessToken,
-        findActiveproduct[data - 1]?.product_id
+        productData[data - 1]?.product_id
       )
     );
     window.location.reload();
@@ -99,7 +96,7 @@ function ProductList() {
             </Stack>
 
             <Table
-              data={tableData}
+              data={data}
               headalEdit={headalEdit}
               headalDelete={headalDelete}
             />

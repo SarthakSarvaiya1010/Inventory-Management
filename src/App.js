@@ -10,6 +10,7 @@ import {
   CustomerListPage,
   AddCustomerPage,
   DeletedProductListPage,
+  DeletedCustomerListPage,
 } from "./pages/index";
 import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
@@ -74,6 +75,10 @@ function App() {
                 <Route
                   path="/deletedproduct"
                   element={<DeletedProductListPage />}
+                />
+                <Route
+                  path="/deletedcustomer"
+                  element={<DeletedCustomerListPage />}
                 />
               </Routes>
             </Main>

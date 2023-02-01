@@ -1,7 +1,13 @@
-import { CUSTOMER_EDIT } from "../../ActionTypes";
+import {
+  CUSTOMER_EDIT,
+  CUSTOMER_DELETED_LIST,
+  CUSTOMER_LIST,
+} from "../../ActionTypes";
 
 const initialstate = {
   customerEdit: [],
+  customerDeletedList: [],
+  loder: true,
 };
 
 const CustomerEditReducer = (state = initialstate, action) => {
@@ -10,6 +16,18 @@ const CustomerEditReducer = (state = initialstate, action) => {
       return {
         ...state,
         customerEdit: action.payload,
+        loder: false,
+      };
+    case CUSTOMER_DELETED_LIST:
+      console.log("12345", action.payload);
+      return {
+        ...state,
+        customerDeletedList: action.payload,
+      };
+    case CUSTOMER_LIST:
+      return {
+        ...state,
+        loder: true,
       };
     default:
       return state;

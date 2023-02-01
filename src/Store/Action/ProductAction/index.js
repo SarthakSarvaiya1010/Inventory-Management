@@ -5,6 +5,7 @@ import {
   PRODUCT_ADD,
   PRODUCT_DELETE,
   PRODUCT_EDIT_DATA,
+  PRODUCT_DELETE_LIST,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -118,3 +119,22 @@ export const ProductDeleteAction =
       });
     }
   };
+export const ProductDeleteListAction = (AccessToken) => async (dispatch) => {
+  // const Product_id = 6;
+  const token = AccessToken;
+  try {
+    const ProductDeleteList = await axios.get(
+      "http://localhost:3200/delete/products",
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    dispatch({
+      type: PRODUCT_DELETE_LIST,
+      payload: ProductDeleteList.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
