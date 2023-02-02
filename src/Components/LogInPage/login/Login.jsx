@@ -7,8 +7,15 @@ import Button from "@mui/material/Button";
 import { userLogin } from "../../../Store/Action/AuthAction/index";
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login(props) {
+  const showToastMessage = () => {
+    toast.success("Login  Success  !", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
   const { setOpen } = props;
   const dispatch = useDispatch();
 
@@ -23,6 +30,7 @@ function Login(props) {
     setTest(true);
     dispatch(userLogin(LoginInfo));
   };
+
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
 
@@ -32,7 +40,10 @@ function Login(props) {
         "LoginData",
         JSON.stringify(successLoginData.LoginData)
       );
-      navigate("/productList");
+      showToastMessage();
+      setTimeout(() => {
+        navigate("/productList");
+      }, 5500);
       setTest(false);
     }
   }, [
@@ -46,6 +57,7 @@ function Login(props) {
     <div>
       <div>
         <DialogContent>
+          <ToastContainer />
           <Stack direction="row" justifyContent="center" alignItems="center">
             <DialogTitle>LogIn</DialogTitle>
           </Stack>
@@ -67,6 +79,7 @@ function Login(props) {
 
                 // defaultValue="Hello World"
               />
+
               <TextField
                 required
                 id="outlined-password-input"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { TextField, DialogContent, Container } from "@mui/material";
 import Header from "../../../Helpers/Header/Header";
@@ -33,10 +33,8 @@ function AddCustomer() {
     console.log("done");
     navigate("/ProductList");
   };
-  const [test, setTest] = useState(false);
   useEffect(() => {
     if (id) {
-      setTest(true);
       dispatch(
         CustomerEditAction(successLoginData?.LoginData?.accessToken, id)
       );

@@ -5,22 +5,23 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomerDelectListAction } from "../../../Store/Action/CustomerAction/index";
+import { TaxListAction } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 
-function DeletedCustomerList() {
+function TaxList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const CustomerData = useSelector((state) => state?.CustomerEdit);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const TaxData = useSelector((state) => state?.TaxData);
+  const data = [];
+  console.log("successLoginData", TaxData);
 
-  console.log("data", CustomerData.customerDeletedList);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
-        CustomerDelectListAction(
+        TaxListAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken
         )
       );
@@ -30,29 +31,35 @@ function DeletedCustomerList() {
     dispatch,
     successLoginData?.LoginData?.accessToken,
   ]);
-  const data = [];
-
   // eslint-disable-next-line array-callback-return
-  CustomerData?.customerDeletedList.map((e) => {
-    let test = {};
-    test["Name"] = e.customer_name;
-    test["Mobile Number"] = e.mobile_no;
-    test["Email Id"] = e.email;
-    data.push(test);
+  TaxData?.TaxList.map((e) => {
+    let elements = {};
+    elements["Tax Name"] = e.tax_name;
+    elements["Tax Rate [ In % ]"] = e.tax_rate;
+    elements["Tax Country"] = e.tax_country;
+    elements["Active"] = e.isactive;
+    data.push(elements);
   });
-  const headalEdit = (data) => {
-    console.log(data, CustomerData?.CoustomerList[data - 1]);
 
-    navigate(
-      `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
-    );
+  const headalEdit = (data) => {
+    navigate(`/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`);
   };
 
+  const headalDelete = (data) => {
+    // dispatch(
+    //   ProductDeleteAction(
+    //     successLoginData?.LoginData?.accessToken,
+    //     productData.productList[data - 1]?.product_id
+    //   )
+    // );
+    window.location.reload();
+  };
   return (
     <div>
-      {CustomerData?.customerDeletedList?.length ? (
+      {" "}
+      {TaxData?.TaxList.length ? (
         <Container fixed>
-          <Header name={"Deleted Customer List"} SearchBar={true} />
+          <Header name={"Tax List"} SearchBar={true} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"
@@ -66,10 +73,10 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/customerList");
+                  navigate("/addtax");
                 }}
               >
-                back
+                add new tax
               </Button>
 
               <Button
@@ -77,14 +84,17 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addcustomer");
+                  navigate("/deletedproduct");
                 }}
               >
-                Add New Customer
+                view deleted Tax
               </Button>
             </Stack>
-
-            <Table data={data} headalEdit={headalEdit} />
+            <Table
+              data={data}
+              headalEdit={headalEdit}
+              headalDelete={headalDelete}
+            />
           </Container>
         </Container>
       ) : (
@@ -102,4 +112,4 @@ function DeletedCustomerList() {
   );
 }
 
-export default DeletedCustomerList;
+export default TaxList;

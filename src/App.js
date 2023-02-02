@@ -11,6 +11,8 @@ import {
   AddCustomerPage,
   DeletedProductListPage,
   DeletedCustomerListPage,
+  TaxListPage,
+  AddTaxPage,
 } from "./pages/index";
 import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
@@ -80,6 +82,9 @@ function App() {
                   path="/deletedcustomer"
                   element={<DeletedCustomerListPage />}
                 />
+                <Route path="/TaxList" element={<TaxListPage />} />
+                <Route path="/addtax" element={<AddTaxPage />} />
+                <Route path="/tax/edit/:id" element={<AddTaxPage />} />
               </Routes>
             </Main>
           </Box>

@@ -16,6 +16,9 @@ import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -36,15 +39,24 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function Header(props) {
+  const showToastMessage = () => {
+    toast.success("LogOut  Success  !", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   console.log("successLoginData", successLoginData);
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(null);
   const { openManu, setOpenManu } = props;
 
   useEffect(() => {
     if (successLoginData.LoginData.statusCode === "200") {
-      setOpen(false);
-      setOpenManu(true);
+      setTimeout(() => {
+        setOpen(false);
+        setOpenManu(true);
+      }, 5500);
     }
   }, [setOpenManu, successLoginData.LoginData.statusCode]);
 
@@ -66,51 +78,78 @@ export default function Header(props) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={openManu}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(openManu && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-          {successLoginData.LoginData.statusCode === "200" ||
-          accessToken?.statusCode ? (
-            <Typography variant="h5" component="div">
-              Hello, 'user_name'
+    <div>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={openManu}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(openManu && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Inventory
             </Typography>
-          ) : (
-            <div>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  handleClickOpen(true);
-                }}
-              >
-                sign in
-              </Button>
-              <Button color="inherit">sign up</Button>
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <Login setOpen={setOpen} />
-      </Dialog>
-    </Box>
+            {successLoginData.LoginData.statusCode === "200" ||
+            accessToken?.statusCode ? (
+              <>
+                <Typography variant="h5" component="div">
+                  Hello, {accessToken?.name}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{ marginLeft: "15px" }}
+                >
+                  |
+                </Typography>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{ marginLeft: "15px", cursor: "pointer" }}
+                  onClick={() => {
+                    showToastMessage();
+                    window.localStorage.clear();
+                    setTimeout(() => {
+                      navigate("/");
+                      window.location.reload();
+                    }, 5500);
+                  }}
+                >
+                  Log out
+                </Typography>
+                <ToastContainer />
+              </>
+            ) : (
+              <div>
+                <Button
+                  color="inherit"
+                  onClick={() => {
+                    handleClickOpen(true);
+                  }}
+                >
+                  sign in
+                </Button>
+                <Button color="inherit">sign up</Button>
+              </div>
+            )}
+          </Toolbar>
+        </AppBar>
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <Login setOpen={setOpen} />
+        </Dialog>
+      </Box>
+    </div>
   );
 }

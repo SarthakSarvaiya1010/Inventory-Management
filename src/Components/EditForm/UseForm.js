@@ -6,16 +6,25 @@ import {
   ProductEditDataAction,
 } from "../../Store/Action/ProductAction";
 
-const UseForm = (Product_data) => {
+const UseForm = (Product_data, showToastMessage) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
-  const [values, setvalues] = useState(Product_data ? Product_data : null);
+  const [values, setvalues] = useState(null);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
 
   // console.log("values----->", values);
 
-  console.log(errors, "errors", Product_data, "values");
+  console.log(
+    // "errors",
+    // errors,
+    // "Product_data",
+    // Product_data,
+    "values",
+    values,
+    Product_data?.product_name
+    // Product_data?.product_name
+  );
   const handleSubmit = () => {
     setFindErrors(true);
     setErrors(validate(values, Product_data));
@@ -34,6 +43,7 @@ const UseForm = (Product_data) => {
             parseInt(Product_data.product_id)
           )
         );
+        showToastMessage();
       } else {
         dispatch(
           ProductAddAction(successLoginData?.LoginData?.accessToken, data)
@@ -44,9 +54,9 @@ const UseForm = (Product_data) => {
 
   useEffect(() => {
     if (findErrors) {
-      setErrors(validate(values));
+      setErrors(validate(values, Product_data));
     }
-  }, [findErrors, values]);
+  }, [Product_data, findErrors, values]);
 
   const handleOnchange = useCallback(
     (e) =>
@@ -56,7 +66,7 @@ const UseForm = (Product_data) => {
       }),
     []
   );
-  console.log(values, "values");
+  // console.log(values, "values");
 
   return {
     handleSubmit,

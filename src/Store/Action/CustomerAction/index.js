@@ -3,6 +3,7 @@ import {
   FAILED_ADMIN_LIST,
   CUSTOMER_EDIT,
   CUSTOMER_DELETED_LIST,
+  CUSTOMER_DELETE,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -61,3 +62,24 @@ export const CustomerEditAction = (AccessToken) => async (dispatch) => {
     });
   }
 };
+export const CustomerDeleteAction =
+  (AccessToken, customer_id) => async (dispatch) => {
+    const token = AccessToken;
+    try {
+      const CustomerDelete = await axios.delete(
+        `http://localhost:3200/delete/customers/${customer_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      dispatch({
+        type: CUSTOMER_DELETE,
+        payload: CustomerDelete.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };

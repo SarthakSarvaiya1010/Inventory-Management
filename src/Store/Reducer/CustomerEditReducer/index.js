@@ -2,6 +2,7 @@ import {
   CUSTOMER_EDIT,
   CUSTOMER_DELETED_LIST,
   CUSTOMER_LIST,
+  CUSTOMER_DELETE,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -28,6 +29,11 @@ const CustomerEditReducer = (state = initialstate, action) => {
       return {
         ...state,
         loder: true,
+      };
+    case CUSTOMER_DELETE:
+      return {
+        ...state,
+        ...action.payload,
       };
     default:
       return state;

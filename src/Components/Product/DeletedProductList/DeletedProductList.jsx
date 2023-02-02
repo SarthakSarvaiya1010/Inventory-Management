@@ -17,14 +17,21 @@ function DeletedProductList() {
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductEdit);
   console.log("successLoginData", productData);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken) {
+    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
-        ProductDeleteListAction(successLoginData?.LoginData?.accessToken)
+        ProductDeleteListAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
+        )
       );
     }
-  }, [dispatch, successLoginData?.LoginData?.accessToken]);
+  }, [
+    accessToken?.accessToken,
+    dispatch,
+    successLoginData?.LoginData?.accessToken,
+  ]);
 
   const headalEdit = (data) => {
     console.log("data", data, productData?.productDeletList[data - 1]);
@@ -33,6 +40,7 @@ function DeletedProductList() {
     );
   };
 
+  // eslint-disable-next-line array-callback-return
   productData.productDeletList.map((e) => {
     let elements = {};
     elements["Product Name"] = e.product_name;

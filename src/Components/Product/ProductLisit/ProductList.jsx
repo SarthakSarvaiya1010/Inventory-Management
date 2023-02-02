@@ -45,16 +45,14 @@ function ProductList() {
   });
 
   const headalEdit = (data) => {
-    console.log("data", data, productData[data - 1]?.product_id);
-    navigate(`/product/edit/${productData[data - 1]?.product_id}`);
+    navigate(`/product/edit/${productData.productList[data - 1]?.product_id}`);
   };
 
   const headalDelete = (data) => {
-    console.log("data", productData[data - 1]?.product_id);
     dispatch(
       ProductDeleteAction(
         successLoginData?.LoginData?.accessToken,
-        productData[data - 1]?.product_id
+        productData.productList[data - 1]?.product_id
       )
     );
     window.location.reload();

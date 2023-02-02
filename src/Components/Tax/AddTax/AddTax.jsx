@@ -1,6 +1,15 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
-import { TextField, DialogContent, Container } from "@mui/material";
+import {
+  TextField,
+  DialogContent,
+  Container,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 
 import Header from "../../../Helpers/Header/Header";
 import Stack from "@mui/material/Stack";
@@ -9,34 +18,28 @@ import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 import UseForm from "../../EditForm/UseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductEditAction } from "../../../Store/Action/ProductAction/index";
+import { TaxEditAction } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const currencies = [
-  {
-    value: "Tax",
-    label: "Tax",
-  },
-  {
-    value: "select ",
-    label: "One",
-  },
-];
-
-function AddProduct() {
+function AddTax() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
-  const ProductEditData = useSelector((state) => state?.ProductEdit);
+  const TaxData = useSelector((state) => state?.TaxData);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
 
-  const Product_data = ProductEditData?.productEdit;
-  // console.log("params", id, Product_data);
-  // const [values, setvalues] = useState(null);
-  console.log("params", Product_data, Object.keys(Product_data).length);
+  const Tax_data = TaxData?.TaxEdit;
+
+  console.log(
+    "params",
+    id,
+    TaxData?.TaxEdit,
+    Tax_data?.tax_name,
+    TaxData.loder
+  );
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const accessTokenData =
     successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
@@ -49,12 +52,12 @@ function AddProduct() {
 
   useEffect(() => {
     if (id) {
-      dispatch(ProductEditAction(accessTokenData, id));
+      dispatch(TaxEditAction(accessTokenData, id));
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
   const { handleSubmit, values, errors, handleOnchange } = UseForm(
-    Product_data,
+    Tax_data,
     showToastMessage
   );
 
@@ -67,10 +70,10 @@ function AddProduct() {
 
   return (
     <div>
-      {!ProductEditData.loder || !id ? (
+      {!TaxData.loder || !id ? (
         // Object.keys(Product_data).length ? (
         <Container fixed>
-          <Header name={"Add Product"} SearchBar={false} />
+          <Header name={"Add Tax"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <DialogContent>
               <br />
@@ -91,54 +94,22 @@ function AddProduct() {
                   <TextField
                     required
                     error={errors?.product_name ? true : null}
-                    name="product_name"
+                    name="Tax_name"
                     id="outlined-Product"
-                    label="Product Name"
+                    label="Tax Name"
                     autoComplete="off"
-                    defaultValue={id ? Product_data.product_name : ""}
+                    defaultValue={id ? TaxData?.TaxEdit?.Tax_name : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.product_name}</p>
                   <br />
                   <TextField
-                    id="outlined-Product"
-                    label="Description"
-                    name="Description"
-                    autoComplete="off"
-                    type="textarea"
-                    defaultValue={id ? Product_data.description : ""}
-                    onChange={(e) => handleOnchange(e)}
-                  />
-                  <br />
-                  <TextField
-                    error={errors?.product_type ? true : null}
-                    id="outlined-select-currency-native"
-                    select
-                    name="product_type"
-                    label="Product Type"
-                    defaultValue="select One"
-                    // defaultValue={id ? Product_data.description : ""}
-
-                    SelectProps={{
-                      native: true,
-                    }}
-                    onChange={(e) => handleOnchange(e)}
-                  >
-                    {currencies.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </TextField>
-                  <p style={{ color: "red" }}>{errors?.product_type}</p>
-                  <br />
-                  <TextField
                     error={errors?.weight ? true : null}
                     required
                     type="number"
-                    name="weight"
-                    label="Weight [In Grams]"
-                    defaultValue={id ? Product_data.weight : ""}
+                    name="tax_rate"
+                    label="Tax Rate [ In % ]"
+                    defaultValue={id ? TaxData?.TaxEdit?.tax_rate : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.weight}
@@ -148,18 +119,38 @@ function AddProduct() {
 
                   <br />
                   <TextField
-                    error={errors?.hsn ? true : null}
                     required
-                    type="number"
-                    name="hsn"
-                    label="HSN"
-                    defaultValue={id ? Product_data.hsn : ""}
-                    variant="outlined"
-                    onChange={(e) => handleOnchange(e)}
-                    value={values?.hsn}
+                    error={errors?.product_name ? true : null}
+                    name="tax_country"
+                    id="outlined-Product"
+                    label="Tax County"
                     autoComplete="off"
+                    defaultValue={id ? TaxData?.TaxEdit?.tax_country : ""}
+                    onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Active
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      defaultValue="NO"
+                    >
+                      <FormControlLabel
+                        value="YES"
+                        control={<Radio />}
+                        label="YES"
+                      />
+                      <FormControlLabel
+                        value="NO"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
                 </Stack>
               </Box>
               <br />
@@ -218,4 +209,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default AddTax;

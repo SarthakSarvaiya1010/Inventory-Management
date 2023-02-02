@@ -72,7 +72,19 @@ export default function CustomizedTables(props) {
                 <StyledTableCell align="right">{index}</StyledTableCell>
 
                 {column.map((v) => (
-                  <StyledTableCell align="right">{row[v]}</StyledTableCell>
+                  <StyledTableCell
+                    align="right"
+                    sx={{
+                      color:
+                        row[v] === "YES"
+                          ? "green"
+                          : row[v] === "NO"
+                          ? "red"
+                          : "black",
+                    }}
+                  >
+                    {row[v]}
+                  </StyledTableCell>
                 ))}
                 <StyledTableCell align="right" className={classes.cell_long}>
                   {data.Price || Object.keys(data).length ? (

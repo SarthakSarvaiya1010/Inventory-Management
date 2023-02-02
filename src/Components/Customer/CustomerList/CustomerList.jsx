@@ -5,7 +5,10 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomerListAction } from "../../../Store/Action/CustomerAction/index";
+import {
+  CustomerListAction,
+  CustomerDeleteAction,
+} from "../../../Store/Action/CustomerAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function CustomerList() {
@@ -14,13 +17,22 @@ function CustomerList() {
 
   const CustomerData = useSelector((state) => state?.CustomerList);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   console.log("data", CustomerData.CoustomerList);
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken) {
-      dispatch(CustomerListAction(successLoginData?.LoginData?.accessToken));
+    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
+      dispatch(
+        CustomerListAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
+        )
+      );
     }
-  }, [dispatch, successLoginData?.LoginData?.accessToken]);
+  }, [
+    accessToken?.accessToken,
+    dispatch,
+    successLoginData?.LoginData?.accessToken,
+  ]);
   const data = [];
 
   // eslint-disable-next-line array-callback-return
@@ -37,6 +49,22 @@ function CustomerList() {
     navigate(
       `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
     );
+  };
+
+  const headalDelete = (data) => {
+    console.log(
+      "data",
+      CustomerData.CoustomerList,
+      // data,
+      CustomerData.CoustomerList[data - 1]?.customer_id
+    );
+    dispatch(
+      CustomerDeleteAction(
+        successLoginData?.LoginData?.accessToken,
+        CustomerData.CoustomerList[data - 1]?.customer_id
+      )
+    );
+    window.location.reload();
   };
 
   return (
@@ -75,7 +103,11 @@ function CustomerList() {
               </Button>
             </Stack>
 
-            <Table data={data} headalEdit={headalEdit} />
+            <Table
+              data={data}
+              headalEdit={headalEdit}
+              headalDelete={headalDelete}
+            />
           </Container>
         </Container>
       ) : (
