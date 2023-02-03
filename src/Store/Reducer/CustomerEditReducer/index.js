@@ -3,6 +3,8 @@ import {
   CUSTOMER_DELETED_LIST,
   CUSTOMER_LIST,
   CUSTOMER_DELETE,
+  CUSTOMER_EDIT_DATA,
+  CUSTOMER_ADD,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -31,6 +33,16 @@ const CustomerEditReducer = (state = initialstate, action) => {
         loder: true,
       };
     case CUSTOMER_DELETE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case CUSTOMER_EDIT_DATA:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case CUSTOMER_ADD:
       return {
         ...state,
         ...action.payload,

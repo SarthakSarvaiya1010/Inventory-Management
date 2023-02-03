@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedTables(props) {
   const classes = useStyles();
-  const { data, headalEdit, headalDelete } = props;
+  const { data, headalEdit, headalDelete, hide } = props;
   console.log(data, "headalEdit", Object.keys(data).length);
   const column = Object.keys(data[0]);
   return (
@@ -87,7 +87,7 @@ export default function CustomizedTables(props) {
                   </StyledTableCell>
                 ))}
                 <StyledTableCell align="right" className={classes.cell_long}>
-                  {data.Price || Object.keys(data).length ? (
+                  {!hide ? (
                     <>
                       <IconButton onClick={() => headalEdit(index)}>
                         <EditIcon fontSize="17px" />

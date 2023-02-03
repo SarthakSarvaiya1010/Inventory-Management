@@ -4,18 +4,43 @@ import {
   CUSTOMER_EDIT,
   CUSTOMER_DELETED_LIST,
   CUSTOMER_DELETE,
+  CUSTOMER_EDIT_DATA,
+  CUSTOMER_ADD,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const CustomerListAction = (AccessToken) => async (dispatch) => {
+export const CustomerListAction =
+  (AccessToken, customers_id) => async (dispatch) => {
+    const token = AccessToken;
+    try {
+      const ProductList = await axios.get("http://localhost:3200/customers", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      dispatch({
+        type: CUSTOMER_LIST,
+        payload: ProductList.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };
+
+export const CustomerAddAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const ProductList = await axios.get("http://localhost:3200/customers", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const CustomerAdd = await axios.post(
+      "http://localhost:3200/customers",
+      data,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     dispatch({
-      type: CUSTOMER_LIST,
-      payload: ProductList.data,
+      type: CUSTOMER_ADD,
+      payload: CustomerAdd.data,
     });
   } catch (error) {
     dispatch({
@@ -45,23 +70,52 @@ export const CustomerDelectListAction = (AccessToken) => async (dispatch) => {
     });
   }
 };
-export const CustomerEditAction = (AccessToken) => async (dispatch) => {
-  const token = AccessToken;
-  try {
-    const ProductEdit = await axios.get("http://localhost:3200/customers", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    dispatch({
-      type: CUSTOMER_EDIT,
-      payload: ProductEdit.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: FAILED_ADMIN_LIST,
-      payload: { data: error.response.data },
-    });
-  }
-};
+
+export const CustomerEditAction =
+  (AccessToken, customers_id) => async (dispatch) => {
+    const token = AccessToken;
+    try {
+      const ProductEdit = await axios.get(
+        `http://localhost:3200/customers/${customers_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      dispatch({
+        type: CUSTOMER_EDIT,
+        payload: ProductEdit.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };
+
+export const CustomerEditDataAction =
+  (AccessToken, data, customers_id) => async (dispatch) => {
+    const token = AccessToken;
+    try {
+      const ProductEditData = await axios.put(
+        `http://localhost:3200/edit/customers/${customers_id}`,
+        data,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      dispatch({
+        type: CUSTOMER_EDIT_DATA,
+        payload: ProductEditData.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };
+
 export const CustomerDeleteAction =
   (AccessToken, customer_id) => async (dispatch) => {
     const token = AccessToken;

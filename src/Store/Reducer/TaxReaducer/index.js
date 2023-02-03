@@ -1,8 +1,9 @@
-import { TAX_LIST, TAX_EDIT } from "../../ActionTypes";
+import { TAX_LIST, TAX_EDIT, TAX_DELETED_LIST } from "../../ActionTypes";
 
 const initialstate = {
   TaxList: [],
   TaxEdit: [],
+  TaxDeletList: [],
   loder: true,
 };
 
@@ -20,11 +21,11 @@ const TaxReducer = (state = initialstate, action) => {
         TaxEdit: action.payload,
         loder: false,
       };
-    // case FAILED_ADMIN_LIST:
-    //   return {
-    //     ...state,
-    //     AutherationError: action.payload.data,
-    //   };
+    case TAX_DELETED_LIST:
+      return {
+        ...state,
+        TaxDeletList: action.payload,
+      };
 
     default:
       return state;

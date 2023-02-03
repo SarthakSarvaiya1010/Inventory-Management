@@ -86,7 +86,7 @@ function DeletedProductList() {
                 add product
               </Button>
             </Stack>
-            <Table data={data} headalEdit={headalEdit} />
+            <Table data={data} headalEdit={headalEdit} hide={true} />
           </Container>
         </Container>
       ) : (

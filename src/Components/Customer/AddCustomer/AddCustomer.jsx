@@ -19,30 +19,46 @@ function AddCustomer() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const CustomerEditData = useSelector((state) => state?.CustomerEdit);
-  const Product_data = CustomerEditData.customerEdit;
+  const Customer_data = CustomerEditData.customerEdit[0];
 
-  console.log("params", id, CustomerEditData);
+  console.log(
+    "params",
+    id,
+    // CustomerEditData.customerEdit,
+    Customer_data,
+    Customer_data?.customer_name,
+    CustomerEditData.loder
+  );
   // const [values, setvalues] = useState(null);
 
-  const { handleSubmit, values, errors, handleOnchange } =
-    UseForm(Product_data);
+  const { customerhandleSubmit, values, errors, handleOnchange } =
+    UseForm(Customer_data);
 
   console.log(values);
 
   const handleCancle = () => {
-    console.log("done");
-    navigate("/ProductList");
+    navigate("/customerList");
   };
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   useEffect(() => {
     if (id) {
       dispatch(
-        CustomerEditAction(successLoginData?.LoginData?.accessToken, id)
+        CustomerEditAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          id
+        )
       );
     }
-  }, [dispatch, id, successLoginData?.LoginData?.accessToken]);
+  }, [
+    accessToken?.accessToken,
+    dispatch,
+    id,
+    successLoginData?.LoginData?.accessToken,
+  ]);
   return (
     <div>
-      {CustomerEditData.loder || !id ? (
+      {!CustomerEditData.loder || !id ? (
         <Container fixed>
           <Header name={"Add Customer"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -64,50 +80,42 @@ function AddCustomer() {
                 >
                   <TextField
                     required
-                    error={errors?.product_name ? true : null}
+                    error={errors?.customer_name ? true : null}
                     name="customer_name"
                     id="outlined-Product"
                     label="Customer Name"
                     autoComplete="off"
-                    defaultValue={
-                      id ? CustomerEditData.customerEdit.product_name : ""
-                    }
+                    defaultValue={id ? Customer_data?.customer_name : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
-                  <p style={{ color: "red" }}>{errors?.product_name}</p>
+                  <p style={{ color: "red" }}>{errors?.customer_name}</p>
                   <br />
                   <TextField
                     required
+                    error={errors?.address ? true : null}
                     id="outlined-Product"
                     label="Customer Address"
-                    name="customer_address"
+                    name="address"
                     autoComplete="off"
                     type="textarea"
                     onChange={(e) => handleOnchange(e)}
-                    defaultValue={
-                      id ? CustomerEditData.customerEdit.product_name : ""
-                    }
+                    defaultValue={id ? Customer_data?.address : ""}
                   />
+                  <p style={{ color: "red" }}>{errors?.address}</p>
                   <br />
                   <TextField
-                    error={errors?.weight ? true : null}
-                    required
                     type="text"
-                    name="customer_tin_no"
-                    label="customer_tin_no"
+                    name="tin_no"
+                    label="customer Tin No"
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.weight}
                     autoComplete="off"
-                    defaultValue={
-                      id ? CustomerEditData.customerEdit.product_name : ""
-                    }
+                    defaultValue={id ? Customer_data?.tin_no : ""}
                   />
-                  <p style={{ color: "red" }}>{errors?.weight}</p>
-
                   <br />
                   <TextField
-                    error={errors?.hsn ? true : null}
+                    error={errors?.mobile_no ? true : null}
                     required
                     type="number"
                     name="mobile_no"
@@ -116,19 +124,16 @@ function AddCustomer() {
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
                     autoComplete="off"
-                    defaultValue={
-                      id ? CustomerEditData.customerEdit.product_name : ""
-                    }
+                    defaultValue={id ? Customer_data?.mobile_no : ""}
                   />
-                  <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <p style={{ color: "red" }}>{errors?.mobile_no}</p>
                   <TextField
-                    required
-                    name="email_id"
+                    name="email"
                     id="outlined-Email"
                     label="Email id"
                     autoComplete="off"
                     onChange={(e) => handleOnchange(e.target.value)}
-                    defaultValue={id ? Product_data.product_name : ""}
+                    defaultValue={id ? Customer_data?.email : ""}
                   />
                 </Stack>
               </Box>
@@ -144,7 +149,7 @@ function AddCustomer() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={handleSubmit}
+                    onClick={customerhandleSubmit}
                   >
                     Update
                   </Button>
@@ -152,7 +157,7 @@ function AddCustomer() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={handleSubmit}
+                    onClick={customerhandleSubmit}
                   >
                     Submit
                   </Button>

@@ -53,7 +53,7 @@ function AddProduct() {
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
-  const { handleSubmit, values, errors, handleOnchange } = UseForm(
+  const { producthandleSubmit, values, errors, handleOnchange } = UseForm(
     Product_data,
     showToastMessage
   );
@@ -174,7 +174,7 @@ function AddProduct() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={handleSubmit}
+                    onClick={producthandleSubmit}
                   >
                     Update
                   </Button>
@@ -182,7 +182,7 @@ function AddProduct() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={handleSubmit}
+                    onClick={producthandleSubmit}
                   >
                     Submit
                   </Button>

@@ -1,46 +1,42 @@
 import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { validate } from "./formValidation";
+import { ProductValidate, CustomerValidate } from "./formValidation";
 import {
   ProductAddAction,
   ProductEditDataAction,
 } from "../../Store/Action/ProductAction";
+import {
+  CustomerEditDataAction,
+  CustomerAddAction,
+} from "../../Store/Action/CustomerAction/index";
 
-const UseForm = (Product_data, showToastMessage) => {
+const UseForm = (defaultData, showToastMessage) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
-  // console.log("values----->", values);
+  console.log("Product_data ", defaultData);
 
-  console.log(
-    // "errors",
-    // errors,
-    // "Product_data",
-    // Product_data,
-    "values",
-    values,
-    Product_data?.product_name
-    // Product_data?.product_name
-  );
-  const handleSubmit = () => {
+  const producthandleSubmit = () => {
     setFindErrors(true);
-    setErrors(validate(values, Product_data));
+    setErrors(ProductValidate(values, defaultData));
     const data = {};
-    data["product_name"] = values?.product_name || Product_data?.product_name;
-    data["product_type"] = values?.product_type || Product_data?.product_type;
-    data["description"] = values?.Description || Product_data?.description;
-    data["hsn"] = parseFloat(values?.hsn || Product_data?.hsn);
-    data["weight"] = parseFloat(values.weight || Product_data?.weight);
+    data["product_name"] = values?.product_name || defaultData?.product_name;
+    data["product_type"] = values?.product_type || defaultData?.product_type;
+    data["description"] = values?.Description || defaultData?.description;
+    data["hsn"] = parseFloat(values?.hsn || defaultData?.hsn);
+    data["weight"] = parseFloat(values.weight || defaultData?.weight);
     if (!Object.keys(errors).length && findErrors) {
-      if (Product_data) {
+      if (defaultData) {
         dispatch(
           ProductEditDataAction(
-            successLoginData?.LoginData?.accessToken,
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
             data,
-            parseInt(Product_data.product_id)
+            parseInt(defaultData.product_id)
           )
         );
         showToastMessage();
@@ -52,11 +48,44 @@ const UseForm = (Product_data, showToastMessage) => {
     }
   };
 
+  const customerhandleSubmit = () => {
+    setFindErrors(true);
+    setErrors(CustomerValidate(values, defaultData));
+    const data = {};
+    data["customer_name"] = values?.customer_name || defaultData?.customer_name;
+    data["mobile_no"] = values?.mobile_no || defaultData?.mobile_no;
+    data["email"] = values?.email || defaultData?.email;
+    data["address"] = values?.address || defaultData?.address;
+    data["tin_no"] = values.tin_no || defaultData?.tin_no;
+    if (!Object.keys(errors).length && findErrors) {
+      if (defaultData) {
+        dispatch(
+          CustomerEditDataAction(
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
+            data,
+            parseInt(defaultData?.customer_id)
+          )
+        );
+        showToastMessage();
+      } else {
+        dispatch(
+          CustomerAddAction(
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
+            data
+          )
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     if (findErrors) {
-      setErrors(validate(values, Product_data));
+      setErrors(ProductValidate(values, defaultData));
+      setErrors(CustomerValidate(values, defaultData));
     }
-  }, [Product_data, findErrors, values]);
+  }, [defaultData, findErrors, values]);
 
   const handleOnchange = useCallback(
     (e) =>
@@ -69,7 +98,8 @@ const UseForm = (Product_data, showToastMessage) => {
   // console.log(values, "values");
 
   return {
-    handleSubmit,
+    producthandleSubmit,
+    customerhandleSubmit,
     values,
     setvalues,
     errors,

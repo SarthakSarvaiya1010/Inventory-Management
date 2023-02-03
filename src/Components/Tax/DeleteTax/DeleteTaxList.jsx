@@ -1,26 +1,28 @@
 import React, { useEffect } from "react";
+// import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
 import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomerDelectListAction } from "../../../Store/Action/CustomerAction/index";
+import { TaxDelectListAction } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 
-function DeletedCustomerList() {
+function DeletedTaxList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const data = [];
 
-  const CustomerData = useSelector((state) => state?.CustomerEdit);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const TaxData = useSelector((state) => state?.TaxData);
+  console.log("successLoginData", TaxData);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
-  console.log("data", CustomerData.customerDeletedList);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
-        CustomerDelectListAction(
+        TaxDelectListAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken
         )
       );
@@ -30,29 +32,28 @@ function DeletedCustomerList() {
     dispatch,
     successLoginData?.LoginData?.accessToken,
   ]);
-  const data = [];
 
-  // eslint-disable-next-line array-callback-return
-  CustomerData?.customerDeletedList.map((e) => {
-    let test = {};
-    test["Name"] = e.customer_name;
-    test["Mobile Number"] = e.mobile_no;
-    test["Email Id"] = e.email;
-    data.push(test);
-  });
   const headalEdit = (data) => {
-    console.log(data, CustomerData?.CoustomerList[data - 1]);
-
+    console.log("data", data, TaxData?.productDeletList[data - 1]);
     navigate(
-      `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
+      `/product/edit/${TaxData?.productDeletList[data - 1]?.product_id}`
     );
   };
 
+  // eslint-disable-next-line array-callback-return
+  TaxData?.TaxDeletList.map((e) => {
+    let elements = {};
+    elements["Tax Name"] = e.tax_name;
+    elements["Tax Rate [ In % ]"] = e.tax_rate;
+    elements["Tax Country"] = e.tax_country;
+    data.push(elements);
+  });
+
   return (
     <div>
-      {CustomerData?.customerDeletedList?.length ? (
+      {TaxData?.TaxDeletList?.length ? (
         <Container fixed>
-          <Header name={"Deleted Customer List"} SearchBar={true} />
+          <Header name={"Delete Product List"} SearchBar={true} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"
@@ -66,7 +67,7 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/customerList");
+                  navigate("/TaxList");
                 }}
               >
                 back
@@ -77,13 +78,12 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addcustomer");
+                  navigate("/addtax");
                 }}
               >
-                Add New Customer
+                add product
               </Button>
             </Stack>
-
             <Table data={data} headalEdit={headalEdit} hide={true} />
           </Container>
         </Container>
@@ -102,4 +102,4 @@ function DeletedCustomerList() {
   );
 }
 
-export default DeletedCustomerList;
+export default DeletedTaxList;

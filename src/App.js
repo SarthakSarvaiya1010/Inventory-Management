@@ -13,6 +13,7 @@ import {
   DeletedCustomerListPage,
   TaxListPage,
   AddTaxPage,
+  DeleteTaxPage,
 } from "./pages/index";
 import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
@@ -24,6 +25,7 @@ const outerTheme = createTheme({
     },
   },
 });
+
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -37,7 +39,7 @@ const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(2),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -52,8 +54,25 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
     }),
   })
 );
+
+const route = [
+  { path: "/", element: <HomePage /> },
+  { path: "/productlist", element: <ProductListPage /> },
+  { path: "/addproduct", element: <AddProductPage /> },
+  { path: "/product/edit/:id", element: <AddProductPage /> },
+  { path: "/customerList", element: <CustomerListPage /> },
+  { path: "/addcustomer", element: <AddCustomerPage /> },
+  { path: "/customer/edit/:id", element: <AddCustomerPage /> },
+  { path: "/deletedproduct", element: <DeletedProductListPage /> },
+  { path: "/deletedcustomer", element: <DeletedCustomerListPage /> },
+  { path: "/TaxList", element: <TaxListPage /> },
+  { path: "/addtax", element: <AddTaxPage /> },
+  { path: "/tax/edit/:id", element: <AddTaxPage /> },
+  { path: "/deletedtax", element: <DeleteTaxPage /> },
+];
+
 function App() {
-  const [openManu, setOpenManu] = useState(null);
+  const [openManu, setOpenManu] = useState(false);
   return (
     <div className="App">
       <BrowserRouter>
@@ -64,27 +83,11 @@ function App() {
             <Main open={openManu}>
               <DrawerHeader />
               <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/productList" element={<ProductListPage />} />
-                <Route path="/addproduct" element={<AddProductPage />} />
-                <Route path="/product/edit/:id" element={<AddProductPage />} />
-                <Route path="/customerList" element={<CustomerListPage />} />
-                <Route path="/addcustomer" element={<AddCustomerPage />} />
-                <Route
-                  path="/customer/edit/:id"
-                  element={<AddCustomerPage />}
-                />
-                <Route
-                  path="/deletedproduct"
-                  element={<DeletedProductListPage />}
-                />
-                <Route
-                  path="/deletedcustomer"
-                  element={<DeletedCustomerListPage />}
-                />
-                <Route path="/TaxList" element={<TaxListPage />} />
-                <Route path="/addtax" element={<AddTaxPage />} />
-                <Route path="/tax/edit/:id" element={<AddTaxPage />} />
+                {route.map((route) => {
+                  return (
+                    <Route path={route.path} element={route.element}></Route>
+                  );
+                })}
               </Routes>
             </Main>
           </Box>

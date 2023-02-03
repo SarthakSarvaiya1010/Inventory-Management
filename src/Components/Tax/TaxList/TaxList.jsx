@@ -84,7 +84,7 @@ function TaxList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/deletedproduct");
+                  navigate("/deletedtax");
                 }}
               >
                 view deleted Tax

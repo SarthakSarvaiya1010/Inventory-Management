@@ -65,7 +65,7 @@ function AddTax() {
 
   const handleCancle = () => {
     console.log("done");
-    navigate("/ProductList");
+    navigate("/TaxList");
   };
 
   return (
@@ -94,11 +94,11 @@ function AddTax() {
                   <TextField
                     required
                     error={errors?.product_name ? true : null}
-                    name="Tax_name"
+                    name="tax_name"
                     id="outlined-Product"
                     label="Tax Name"
                     autoComplete="off"
-                    defaultValue={id ? TaxData?.TaxEdit?.Tax_name : ""}
+                    defaultValue={id ? TaxData?.TaxEdit[0]?.tax_name : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.product_name}</p>
@@ -109,7 +109,7 @@ function AddTax() {
                     type="number"
                     name="tax_rate"
                     label="Tax Rate [ In % ]"
-                    defaultValue={id ? TaxData?.TaxEdit?.tax_rate : ""}
+                    defaultValue={id ? TaxData?.TaxEdit[0]?.tax_rate : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.weight}
@@ -125,7 +125,7 @@ function AddTax() {
                     id="outlined-Product"
                     label="Tax County"
                     autoComplete="off"
-                    defaultValue={id ? TaxData?.TaxEdit?.tax_country : ""}
+                    defaultValue={id ? TaxData?.TaxEdit[0]?.tax_country : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.hsn}</p>
@@ -137,7 +137,7 @@ function AddTax() {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
-                      defaultValue="NO"
+                      defaultValue={id ? TaxData?.TaxEdit[0]?.isactive : "NO"}
                     >
                       <FormControlLabel
                         value="YES"
@@ -147,7 +147,7 @@ function AddTax() {
                       <FormControlLabel
                         value="NO"
                         control={<Radio />}
-                        label="No"
+                        label="NO"
                       />
                     </RadioGroup>
                   </FormControl>

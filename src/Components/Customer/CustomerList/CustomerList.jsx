@@ -18,8 +18,14 @@ function CustomerList() {
   const CustomerData = useSelector((state) => state?.CustomerList);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const CustomerEditData = useSelector((state) => state?.CustomerEdit);
 
-  console.log("data", CustomerData.CoustomerList);
+  console.log(
+    "data",
+    CustomerData.CoustomerList,
+    CustomerEditData.loder,
+    "params"
+  );
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
