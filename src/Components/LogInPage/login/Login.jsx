@@ -16,23 +16,37 @@ function Login(props) {
       position: toast.POSITION.TOP_CENTER,
     });
   };
+  const showToastMessageServerError = () => {
+    toast.error("server is offline  !", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+  const showToastMessageError = (data) => {
+    toast.error(`${data} !`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
   const { setOpen } = props;
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState(null);
   const [test, setTest] = useState(null);
+  const [buttonDisbel, setButtonDisbel] = useState(null);
   const [password, setpassWord] = useState(null);
   const LoginInfo = {
     email: email,
     password: password,
   };
   const handleSubmit = () => {
+    setButtonDisbel(true);
     setTest(true);
     dispatch(userLogin(LoginInfo));
   };
 
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  console.log("successLoginData", successLoginData?.FailedLoginData);
 
   useEffect(() => {
     if (successLoginData.LoginData.statusCode === "200" && test) {
@@ -45,9 +59,20 @@ function Login(props) {
         navigate("/productList");
       }, 5500);
       setTest(false);
+      setButtonDisbel(false);
+    } else if (
+      successLoginData?.FailedLoginData?.status === "server_offline" &&
+      test
+    ) {
+      showToastMessageServerError();
+      setButtonDisbel(false);
+    } else if (successLoginData?.FailedLoginData?.status === "failed" && test) {
+      showToastMessageError(successLoginData?.FailedLoginData?.message);
+      setButtonDisbel(false);
     }
   }, [
     navigate,
+    successLoginData?.FailedLoginData,
     successLoginData.LoginData,
     successLoginData.LoginData.statusCode,
     test,
@@ -96,7 +121,12 @@ function Login(props) {
             alignItems="center"
             spacing={2}
           >
-            <Button variant="contained" color="success" onClick={handleSubmit}>
+            <Button
+              disabled={buttonDisbel}
+              variant="contained"
+              color="success"
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
             <Button

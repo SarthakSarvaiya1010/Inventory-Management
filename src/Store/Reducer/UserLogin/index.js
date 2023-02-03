@@ -14,7 +14,7 @@ const UserLoginReducer = (state = initialstate, action) => {
     case AUTHFAILED:
       return {
         ...state,
-        FailedLoginData: action.payload.data,
+        FailedLoginData: action?.payload?.data,
       };
 
     default:

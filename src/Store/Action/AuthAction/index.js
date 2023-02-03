@@ -11,9 +11,10 @@ export const userLogin = (data) => async (dispatch) => {
       payload: { data: res.data },
     });
   } catch (error) {
+    let status = { status: "server_offline" };
     dispatch({
       type: AUTHFAILED,
-      payload: { data: error.response.data },
+      payload: { data: error?.response?.data || status },
     });
   }
 };

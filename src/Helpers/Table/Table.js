@@ -10,8 +10,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
+import { IconButton } from "@mui/material";
+// import IconButton from "@material-ui/core/IconButton";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -35,14 +35,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-const useStyles = makeStyles((theme) => ({
-  cell_long: {
-    width: 300,
-  },
-}));
 
 export default function CustomizedTables(props) {
-  const classes = useStyles();
   const { data, headalEdit, headalDelete, hide } = props;
   console.log(data, "headalEdit", Object.keys(data).length);
   const column = Object.keys(data[0]);
@@ -86,7 +80,7 @@ export default function CustomizedTables(props) {
                     {row[v]}
                   </StyledTableCell>
                 ))}
-                <StyledTableCell align="right" className={classes.cell_long}>
+                <StyledTableCell align="right">
                   {!hide ? (
                     <>
                       <IconButton onClick={() => headalEdit(index)}>
