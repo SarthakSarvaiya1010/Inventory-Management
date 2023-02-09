@@ -9,11 +9,12 @@ import {
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const ProductListAction = (AccessToken) => async (dispatch) => {
+export const ProductListAction = (AccessToken, search) => async (dispatch) => {
   const token = AccessToken;
   try {
     const ProductList = await axios.get("http://localhost:3200/products", {
       headers: { Authorization: `Bearer ${token}` },
+      params: { searchKeyword: search },
     });
     dispatch({
       type: PRODUCT_LIST,

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
@@ -18,6 +18,7 @@ function ProductList() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductList);
+  const [search, setSearch] = useState();
   const data = [];
   console.log("successLoginData", productData);
 
@@ -57,11 +58,37 @@ function ProductList() {
     );
     window.location.reload();
   };
+  const searchHeadal = (e) => {
+    setSearch(e.target.value);
+    // function handleEscapeKey(event) {
+    //   if (event.code === "Enter") {
+    //     alert("done");
+    //   }
+    // }
+    // document.addEventListener("keydown", handleEscapeKey);
+    // return () => document.removeEventListener("keydown", handleEscapeKey);
+  };
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      dispatch(
+        ProductListAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          search
+        )
+      );
+    }
+  };
+  console.log(search);
   return (
     <div>
-      {productData?.productList.length ? (
+      {productData?.productList?.length ? (
         <Container fixed>
-          <Header name={"Product List"} SearchBar={true} />
+          <Header
+            name={"Product List"}
+            SearchBar={true}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"

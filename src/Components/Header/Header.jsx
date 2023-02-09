@@ -40,7 +40,7 @@ const AppBar = styled(MuiAppBar, {
 
 export default function Header(props) {
   const showToastMessage = () => {
-    toast.success("LogOut  Success  !", {
+    toast.success("Logout  Success  !", {
       position: toast.POSITION.TOP_CENTER,
     });
   };

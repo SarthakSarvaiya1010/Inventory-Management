@@ -16,3 +16,4 @@ export const CUSTOMER_ADD = "CUSTOMER_ADD";
 export const TAX_LIST = "TAX_LIST";
 export const TAX_EDIT = "TAX_EDIT";
 export const TAX_DELETED_LIST = "TAX_DELETED_LIST";
+export const INVOICE_LIST = "INVOICE_LIST";
