@@ -11,6 +11,7 @@ import {
   ProductDeleteAction,
 } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
+import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
 function ProductList() {
   const navigate = useNavigate();
@@ -18,7 +19,11 @@ function ProductList() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductList);
+  let limit = 2;
   const [search, setSearch] = useState();
+  const [pageNumber, setPageNumber] = useState();
+  const [shorting, setShorting] = useState();
+  const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
   console.log("successLoginData", productData);
 
@@ -36,9 +41,27 @@ function ProductList() {
     dispatch,
     successLoginData?.LoginData?.accessToken,
   ]);
+
+  useEffect(() => {
+    dispatch(
+      ProductListAction(
+        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
+      )
+    );
+  }, [
+    accessToken?.accessToken,
+    dispatch,
+    limit,
+    pageNumber,
+    shorting,
+    successLoginData?.LoginData?.accessToken,
+  ]);
+
   // eslint-disable-next-line array-callback-return
   productData.productList.map((e) => {
     let elements = {};
+    elements["Sr. No"] = e.sr_no;
     elements["Product Name"] = e.product_name;
     elements["HSN"] = e.hsn;
     elements["Weight [ In Grams ]"] = e.weight;
@@ -58,38 +81,73 @@ function ProductList() {
     );
     window.location.reload();
   };
+
   const searchHeadal = (e) => {
     setSearch(e.target.value);
-    // function handleEscapeKey(event) {
-    //   if (event.code === "Enter") {
-    //     alert("done");
-    //   }
-    // }
-    // document.addEventListener("keydown", handleEscapeKey);
-    // return () => document.removeEventListener("keydown", handleEscapeKey);
   };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
         ProductListAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          search
+          { search: search, limit: limit, pageNumber: pageNumber }
         )
       );
     }
   };
   console.log(search);
+  console.log("setShortingData", shorting);
+
+  const headalShorting = (data_a) => {
+    shortingIcon === data_a
+      ? setShortingIcon("Sr. No")
+      : setShortingIcon(data_a);
+    switch (data_a) {
+      case "Sr. No":
+        if (shorting === "sr_no") {
+          setShorting(null);
+        } else {
+          setShorting("sr_no");
+        }
+        return "done";
+      case "Product Name":
+        if (shorting === "product_name") {
+          setShorting(null);
+        } else {
+          setShorting("product_name");
+        }
+        return "done";
+      case "HSN":
+        if (shorting === "hsn") {
+          setShorting(null);
+        } else {
+          setShorting("hsn");
+        }
+        return "done";
+      case "Weight [ In Grams ]":
+        if (shorting === "weight") {
+          setShorting(null);
+        } else {
+          setShorting("weight");
+        }
+        return "done";
+      default:
+        setShorting(null);
+        return " state";
+    }
+  };
+
   return (
     <div>
       {productData?.productList?.length ? (
-        <Container fixed>
+        <Container fixed sx={{ Width: 100 }}>
           <Header
             name={"Product List"}
             SearchBar={true}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
           />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+          <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
             <Stack
               direction="row"
               justifyContent="flex-end"
@@ -124,7 +182,25 @@ function ProductList() {
               data={data}
               headalEdit={headalEdit}
               headalDelete={headalDelete}
+              headalShorting={headalShorting}
+              ShortingHide={shortingIcon}
             />
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  productData?.productList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+              />
+            </Stack>
           </Container>
         </Container>
       ) : (

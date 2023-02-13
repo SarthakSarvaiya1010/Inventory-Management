@@ -77,7 +77,7 @@ function InvoiceList() {
                   navigate("/addproduct");
                 }}
               >
-                add product
+                add Invoice
               </Button>
 
               <Button
@@ -88,7 +88,7 @@ function InvoiceList() {
                   navigate("/deletedproduct");
                 }}
               >
-                view deleted products
+                view deleted Invoice
               </Button>
             </Stack>
 

@@ -9,24 +9,29 @@ import {
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const CustomerListAction =
-  (AccessToken, customers_id) => async (dispatch) => {
-    const token = AccessToken;
-    try {
-      const ProductList = await axios.get("http://localhost:3200/customers", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      dispatch({
-        type: CUSTOMER_LIST,
-        payload: ProductList.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
+export const CustomerListAction = (AccessToken, data) => async (dispatch) => {
+  const token = AccessToken;
+  try {
+    const ProductList = await axios.get("http://localhost:3200/customers", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: {
+        searchKeyword: data.search ? data.search : null,
+        limit: data.limit,
+        page: data.pageNumber,
+        orderByString: data.orderByString,
+      },
+    });
+    dispatch({
+      type: CUSTOMER_LIST,
+      payload: ProductList.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
 
 export const CustomerAddAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
@@ -50,26 +55,33 @@ export const CustomerAddAction = (AccessToken, data) => async (dispatch) => {
   }
 };
 
-export const CustomerDelectListAction = (AccessToken) => async (dispatch) => {
-  const token = AccessToken;
-  try {
-    const CustomerDelectList = await axios.get(
-      "http://localhost:3200/delete/customers",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    dispatch({
-      type: CUSTOMER_DELETED_LIST,
-      payload: CustomerDelectList.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: FAILED_ADMIN_LIST,
-      payload: { data: error.response.data },
-    });
-  }
-};
+export const CustomerDelectListAction =
+  (AccessToken, data) => async (dispatch) => {
+    const token = AccessToken;
+    try {
+      const CustomerDelectList = await axios.get(
+        "http://localhost:3200/delete/customers",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            searchKeyword: data.search ? data.search : null,
+            limit: data.limit,
+            page: data.pageNumber,
+            orderByString: data.orderByString,
+          },
+        }
+      );
+      dispatch({
+        type: CUSTOMER_DELETED_LIST,
+        payload: CustomerDelectList.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };
 
 export const CustomerEditAction =
   (AccessToken, customers_id) => async (dispatch) => {

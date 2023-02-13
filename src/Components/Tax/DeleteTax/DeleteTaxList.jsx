@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { TaxDelectListAction } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
+import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
 function DeletedTaxList() {
   const navigate = useNavigate();
@@ -48,12 +49,50 @@ function DeletedTaxList() {
     elements["Tax Country"] = e.tax_country;
     data.push(elements);
   });
+  let limit = 2;
+  const [search, setSearch] = useState();
+  const [pageNumber, setPageNumber] = useState();
+
+  useEffect(() => {
+    dispatch(
+      TaxDelectListAction(
+        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+        { limit: limit, pageNumber: pageNumber }
+      )
+    );
+  }, [
+    accessToken?.accessToken,
+    dispatch,
+    limit,
+    pageNumber,
+    successLoginData?.LoginData?.accessToken,
+  ]);
+
+  const searchHeadal = (e) => {
+    setSearch(e.target.value);
+  };
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      dispatch(
+        TaxDelectListAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          { search: search, limit: limit, pageNumber: pageNumber }
+        )
+      );
+    }
+  };
+  console.log(search);
 
   return (
     <div>
       {TaxData?.TaxDeletList?.length ? (
         <Container fixed>
-          <Header name={"Delete Product List"} SearchBar={true} />
+          <Header
+            name={"Delete Product List"}
+            SearchBar={true}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"
@@ -85,6 +124,22 @@ function DeletedTaxList() {
               </Button>
             </Stack>
             <Table data={data} headalEdit={headalEdit} hide={true} />
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  TaxData?.TaxDeletList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+              />
+            </Stack>
           </Container>
         </Container>
       ) : (

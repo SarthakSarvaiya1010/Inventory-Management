@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
 import Container from "@mui/material/Container";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { TaxListAction } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
+import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
 function TaxList() {
   const navigate = useNavigate();
@@ -14,6 +15,9 @@ function TaxList() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const TaxData = useSelector((state) => state?.TaxData);
+  let limit = 2;
+  const [search, setSearch] = useState();
+  const [pageNumber, setPageNumber] = useState();
   const data = [];
   console.log("successLoginData", TaxData);
 
@@ -45,6 +49,7 @@ function TaxList() {
     navigate(`/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`);
   };
 
+  console.log(TaxData?.TaxList[0]?.total_count / limit, "data");
   const headalDelete = (data) => {
     // dispatch(
     //   ProductDeleteAction(
@@ -54,12 +59,47 @@ function TaxList() {
     // );
     window.location.reload();
   };
+  useEffect(() => {
+    dispatch(
+      TaxListAction(
+        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+        { limit: limit, pageNumber: pageNumber }
+      )
+    );
+  }, [
+    accessToken?.accessToken,
+    dispatch,
+    limit,
+    pageNumber,
+    successLoginData?.LoginData?.accessToken,
+  ]);
+
+  const searchHeadal = (e) => {
+    setSearch(e.target.value);
+  };
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      dispatch(
+        TaxListAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          { search: search, limit: limit, pageNumber: pageNumber }
+        )
+      );
+    }
+  };
+  console.log(search);
+
   return (
     <div>
       {" "}
       {TaxData?.TaxList.length ? (
         <Container fixed>
-          <Header name={"Tax List"} SearchBar={true} />
+          <Header
+            name={"Tax List"}
+            SearchBar={true}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"
@@ -95,6 +135,22 @@ function TaxList() {
               headalEdit={headalEdit}
               headalDelete={headalDelete}
             />
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  TaxData?.TaxList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+              />
+            </Stack>
           </Container>
         </Container>
       ) : (
