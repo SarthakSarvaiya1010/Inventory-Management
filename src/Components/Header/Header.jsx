@@ -40,7 +40,7 @@ const AppBar = styled(MuiAppBar, {
 
 export default function Header(props) {
   const showToastMessage = () => {
-    toast.success("LogOut  Success  !", {
+    toast.success("Logout  Success  !", {
       position: toast.POSITION.TOP_CENTER,
     });
   };
@@ -74,7 +74,7 @@ export default function Header(props) {
       accessToken?.statusCode
     ) {
       setOpenManu(true);
-    }
+    } 
   };
 
   return (
@@ -83,15 +83,20 @@ export default function Header(props) {
         <CssBaseline />
         <AppBar position="fixed" open={openManu}>
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(openManu && { display: "none" }) }}
-            >
-              <MenuIcon />
-            </IconButton>
+            {successLoginData?.LoginData?.statusCode === "200" ||
+            accessToken?.statusCode ? (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(openManu && { display: "none" }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+            ) : (
+              ""
+            )}
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Inventory
             </Typography>

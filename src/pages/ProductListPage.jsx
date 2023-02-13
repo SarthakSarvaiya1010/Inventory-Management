@@ -1,5 +1,5 @@
 import React from "react";
-import ProductLisit from "../Components/Product/ProductLisit/ProductList";
+import ProductLisit from "../Components/Product/ProductList/ProductList";
 
 function AddProductPage() {
   return (

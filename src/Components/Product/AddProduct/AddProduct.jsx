@@ -201,9 +201,6 @@ function AddProduct() {
           </Container>
         </Container>
       ) : (
-        // ) : (
-        //   <h1>done 1</h1>
-        // )
         <Stack
           sx={{ color: "grey.500", height: "80vh" }}
           spacing={2}

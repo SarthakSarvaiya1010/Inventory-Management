@@ -7,4 +7,6 @@ export { default as DeletedCustomerListPage } from "./DeletedCustomerListPage";
 export { default as DeleteTaxPage } from "./DeleteTaxPage";
 export { default as TaxListPage } from "./TaxListPage";
 export { default as AddTaxPage } from "./AddTaxPage";
+export { default as InvoiceListPage } from "./InvoiceListPage";
 export { default as SideBar } from "./SideBar";
+export {default as AddInvoicePage} from "./AddInvoicePage"
