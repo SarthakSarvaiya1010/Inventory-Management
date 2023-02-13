@@ -50,7 +50,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar(props) {
-  const { name, SearchBar } = props;
+  const { name, SearchBar, searchHeadal, onKeyDown } = props;
   console.log("Search", SearchBar);
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -81,6 +81,8 @@ export default function SearchAppBar(props) {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
+                onChange={(e) => searchHeadal(e)}
+                onKeyDown={(e) => onKeyDown(e)}
               />
             </Search>
           ) : (

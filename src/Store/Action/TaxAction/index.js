@@ -6,11 +6,16 @@ import {
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const TaxListAction = (AccessToken) => async (dispatch) => {
+export const TaxListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
     const TaxList = await axios.get("http://localhost:3200/tax", {
       headers: { Authorization: `Bearer ${token}` },
+      params: {
+        searchKeyword: data.search ? data.search : null,
+        limit: data.limit,
+        page: data.pageNumber,
+      },
     });
     dispatch({
       type: TAX_LIST,
@@ -43,11 +48,16 @@ export const TaxEditAction = (AccessToken, Tax_id) => async (dispatch) => {
   }
 };
 
-export const TaxDelectListAction = (AccessToken) => async (dispatch) => {
+export const TaxDelectListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
     const TaxDelectList = await axios.get("http://localhost:3200/delete/tax", {
       headers: { Authorization: `Bearer ${token}` },
+      params: {
+        searchKeyword: data.search ? data.search : null,
+        limit: data.limit,
+        page: data.pageNumber,
+      },
     });
     dispatch({
       type: TAX_DELETED_LIST,

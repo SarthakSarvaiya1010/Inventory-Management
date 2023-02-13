@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InvoiceListAction } from "../../../Store/Action/InvoiceAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
-import {GetinvoiceAddPageAction} from '../../../Store/Action/InvoiceAction'
+import { GetinvoiceAddPageAction } from "../../../Store/Action/InvoiceAction";
 
 function InvoiceList() {
   const navigate = useNavigate();
@@ -43,9 +43,7 @@ function InvoiceList() {
     elements["Total Amount"] = e.taxable_amount;
     data.push(elements);
   });
-  const InvoicePageData = useSelector(
-    (state) => state?.InvoiceData
-  ) 
+  const InvoicePageData = useSelector((state) => state?.InvoiceData);
   const headalEdit = (data) => {
     navigate(
       `/InvoiceList/edit/${InvoiceData.invoiceList[data - 1]?.invoice_id}`
@@ -53,17 +51,16 @@ function InvoiceList() {
   };
   const NavigateAddInvoice = () => {
     console.log("click on invoice");
-    dispatch(GetinvoiceAddPageAction(accessToken?.accessToken))
-    if(InvoicePageData?.GetInvoicePagData?.length){
+    dispatch(GetinvoiceAddPageAction(accessToken?.accessToken));
+    if (InvoicePageData?.GetInvoicePagData?.length) {
       navigate("/addinvoice");
     }
   };
   useEffect(() => {
-    if(InvoicePageData?.GetInvoicePagData?.length){ 
+    if (InvoicePageData?.GetInvoicePagData?.length) {
       navigate("/addinvoice");
     }
-   
-  })
+  });
   const headalDelete = (data) => {
     // dispatch(
     //   ProductDeleteAction(

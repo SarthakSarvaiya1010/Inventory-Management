@@ -9,11 +9,18 @@ import {
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const ProductListAction = (AccessToken) => async (dispatch) => {
+export const ProductListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
+  console.log(data, " data");
   try {
     const ProductList = await axios.get("http://localhost:3200/products", {
       headers: { Authorization: `Bearer ${token}` },
+      params: {
+        searchKeyword: data.search,
+        limit: data.limit,
+        page: data.pageNumber,
+        orderByString: data.orderByString,
+      },
     });
     dispatch({
       type: PRODUCT_LIST,
@@ -119,22 +126,31 @@ export const ProductDeleteAction =
       });
     }
   };
-export const ProductDeleteListAction = (AccessToken) => async (dispatch) => {
-  // const Product_id = 6;
-  const token = AccessToken;
-  try {
-    const ProductDeleteList = await axios.get(
-      "http://localhost:3200/delete/products",
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    dispatch({
-      type: PRODUCT_DELETE_LIST,
-      payload: ProductDeleteList.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: FAILED_ADMIN_LIST,
-      payload: { data: error.response.data },
-    });
-  }
-};
+export const ProductDeleteListAction =
+  (AccessToken, data) => async (dispatch) => {
+    // const Product_id = 6;
+    const token = AccessToken;
+    try {
+      const ProductDeleteList = await axios.get(
+        "http://localhost:3200/delete/products",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            searchKeyword: data.search,
+            limit: data.limit,
+            page: data.pageNumber,
+            orderByString: data.orderByString,
+          },
+        }
+      );
+      dispatch({
+        type: PRODUCT_DELETE_LIST,
+        payload: ProductDeleteList.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };

@@ -11,6 +11,8 @@ import Paper from "@mui/material/Paper";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 // import IconButton from "@material-ui/core/IconButton";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -37,8 +39,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function CustomizedTables(props) {
-  const { data, headalEdit, headalDelete, hide } = props;
-  console.log(data, "headalEdit", Object.keys(data).length);
+  const { data, headalEdit, headalDelete, hide, headalShorting, ShortingHide } =
+    props;
+  console.log(data, "headalEdit", Object.keys(data).length, ShortingHide);
   const column = Object.keys(data[0]);
   return (
     <TableContainer component={Paper}>
@@ -51,9 +54,33 @@ export default function CustomizedTables(props) {
               },
             }}
           >
-            <StyledTableCell align="right">sr no</StyledTableCell>
             {column.map((data) => (
-              <StyledTableCell align="right">{data}</StyledTableCell>
+              <StyledTableCell align="right">
+                {data}
+                {ShortingHide === data ? (
+                  <FilterListIcon
+                    sx={{
+                      margin: "0 10px 10px 0 ",
+                      transform: "rotate(180deg)",
+                    }}
+                    fontSize="small"
+                    onClick={() => {
+                      headalShorting(data);
+                    }}
+                  />
+                ) : (
+                  <FilterListOffIcon
+                    sx={{
+                      margin: " 0  10px 0 0 ",
+                      transform: "rotate(180deg)",
+                    }}
+                    fontSize="small"
+                    onClick={() => {
+                      headalShorting(data);
+                    }}
+                  />
+                )}
+              </StyledTableCell>
             ))}
             <StyledTableCell align="right">Action</StyledTableCell>
           </TableRow>
@@ -63,8 +90,6 @@ export default function CustomizedTables(props) {
             index++;
             return (
               <StyledTableRow key={row.name}>
-                <StyledTableCell align="right">{index}</StyledTableCell>
-
                 {column.map((v) => (
                   <StyledTableCell
                     align="right"
