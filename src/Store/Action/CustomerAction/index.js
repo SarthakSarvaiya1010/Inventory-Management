@@ -14,12 +14,14 @@ export const CustomerListAction = (AccessToken, data) => async (dispatch) => {
   try {
     const ProductList = await axios.get("http://localhost:3200/customers", {
       headers: { Authorization: `Bearer ${token}` },
-      params: {
-        searchKeyword: data.search ? data.search : null,
-        limit: data.limit,
-        page: data.pageNumber,
-        orderByString: data.orderByString,
-      },
+      params: data
+        ? {
+            searchKeyword: data.search ? data.search : null,
+            limit: data.limit,
+            page: data.pageNumber,
+            orderByString: data.orderByString,
+          }
+        : null,
     });
     dispatch({
       type: CUSTOMER_LIST,

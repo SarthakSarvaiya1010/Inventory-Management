@@ -29,7 +29,6 @@ export const GetinvoiceAddPageAction = (AccessToken) => async (dispatch) => {
   try {
     const GetInvoicepageData = await axios.get(
       "http://localhost:3200/getinvoicepage",
-
       { headers: { Authorization: `Bearer ${token}` } }
     );
     dispatch({

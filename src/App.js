@@ -15,12 +15,12 @@ import {
   AddTaxPage,
   DeleteTaxPage,
   InvoiceListPage,
-  AddInvoicePage
+  AddInvoicePage,
 } from "./pages/index";
 import ListUser from "./Components/UserData/ListUser";
 import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
-
+import "./App.css";
 const outerTheme = createTheme({
   palette: {
     primary: {
@@ -74,7 +74,7 @@ const route = [
   { path: "/deletedtax", element: <DeleteTaxPage /> },
   { path: "/listuser", element: <ListUser /> },
   { path: "/InvoiceList", element: <InvoiceListPage /> },
-  {path:"/addinvoice" , element : <AddInvoicePage />}
+  { path: "/addinvoice", element: <AddInvoicePage /> },
 ];
 
 function App() {
