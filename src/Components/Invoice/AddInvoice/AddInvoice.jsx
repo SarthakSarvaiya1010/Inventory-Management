@@ -29,6 +29,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { textAlign } from "@mui/system";
+import { useCallback } from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -43,13 +44,12 @@ function AddInvoice(props) {
   console.log("accessToken====>", accessToken?.accessToken);
   console.log("testData", testData);
   const [age, setAge] = React.useState("");
-  const [value, setValue] = React.useState(new Date());
+  // const [value, setValue] = React.useState(new Date());
   const [addtable, setAddTable] = useState(1);
+  const [value, setvalues] = useState(null);
+  console.log("value===>", value);
   console.log("addtable", addtable);
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   const { sx, ...other } = props;
   const commonStyles = {
     p: 2,
@@ -59,6 +59,15 @@ function AddInvoice(props) {
   const handleDelete = () => {
     setAddTable((prev) => prev - 1);
   };
+
+  const handleChange = useCallback(
+    (e) =>
+      setvalues((values) => {
+        const newValues = { ...values, [e.target.name]: e.target.value };
+        return newValues;
+      }),
+    []
+  );
 
   return (
     <div>
@@ -115,15 +124,15 @@ function AddInvoice(props) {
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
                         //   value={age}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e)}
                         label="Mobile_no*"
+                        name="customer_mobileNo"
                       >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {testData[0]?.CustomerList?.map((cdata) => {
+                          <>
+                            <MenuItem value={10}>{cdata.mobile_no}</MenuItem>
+                          </>;
+                        })}
                       </Select>
 
                       <br />
@@ -135,6 +144,8 @@ function AddInvoice(props) {
                         rows={2}
                         maxRows={4}
                         sx={{ width: 1 }}
+                        name="Customer_Address"
+                        onChange={(e) => handleChange(e)}
                       />
                       <br />
                       <TextField
@@ -142,6 +153,8 @@ function AddInvoice(props) {
                         label="Customer_Gst_No"
                         variant="standard"
                         sx={{ width: 1 }}
+                        name="Customer_Gst_No"
+                        onChange={(e) => handleChange(e)}
                       />
                       <br />
                       <TextField
@@ -149,6 +162,8 @@ function AddInvoice(props) {
                         label="Name "
                         variant="standard"
                         sx={{ width: 1 }}
+                        name="Customer_Name"
+                        onChange={(e) => handleChange(e)}
                       />
                       <br />
                     </FormControl>
@@ -164,15 +179,16 @@ function AddInvoice(props) {
                       variant="standard"
                       value={testData[0]?.bill_no}
                       sx={{ width: 1 }}
+                      name="bill_no"
+                      onChange={(e) => handleChange(e)}
                     />
                     <br />
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         label="Date"
                         value={testData[0]?.date}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
+                        name="date"
+                        onChange={(e) => handleChange(e)}
                         renderInput={(params) => <TextField {...params} />}
                       />
                     </LocalizationProvider>
@@ -182,6 +198,8 @@ function AddInvoice(props) {
                       label="Gst_No"
                       variant="standard"
                       sx={{ width: 1 }}
+                      name="Gst_No"
+                      onChange={(e) => handleChange(e)}
                     />
                   </Stack>
                 </Item>
@@ -240,7 +258,7 @@ function AddInvoice(props) {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 //   value={age}
-                                onChange={handleChange}
+                                // onChange={handleChange}
                                 label=" Select Product"
                               >
                                 <MenuItem value="">
