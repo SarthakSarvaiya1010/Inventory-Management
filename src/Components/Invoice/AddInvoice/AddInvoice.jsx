@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   TextField,
-  DialogContent,
+  // DialogContent,
   Container,
   Stack,
   Box,
@@ -23,34 +23,114 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Header from "../../../Helpers/Header/Header";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
-import { textAlign } from "@mui/system";
+import { useDispatch, useSelector } from "react-redux";
+import { GetinvoiceAddPageAction } from "../../../Store/Action/InvoiceAction";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "left",
-  padding: 30,
   color: theme.palette.text.secondary,
 }));
-function AddInvoice(props) {
-  const { accessToken, testData } = props;
+
+function AddInvoice() {
+  const dispatch = useDispatch();
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const invoivepagedata = JSON.parse(
+    localStorage.getItem("InvoiceAddPageData")
+  );
+
   console.log("accessToken====>", accessToken?.accessToken);
-  console.log("testData", testData);
-  const [age, setAge] = React.useState("");
-  const [value, setValue] = React.useState(new Date());
+  const [CustomerListData, setCustomerListData] = useState({
+    customer_name: "",
+    address: "",
+    gst_no: "",
+  });
+  const [productListData, setProductListData] = useState({
+    hsn: "",
+  });
+
+  const [test, setTest] = useState();
+  const [bill_value, setBill_value] = useState([]);
+
+  const hedalchengeInt = (e) => {
+    let name = e.target.name.split(" ", 2);
+    let dummy = bill_value[parseInt(name[1]) - 1];
+    console.log("name, dummy", name, dummy, dummy.index);
+    // setTest({ ...test, [name[0]]: e.target.value });
+    // setBill_value([{ ...bill_value, [name[0]]: e.target.value }]);
+
+    bill_value.splice(0, 1, {
+      [name[0]]: e.target.value,
+      index: dummy.index,
+      product_id: dummy.product_id,
+      weight: dummy.weight,
+    });
+  };
+  // {
+  //   [name[0]]: e.target.value,
+  //   product_id: dummy.product_id,
+  //   index: dummy.index,
+  // }
+  // const [value, setValue] = useState(new Date());
+  // const CustomerData = useSelector((state) => state?.CustomerList);
+  const InvoicePageData = useSelector((state) => state?.InvoiceData);
+
   const [addtable, setAddTable] = useState(1);
-  console.log("addtable", addtable);
+  const [product, setProduct] = useState([]);
+  console.log("bill_value", bill_value, test);
+
+  const testData = InvoicePageData?.GetInvoicePagData.length
+    ? InvoicePageData?.GetInvoicePagData
+    : invoivepagedata;
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
+      (e) => e.customer_id === event.target.value
+    );
+    setCustomerListData(data);
   };
-  const { sx, ...other } = props;
+
+  const handleChangeProduct = (fieldName, value) => {
+    let existingweight = product.filter((ans) => ans?.weight);
+    let existingrate = product.filter((ans) => ans?.rate);
+
+    if (existingweight.length > 0 && existingrate.length <= 0) {
+      existingweight.forEach((f) => {
+        let ansDataInd = product.findIndex((e) => e.weight === f.weight);
+        product[ansDataInd].weight = value;
+      });
+      setProduct([...product]);
+    } else {
+      if (existingrate.length > 0 && existingweight.length <= 0) {
+        existingrate.forEach((f) => {
+          let ansDataInd = product.findIndex((e) => e.rate === f.rate);
+          product[ansDataInd].rate = value;
+        });
+        setProduct([...product]);
+      } else {
+        setProduct([...product, { [fieldName]: value }]);
+      }
+    }
+    //  else {
+    //   setProduct([...product, { [fieldName]: value }]);
+    // }
+
+    // if (fieldName.weight) {
+    //   setProduct([...product, { [fieldName.weight]: value }]);
+    // } else {
+    //   setProduct([...product, { [fieldName]: value }]);
+    // }
+  };
+  console.log("product_Data", product);
+
+  // const { sx, ...other } = props;
   const commonStyles = {
     p: 2,
     border: 1,
@@ -59,6 +139,19 @@ function AddInvoice(props) {
   const handleDelete = () => {
     setAddTable((prev) => prev - 1);
   };
+
+  useEffect(() => {
+    dispatch(GetinvoiceAddPageAction(accessToken?.accessToken));
+  }, [accessToken?.accessToken, dispatch]);
+
+  useEffect(() => {
+    if (InvoicePageData?.GetInvoicePagData.length) {
+      localStorage.setItem(
+        "InvoiceAddPageData",
+        JSON.stringify(InvoicePageData?.GetInvoicePagData)
+      );
+    }
+  }, [InvoicePageData?.GetInvoicePagData]);
 
   return (
     <div>
@@ -109,23 +202,28 @@ function AddInvoice(props) {
                   <Stack spacing={1}>
                     <FormControl variant="standard" sx={{ width: 1 }}>
                       <InputLabel id="demo-simple-select-standard-label">
-                        Mobile_no
+                        Mobile no
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-standard-label"
-                        id="demo-simple-select-standard"
+                        id="demo-simple-select-standard-01"
                         //   value={age}
                         onChange={handleChange}
                         label="Mobile_no*"
                       >
-                        <MenuItem value="">
+                        <MenuItem value={null}>
                           <em>None</em>
                         </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.map(
+                          (e, index) => {
+                            return (
+                              <MenuItem value={e.customer_id} key={index}>
+                                {e.mobile_no}
+                              </MenuItem>
+                            );
+                          }
+                        )}
                       </Select>
-
                       <br />
                       <TextField
                         id="standard-basic"
@@ -133,23 +231,31 @@ function AddInvoice(props) {
                         variant="standard"
                         multiline
                         rows={2}
-                        maxRows={4}
+                        // maxRows={4}
                         sx={{ width: 1 }}
+                        value={
+                          CustomerListData?.address === ""
+                            ? ""
+                            : CustomerListData?.address
+                        }
                       />
                       <br />
                       <TextField
-                        id="standard-basic"
+                        id="standard-basic-1"
                         label="Customer_Gst_No"
                         variant="standard"
                         sx={{ width: 1 }}
                       />
                       <br />
+
                       <TextField
-                        id="standard-basic"
+                        id="standard-basic-2"
                         label="Name "
                         variant="standard"
+                        value={CustomerListData?.customer_name}
                         sx={{ width: 1 }}
                       />
+
                       <br />
                     </FormControl>
                   </Stack>
@@ -159,14 +265,14 @@ function AddInvoice(props) {
                 <Item sx={{ pt: 6, pb: 6 }}>
                   <Stack spacing={4}>
                     <TextField
-                      id="standard-basic"
+                      id="standard-basic-3"
                       label="Bill_no"
                       variant="standard"
-                      value={testData[0]?.bill_no}
+                      value={testData[0]?.bill_no || 0}
                       sx={{ width: 1 }}
                     />
                     <br />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         label="Date"
                         value={testData[0]?.date}
@@ -175,10 +281,10 @@ function AddInvoice(props) {
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
-                    </LocalizationProvider>
+                    </LocalizationProvider> */}
                     <br />
                     <TextField
-                      id="standard-basic"
+                      id="standard-basic-4"
                       label="Gst_No"
                       variant="standard"
                       sx={{ width: 1 }}
@@ -208,7 +314,9 @@ function AddInvoice(props) {
                             <Button
                               variant="contained"
                               color="success"
-                              onClick={() => setAddTable((prev) => prev + 1)}
+                              onClick={() => {
+                                setAddTable((prev) => prev + 1);
+                              }}
                             >
                               <AddIcon />
                             </Button>
@@ -240,44 +348,74 @@ function AddInvoice(props) {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 //   value={age}
-                                onChange={handleChange}
+                                onChange={(e) =>
+                                  handleChangeProduct(
+                                    "product_id",
+                                    e.target.value
+                                  )
+                                }
                                 label=" Select Product"
+                                name={ind}
                               >
                                 <MenuItem value="">
                                   <em>None</em>
                                 </MenuItem>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {InvoicePageData?.GetInvoicePagData[0]?.productList?.map(
+                                  (e, index) => {
+                                    return (
+                                      <MenuItem
+                                        value={e.product_id}
+                                        key={index}
+                                      >
+                                        {e.product_name}
+                                      </MenuItem>
+                                    );
+                                  }
+                                )}
                               </Select>
                             </FormControl>
                           </TableCell>
                           <TableCell>
                             <TextField
-                              id="standard-basic"
+                              id="standard-basic-5"
                               label="Hsn"
                               variant="standard"
+                              type="number"
+                              value={productListData?.hsn}
                             />
                           </TableCell>
                           <TableCell>
                             <TextField
-                              id="standard-basic"
+                              id="standard-basic-6"
+                              name={`weight ${ind}`}
                               label="Weight"
                               variant="standard"
+                              type="number"
+                              onChange={(e) =>
+                                handleChangeProduct("weight", e.target.value)
+                              }
                             />
                           </TableCell>
                           <TableCell>
                             <TextField
-                              id="standard-basic"
+                              id="standard-basic-7"
                               label="Rate"
                               variant="standard"
+                              type="number"
+                              name={`rate ${ind}`}
+                              onChange={(e) =>
+                                handleChangeProduct("rate", e.target.value)
+                              }
                             />
                           </TableCell>
                           <TableCell colSpan={2}>
                             <TextField
-                              id="standard-basic"
+                              id="standard-basic-8"
                               label="Amount"
                               variant="standard"
+                              value={parseInt(
+                                bill_value?.["Weight" + ind] * bill_value?.rate
+                              ).toFixed(2)}
                             />
                           </TableCell>
                           <TableCell>
@@ -307,27 +445,40 @@ function AddInvoice(props) {
                         </TableCell>
                         <TableCell colSpan={1}>
                           <TextField
-                            id="standard-basic"
+                            id="standard-basic-9"
                             // label="Amount"
                             variant="standard"
                             defaultValue={0}
+                            value={
+                              bill_value?.Weight
+                                ? parseInt(bill_value[0]?.Weight).toFixed(2)
+                                : 0
+                            }
                             sx={{ width: 200 }}
                           />
                         </TableCell>
                         <TableCell colSpan={1}>
                           <TextField
-                            id="standard-basic"
+                            id="standard-basic-01"
                             // label="Amount"
                             variant="standard"
+                            value={
+                              bill_value?.rate
+                                ? parseInt(bill_value?.rate).toFixed(2)
+                                : 0
+                            }
                             defaultValue={0}
                           />
                         </TableCell>
                         <TableCell colSpan={2}>
                           <TextField
-                            id="standard-basic"
+                            id="standard-basic-02"
                             // label="Amount"
                             variant="standard"
                             defaultValue={0}
+                            value={parseInt(
+                              bill_value?.Weight * bill_value?.rate
+                            ).toFixed(2)}
                           />
                         </TableCell>
                       </TableRow>
@@ -337,14 +488,65 @@ function AddInvoice(props) {
                     <Table aria-label="simple table">
                       <TableHead>
                         <TableRow>
+                          <TableCell colSpan={4}></TableCell>
                           <TableCell>TAXABLE AMOUNT</TableCell>
+                          <TableCell>
+                            <TextField
+                              id="standard-basic"
+                              label="TaxableAmount"
+                              variant="standard"
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell colSpan={4}></TableCell>
+
                           <TableCell>SGST(1.50%)</TableCell>
+                          <TableCell>
+                            <TextField
+                              id="standard-basic-03"
+                              label="SGST"
+                              variant="standard"
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell colSpan={4}></TableCell>
+
                           <TableCell>CGST(1.50%)</TableCell>
+                          <TableCell>
+                            <TextField
+                              id="standard-basic-04"
+                              label="CGST"
+                              variant="standard"
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell colSpan={4}></TableCell>
+
                           <TableCell>DISCOUNT</TableCell>
+                          <TableCell>
+                            <TextField
+                              id="standard-basic-05"
+                              label="Discount"
+                              variant="standard"
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
                           <TableCell>BILL AMOUNT</TableCell>
+                          <TableCell>
+                            <TextField
+                              id="standard-basic-06"
+                              label="Bill Amount"
+                              variant="standard"
+                            />
+                          </TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody>
+
+                      {/* <TableBody>
                         <TableRow
                           // key={row.name}
                           sx={{
@@ -387,7 +589,7 @@ function AddInvoice(props) {
                             />
                           </TableCell>
                         </TableRow>
-                      </TableBody>
+                      </TableBody> */}
                     </Table>
                   </Box>
                 </TableContainer>
