@@ -60,7 +60,10 @@ function AddCustomer() {
     <div>
       {!CustomerEditData.loder || !id ? (
         <Container fixed>
-          <Header name={"Add Customer"} SearchBar={false} />
+          <Header
+            name={id ? "Edit Customer" : "Add Customer"}
+            SearchBar={false}
+          />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <DialogContent>
               <br />

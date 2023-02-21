@@ -32,6 +32,7 @@ function AddProduct() {
   const ProductEditData = useSelector((state) => state?.ProductEdit);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
+  console.log("id==========>",id);
 
   const Product_data = ProductEditData?.productEdit;
   // console.log("params", id, Product_data);
@@ -70,7 +71,7 @@ function AddProduct() {
       {!ProductEditData.loder || !id ? (
         // Object.keys(Product_data).length ? (
         <Container fixed>
-          <Header name={"Add Product"} SearchBar={false} />
+          <Header name={id ? "Edit product" : "Add Product"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <DialogContent>
               <br />

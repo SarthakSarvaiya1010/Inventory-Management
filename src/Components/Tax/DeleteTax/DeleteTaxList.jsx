@@ -10,7 +10,6 @@ import {
   TaxDelectListAction,
   PermanentTaxDeleteAction,
 } from "../../../Store/Action/TaxAction/index";
-import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
 function DeletedTaxList() {

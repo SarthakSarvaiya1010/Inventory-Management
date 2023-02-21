@@ -84,34 +84,33 @@ export const ProductEditDataAction =
     }
   };
 
-export const ProductAddAction =
-  (AccessToken, data) => async (dispatch) => {
-    // const Product_id = 6;
-    const token = AccessToken;
-    console.log("data==========>",data);
-    try {
-      const ProductAdd = await axios.post(
-        "http://localhost:3200/products",
-        data,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch({
-        type: PRODUCT_ADD,
-        payload: ProductAdd.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
+export const ProductAddAction = (AccessToken, data) => async (dispatch) => {
+  // const Product_id = 6;
+  const token = AccessToken;
+  console.log("data==========>", data);
+  try {
+    const ProductAdd = await axios.post(
+      "http://localhost:3200/products",
+      data,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    dispatch({
+      type: PRODUCT_ADD,
+      payload: ProductAdd.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
 
 export const ProductDeleteAction =
   (AccessToken, Product_id) => async (dispatch) => {
     // const Product_id = 6;
     const token = AccessToken;
-    console.log("Product_id",Product_id);
+    console.log("Product_id", Product_id);
     try {
       const ProductDelete = await axios.delete(
         `http://localhost:3200/delete/products/${Product_id}`,

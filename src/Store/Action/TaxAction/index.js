@@ -23,6 +23,7 @@ export const TaxListAction = (AccessToken, data) => async (dispatch) => {
         searchKeyword: data.search ? data.search : null,
         limit: data.limit,
         page: data.pageNumber,
+        orderByString: data.orderByString,
       },
     });
     dispatch({

@@ -75,7 +75,7 @@ function InvoiceList() {
   };
   const headalShorting = (data_a) => {
     shortingIcon === data_a
-      ? setShortingIcon("Sr. No")
+      ? setShortingIcon(null)
       : setShortingIcon(data_a);
     switch (data_a) {
       case "BILL No":

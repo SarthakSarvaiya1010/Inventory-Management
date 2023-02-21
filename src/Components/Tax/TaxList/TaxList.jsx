@@ -18,11 +18,13 @@ function TaxList() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const TaxData = useSelector((state) => state?.TaxData);
-  let limit = 2;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
-  const data = [];
+  const [shorting, setShorting] = useState();
+  const [shortingIcon, setShortingIcon] = useState("Sr.No");
   console.log("TaxData", TaxData?.TaxDeleteSuccessData?.statusCode);
+  let limit = 2;
+  const data = [];
 
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   TaxData?.TaxList.map((e) => {
@@ -34,13 +36,6 @@ function TaxList() {
     elements["Active"] = e.isactive;
     data.push(elements);
   });
-
-  // useEffect(() => {
-  //   if (TaxData?.TaxDeleteSuccessData?.statusCode == "200") {
-  //     alert("Sucessfully Tax delete");
-  //     window.location.reload();
-  //   }
-  // }, [TaxData?.TaxDeleteSuccessData?.StatusCode]);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
@@ -74,7 +69,7 @@ function TaxList() {
     dispatch(
       TaxListAction(
         successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber }
+        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
       )
     );
   }, [
@@ -82,6 +77,7 @@ function TaxList() {
     dispatch,
     limit,
     pageNumber,
+    shorting,
     successLoginData?.LoginData?.accessToken,
   ]);
 
@@ -98,7 +94,49 @@ function TaxList() {
       );
     }
   };
-  console.log(search);
+  const headalShorting = (data_a) => {
+    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
+    switch (data_a) {
+      case "Sr. No":
+        if (shorting === "sr_no") {
+          setShorting(null);
+        } else {
+          setShorting("sr_no");
+        }
+        return "done";
+      case "Tax Name":
+        if (shorting === "tax_name") {
+          setShorting(null);
+        } else {
+          setShorting("tax_name");
+        }
+        return "done";
+      case "Tax Rate [ In % ]":
+        if (shorting === "tax_rate") {
+          setShorting(null);
+        } else {
+          setShorting("tax_rate");
+        }
+        return "done";
+      case "Tax Country":
+        if (shorting === "tax_country") {
+          setShorting(null);
+        } else {
+          setShorting("tax_country");
+        }
+        return "done";
+      case "Active":
+        if (shorting === "isactive") {
+          setShorting(null);
+        } else {
+          setShorting("isactive");
+        }
+        return "done";
+      default:
+        setShorting(null);
+        return " state";
+    }
+  };
 
   return (
     <div>
@@ -145,6 +183,8 @@ function TaxList() {
               data={data}
               headalEdit={headalEdit}
               headalDelete={headalDelete}
+              headalShorting={headalShorting}
+              ShortingHide={shortingIcon}
             />
             <Stack
               sx={{

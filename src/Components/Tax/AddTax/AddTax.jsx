@@ -53,7 +53,7 @@ function AddTax() {
       {!TaxData.loder || !id ? (
         // Object.keys(Product_data).length ? (
         <Container fixed>
-          <Header name={Tax_data ? "Edit Tax" : "Add Tax"} SearchBar={false} />
+          <Header name={id ? "Edit Tax" : "Add Tax"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <DialogContent>
               <br />
