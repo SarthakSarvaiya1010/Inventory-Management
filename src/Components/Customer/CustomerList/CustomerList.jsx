@@ -93,9 +93,7 @@ function CustomerList() {
   }, [accessToken?.accessToken, dispatch, limit, pageNumber, shorting]);
 
   const headalShorting = (data_a) => {
-    shortingIcon === data_a
-      ? setShortingIcon("Sr. No")
-      : setShortingIcon(data_a);
+    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
         if (shorting === "sr_no") {

@@ -1,3 +1,4 @@
+/* eslint-disable no-self-assign */
 import React, { useEffect, useState } from "react";
 import {
   TextField,
@@ -23,9 +24,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Header from "../../../Helpers/Header/Header";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +39,10 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "left",
   color: theme.palette.text.secondary,
 }));
-
+const commonStyles = {
+  p: 2,
+  border: 1,
+};
 function AddInvoice() {
   const dispatch = useDispatch();
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
@@ -46,49 +50,146 @@ function AddInvoice() {
     localStorage.getItem("InvoiceAddPageData")
   );
 
-  console.log("accessToken====>", accessToken?.accessToken);
   const [CustomerListData, setCustomerListData] = useState({
     customer_name: "",
     address: "",
     gst_no: "",
   });
-  const [productListData, setProductListData] = useState({
-    hsn: "",
-  });
-
-  const [test, setTest] = useState();
-  const [bill_value, setBill_value] = useState([]);
-
-  const hedalchengeInt = (e) => {
-    let name = e.target.name.split(" ", 2);
-    let dummy = bill_value[parseInt(name[1]) - 1];
-    console.log("name, dummy", name, dummy, dummy.index);
-    // setTest({ ...test, [name[0]]: e.target.value });
-    // setBill_value([{ ...bill_value, [name[0]]: e.target.value }]);
-
-    bill_value.splice(0, 1, {
-      [name[0]]: e.target.value,
-      index: dummy.index,
-      product_id: dummy.product_id,
-      weight: dummy.weight,
-    });
-  };
-  // {
-  //   [name[0]]: e.target.value,
-  //   product_id: dummy.product_id,
-  //   index: dummy.index,
-  // }
-  // const [value, setValue] = useState(new Date());
-  // const CustomerData = useSelector((state) => state?.CustomerList);
-  const InvoicePageData = useSelector((state) => state?.InvoiceData);
 
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
-  console.log("bill_value", bill_value, test);
+  const [discount, setDiscount] = useState();
+  const [finalinvoicedata, setFinalInvoiceData] = useState(null);
+
+  const InvoicePageData = useSelector((state) => state?.InvoiceData);
 
   const testData = InvoicePageData?.GetInvoicePagData.length
     ? InvoicePageData?.GetInvoicePagData
-    : invoivepagedata;
+    : invoivepagedata
+    ? invoivepagedata
+    : [{}];
+
+  const handleChangeProduct = (name, value) => {
+    let nameIndex = name.split(" ", 2);
+    let index = parseInt(nameIndex[1]) - 1;
+    let fieldName = nameIndex[0];
+    let existingweight = product.filter((ans) => ans?.weight);
+    let existingrate = product.filter((ans) => ans?.rate);
+    let existingProduct = product.filter((ans) => ans?.product_id);
+
+    let hsn_data;
+    if (fieldName === "product_id") {
+      let hsn_data_1 =
+        InvoicePageData?.GetInvoicePagData[0]?.productList.filter(
+          (e) => e?.product_id === value
+        );
+      hsn_data = hsn_data_1[0]?.hsn;
+    }
+
+    if (existingweight.length > 0 && fieldName === "weight") {
+      existingweight.forEach((f) => {
+        product[index].product_id = product[addtable - 1]?.product_id;
+        product[index].hsn = product[addtable - 1]?.hsn;
+        product[index].weight = value;
+        product[index].rate = product[addtable - 1]?.rate;
+        product[index].amount =
+          value && product[addtable - 1]?.rate
+            ? parseFloat(value) * parseFloat(product[addtable - 1]?.rate)
+            : 0;
+      });
+      setProduct([...product]);
+    } else {
+      if (existingrate.length > 0 && fieldName === "rate") {
+        existingrate.forEach((f) => {
+          product[index].product_id = product[addtable - 1]?.product_id;
+          product[index].hsn = product[addtable - 1]?.hsn;
+          product[index].weight = product[addtable - 1]?.weight;
+          product[index].rate = value;
+          product[index].amount =
+            product[0]?.weight && value
+              ? parseFloat(product[addtable - 1]?.weight) * parseFloat(value)
+              : 0;
+        });
+        setProduct([...product]);
+      } else {
+        if (
+          (existingProduct.length > addtable - 1 ||
+            existingProduct.length > 0) &&
+          fieldName === "product_id"
+        ) {
+          existingrate.forEach((f) => {
+            product[index].product_id = value;
+            product[index].hsn = hsn_data;
+            product[index].weight = product[index]?.weight;
+            product[index].rate = product[index]?.rate;
+          });
+          setProduct([...product]);
+        } else {
+          if (addtable > 1) {
+            setProduct([
+              ...product,
+              {
+                product_id: product[addtable - 1]?.product_id,
+                hsn: product[addtable - 1]?.hsn || hsn_data,
+                weight: product[addtable - 1]?.weight,
+                rate: product[addtable - 1]?.rate,
+                amount:
+                  product[addtable - 1]?.weight && product[addtable - 1]?.rate
+                    ? parseFloat(product[addtable - 1]?.weight) *
+                      parseFloat(product[addtable - 1]?.rate)
+                    : 0,
+                [fieldName]: value,
+              },
+            ]);
+          } else {
+            setProduct([
+              {
+                product_id: product[0]?.product_id,
+                hsn: product[0]?.hsn || hsn_data,
+                weight: product[0]?.weight,
+                rate: product[0]?.rate,
+                amount:
+                  product[0]?.weight && product[0]?.rate
+                    ? parseFloat(product[0]?.weight) *
+                      parseFloat(product[0]?.rate)
+                    : 0,
+                [fieldName]: value,
+              },
+            ]);
+          }
+        }
+      }
+    }
+  };
+
+  // const { sx, ...other } = props;
+  console.log("product", product);
+
+  const handleCreate = () => {
+    console.log("product", product, CustomerListData);
+  };
+
+  let totalAmount = 0;
+  let totalweight = 0;
+  let totalrate = 0;
+  product.forEach((sum) => {
+    totalAmount += sum.amount;
+    totalweight += sum.weight;
+    totalrate += sum.rate;
+  });
+  console.log("weight===>", totalweight);
+
+  console.log("totalAmount==>", totalAmount);
+  let SGST = ((1.5 / 100) * totalAmount).toFixed(2);
+  let CGST = ((1.5 / 100) * totalAmount).toFixed(2);
+  console.log("SGST,CGST", parseFloat(SGST), parseFloat(CGST));
+  const Bill_Amount =
+    totalAmount && SGST && CGST
+      ? totalAmount +
+        parseFloat(SGST) +
+        parseFloat(CGST) -
+        (discount ? discount : 0)
+      : 0;
 
   const handleChange = (event) => {
     const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
@@ -97,49 +198,14 @@ function AddInvoice() {
     setCustomerListData(data);
   };
 
-  const handleChangeProduct = (fieldName, value) => {
-    let existingweight = product.filter((ans) => ans?.weight);
-    let existingrate = product.filter((ans) => ans?.rate);
-
-    if (existingweight.length > 0 && existingrate.length <= 0) {
-      existingweight.forEach((f) => {
-        let ansDataInd = product.findIndex((e) => e.weight === f.weight);
-        product[ansDataInd].weight = value;
-      });
-      setProduct([...product]);
-    } else {
-      if (existingrate.length > 0 && existingweight.length <= 0) {
-        existingrate.forEach((f) => {
-          let ansDataInd = product.findIndex((e) => e.rate === f.rate);
-          product[ansDataInd].rate = value;
-        });
-        setProduct([...product]);
-      } else {
-        setProduct([...product, { [fieldName]: value }]);
-      }
-    }
-    //  else {
-    //   setProduct([...product, { [fieldName]: value }]);
-    // }
-
-    // if (fieldName.weight) {
-    //   setProduct([...product, { [fieldName.weight]: value }]);
-    // } else {
-    //   setProduct([...product, { [fieldName]: value }]);
-    // }
-  };
-  console.log("product_Data", product);
-
-  // const { sx, ...other } = props;
-  const commonStyles = {
-    p: 2,
-    border: 1,
-  };
-
   const handleDelete = () => {
     setAddTable((prev) => prev - 1);
+    product.splice(addtable - 1, 1);
   };
 
+  const handleAdd = () => {
+    setAddTable((prev) => prev + 1);
+  };
   useEffect(() => {
     dispatch(GetinvoiceAddPageAction(accessToken?.accessToken));
   }, [accessToken?.accessToken, dispatch]);
@@ -157,6 +223,9 @@ function AddInvoice() {
     <div>
       <Container>
         <Header name={"AddInvoice"} SearchBar={false} />
+        <a href="https://codingbeautydev.com" target="_blank" rel="noreferrer">
+          Coding Beauty
+        </a>
         <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
           <Box
             sx={{
@@ -208,8 +277,9 @@ function AddInvoice() {
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard-01"
                         //   value={age}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e)}
                         label="Mobile_no*"
+                        name="customer_mobileNo"
                       >
                         <MenuItem value={null}>
                           <em>None</em>
@@ -245,6 +315,8 @@ function AddInvoice() {
                         label="Customer_Gst_No"
                         variant="standard"
                         sx={{ width: 1 }}
+                        name="Customer_Gst_No"
+                        onChange={(e) => handleChange(e)}
                       />
                       <br />
 
@@ -254,6 +326,8 @@ function AddInvoice() {
                         variant="standard"
                         value={CustomerListData?.customer_name}
                         sx={{ width: 1 }}
+                        name="Customer_Name"
+                        onChange={(e) => handleChange(e)}
                       />
 
                       <br />
@@ -270,24 +344,27 @@ function AddInvoice() {
                       variant="standard"
                       value={testData[0]?.bill_no || 0}
                       sx={{ width: 1 }}
+                      name="bill_no"
+                      onChange={(e) => handleChange(e)}
                     />
                     <br />
-                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         label="Date"
                         value={testData[0]?.date}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
+                        name="date"
+                        onChange={(e) => handleChange(e)}
                         renderInput={(params) => <TextField {...params} />}
                       />
-                    </LocalizationProvider> */}
+                    </LocalizationProvider>
                     <br />
                     <TextField
                       id="standard-basic-4"
                       label="Gst_No"
                       variant="standard"
                       sx={{ width: 1 }}
+                      name="Gst_No"
+                      onChange={(e) => handleChange(e)}
                     />
                   </Stack>
                 </Item>
@@ -314,9 +391,7 @@ function AddInvoice() {
                             <Button
                               variant="contained"
                               color="success"
-                              onClick={() => {
-                                setAddTable((prev) => prev + 1);
-                              }}
+                              onClick={() => handleAdd()}
                             >
                               <AddIcon />
                             </Button>
@@ -350,12 +425,11 @@ function AddInvoice() {
                                 //   value={age}
                                 onChange={(e) =>
                                   handleChangeProduct(
-                                    "product_id",
+                                    "product_id " + ind,
                                     e.target.value
                                   )
                                 }
                                 label=" Select Product"
-                                name={ind}
                               >
                                 <MenuItem value="">
                                   <em>None</em>
@@ -381,7 +455,11 @@ function AddInvoice() {
                               label="Hsn"
                               variant="standard"
                               type="number"
-                              value={productListData?.hsn}
+                              value={
+                                product[ind - 1]?.hsn
+                                  ? product[ind - 1]?.hsn
+                                  : 0
+                              }
                             />
                           </TableCell>
                           <TableCell>
@@ -392,7 +470,10 @@ function AddInvoice() {
                               variant="standard"
                               type="number"
                               onChange={(e) =>
-                                handleChangeProduct("weight", e.target.value)
+                                handleChangeProduct(
+                                  "weight " + ind,
+                                  parseFloat(e.target.value)
+                                )
                               }
                             />
                           </TableCell>
@@ -404,26 +485,45 @@ function AddInvoice() {
                               type="number"
                               name={`rate ${ind}`}
                               onChange={(e) =>
-                                handleChangeProduct("rate", e.target.value)
+                                handleChangeProduct(
+                                  "rate " + ind,
+                                  parseFloat(e.target.value)
+                                )
                               }
                             />
                           </TableCell>
                           <TableCell colSpan={2}>
-                            <TextField
-                              id="standard-basic-8"
-                              label="Amount"
-                              variant="standard"
-                              value={parseInt(
-                                bill_value?.["Weight" + ind] * bill_value?.rate
-                              ).toFixed(2)}
-                            />
+                            {product.length > ind - 1 ? (
+                              <TextField
+                                id="standard-basic-8"
+                                label="Amount"
+                                variant="standard"
+                                value={
+                                  product[ind - 1]?.amount === "NaN"
+                                    ? 0
+                                    : product[ind - 1]?.amount?.toFixed(2)
+                                }
+                              />
+                            ) : (
+                              <TextField
+                                id="standard-basic-8"
+                                label="Amount"
+                                variant="standard"
+                                value={
+                                  typeof product[ind - 1]?.amount !==
+                                  "undefined"
+                                    ? (product[ind - 1]?.amount).toFixed(2)
+                                    : 0
+                                }
+                              />
+                            )}
                           </TableCell>
                           <TableCell>
                             {i > 0 ? (
                               <Button
                                 variant="outlined"
                                 color="error"
-                                onClick={handleDelete}
+                                onClick={(ind) => handleDelete(ind)}
                               >
                                 <ClearIcon />
                               </Button>
@@ -446,39 +546,28 @@ function AddInvoice() {
                         <TableCell colSpan={1}>
                           <TextField
                             id="standard-basic-9"
-                            // label="Amount"
+                            label="Total weight"
                             variant="standard"
                             defaultValue={0}
-                            value={
-                              bill_value?.Weight
-                                ? parseInt(bill_value[0]?.Weight).toFixed(2)
-                                : 0
-                            }
+                            value={totalweight ? totalweight : 0}
                             sx={{ width: 200 }}
                           />
                         </TableCell>
                         <TableCell colSpan={1}>
                           <TextField
                             id="standard-basic-01"
-                            // label="Amount"
+                            label="Total rate"
                             variant="standard"
-                            value={
-                              bill_value?.rate
-                                ? parseInt(bill_value?.rate).toFixed(2)
-                                : 0
-                            }
-                            defaultValue={0}
+                            value={totalrate ? totalrate : 0}
                           />
                         </TableCell>
                         <TableCell colSpan={2}>
                           <TextField
                             id="standard-basic-02"
-                            // label="Amount"
+                            label="Total Amount"
                             variant="standard"
                             defaultValue={0}
-                            value={parseInt(
-                              bill_value?.Weight * bill_value?.rate
-                            ).toFixed(2)}
+                            value={totalAmount?.toFixed(2)}
                           />
                         </TableCell>
                       </TableRow>
@@ -488,108 +577,69 @@ function AddInvoice() {
                     <Table aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell colSpan={4}></TableCell>
-                          <TableCell>TAXABLE AMOUNT</TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic"
-                              label="TaxableAmount"
-                              variant="standard"
-                            />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={4}></TableCell>
-
-                          <TableCell>SGST(1.50%)</TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic-03"
-                              label="SGST"
-                              variant="standard"
-                            />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={4}></TableCell>
-
-                          <TableCell>CGST(1.50%)</TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic-04"
-                              label="CGST"
-                              variant="standard"
-                            />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={4}></TableCell>
-
-                          <TableCell>DISCOUNT</TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic-05"
-                              label="Discount"
-                              variant="standard"
-                            />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>BILL AMOUNT</TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic-06"
-                              label="Bill Amount"
-                              variant="standard"
-                            />
+                          <TableCell colSpan={8}></TableCell>
+                          <TableCell rowSpan={2}>
+                            <TableRow>
+                              <TableCell>TAXABLE AMOUNT</TableCell>
+                              <TableCell>
+                                <TextField
+                                  id="standard-basic"
+                                  label="TaxableAmount"
+                                  variant="standard"
+                                  value={totalAmount.toFixed(2)}
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>SGST(1.50%)</TableCell>
+                              <TableCell>
+                                <TextField
+                                  id="standard-basic-03"
+                                  label="SGST"
+                                  variant="standard"
+                                  value={SGST}
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>CGST(1.50%)</TableCell>
+                              <TableCell>
+                                <TextField
+                                  id="standard-basic-04"
+                                  label="CGST"
+                                  variant="standard"
+                                  value={CGST}
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>DISCOUNT</TableCell>
+                              <TableCell>
+                                <TextField
+                                  id="standard-basic-05"
+                                  label="Discount"
+                                  variant="standard"
+                                  value={discount ? discount : 0}
+                                  onChange={(e) => setDiscount(e.target.value)}
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>BILL AMOUNT</TableCell>
+                              <TableCell>
+                                <TextField
+                                  id="standard-basic-06"
+                                  label="Bill Amount"
+                                  variant="standard"
+                                  value={
+                                    Bill_Amount ? Bill_Amount.toFixed(2) : 0
+                                  }
+                                />
+                              </TableCell>
+                            </TableRow>
                           </TableCell>
                         </TableRow>
                       </TableHead>
-
-                      {/* <TableBody>
-                        <TableRow
-                          // key={row.name}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell>
-                            <TextField
-                              id="standard-basic"
-                              label="TaxableAmount"
-                              variant="standard"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic"
-                              label="SGST"
-                              variant="standard"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic"
-                              label="CGST"
-                              variant="standard"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic"
-                              label="Discount"
-                              variant="standard"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic"
-                              label="Bill Amount"
-                              variant="standard"
-                            />
-                          </TableCell>
-                        </TableRow>
-                      </TableBody> */}
                     </Table>
                   </Box>
                 </TableContainer>
@@ -663,6 +713,18 @@ function AddInvoice() {
                 </Item>
               </Grid>
             </Grid>
+            <Button
+              variant="contained"
+              color="success"
+              sx={{ marginTop: 4 }}
+              onClick={() => handleCreate()}
+              href="https://localhost:3200/Invoice/pdf"
+            >
+              Create And Print
+              {/* <a target="_blank" rel="noreferrer">
+                Coding Beauty
+              </a> */}
+            </Button>
           </Box>
         </Container>
       </Container>

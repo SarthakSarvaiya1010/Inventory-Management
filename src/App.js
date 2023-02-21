@@ -16,6 +16,7 @@ import {
   DeleteTaxPage,
   InvoiceListPage,
   AddInvoicePage,
+  EditInvoicePage,
 } from "./pages/index";
 import ListUser from "./Components/UserData/ListUser";
 import { styled } from "@mui/material/styles";
@@ -69,6 +70,7 @@ const route = [
   { path: "/deletedproduct", element: <DeletedProductListPage /> },
   { path: "/deletedcustomer", element: <DeletedCustomerListPage /> },
   { path: "/TaxList", element: <TaxListPage /> },
+  { path: "/InvoiceList/edit/:id", element: <EditInvoicePage /> },
   { path: "/addtax", element: <AddTaxPage /> },
   { path: "/tax/edit/:id", element: <AddTaxPage /> },
   { path: "/deletedtax", element: <DeleteTaxPage /> },

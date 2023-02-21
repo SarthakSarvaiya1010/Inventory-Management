@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InvoiceListAction } from "../../../Store/Action/InvoiceAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
+import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
 function InvoiceList() {
   const navigate = useNavigate();
@@ -17,6 +18,13 @@ function InvoiceList() {
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const InvoiceData = useSelector((state) => state?.InvoiceData);
   const data = [];
+  const [pageNumber, setPageNumber] = useState();
+  const [search, setSearch] = useState();
+  const [shortingIcon, setShortingIcon] = useState("BILL No");
+  const [shorting, setShorting] = useState();
+
+  let limit = 2;
+
   console.log("successLoginData", InvoiceData);
 
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
@@ -24,13 +32,17 @@ function InvoiceList() {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
         InvoiceListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          { limit: limit, pageNumber: pageNumber, orderByString: shorting }
         )
       );
     }
   }, [
     accessToken?.accessToken,
     dispatch,
+    limit,
+    pageNumber,
+    shorting,
     successLoginData?.LoginData?.accessToken,
   ]);
   // eslint-disable-next-line array-callback-return
@@ -60,12 +72,68 @@ function InvoiceList() {
     // );
     window.location.reload();
   };
+  const searchHeadal = (e) => {
+    setSearch(e.target.value);
+  };
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      dispatch(
+        InvoiceListAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          { search: search, limit: limit, pageNumber: pageNumber }
+        )
+      );
+    }
+  };
+  const headalShorting = (data_a) => {
+    shortingIcon === data_a
+      ? setShortingIcon("Sr. No")
+      : setShortingIcon(data_a);
+    switch (data_a) {
+      case "BILL No":
+        if (shorting === "bill_no") {
+          setShorting(null);
+        } else {
+          setShorting("bill_no");
+        }
+        return "done";
+      case "Invoice Date":
+        if (shorting === "invoice_date") {
+          setShorting(null);
+        } else {
+          setShorting("invoice_date");
+        }
+        return "done";
+      case "Name":
+        if (shorting === "customer_name") {
+          setShorting(null);
+        } else {
+          setShorting("customer_name");
+        }
+        return "done";
+      case "Total Amount":
+        if (shorting === "bill_amount") {
+          setShorting(null);
+        } else {
+          setShorting("bill_amount");
+        }
+        return "done";
+      default:
+        setShorting(null);
+        return " state";
+    }
+  };
 
   return (
     <div>
       {InvoiceData?.invoiceList.length ? (
         <Container fixed>
-          <Header name={"InvoiceList"} SearchBar={true} />
+          <Header
+            name={"InvoiceList"}
+            SearchBar={true}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"
@@ -99,7 +167,25 @@ function InvoiceList() {
               data={data}
               headalEdit={headalEdit}
               headalDelete={headalDelete}
+              headalShorting={headalShorting}
+              ShortingHide={shortingIcon}
             />
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  InvoiceData?.invoiceList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+              />
+            </Stack>
           </Container>
         </Container>
       ) : (

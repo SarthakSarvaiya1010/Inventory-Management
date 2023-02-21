@@ -15,12 +15,14 @@ export const ProductListAction = (AccessToken, data) => async (dispatch) => {
   try {
     const ProductList = await axios.get("http://localhost:3200/products", {
       headers: { Authorization: `Bearer ${token}` },
-      params: {
-        searchKeyword: data.search,
-        limit: data.limit,
-        page: data.pageNumber,
-        orderByString: data.orderByString,
-      },
+      params: data
+        ? {
+            searchKeyword: data.search,
+            limit: data.limit,
+            page: data.pageNumber,
+            orderByString: data.orderByString,
+          }
+        : null,
     });
     dispatch({
       type: PRODUCT_LIST,
@@ -86,7 +88,7 @@ export const ProductAddAction =
   (AccessToken, Product_id) => async (dispatch) => {
     // const Product_id = 6;
     const token = AccessToken;
-    console.log(Product_id);
+    console.log("Product_id", Product_id);
     try {
       const ProductAdd = await axios.post(
         "http://localhost:3200/products",

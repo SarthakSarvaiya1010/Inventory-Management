@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductValidate, CustomerValidate } from "./formValidation";
 import {
@@ -10,7 +10,7 @@ import {
   CustomerAddAction,
 } from "../../Store/Action/CustomerAction/index";
 
-const UseForm = (defaultData, showToastMessage) => {
+const UseForm = (defaultData, showToastMessage, image) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
@@ -24,25 +24,46 @@ const UseForm = (defaultData, showToastMessage) => {
     setFindErrors(true);
     setErrors(ProductValidate(values, defaultData));
     const data = {};
+    const formAddUserData = new FormData();
+    formAddUserData.append(
+      "product_name",
+      values?.product_name || defaultData?.product_name
+    );
+    formAddUserData.append(
+      "product_type",
+      values?.product_type || defaultData?.product_type
+    );
+    formAddUserData.append(
+      "description",
+      values?.Description || defaultData?.description
+    );
+    formAddUserData.append("hsn", values?.hsn || defaultData?.hsn);
+    formAddUserData.append("weight", values?.weight || defaultData?.weight);
+    formAddUserData.append("image_src", image);
     data["product_name"] = values?.product_name || defaultData?.product_name;
     data["product_type"] = values?.product_type || defaultData?.product_type;
     data["description"] = values?.Description || defaultData?.description;
     data["hsn"] = parseFloat(values?.hsn || defaultData?.hsn);
     data["weight"] = parseFloat(values.weight || defaultData?.weight);
+    data["image_src"] = image;
     if (!Object.keys(errors).length && findErrors) {
-      if (defaultData) {
+      if (defaultData?.product_id) {
         dispatch(
           ProductEditDataAction(
             successLoginData?.LoginData?.accessToken ||
               accessToken?.accessToken,
-            data,
+            formAddUserData,
             parseInt(defaultData.product_id)
           )
         );
         showToastMessage();
       } else {
         dispatch(
-          ProductAddAction(successLoginData?.LoginData?.accessToken, data)
+          ProductAddAction(
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
+            formAddUserData
+          )
         );
       }
     }
@@ -95,6 +116,7 @@ const UseForm = (defaultData, showToastMessage) => {
       }),
     []
   );
+
   // console.log(values, "values");
 
   return {
