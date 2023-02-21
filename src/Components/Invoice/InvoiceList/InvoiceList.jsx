@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
 // import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
@@ -48,6 +49,7 @@ function InvoiceList() {
           { limit: limit, pageNumber: pageNumber, orderByString: shorting }
         )
       );
+      localStorage.setItem("InvoiceEditPageData", JSON.stringify([{}]));
     }
   }, [
     accessToken?.accessToken,
@@ -60,7 +62,9 @@ function InvoiceList() {
   // eslint-disable-next-line array-callback-return
 
   const headalEdit = (data) => {
-    navigate("/invoice/edit");
+    navigate(
+      `/InvoiceList/edit/${InvoiceData.invoiceList[data - 1]?.invoice_id}`
+    );
   };
 
   const headalDelete = (data) => {
@@ -74,9 +78,7 @@ function InvoiceList() {
     }
   };
   const headalShorting = (data_a) => {
-    shortingIcon === data_a
-      ? setShortingIcon(null)
-      : setShortingIcon(data_a);
+    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
     switch (data_a) {
       case "BILL No":
         if (shorting === "bill_no") {

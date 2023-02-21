@@ -14,7 +14,7 @@ import axios from "axios";
 export const CustomerListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const ProductList = await axios.get("http://localhost:3200/customers", {
+    const ProductList = await axios.get("https://inventory-management-backend.onrender.com/customers", {
       headers: { Authorization: `Bearer ${token}` },
       params: data
         ? {
@@ -41,7 +41,7 @@ export const CustomerAddAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
     const CustomerAdd = await axios.post(
-      "http://localhost:3200/customers",
+      "https://inventory-management-backend.onrender.com/customers",
       data,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -64,7 +64,7 @@ export const CustomerDelectListAction =
     const token = AccessToken;
     try {
       const CustomerDelectList = await axios.get(
-        "http://localhost:3200/delete/customers",
+        "https://inventory-management-backend.onrender.com/delete/customers",
         {
           headers: { Authorization: `Bearer ${token}` },
           params: {
@@ -92,7 +92,7 @@ export const CustomerEditAction =
     const token = AccessToken;
     try {
       const ProductEdit = await axios.get(
-        `http://localhost:3200/customers/${customers_id}`,
+        `https://inventory-management-backend.onrender.com/customers/${customers_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -114,7 +114,7 @@ export const CustomerEditDataAction =
     const token = AccessToken;
     try {
       const ProductEditData = await axios.put(
-        `http://localhost:3200/edit/customers/${customers_id}`,
+        `https://inventory-management-backend.onrender.com/edit/customers/${customers_id}`,
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -137,7 +137,7 @@ export const CustomerDeleteAction =
     const token = AccessToken;
     try {
       const CustomerDelete = await axios.delete(
-        `http://localhost:3200/delete/customers/${customer_id}`,
+        `https://inventory-management-backend.onrender.com/delete/customers/${customer_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -158,7 +158,7 @@ export const PermanentCustomerDeleteAction =
     const token = AccessToken;
     try {
       const PermanentCustomerDelete = await axios.delete(
-        `http://localhost:3200/permanent/delete/customers/${customer_id}`,
+        `https://inventory-management-backend.onrender.com/permanent/delete/customers/${customer_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

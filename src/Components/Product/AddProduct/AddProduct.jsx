@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
-import { TextField, DialogContent, Container } from "@mui/material";
+import { TextField, DialogContent, Container, Fab } from "@mui/material";
 
 import Header from "../../../Helpers/Header/Header";
 import Stack from "@mui/material/Stack";
@@ -13,6 +13,7 @@ import { ProductEditAction } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddIcon from "@mui/icons-material/Add";
 
 const currencies = [
   {
@@ -33,11 +34,14 @@ function AddProduct() {
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
   console.log("id==========>",id);
+  const imageUploader = React.useRef(null);
+  const uploadedImage = React.useRef(null);
+  const [image, setImage] = React.useState(null);
 
   const Product_data = ProductEditData?.productEdit;
   // console.log("params", id, Product_data);
   // const [values, setvalues] = useState(null);
-  console.log("params", Product_data, Object.keys(Product_data).length);
+  console.log("params", ProductEditData?.productEdit?.image_src, uploadedImage);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const accessTokenData =
     successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
@@ -56,14 +60,31 @@ function AddProduct() {
 
   const { producthandleSubmit, values, errors, handleOnchange } = UseForm(
     Product_data,
-    showToastMessage
+    showToastMessage,
+    image
   );
 
-  console.log(values);
+  console.log("values", values);
 
   const handleCancle = () => {
     console.log("done");
     navigate("/ProductList");
+  };
+
+  const hedalImgChage = (event) => {
+    const [file] = event.target.files;
+
+    if (file) {
+      const reader = new FileReader();
+      const { current } = uploadedImage;
+      current.file = file;
+
+      reader.onload = (e) => {
+        current.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+    setImage(file);
   };
 
   return (
@@ -146,7 +167,6 @@ function AddProduct() {
                     autoComplete="off"
                   />
                   <p style={{ color: "red" }}>{errors?.weight}</p>
-
                   <br />
                   <TextField
                     error={errors?.hsn ? true : null}
@@ -161,9 +181,60 @@ function AddProduct() {
                     autoComplete="off"
                   />
                   <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <br />
+                  {/* <TextField
+                    error={errors?.hsn ? true : null}
+                    required
+                    type="number"
+                    name="image_src"
+                    label="image"
+                    defaultValue={id ? Product_data.hsn : ""}
+                    variant="outlined"
+                    onChange={(e) => handleOnchange(e)}
+                    value={values?.hsn}
+                    autoComplete="off"
+                  /> */}
+                  <img
+                    alt=""
+                    ref={uploadedImage}
+                    style={{
+                      height: "120px",
+                      width: "120px",
+                      display:
+                        image || ProductEditData?.productEdit?.image_src
+                          ? "flex"
+                          : "none",
+                    }}
+                    src={
+                      ProductEditData?.productEdit?.image_src
+                        ? `http://localhost:3200/${ProductEditData?.productEdit?.image_src}`
+                        : "src/"
+                    }
+                  />
+                  <br />
+                  <label htmlFor="upload-photo">
+                    <input
+                      style={{ display: "none" }}
+                      id="upload-photo"
+                      name="image_src"
+                      ref={imageUploader}
+                      onChange={hedalImgChage}
+                      type="file"
+                    />
+
+                    <Fab
+                      color="secondary"
+                      size="small"
+                      component="span"
+                      aria-label="add"
+                      variant="extended"
+                    >
+                      <AddIcon /> Upload product photo
+                    </Fab>
+                  </label>
+                  ;
                 </Stack>
               </Box>
-              <br />
               <br />
               <Stack
                 direction="row"

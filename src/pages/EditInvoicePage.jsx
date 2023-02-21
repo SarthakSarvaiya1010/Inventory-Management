@@ -1,10 +1,10 @@
-import React from 'react'
-import EditInvoice from "../Components/Invoice/EditInvoice/EditInvoice"
+import React from "react";
+import InvoiceEdit from "../Components/Invoice/InvoiceEdit/InvoiveEdit";
 
 export default function EditInvoicePage() {
   return (
     <div>
-      <EditInvoice />
+      <InvoiceEdit />
     </div>
-  )
+  );
 }

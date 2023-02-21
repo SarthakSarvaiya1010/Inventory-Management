@@ -43,7 +43,10 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "left",
   color: theme.palette.text.secondary,
 }));
-
+const commonStyles = {
+  p: 2,
+  border: 1,
+};
 function AddInvoice() {
   const commonStyles = {
     p: 2,
@@ -55,6 +58,7 @@ function AddInvoice() {
   const invoivepagedata = JSON.parse(
     localStorage.getItem("InvoiceAddPageData")
   );
+
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
   const testData = InvoicePageData?.GetInvoicePagData.length
     ? InvoicePageData?.GetInvoicePagData
@@ -67,11 +71,15 @@ function AddInvoice() {
     address: "",
     gst_no: "",
   });
-  console.log("invoicepdf", InvoicePageData?.InvoicePdf);
-  console.log("CustomerListData", CustomerListData);
+
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
   const [discount, setDiscount] = useState();
+  const [finalinvoicedata, setFinalInvoiceData] = useState(null);
+
+  console.log("invoicepdf", InvoicePageData?.InvoicePdf);
+  console.log("CustomerListData", CustomerListData);
+
   console.log("discount==>", discount);
   console.log("product_Data", product);
 
@@ -91,7 +99,6 @@ function AddInvoice() {
         );
       hsn_data = hsn_data_1[0]?.hsn;
     }
-
     if (existingweight.length > 0 && fieldName === "weight") {
       console.log("weightblockhere");
       existingweight.forEach((f) => {
@@ -165,6 +172,29 @@ function AddInvoice() {
       }
     }
   };
+
+  // const { sx, ...other } = props;
+  console.log("product", product);
+
+  let totalAmount = 0;
+  let totalweight = 0;
+  let totalrate = 0;
+  product.forEach((sum, index) => {
+    totalAmount += sum.amount;
+    totalweight += parseFloat(sum.weight);
+    totalrate += parseFloat(sum.rate);
+  });
+  let SGST = ((1.5 / 100) * totalAmount).toFixed(2);
+  let CGST = ((1.5 / 100) * totalAmount).toFixed(2);
+  console.log("SGST,CGST", parseFloat(SGST), parseFloat(CGST));
+  const Bill_Amount =
+    totalAmount && SGST && CGST
+      ? totalAmount +
+        parseFloat(SGST) +
+        parseFloat(CGST) -
+        (discount ? discount : 0)
+      : 0;
+
   var b64;
   console.log(
     "InvoicePageData?.InvoicePdf?.InvoicePdf",
@@ -176,7 +206,7 @@ function AddInvoice() {
 
   // Decode Base64 to binary and show some information about the PDF file (note that I skipped all checks)
   if (b64) {
-    var bin = atob(b64);
+    // var bin = atob(b64);
 
     // Embed the PDF into the HTML page and show it to the user
     var obj = document.createElement("object");
@@ -218,25 +248,6 @@ function AddInvoice() {
     }
   }, [InvoicePageData?.GetInvoicePagData]);
 
-  let totalAmount = 0;
-  let totalweight = 0;
-  let totalrate = 0;
-  product.forEach((sum, index) => {
-    totalAmount += sum.amount;
-    totalweight += parseFloat(sum.weight);
-    totalrate += parseFloat(sum.rate);
-  });
-  let SGST = ((1.5 / 100) * totalAmount).toFixed(2);
-  let CGST = ((1.5 / 100) * totalAmount).toFixed(2);
-  console.log("SGST,CGST", parseFloat(SGST), parseFloat(CGST));
-  const Bill_Amount =
-    totalAmount && SGST && CGST
-      ? totalAmount +
-        parseFloat(SGST) +
-        parseFloat(CGST) -
-        (discount ? discount : 0)
-      : 0;
-
   const handleAddInvoiceData = () => {
     const finalinvoicedata = {
       bill_no: testData[0]?.bill_no,
@@ -255,6 +266,9 @@ function AddInvoice() {
     <div>
       <Container>
         <Header name={"AddInvoice"} SearchBar={false} />
+        <a href="https://codingbeautydev.com" target="_blank" rel="noreferrer">
+          Coding Beauty
+        </a>
         <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
           <Box
             sx={{
@@ -376,16 +390,16 @@ function AddInvoice() {
                       name="bill_no"
                       onChange={(e) => handleChange(e)}
                     />
-                    <br />
-                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Date"
-                        value={testData[0]?.date}
-                        name="date"
-                        onChange={(e) => handleChange(e)}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider> */}
+                    {/* <br />
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Date"
+                          value={testData[0]?.date}
+                          name="date"
+                          onChange={(e) => handleChange(e)}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </LocalizationProvider> */}
                     <br />
                     <TextField
                       id="standard-basic-4"

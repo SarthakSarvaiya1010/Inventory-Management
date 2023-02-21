@@ -71,13 +71,14 @@ const route = [
   { path: "/deletedproduct", element: <DeletedProductListPage /> },
   { path: "/deletedcustomer", element: <DeletedCustomerListPage /> },
   { path: "/TaxList", element: <TaxListPage /> },
+  { path: "/InvoiceList/edit/:id", element: <EditInvoicePage /> },
   { path: "/addtax", element: <AddTaxPage /> },
   { path: "/tax/edit/:id", element: <AddTaxPage /> },
   { path: "/deletedtax", element: <DeleteTaxPage /> },
   { path: "/listuser", element: <ListUser /> },
   { path: "/InvoiceList", element: <InvoiceListPage /> },
   { path: "/addinvoice", element: <AddInvoicePage /> },
-  { path: "/invoice/edit", element: <EditInvoicePage /> },
+  // { path: "/invoice/edit", element: <EditInvoicePage /> },
   { path: "/viewdeletedinvoice", element: <ViewDeletedInvoiceList /> },
 ];
 

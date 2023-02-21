@@ -17,7 +17,7 @@ import axios from "axios";
 export const TaxListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const TaxList = await axios.get("http://localhost:3200/tax", {
+    const TaxList = await axios.get("https://inventory-management-backend.onrender.com/tax", {
       headers: { Authorization: `Bearer ${token}` },
       params: {
         searchKeyword: data.search ? data.search : null,
@@ -42,7 +42,7 @@ export const TaxEditAction = (AccessToken, Tax_id) => async (dispatch) => {
   // const Product_id = 6;
   const token = AccessToken;
   try {
-    const TaxEdit = await axios.get(`http://localhost:3200/tax/${Tax_id}`, {
+    const TaxEdit = await axios.get(`https://inventory-management-backend.onrender.com/tax/${Tax_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch({
@@ -60,7 +60,7 @@ export const TaxEditAction = (AccessToken, Tax_id) => async (dispatch) => {
 export const TaxDelectListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const TaxDelectList = await axios.get("http://localhost:3200/delete/tax", {
+    const TaxDelectList = await axios.get("https://inventory-management-backend.onrender.com/delete/tax", {
       headers: { Authorization: `Bearer ${token}` },
       params: {
         searchKeyword: data.search ? data.search : null,
@@ -85,7 +85,7 @@ export const TaxDeleteAction = (AccessToken, Tax_id) => async (dispatch) => {
   console.log("tax_id", Tax_id);
   try {
     const TaxDelete = await axios.delete(
-      `http://localhost:3200/delete/tax/${Tax_id}`,
+      `https://inventory-management-backend.onrender.com/delete/tax/${Tax_id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -105,7 +105,7 @@ export const TaxAddAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   console.log("data", data);
   try {
-    const TaxAdd = await axios.post("http://localhost:3200/add/tax", data, {
+    const TaxAdd = await axios.post("https://inventory-management-backend.onrender.com/add/tax", data, {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch({
@@ -125,7 +125,7 @@ export const TaxInfoEditAction =
     console.log("data", data);
     try {
       const TaxInfoEdit = await axios.put(
-        `http://localhost:3200/edit/tax/${Tax_id}`,
+        `https://inventory-management-backend.onrender.com/edit/tax/${Tax_id}`,
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -148,7 +148,7 @@ export const PermanentTaxDeleteAction =
     console.log("tax_id", Tax_id);
     try {
       const PermanentTaxDelete = await axios.delete(
-        `http://localhost:3200/permanent/delete/tax/${Tax_id}`,
+        `https://inventory-management-backend.onrender.com/permanent/delete/tax/${Tax_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

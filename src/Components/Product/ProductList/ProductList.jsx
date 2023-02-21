@@ -33,20 +33,7 @@ function ProductList() {
       alert("Sucessfully product deleted");
       window.location.reload();
     }
-  });
-  useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-      dispatch(
-        ProductListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-        )
-      );
-    }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [productData?.SuccessProductDeleteData?.statusCode]);
 
   useEffect(() => {
     dispatch(

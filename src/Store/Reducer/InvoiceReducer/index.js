@@ -1,6 +1,7 @@
 import {
   INVOICE_LIST,
   GET_INVOICE_PAGE,
+  GET_INVOICE_EDIT_DATA,
   ADD_INVOICE,
   GET_DELETED_INVOICE,
   DELETE_INVOICE,
@@ -10,6 +11,7 @@ import {
 const initialstate = {
   invoiceList: [],
   GetInvoicePagData: [],
+  invoiceEdit: [],
   InvoicePdf: [],
   DeletedInvoiceList: [],
   SucessDeletedInvoiceData: [],
@@ -22,6 +24,7 @@ const InvoiceReducer = (state = initialstate, action) => {
       return {
         ...state,
         invoiceList: action.payload,
+        invoiceEdit:[]
       };
     case GET_INVOICE_PAGE:
       console.log("actionpayload,", action.payload);
@@ -29,11 +32,11 @@ const InvoiceReducer = (state = initialstate, action) => {
         ...state,
         GetInvoicePagData: action.payload,
       };
-    case ADD_INVOICE:
+    case GET_INVOICE_EDIT_DATA:
       console.log("actionpayload,", action.payload);
       return {
         ...state,
-        InvoicePdf: action.payload,
+        invoiceEdit: action.payload,
       };
     case ADD_INVOICE:
       console.log("actionpayload,", action.payload);
@@ -41,6 +44,7 @@ const InvoiceReducer = (state = initialstate, action) => {
         ...state,
         InvoicePdf: action.payload,
       };
+
     case GET_DELETED_INVOICE:
       console.log("actionpayload,", action.payload);
       return {

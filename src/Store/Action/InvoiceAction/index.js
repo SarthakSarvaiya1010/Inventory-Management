@@ -3,6 +3,7 @@ import {
   FAILED_ADMIN_LIST,
   GET_INVOICE_PAGE,
   FAILED_INVOICE_PAGE,
+  GET_INVOICE_EDIT_DATA,
   ADD_INVOICE,
   FAILED_ADD_INVOICE,
   GET_DELETED_INVOICE,
@@ -18,7 +19,7 @@ export const InvoiceListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   console.log("data", data);
   try {
-    const InvoiceList = await axios.get("http://localhost:3200/invoicelist", {
+    const InvoiceList = await axios.get("https://inventory-management-backend.onrender.com/invoicelist", {
       headers: { Authorization: `Bearer ${token}` },
       params: data
         ? {
@@ -45,7 +46,7 @@ export const GetinvoiceAddPageAction = (AccessToken) => async (dispatch) => {
   const token = AccessToken;
   try {
     const GetInvoicepageData = await axios.get(
-      "http://localhost:3200/getinvoicepage",
+      "https://inventory-management-backend.onrender.com/getinvoicepage",
       { headers: { Authorization: `Bearer ${token}` } }
     );
     dispatch({
@@ -59,13 +60,31 @@ export const GetinvoiceAddPageAction = (AccessToken) => async (dispatch) => {
     });
   }
 };
-
+export const GetinvoiceEditDataAction =
+  (AccessToken, Invoice_id) => async (dispatch) => {
+    const token = AccessToken;
+    try {
+      const GetInvoicepageData = await axios.get(
+        `https://inventory-management-backend.onrender.com/invoicelistbyid/${Invoice_id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch({
+        type: GET_INVOICE_EDIT_DATA,
+        payload: GetInvoicepageData.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_INVOICE_PAGE,
+        payload: { data: error.response.data },
+      });
+    }
+  };
 export const AddInvoiceData = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
 
   try {
     const AddInvoiceData = await axios.post(
-      "http://localhost:3200/addinvoice",
+      "https://inventory-management-backend.onrender.com/addinvoice",
       data,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -86,7 +105,7 @@ export const GetDeletedInvoiceList =
 
     try {
       const GetDeletedInvoiceData = await axios.get(
-        "http://localhost:3200/invoiceDeletelist",
+        "https://inventory-management-backend.onrender.com/invoiceDeletelist",
         {
           headers: { Authorization: `Bearer ${token}` },
           params: {
@@ -114,7 +133,7 @@ export const DeleteInvoice = (AccessToken, invoice_id) => async (dispatch) => {
 
   try {
     const DeleteInvoice = await axios.delete(
-      `http://localhost:3200/DeleteInvoice/${invoice_id}`,
+      `https://inventory-management-backend.onrender.com/DeleteInvoice/${invoice_id}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     dispatch({
@@ -135,7 +154,7 @@ export const PermanentDeleteInvoice =
 
     try {
       const PermanentDeleteInvoice = await axios.delete(
-        `http://localhost:3200/PermanentDeleteInvoice/${invoice_id}`,
+        `https://inventory-management-backend.onrender.com/PermanentDeleteInvoice/${invoice_id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       dispatch({
