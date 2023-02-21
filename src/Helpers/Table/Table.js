@@ -43,6 +43,7 @@ export default function CustomizedTables(props) {
     props;
   console.log(data, "headalEdit", Object.keys(data).length, ShortingHide);
   const column = Object.keys(data[0]);
+  console.log("data======>",data);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -55,7 +56,7 @@ export default function CustomizedTables(props) {
             }}
           >
             {column.map((data) => (
-              <StyledTableCell align="right">
+              <StyledTableCell align="center">
                 {data}
                 {ShortingHide === data ? (
                   <FilterListIcon
@@ -82,7 +83,7 @@ export default function CustomizedTables(props) {
                 )}
               </StyledTableCell>
             ))}
-            <StyledTableCell align="right">Action</StyledTableCell>
+            <StyledTableCell align="center">Action</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -91,13 +92,14 @@ export default function CustomizedTables(props) {
             return (
               <StyledTableRow key={row.name}>
                 {column.map((v) => (
+                  
                   <StyledTableCell
-                    align="right"
+                    align="center"
                     sx={{
                       color:
                         row[v] === "YES"
                           ? "green"
-                          : row[v] === "NO"
+                          : row[v] === "No".toUpperCase()
                           ? "red"
                           : "black",
                     }}
@@ -105,17 +107,18 @@ export default function CustomizedTables(props) {
                     {row[v]}
                   </StyledTableCell>
                 ))}
-                <StyledTableCell align="right">
+                <StyledTableCell align="center">
                   {!hide ? (
                     <>
                       <IconButton onClick={() => headalEdit(index)}>
-                        <EditIcon fontSize="17px" />
+                        <EditIcon style={{ color: "green" }} fontSize="17px" />
                         <Typography
                           variant="h6"
                           component="text"
                           sx={{
                             fontSize: "17px",
                             marginLeft: "5px",
+                            color: "green",
                           }}
                         >
                           Edit
@@ -126,12 +129,12 @@ export default function CustomizedTables(props) {
                     ""
                   )}
                   <IconButton onClick={() => headalDelete(index)}>
-                    <DeleteIcon fontSize="17px" />
+                    <DeleteIcon style={{ color: "red" }} fontSize="17px" />
 
                     <Typography
                       variant="h6"
                       component="text"
-                      sx={{ fontSize: "17px", marginLeft: "5px" }}
+                      sx={{ fontSize: "17px", marginLeft: "5px", color: "red" }}
                     >
                       Delete
                     </Typography>

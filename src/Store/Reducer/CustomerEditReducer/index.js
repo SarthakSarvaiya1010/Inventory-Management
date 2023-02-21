@@ -5,11 +5,14 @@ import {
   CUSTOMER_DELETE,
   CUSTOMER_EDIT_DATA,
   CUSTOMER_ADD,
+  PERMANENT_CUSTOMER_DELETE,
 } from "../../ActionTypes";
 
 const initialstate = {
   customerEdit: [],
   customerDeletedList: [],
+  SuccessfullyCustomerDeltetedData: [],
+  SuccessPermanentCustomerDeleteData: [],
   loder: true,
 };
 
@@ -35,7 +38,7 @@ const CustomerEditReducer = (state = initialstate, action) => {
     case CUSTOMER_DELETE:
       return {
         ...state,
-        ...action.payload,
+        SuccessfullyCustomerDeltetedData: action.payload,
       };
     case CUSTOMER_EDIT_DATA:
       return {
@@ -46,6 +49,11 @@ const CustomerEditReducer = (state = initialstate, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case PERMANENT_CUSTOMER_DELETE:
+      return {
+        ...state,
+        SuccessPermanentCustomerDeleteData: action.payload,
       };
     default:
       return state;

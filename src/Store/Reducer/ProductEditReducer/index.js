@@ -5,11 +5,14 @@ import {
   PRODUCT_DELETE,
   PRODUCT_EDIT_DATA,
   PRODUCT_DELETE_LIST,
+  PERMANENT_PRODUCT_DELETE,
 } from "../../ActionTypes";
 
 const initialstate = {
   productEdit: [],
   productDeletList: [],
+  SuccessProductDeleteData: [],
+  SucessPermanentDeleteData : [],
   loder: true,
 };
 
@@ -34,7 +37,7 @@ const ProductEditReducer = (state = initialstate, action) => {
     case PRODUCT_DELETE:
       return {
         ...state,
-        ...action.payload,
+        SuccessProductDeleteData: action.payload,
       };
     case PRODUCT_EDIT_DATA:
       return {
@@ -45,6 +48,11 @@ const ProductEditReducer = (state = initialstate, action) => {
       return {
         ...state,
         productDeletList: action.payload,
+      };
+    case PERMANENT_PRODUCT_DELETE:
+      return {
+        ...state,
+        SucessPermanentDeleteData: action.payload,
       };
     default:
       return state;

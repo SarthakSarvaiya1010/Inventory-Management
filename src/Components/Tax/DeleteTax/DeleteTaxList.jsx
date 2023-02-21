@@ -6,7 +6,10 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { TaxDelectListAction } from "../../../Store/Action/TaxAction/index";
+import {
+  TaxDelectListAction,
+  PermanentTaxDeleteAction,
+} from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
@@ -44,6 +47,7 @@ function DeletedTaxList() {
   // eslint-disable-next-line array-callback-return
   TaxData?.TaxDeletList.map((e) => {
     let elements = {};
+    elements["Sr.No"] = e.sr_no;
     elements["Tax Name"] = e.tax_name;
     elements["Tax Rate [ In % ]"] = e.tax_rate;
     elements["Tax Country"] = e.tax_country;
@@ -81,14 +85,23 @@ function DeletedTaxList() {
       );
     }
   };
-  console.log(search);
+  const headalDelete = (data) => {
+    if (window.confirm("Are you sure you want to Delete this Tax?")) {
+      dispatch(
+        PermanentTaxDeleteAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          TaxData?.TaxDeletList[data - 1]?.tax_id
+        )
+      );
+    }
+  };
 
   return (
     <div>
       {TaxData?.TaxDeletList?.length ? (
         <Container fixed>
           <Header
-            name={"Delete Product List"}
+            name={"Deleted Tax List"}
             SearchBar={true}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
@@ -120,10 +133,15 @@ function DeletedTaxList() {
                   navigate("/addtax");
                 }}
               >
-                add product
+                add Tax
               </Button>
             </Stack>
-            <Table data={data} headalEdit={headalEdit} hide={true} />
+            <Table
+              data={data}
+              headalDelete={headalDelete}
+              headalEdit={headalEdit}
+              hide={true}
+            />
             <Stack
               sx={{
                 margin: "10px",
@@ -143,15 +161,48 @@ function DeletedTaxList() {
           </Container>
         </Container>
       ) : (
-        <Stack
-          sx={{ color: "grey.500", height: "80vh" }}
-          spacing={2}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <CircularProgress color="success" size="5rem" />
-        </Stack>
+        <Container fixed>
+          <Header
+            name={"Deleted Tax List"}
+            SearchBar={false}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
+          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              spacing={4}
+              sx={{ p: 4 }}
+            >
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/TaxList");
+                }}
+              >
+                back
+              </Button>
+
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/addtax");
+                }}
+              >
+                add Tax
+              </Button>
+            </Stack>
+            <h1 style={{ color: "red", textAlign: "center", padding: "5px" }}>
+              No Any Record OF Deleted Tax
+            </h1>
+          </Container>
+        </Container>
       )}
     </div>
   );

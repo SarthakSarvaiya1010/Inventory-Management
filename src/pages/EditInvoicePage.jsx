@@ -1,12 +1,10 @@
 import React from "react";
-import InvoiveEdit from "../Components/Invoice/InvoiceEdit/InvoiveEdit";
+import EditInvoice from "../Components/Invoice/EditInvoice/EditInvoice";
 
-function EditInvoicePage() {
+export default function EditInvoicePage() {
   return (
     <div>
-      <InvoiveEdit />{" "}
+      <EditInvoice />
     </div>
   );
 }
-
-export default EditInvoicePage;

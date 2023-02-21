@@ -6,6 +6,8 @@ import {
   CUSTOMER_DELETE,
   CUSTOMER_EDIT_DATA,
   CUSTOMER_ADD,
+  PERMANENT_CUSTOMER_DELETE,
+  FAILED_PERMANENT_CUSTOMER_DELETE,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -147,6 +149,27 @@ export const CustomerDeleteAction =
     } catch (error) {
       dispatch({
         type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };
+export const PermanentCustomerDeleteAction =
+  (AccessToken, customer_id) => async (dispatch) => {
+    const token = AccessToken;
+    try {
+      const PermanentCustomerDelete = await axios.delete(
+        `http://localhost:3200/permanent/delete/customers/${customer_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      dispatch({
+        type: PERMANENT_CUSTOMER_DELETE,
+        payload: PermanentCustomerDelete.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_PERMANENT_CUSTOMER_DELETE,
         payload: { data: error.response.data },
       });
     }

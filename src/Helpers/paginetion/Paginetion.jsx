@@ -29,6 +29,10 @@ export default function UsePagination(props) {
                 type="button"
                 style={{
                   fontWeight: selected ? "bold" : undefined,
+                  backgroundColor: selected ? "green" : "white",
+                  color: selected ? "white" : "green",
+                  border: "1px solid grey",
+                  padding: "6px 12px",
                 }}
                 {...item}
               >
@@ -37,7 +41,16 @@ export default function UsePagination(props) {
             );
           } else {
             children = (
-              <button type="button" {...item}>
+              <button
+                style={{
+                  backgroundColor: "white",
+                  padding: "6px 12px",
+                  color: "green",
+                  border: "1px solid grey",
+                }}
+                type="button"
+                {...item}
+              >
                 {type}
               </button>
             );

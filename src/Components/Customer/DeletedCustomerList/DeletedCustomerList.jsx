@@ -5,7 +5,10 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomerDelectListAction } from "../../../Store/Action/CustomerAction/index";
+import {
+  CustomerDelectListAction,
+  PermanentCustomerDeleteAction,
+} from "../../../Store/Action/CustomerAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
@@ -23,6 +26,12 @@ function DeletedCustomerList() {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   console.log("data", CustomerData.customerDeletedList);
+  useEffect(() => {
+    if (CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode == "200") {
+      alert("Sucessfully Customer Deleted");
+      window.location.reload();
+    }
+  }, CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
@@ -124,6 +133,16 @@ function DeletedCustomerList() {
         return " state";
     }
   };
+  const headalDelete = (data) => {
+    if (window.confirm("Are you sure you want to Delete this invoice?")) {
+      dispatch(
+        PermanentCustomerDeleteAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          CustomerData.customerDeletedList[data - 1]?.customer_id
+        )
+      );
+    }
+  };
 
   return (
     <div>
@@ -169,6 +188,7 @@ function DeletedCustomerList() {
             <Table
               data={data}
               headalEdit={headalEdit}
+              headalDelete={headalDelete}
               hide={true}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
@@ -192,15 +212,48 @@ function DeletedCustomerList() {
           </Container>
         </Container>
       ) : (
-        <Stack
-          sx={{ color: "grey.500", height: "80vh" }}
-          spacing={2}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <CircularProgress color="success" size="5rem" />
-        </Stack>
+        <Container fixed>
+          <Header
+            name={"Deleted Customer List"}
+            SearchBar={true}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
+          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              spacing={4}
+              sx={{ p: 4 }}
+            >
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/customerList");
+                }}
+              >
+                back
+              </Button>
+
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/addcustomer");
+                }}
+              >
+                Add New Customer
+              </Button>
+            </Stack>
+            <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+              No any record found of Deleted Customer
+            </h1>
+          </Container>
+        </Container>
       )}
     </div>
   );

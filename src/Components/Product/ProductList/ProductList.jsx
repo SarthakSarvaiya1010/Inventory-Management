@@ -25,9 +25,15 @@ function ProductList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
-  console.log("successLoginData", productData);
+  console.log("productData", productData);
 
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  useEffect(() => {
+    if (productData?.SuccessProductDeleteData?.statusCode == "200") {
+      alert("Sucessfully product deleted");
+      window.location.reload();
+    }
+  });
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
@@ -73,13 +79,15 @@ function ProductList() {
   };
 
   const headalDelete = (data) => {
-    dispatch(
-      ProductDeleteAction(
-        successLoginData?.LoginData?.accessToken,
-        productData.productList[data - 1]?.product_id
-      )
-    );
-    window.location.reload();
+    if (window.confirm("Are you sure you want to Delete this Product?")) {
+      dispatch(
+        ProductDeleteAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          productData.productList[data - 1]?.product_id
+        )
+      );
+    }
+    // window.location.reload();
   };
 
   const searchHeadal = (e) => {
@@ -99,9 +107,7 @@ function ProductList() {
   console.log("setShortingData", shorting);
 
   const headalShorting = (data_a) => {
-    shortingIcon === data_a
-      ? setShortingIcon("Sr. No")
-      : setShortingIcon(data_a);
+    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
         if (shorting === "sr_no") {

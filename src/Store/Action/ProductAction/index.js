@@ -6,6 +6,8 @@ import {
   PRODUCT_DELETE,
   PRODUCT_EDIT_DATA,
   PRODUCT_DELETE_LIST,
+  PERMANENT_PRODUCT_DELETE,
+  FAILED_PERMANENT_PRODUCT_DELTETE,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -84,34 +86,33 @@ export const ProductEditDataAction =
     }
   };
 
-export const ProductAddAction =
-  (AccessToken, Product_id) => async (dispatch) => {
-    // const Product_id = 6;
-    const token = AccessToken;
-    console.log("Product_id", Product_id);
-    try {
-      const ProductAdd = await axios.post(
-        "http://localhost:3200/products",
-        Product_id,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch({
-        type: PRODUCT_ADD,
-        payload: ProductAdd.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
+export const ProductAddAction = (AccessToken, data) => async (dispatch) => {
+  // const Product_id = 6;
+  const token = AccessToken;
+  console.log("data==========>", data);
+  try {
+    const ProductAdd = await axios.post(
+      "http://localhost:3200/products",
+      data,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    dispatch({
+      type: PRODUCT_ADD,
+      payload: ProductAdd.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
 
 export const ProductDeleteAction =
   (AccessToken, Product_id) => async (dispatch) => {
     // const Product_id = 6;
     const token = AccessToken;
-    console.log(Product_id);
+    console.log("Product_id", Product_id);
     try {
       const ProductDelete = await axios.delete(
         `http://localhost:3200/delete/products/${Product_id}`,
@@ -152,6 +153,27 @@ export const ProductDeleteListAction =
     } catch (error) {
       dispatch({
         type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };
+export const PermanentProductDelete =
+  (AccessToken, Product_id) => async (dispatch) => {
+    // const Product_id = 6;
+    const token = AccessToken;
+    console.log(Product_id);
+    try {
+      const PermanentProductDelete = await axios.delete(
+        `http://localhost:3200/permanent/delete/products/${Product_id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch({
+        type: PERMANENT_PRODUCT_DELETE,
+        payload: PermanentProductDelete.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_PERMANENT_PRODUCT_DELTETE,
         payload: { data: error.response.data },
       });
     }

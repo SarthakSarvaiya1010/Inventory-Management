@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductValidate, CustomerValidate } from "./formValidation";
+import {
+  ProductValidate,
+  CustomerValidate,
+  TaxValidate,
+} from "./formValidation";
 import {
   ProductAddAction,
   ProductEditDataAction,
@@ -9,12 +13,14 @@ import {
   CustomerEditDataAction,
   CustomerAddAction,
 } from "../../Store/Action/CustomerAction/index";
+import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const UseForm = (defaultData, showToastMessage, image) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
+  console.log("values", values);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
@@ -100,11 +106,47 @@ const UseForm = (defaultData, showToastMessage, image) => {
       }
     }
   };
+  const TaxhandleSubmit = () => {
+    console.log(" defaultData", defaultData);
+    setFindErrors(true);
+    setErrors(TaxValidate(values, defaultData));
+    const data = {};
+    data["tax_name"] = values?.tax_name || defaultData[0]?.tax_name;
+    data["tax_rate"] = parseFloat(values?.tax_rate) || defaultData[0]?.tax_rate;
+    data["tax_country"] = values?.tax_country || defaultData[0]?.tax_country;
+    data["isactive"] = values?.isactive
+      ? values?.isactive
+      : "NO" || defaultData?.isactive;
+    console.log("data", data);
+    if (!Object.keys(errors).length && findErrors) {
+      if (defaultData.length > 0) {
+        console.log("edit tax");
+        dispatch(
+          TaxInfoEditAction(
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
+            data,
+            defaultData[0]?.tax_id
+          )
+        );
+      } else {
+        console.log("confirm dispatch", Object.keys(data).length === 4);
+        dispatch(
+          TaxAddAction(
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
+            data
+          )
+        );
+      }
+    }
+  };
 
   useEffect(() => {
     if (findErrors) {
       setErrors(ProductValidate(values, defaultData));
       setErrors(CustomerValidate(values, defaultData));
+      setErrors(TaxValidate(values, defaultData));
     }
   }, [defaultData, findErrors, values]);
 
@@ -122,6 +164,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
   return {
     producthandleSubmit,
     customerhandleSubmit,
+    TaxhandleSubmit,
     values,
     setvalues,
     errors,
