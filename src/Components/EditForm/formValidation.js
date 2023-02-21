@@ -41,3 +41,20 @@ export function CustomerValidate(values, data) {
 
   return errors;
 }
+export function TaxValidate(values, data) {
+  let errors = {};
+
+  if (!values?.tax_name && !data[0]?.tax_name) {
+    errors.tax_name = " tax name is required";
+  }
+
+  if (!values?.tax_rate && !data[0]?.tax_rate) {
+    errors.tax_rate = "Tax_Rate  is required";
+  }
+
+  if (!values?.tax_country && !data[0]?.tax_country) {
+    errors.tax_country = "tax_country is required";
+  }
+
+  return errors;
+}

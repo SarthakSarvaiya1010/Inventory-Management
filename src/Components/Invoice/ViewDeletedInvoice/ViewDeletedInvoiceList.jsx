@@ -6,36 +6,45 @@ import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  CustomerDelectListAction,
-  PermanentCustomerDeleteAction,
-} from "../../../Store/Action/CustomerAction/index";
-import CircularProgress from "@mui/material/CircularProgress";
+  GetDeletedInvoiceList,
+  PermanentDeleteInvoice,
+} from "../../../Store/Action/InvoiceAction/index";
 import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import { convert } from "../../../Helpers/misc";
 
-function DeletedCustomerList() {
+export default function ViewDeletedInvoiceList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [pageNumber, setPageNumber] = useState();
-  let limit = 2;
-  const [shorting, setShorting] = useState();
-  const [shortingIcon, setShortingIcon] = useState("Sr. No");
-  const [search, setSearch] = useState();
-
-  const CustomerData = useSelector((state) => state?.CustomerEdit);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const DeletedInvoiceList = useSelector((state) => state?.InvoiceData);
+  const data = [];
+  let limit = 2;
+  const [pageNumber, setPageNumber] = useState();
+  const [shorting, setShorting] = useState();
+  const [shortingIcon, setShortingIcon] = useState("BILL No");
+  const [search, setSearch] = useState();
+  console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
-  console.log("data", CustomerData.customerDeletedList);
+  DeletedInvoiceList?.DeletedInvoiceList?.map((e) => {
+    let elements = {};
+    elements["BILL No"] = `0${e.bill_no}`;
+    elements["Invoice Date"] = convert(e.invoice_date);
+    elements["Name"] = e.customer_name;
+    elements["Total Amount"] = e.bill_amount;
+    data.push(elements);
+  });
+
   useEffect(() => {
-    if (CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode == "200") {
-      alert("Sucessfully Customer Deleted");
+    if (DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode == "200") {
+      alert("sucessfully deleted");
       window.location.reload();
     }
-  }, CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode);
+  }, [DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode]);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
-        CustomerDelectListAction(
+        GetDeletedInvoiceList(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken
         )
       );
@@ -45,43 +54,10 @@ function DeletedCustomerList() {
     dispatch,
     successLoginData?.LoginData?.accessToken,
   ]);
-  const data = [];
-
-  // eslint-disable-next-line array-callback-return
-  CustomerData?.customerDeletedList.map((e) => {
-    let test = {};
-    test["Sr. No"] = e.sr_no;
-    test["Name"] = e.customer_name;
-    test["Mobile Number"] = e.mobile_no;
-    test["Email Id"] = e.email;
-    data.push(test);
-  });
-  const headalEdit = (data) => {
-    console.log(data, CustomerData?.CoustomerList[data - 1]);
-
-    navigate(
-      `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
-    );
-  };
-  const searchHeadal = (e) => {
-    console.log(e.target.value, "e.target.value");
-    setSearch(e.target.value);
-  };
-  console.log("search", search);
-  const onKeyDown = (e) => {
-    if (e.keyCode === 13) {
-      dispatch(
-        CustomerDelectListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
-      );
-    }
-  };
 
   useEffect(() => {
     dispatch(
-      CustomerDelectListAction(
+      GetDeletedInvoiceList(
         successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
         { limit: limit, pageNumber: pageNumber, orderByString: shorting }
       )
@@ -94,17 +70,37 @@ function DeletedCustomerList() {
     shorting,
     successLoginData?.LoginData?.accessToken,
   ]);
+  const searchHeadal = (e) => {
+    setSearch(e.target.value);
+  };
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      dispatch(
+        GetDeletedInvoiceList(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          { search: search, limit: limit, pageNumber: pageNumber }
+        )
+      );
+    }
+  };
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a
       ? setShortingIcon("Sr. No")
       : setShortingIcon(data_a);
     switch (data_a) {
-      case "Sr. No":
-        if (shorting === "sr_no") {
+      case "BILL No":
+        if (shorting === "bill_no") {
           setShorting(null);
         } else {
-          setShorting("sr_no");
+          setShorting("bill_no");
+        }
+        return "done";
+      case "Invoice Date":
+        if (shorting === "invoice_date") {
+          setShorting(null);
+        } else {
+          setShorting("invoice_date");
         }
         return "done";
       case "Name":
@@ -114,18 +110,11 @@ function DeletedCustomerList() {
           setShorting("customer_name");
         }
         return "done";
-      case "Mobile Number":
-        if (shorting === "mobile_no") {
+      case "Total Amount":
+        if (shorting === "bill_amount") {
           setShorting(null);
         } else {
-          setShorting("mobile_no");
-        }
-        return "done";
-      case "Email Id":
-        if (shorting === "email") {
-          setShorting(null);
-        } else {
-          setShorting("email");
+          setShorting("bill_amount");
         }
         return "done";
       default:
@@ -136,9 +125,9 @@ function DeletedCustomerList() {
   const headalDelete = (data) => {
     if (window.confirm("Are you sure you want to Delete this invoice?")) {
       dispatch(
-        PermanentCustomerDeleteAction(
+        PermanentDeleteInvoice(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          CustomerData.customerDeletedList[data - 1]?.customer_id
+          DeletedInvoiceList?.DeletedInvoiceList[data - 1]?.invoice_id
         )
       );
     }
@@ -146,10 +135,10 @@ function DeletedCustomerList() {
 
   return (
     <div>
-      {CustomerData?.customerDeletedList?.length ? (
+      {DeletedInvoiceList?.DeletedInvoiceList?.length ? (
         <Container fixed>
           <Header
-            name={"Deleted Customer List"}
+            name={"Delete Invoice List"}
             SearchBar={true}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
@@ -167,7 +156,7 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/customerList");
+                  navigate("/InvoiceList");
                 }}
               >
                 back
@@ -178,17 +167,16 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addcustomer");
+                  navigate("/addinvoice");
                 }}
               >
-                Add New Customer
+                Add Invoice{" "}
               </Button>
             </Stack>
-
             <Table
               data={data}
-              headalEdit={headalEdit}
               headalDelete={headalDelete}
+              //   headalEdit={headalEdit}
               hide={true}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
@@ -204,7 +192,7 @@ function DeletedCustomerList() {
             >
               <UsePagination
                 countNumbuer={Math.ceil(
-                  CustomerData?.customerDeletedList[0]?.total_count / limit
+                  DeletedInvoiceList?.DeletedInvoiceList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
               />
@@ -214,8 +202,8 @@ function DeletedCustomerList() {
       ) : (
         <Container fixed>
           <Header
-            name={"Deleted Customer List"}
-            SearchBar={true}
+            name={"Delete Invoice List"}
+            SearchBar={false}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
           />
@@ -232,7 +220,7 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/customerList");
+                  navigate("/InvoiceList");
                 }}
               >
                 back
@@ -243,14 +231,14 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addcustomer");
+                  navigate("/addinvoice");
                 }}
               >
-                Add New Customer
+                Add Invoice
               </Button>
             </Stack>
             <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
-              No any record found of Deleted Customer
+              No any record found of Deleted Invoice
             </h1>
           </Container>
         </Container>
@@ -258,5 +246,3 @@ function DeletedCustomerList() {
     </div>
   );
 }
-
-export default DeletedCustomerList;

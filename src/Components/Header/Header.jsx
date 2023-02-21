@@ -74,7 +74,7 @@ export default function Header(props) {
       accessToken?.statusCode
     ) {
       setOpenManu(true);
-    } 
+    }
   };
 
   return (

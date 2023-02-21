@@ -132,7 +132,7 @@ function AddCustomer() {
                     id="outlined-Email"
                     label="Email id"
                     autoComplete="off"
-                    onChange={(e) => handleOnchange(e.target.value)}
+                    onChange={(e) => handleOnchange(e)}
                     defaultValue={id ? Customer_data?.email : ""}
                   />
                 </Stack>

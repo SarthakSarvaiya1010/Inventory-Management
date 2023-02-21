@@ -6,7 +6,10 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductDeleteListAction } from "../../../Store/Action/ProductAction/index";
+import {
+  ProductDeleteListAction,
+  PermanentProductDelete,
+} from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/paginetion/Paginetion";
 
@@ -23,9 +26,15 @@ function DeletedProductList() {
   const [search, setSearch] = useState();
 
   const productData = useSelector((state) => state?.ProductEdit);
-  console.log("successLoginData", productData);
+  console.log("productData", productData?.SucessPermanentDeleteData);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
+  useEffect(() => {
+    if (productData?.SucessPermanentDeleteData?.statusCode == "200") {
+      alert("Sucessfully product deleted");
+      window.location.reload();
+    }
+  });
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
@@ -125,6 +134,16 @@ function DeletedProductList() {
         return " state";
     }
   };
+  const headalDelete = (data) => {
+    if (window.confirm("Are you sure you want to Delete this Product?")) {
+      dispatch(
+        PermanentProductDelete(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          productData.productDeletList[data - 1]?.product_id
+        )
+      );
+    }
+  };
 
   return (
     <div>
@@ -169,6 +188,7 @@ function DeletedProductList() {
             <Table
               data={data}
               headalEdit={headalEdit}
+              headalDelete={headalDelete}
               hide={true}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
@@ -192,15 +212,49 @@ function DeletedProductList() {
           </Container>
         </Container>
       ) : (
-        <Stack
-          sx={{ color: "grey.500", height: "80vh" }}
-          spacing={2}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <CircularProgress color="success" size="5rem" />
-        </Stack>
+        <Container fixed>
+        <Header
+          name={"Delete Product List"}
+          SearchBar={false}
+          searchHeadal={searchHeadal}
+          onKeyDown={onKeyDown}
+        />
+        <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+            spacing={4}
+            sx={{ p: 4 }}
+          >
+            <Button
+              variant="text"
+              color="success"
+              sx={{ fontSize: 16 }}
+              onClick={() => {
+                navigate("/productList");
+              }}
+            >
+              back
+            </Button>
+
+            <Button
+              variant="text"
+              color="success"
+              sx={{ fontSize: 16 }}
+              onClick={() => {
+                navigate("/addproduct");
+              }}
+            >
+              add product
+            </Button>
+          </Stack>
+          <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+          No any record found of Deleted Product
+
+            </h1>
+        </Container>
+      </Container>
       )}
     </div>
   );

@@ -28,6 +28,7 @@
     "redex": "^0.0.1",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
+    "to-words": "^3.4.0",
     "vercel": "^28.13.2",
     "web-vitals": "^2.1.4"
   },

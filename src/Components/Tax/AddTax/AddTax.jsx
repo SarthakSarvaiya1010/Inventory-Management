@@ -10,7 +10,6 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
-
 import Header from "../../../Helpers/Header/Header";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -20,8 +19,6 @@ import UseForm from "../../EditForm/UseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { TaxEditAction } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function AddTax() {
   const navigate = useNavigate();
@@ -30,25 +27,10 @@ function AddTax() {
   const TaxData = useSelector((state) => state?.TaxData);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
-
   const Tax_data = TaxData?.TaxEdit;
-
-  console.log(
-    "params",
-    id,
-    TaxData?.TaxEdit,
-    Tax_data?.tax_name,
-    TaxData.loder
-  );
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const accessTokenData =
     successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
-
-  const showToastMessage = () => {
-    toast.success("Data Updata  Success  !", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  };
 
   useEffect(() => {
     if (id) {
@@ -56,16 +38,14 @@ function AddTax() {
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
-  const { handleSubmit, values, errors, handleOnchange } = UseForm(
-    Tax_data,
-    showToastMessage
-  );
+  const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(Tax_data);
 
   console.log(values);
 
   const handleCancle = () => {
     console.log("done");
     navigate("/TaxList");
+    window.location.reload();
   };
 
   return (
@@ -73,7 +53,7 @@ function AddTax() {
       {!TaxData.loder || !id ? (
         // Object.keys(Product_data).length ? (
         <Container fixed>
-          <Header name={"Add Tax"} SearchBar={false} />
+          <Header name={Tax_data ? "Edit Tax" : "Add Tax"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <DialogContent>
               <br />
@@ -93,7 +73,7 @@ function AddTax() {
                 >
                   <TextField
                     required
-                    error={errors?.product_name ? true : null}
+                    error={errors?.tax_name ? true : null}
                     name="tax_name"
                     id="outlined-Product"
                     label="Tax Name"
@@ -101,10 +81,10 @@ function AddTax() {
                     defaultValue={id ? TaxData?.TaxEdit[0]?.tax_name : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
-                  <p style={{ color: "red" }}>{errors?.product_name}</p>
+                  <p style={{ color: "red" }}>{errors?.tax_name}</p>
                   <br />
                   <TextField
-                    error={errors?.weight ? true : null}
+                    error={errors?.tax_rate ? true : null}
                     required
                     type="number"
                     name="tax_rate"
@@ -112,15 +92,15 @@ function AddTax() {
                     defaultValue={id ? TaxData?.TaxEdit[0]?.tax_rate : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
-                    value={values?.weight}
+                    value={values?.tax_rate}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.weight}</p>
+                  <p style={{ color: "red" }}>{errors?.tax_rate}</p>
 
                   <br />
                   <TextField
                     required
-                    error={errors?.product_name ? true : null}
+                    error={errors?.tax_country ? true : null}
                     name="tax_country"
                     id="outlined-Product"
                     label="Tax County"
@@ -128,7 +108,7 @@ function AddTax() {
                     defaultValue={id ? TaxData?.TaxEdit[0]?.tax_country : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
-                  <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <p style={{ color: "red" }}>{errors?.tax_country}</p>
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
                       Active
@@ -136,8 +116,9 @@ function AddTax() {
                     <RadioGroup
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
+                      name="isactive"
                       defaultValue={id ? TaxData?.TaxEdit[0]?.isactive : "NO"}
+                      onChange={(e) => handleOnchange(e)}
                     >
                       <FormControlLabel
                         value="YES"
@@ -165,7 +146,7 @@ function AddTax() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={handleSubmit}
+                    onClick={TaxhandleSubmit}
                   >
                     Update
                   </Button>
@@ -173,7 +154,7 @@ function AddTax() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={handleSubmit}
+                    onClick={TaxhandleSubmit}
                   >
                     Submit
                   </Button>
@@ -188,13 +169,9 @@ function AddTax() {
               </Stack>
               <br />
             </DialogContent>
-            <ToastContainer />
           </Container>
         </Container>
       ) : (
-        // ) : (
-        //   <h1>done 1</h1>
-        // )
         <Stack
           sx={{ color: "grey.500", height: "80vh" }}
           spacing={2}

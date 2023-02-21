@@ -17,6 +17,9 @@ function CustomerList() {
   const dispatch = useDispatch();
 
   const CustomerData = useSelector((state) => state?.CustomerList);
+  const SuccesscustomerDeletedData = useSelector(
+    (state) => state?.CustomerEdit?.SuccessfullyCustomerDeltetedData
+  );
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [search, setSearch] = useState(null);
@@ -24,22 +27,8 @@ function CustomerList() {
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [pageNumber, setPageNumber] = useState();
   let limit = 2;
-
-  // useEffect(() => {
-  //   if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-  //     dispatch(
-  //       CustomerListAction(
-  //         successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-  //       )
-  //     );
-  //   }
-  // }, [
-  //   accessToken?.accessToken,
-  //   dispatch,
-  //   successLoginData?.LoginData?.accessToken,
-  // ]);
   const data = [];
-
+  console.log("SuccesscustomerDeletedData",SuccesscustomerDeletedData);
   // eslint-disable-next-line array-callback-return
   CustomerData?.CoustomerList.map((e) => {
     let test = {};
@@ -49,6 +38,13 @@ function CustomerList() {
     test["Email Id"] = e.email;
     data.push(test);
   });
+  console.log("CustomerData", CustomerData);
+  useEffect(() => {
+    if (SuccesscustomerDeletedData?.statusCode == "200") {
+      alert("SucessFully Customer Deleted");
+      window.location.reload();
+    }
+  }, [SuccesscustomerDeletedData?.StatusCode]);
   const headalEdit = (data) => {
     console.log(data, CustomerData?.CoustomerList[data - 1]);
 
@@ -58,13 +54,14 @@ function CustomerList() {
   };
 
   const headalDelete = (data) => {
-    dispatch(
-      CustomerDeleteAction(
-        successLoginData?.LoginData?.accessToken,
-        CustomerData.CoustomerList[data - 1]?.customer_id
-      )
-    );
-    window.location.reload();
+    if (window.confirm("Are you sure you want to Delete this invoice?")) {
+      dispatch(
+        CustomerDeleteAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          CustomerData.CoustomerList[data - 1]?.customer_id
+        )
+      );
+    }
   };
   const searchHeadal = (e) => {
     console.log(e.target.value, "e.target.value");
@@ -93,9 +90,7 @@ function CustomerList() {
   }, [accessToken?.accessToken, dispatch, limit, pageNumber, shorting]);
 
   const headalShorting = (data_a) => {
-    shortingIcon === data_a
-      ? setShortingIcon("Sr. No")
-      : setShortingIcon(data_a);
+    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
         if (shorting === "sr_no") {
