@@ -4,6 +4,7 @@ import {
   ProductValidate,
   CustomerValidate,
   TaxValidate,
+  CompanyValidate,
 } from "./formValidation";
 import {
   ProductAddAction,
@@ -13,6 +14,7 @@ import {
   CustomerEditDataAction,
   CustomerAddAction,
 } from "../../Store/Action/CustomerAction/index";
+import { CompanyInfoEditAction } from "../../Store/Action/CompanyAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const UseForm = (defaultData, showToastMessage, image) => {
@@ -29,7 +31,6 @@ const UseForm = (defaultData, showToastMessage, image) => {
   const producthandleSubmit = () => {
     setFindErrors(true);
     setErrors(ProductValidate(values, defaultData));
-    const data = {};
     const formAddUserData = new FormData();
     formAddUserData.append(
       "product_name",
@@ -46,12 +47,6 @@ const UseForm = (defaultData, showToastMessage, image) => {
     formAddUserData.append("hsn", values?.hsn || defaultData?.hsn);
     formAddUserData.append("weight", values?.weight || defaultData?.weight);
     formAddUserData.append("image_src", image);
-    data["product_name"] = values?.product_name || defaultData?.product_name;
-    data["product_type"] = values?.product_type || defaultData?.product_type;
-    data["description"] = values?.Description || defaultData?.description;
-    data["hsn"] = parseFloat(values?.hsn || defaultData?.hsn);
-    data["weight"] = parseFloat(values.weight || defaultData?.weight);
-    data["image_src"] = image;
     if (!Object.keys(errors).length && findErrors) {
       if (defaultData?.product_id) {
         dispatch(
@@ -72,6 +67,49 @@ const UseForm = (defaultData, showToastMessage, image) => {
           )
         );
       }
+    }
+  };
+
+  const companyhandleSubmit = () => {
+    setFindErrors(true);
+    setErrors(CompanyValidate(values, defaultData));
+    const formAddUserData = new FormData();
+    formAddUserData.append(
+      "company_address",
+      values?.company_address || defaultData?.company_address
+    );
+    formAddUserData.append(
+      "company_name",
+      values?.company_name || defaultData?.company_name
+    );
+    formAddUserData.append("image_src", image);
+    formAddUserData.append(
+      "mobile_no",
+      values?.mobile_no || defaultData?.mobile_no
+    );
+    formAddUserData.append(
+      "phone_no",
+      values?.phone_no || defaultData?.phone_no
+    );
+    formAddUserData.append(
+      "terms_condition",
+      values?.terms_condition || defaultData?.terms_condition
+    );
+    formAddUserData.append(
+      "tin_gst_no",
+      values?.tin_gst_no || defaultData?.tin_gst_no
+    );
+    formAddUserData.append("website", values?.website || defaultData?.website);
+
+    if (!Object.keys(errors).length && findErrors) {
+      dispatch(
+        CompanyInfoEditAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          formAddUserData,
+          parseInt(defaultData?.company_id)
+        )
+      );
+      showToastMessage();
     }
   };
 
@@ -169,6 +207,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
     setvalues,
     errors,
     handleOnchange,
+    companyhandleSubmit,
   };
 };
 export default UseForm;

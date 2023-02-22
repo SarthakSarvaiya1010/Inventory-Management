@@ -14,17 +14,20 @@ import axios from "axios";
 export const CustomerListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const ProductList = await axios.get("https://inventory-management-backend.onrender.com/customers", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: data
-        ? {
-            searchKeyword: data.search ? data.search : null,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          }
-        : null,
-    });
+    const ProductList = await axios.get(
+      "https://inventory-management-backend.onrender.com/customers",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      }
+    );
     dispatch({
       type: CUSTOMER_LIST,
       payload: ProductList.data,

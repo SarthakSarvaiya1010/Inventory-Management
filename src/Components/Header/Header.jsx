@@ -42,6 +42,7 @@ export default function Header(props) {
   const showToastMessage = () => {
     toast.success("Logout  Success  !", {
       position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
     });
   };
   const successLoginData = useSelector((state) => state?.UserLoginReducer);

@@ -10,7 +10,7 @@ import {
   TaxDeleteAction,
 } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 
 function TaxList() {
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ function TaxList() {
   const data = [];
 
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  // eslint-disable-next-line array-callback-return
   TaxData?.TaxList.map((e) => {
     let elements = {};
     elements["Sr.No"] = e.sr_no;

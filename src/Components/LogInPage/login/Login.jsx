@@ -14,16 +14,19 @@ function Login(props) {
   const showToastMessage = () => {
     toast.success("Login  Success  !", {
       position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
     });
   };
   const showToastMessageServerError = () => {
     toast.error("server is offline  !", {
       position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
     });
   };
   const showToastMessageError = (data) => {
     toast.error(`${data} !`, {
       position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
     });
   };
 
@@ -57,7 +60,7 @@ function Login(props) {
       showToastMessage();
       setTimeout(() => {
         navigate("/productList");
-      }, 5500);
+      }, 2000);
       setTest(false);
       setButtonDisbel(false);
     } else if (

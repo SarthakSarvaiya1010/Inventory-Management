@@ -10,7 +10,7 @@ import {
   TaxDelectListAction,
   PermanentTaxDeleteAction,
 } from "../../../Store/Action/TaxAction/index";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 
 function DeletedTaxList() {
   const navigate = useNavigate();
@@ -180,7 +180,7 @@ function DeletedTaxList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/TaxList");
+                  navigate("/tax_list");
                 }}
               >
                 back

@@ -9,8 +9,7 @@ import {
   CustomerDelectListAction,
   PermanentCustomerDeleteAction,
 } from "../../../Store/Action/CustomerAction/index";
-import CircularProgress from "@mui/material/CircularProgress";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 
 function DeletedCustomerList() {
   const navigate = useNavigate();
@@ -27,11 +26,13 @@ function DeletedCustomerList() {
 
   console.log("data", CustomerData.customerDeletedList);
   useEffect(() => {
-    if (CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode == "200") {
+    if (
+      CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode === "200"
+    ) {
       alert("Sucessfully Customer Deleted");
       window.location.reload();
     }
-  }, CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode);
+  }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
@@ -232,7 +233,7 @@ function DeletedCustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/customerList");
+                  navigate("/customer_list");
                 }}
               >
                 back

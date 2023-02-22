@@ -17,6 +17,7 @@ import {
   InvoiceListPage,
   AddInvoicePage,
   EditInvoicePage,
+  CompanyInfoPage,
 } from "./pages/index";
 import ListUser from "./Components/UserData/ListUser";
 import { styled } from "@mui/material/styles";
@@ -65,21 +66,21 @@ const route = [
   { path: "/productlist", element: <ProductListPage /> },
   { path: "/addproduct", element: <AddProductPage /> },
   { path: "/product/edit/:id", element: <AddProductPage /> },
-  { path: "/customerList", element: <CustomerListPage /> },
+  { path: "/customer_list", element: <CustomerListPage /> },
   { path: "/addcustomer", element: <AddCustomerPage /> },
   { path: "/customer/edit/:id", element: <AddCustomerPage /> },
   { path: "/deletedproduct", element: <DeletedProductListPage /> },
   { path: "/deletedcustomer", element: <DeletedCustomerListPage /> },
-  { path: "/TaxList", element: <TaxListPage /> },
+  { path: "/tax_list", element: <TaxListPage /> },
   { path: "/InvoiceList/edit/:id", element: <EditInvoicePage /> },
   { path: "/addtax", element: <AddTaxPage /> },
   { path: "/tax/edit/:id", element: <AddTaxPage /> },
   { path: "/deletedtax", element: <DeleteTaxPage /> },
   { path: "/listuser", element: <ListUser /> },
-  { path: "/InvoiceList", element: <InvoiceListPage /> },
+  { path: "/invoice_list", element: <InvoiceListPage /> },
   { path: "/addinvoice", element: <AddInvoicePage /> },
-  // { path: "/invoice/edit", element: <EditInvoicePage /> },
   { path: "/viewdeletedinvoice", element: <ViewDeletedInvoiceList /> },
+  { path: "/company_info", element: <CompanyInfoPage /> },
 ];
 
 function App() {

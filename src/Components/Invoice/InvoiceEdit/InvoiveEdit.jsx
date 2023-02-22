@@ -75,7 +75,7 @@ function InvoiceEdit() {
   const [addtable, setAddTable] = useState(
     testData[0]?.productlistdata?.length || 1
   );
-  console.log("addtable",addtable);
+  console.log("addtable", addtable);
   const [product, setProduct] = useState(testData[0]?.productlistdata || [{}]);
   console.log("testData======?", testData);
 
@@ -375,7 +375,7 @@ function InvoiceEdit() {
                         onChange={(e) => handleChange(e)}
                       />
                       <br />
-                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           label="Date"
                           value={dateData}
@@ -384,7 +384,7 @@ function InvoiceEdit() {
                           onChange={(e) => handleChangeDate(e)}
                           renderInput={(params) => <TextField {...params} />}
                         />
-                      </LocalizationProvider> */}
+                      </LocalizationProvider>
                       <br />
                       <TextField
                         id="standard-basic-4"

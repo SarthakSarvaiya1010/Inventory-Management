@@ -19,17 +19,20 @@ export const InvoiceListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   console.log("data", data);
   try {
-    const InvoiceList = await axios.get("https://inventory-management-backend.onrender.com/invoicelist", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: data
-        ? {
-            searchKeyword: data.search,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          }
-        : null,
-    });
+    const InvoiceList = await axios.get(
+      "https://inventory-management-backend.onrender.com/invoicelist",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        params: data
+          ? {
+              searchKeyword: data.search,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      }
+    );
     dispatch({
       type: INVOICE_LIST,
       payload: InvoiceList.data,

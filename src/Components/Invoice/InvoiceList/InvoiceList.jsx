@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InvoiceListAction } from "../../../Store/Action/InvoiceAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 import { DeleteInvoice } from "../../../Store/Action/InvoiceAction/index";
 
 function InvoiceList() {
@@ -36,11 +36,11 @@ function InvoiceList() {
     data.push(elements);
   });
   useEffect(() => {
-    if (InvoiceData?.SucessDeletedInvoiceData?.statusCode == "200") {
+    if (InvoiceData?.SucessDeletedInvoiceData?.statusCode === "200") {
       alert("sucessfully deleted");
       window.location.reload();
     }
-  });
+  }, [InvoiceData?.SucessDeletedInvoiceData?.statusCode]);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(

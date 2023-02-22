@@ -58,3 +58,35 @@ export function TaxValidate(values, data) {
 
   return errors;
 }
+export function CompanyValidate(values, data) {
+  let errors = {};
+
+  if (!values?.company_address && !data?.company_address) {
+    errors.company_address = " company address is required";
+  }
+
+  if (!values?.company_name && !data?.company_name) {
+    errors.company_name = "Company Name is required";
+  }
+
+  if (!values?.image_src && !data?.image_src) {
+    errors.image_src = "image  is required";
+  }
+  if (!values?.mobile_no && !data?.mobile_no) {
+    errors.mobile_no = "mobile no is required";
+  }
+  if (!values?.phone_no && !data?.phone_no) {
+    errors.phone_no = "phone no is required";
+  }
+  if (!values?.terms_condition && !data?.terms_condition) {
+    errors.terms_condition = "terms condition is required";
+  }
+  if (!values?.tin_gst_no && !data?.tin_gst_no) {
+    errors.tin_gst_no = "tin gst no is required";
+  }
+  if (!values?.website && !data?.website) {
+    errors.website = "website is required";
+  }
+
+  return errors;
+}

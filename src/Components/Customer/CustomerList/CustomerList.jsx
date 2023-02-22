@@ -10,7 +10,7 @@ import {
   CustomerDeleteAction,
 } from "../../../Store/Action/CustomerAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 
 function CustomerList() {
   const navigate = useNavigate();
@@ -28,11 +28,11 @@ function CustomerList() {
   const [pageNumber, setPageNumber] = useState();
   let limit = 2;
   const data = [];
-  console.log("SuccesscustomerDeletedData",SuccesscustomerDeletedData);
+  console.log("SuccesscustomerDeletedData", SuccesscustomerDeletedData);
   // eslint-disable-next-line array-callback-return
   CustomerData?.CoustomerList.map((e) => {
     let test = {};
-    test["Sr. No"] = e.sr_no;
+    test["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     test["Name"] = e.customer_name;
     test["Mobile Number"] = e.mobile_no;
     test["Email Id"] = e.email;
@@ -40,11 +40,14 @@ function CustomerList() {
   });
   console.log("CustomerData", CustomerData);
   useEffect(() => {
-    if (SuccesscustomerDeletedData?.statusCode == "200") {
+    if (SuccesscustomerDeletedData?.statusCode === "200") {
       alert("SucessFully Customer Deleted");
       window.location.reload();
     }
-  }, [SuccesscustomerDeletedData?.StatusCode]);
+  }, [
+    SuccesscustomerDeletedData.StatusCode,
+    SuccesscustomerDeletedData?.statusCode,
+  ]);
   const headalEdit = (data) => {
     console.log(data, CustomerData?.CoustomerList[data - 1]);
 

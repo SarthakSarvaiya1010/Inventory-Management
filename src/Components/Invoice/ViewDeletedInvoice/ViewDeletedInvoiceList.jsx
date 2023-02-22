@@ -9,7 +9,7 @@ import {
   GetDeletedInvoiceList,
   PermanentDeleteInvoice,
 } from "../../../Store/Action/InvoiceAction/index";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 import { convert } from "../../../Helpers/misc";
 
 export default function ViewDeletedInvoiceList() {
@@ -26,6 +26,7 @@ export default function ViewDeletedInvoiceList() {
   console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
+  // eslint-disable-next-line array-callback-return
   DeletedInvoiceList?.DeletedInvoiceList?.map((e) => {
     let elements = {};
     elements["BILL No"] = `0${e.bill_no}`;
@@ -36,7 +37,7 @@ export default function ViewDeletedInvoiceList() {
   });
 
   useEffect(() => {
-    if (DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode == "200") {
+    if (DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode === "200") {
       alert("sucessfully deleted");
       window.location.reload();
     }

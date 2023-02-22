@@ -5,6 +5,7 @@ import CustomerEditReducer from "./CustomerEditReducer/index";
 import UserLoginReducer from "./UserLogin/index";
 import InvoiceReducer from "./InvoiceReducer/index";
 import TaxReducer from "./TaxReaducer/index";
+import CompanyInfoReducer from "./CompanyInfoReducer/index";
 
 import { combineReducers } from "redux";
 const RootReducer = combineReducers({
@@ -15,5 +16,6 @@ const RootReducer = combineReducers({
   CustomerEdit: CustomerEditReducer,
   InvoiceData: InvoiceReducer,
   TaxData: TaxReducer,
+  CompanyInfo: CompanyInfoReducer,
 });
 export default RootReducer;

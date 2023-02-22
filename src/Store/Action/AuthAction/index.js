@@ -3,8 +3,10 @@ import axios from "axios";
 
 export const userLogin = (data) => async (dispatch) => {
   try {
-    const res = await axios.post("https://inventory-management-backend.onrender.com/login ", data);
-
+    const res = await axios.post(
+      "https://inventory-management-backend.onrender.com/login ",
+      data
+    );
     dispatch({
       type: AUTH,
 
