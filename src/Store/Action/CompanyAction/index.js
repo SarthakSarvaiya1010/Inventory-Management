@@ -10,17 +10,20 @@ import axios from "axios";
 export const CompanyInfoAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const CompanyInfo = await axios.get("http://localhost:3200/company_info", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: data
-        ? {
-            searchKeyword: data.search ? data.search : null,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          }
-        : null,
-    });
+    const CompanyInfo = await axios.get(
+      "https://inventory-management-backend.onrender.com/company_info",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      }
+    );
     dispatch({
       type: COMPANY_INFO,
       payload: CompanyInfo.data,
@@ -37,7 +40,7 @@ export const CompanyInfoByIdAction =
     const token = AccessToken;
     try {
       const CompanyInfo = await axios.get(
-        `http://localhost:3200/company_info/${company_id}`,
+        `https://inventory-management-backend.onrender.com/company_info/${company_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -84,7 +87,7 @@ export const CompanyDeleteAction =
     console.log("Product_id", Product_id);
     try {
       const ProductDelete = await axios.delete(
-        `http://localhost:3200/delete/company_info/${Product_id}`,
+        `https://inventory-management-backend.onrender.com/delete/company_info/${Product_id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       dispatch({

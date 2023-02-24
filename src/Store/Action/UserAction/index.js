@@ -9,17 +9,20 @@ import axios from "axios";
 export const userListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const userList = await axios.get("http://localhost:3200/users", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: data
-        ? {
-            searchKeyword: data.search ? data.search : null,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          }
-        : null,
-    });
+    const userList = await axios.get(
+      "https://inventory-management-backend.onrender.com/users",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      }
+    );
     dispatch({
       type: USER_LIST,
       payload: userList.data,
@@ -34,17 +37,20 @@ export const userListAction = (AccessToken, data) => async (dispatch) => {
 export const userDelteListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const userList = await axios.get("http://localhost:3200/delete/users", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: data
-        ? {
-            searchKeyword: data.search ? data.search : null,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          }
-        : null,
-    });
+    const userList = await axios.get(
+      "https://inventory-management-backend.onrender.com/delete/users",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      }
+    );
     dispatch({
       type: USER_DELTE_LIST,
       payload: userList.data,
@@ -61,7 +67,7 @@ export const userDeleteAction = (AccessToken, user_id) => async (dispatch) => {
   const token = AccessToken;
   try {
     const userList = await axios.delete(
-      `http://localhost:3200/delete/users/${user_id}`,
+      `https://inventory-management-backend.onrender.com/delete/users/${user_id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
