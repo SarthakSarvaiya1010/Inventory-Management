@@ -15,20 +15,17 @@ export const ProductListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   console.log(data, " data");
   try {
-    const ProductList = await axios.get(
-      "https://inventory-management-backend.onrender.com/products",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        params: data
-          ? {
-              searchKeyword: data.search,
-              limit: data.limit,
-              page: data.pageNumber,
-              orderByString: data.orderByString,
-            }
-          : null,
-      }
-    );
+    const ProductList = await axios.get("http://localhost:3200/products", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: data
+        ? {
+            searchKeyword: data.search,
+            limit: data.limit,
+            page: data.pageNumber,
+            orderByString: data.orderByString,
+          }
+        : null,
+    });
     dispatch({
       type: PRODUCT_LIST,
       payload: ProductList.data,
@@ -47,7 +44,7 @@ export const ProductEditAction =
     const token = AccessToken;
     try {
       const ProductEdit = await axios.get(
-        `https://inventory-management-backend.onrender.com/products/${Product_id}`,
+        `http://localhost:3200/products/${Product_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -71,7 +68,7 @@ export const ProductEditDataAction =
     console.log(token, Product_id, data, "token, Product_id");
     try {
       const ProductEditData = await axios.put(
-        `https://inventory-management-backend.onrender.com/edit/products/${Product_id}`,
+        `http://localhost:3200/edit/products/${Product_id}`,
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -95,7 +92,7 @@ export const ProductAddAction = (AccessToken, data) => async (dispatch) => {
   console.log("data==========>", data);
   try {
     const ProductAdd = await axios.post(
-      "https://inventory-management-backend.onrender.com/products",
+      "http://localhost:3200/products",
       data,
       { headers: { Authorization: `Bearer ${token}` } }
     );

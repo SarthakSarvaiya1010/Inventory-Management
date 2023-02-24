@@ -30,7 +30,7 @@ function TaxList() {
   // eslint-disable-next-line array-callback-return
   TaxData?.TaxList.map((e) => {
     let elements = {};
-    elements["Sr.No"] = e.sr_no;
+    elements["Sr.No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     elements["Tax Name"] = e.tax_name;
     elements["Tax Rate [ In % ]"] = e.tax_rate;
     elements["Tax Country"] = e.tax_country;

@@ -1,7 +1,13 @@
-import { COMPANY_INFO, COMPANY_INFO_EDIT } from "../../ActionTypes";
+import {
+  COMPANY_INFO,
+  COMPANY_INFO_BY_ID,
+  COMPANY_INFO_EDIT,
+  COMPANY_DELETE,
+} from "../../ActionTypes";
 
 const initialstate = {
   CompanyInfo: [],
+  CompanyInfoId: [],
   loder: true,
 };
 
@@ -13,7 +19,19 @@ const CompanyInfoReducer = (state = initialstate, action) => {
         CompanyInfo: action.payload,
         loder: true,
       };
+    case COMPANY_INFO_BY_ID:
+      return {
+        ...state,
+        CompanyInfoId: action.payload,
+        loder: true,
+      };
+
     case COMPANY_INFO_EDIT:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case COMPANY_DELETE:
       return {
         ...state,
         ...action.payload,

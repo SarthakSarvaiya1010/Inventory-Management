@@ -22,16 +22,24 @@ const UseForm = (defaultData, showToastMessage, image) => {
   const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
-  console.log("values", values);
+  console.log("valueserrors", errors, "findErrors", findErrors);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   console.log("Product_data ", defaultData);
 
+  useEffect(() => {
+    if (defaultData.length || Object.keys(defaultData).length) {
+      setvalues(defaultData);
+    }
+  }, [defaultData]);
+
+  const [test, setTest] = useState(null);
   const producthandleSubmit = () => {
-    setFindErrors(true);
-    setErrors(ProductValidate(values, defaultData));
+    setTest(true);
     const formAddUserData = new FormData();
+    setFindErrors("ProductValidate");
+    setErrors(ProductValidate(values, defaultData));
     formAddUserData.append(
       "product_name",
       values?.product_name || defaultData?.product_name
@@ -47,32 +55,39 @@ const UseForm = (defaultData, showToastMessage, image) => {
     formAddUserData.append("hsn", values?.hsn || defaultData?.hsn);
     formAddUserData.append("weight", values?.weight || defaultData?.weight);
     formAddUserData.append("image_src", image);
-    if (!Object.keys(errors).length && findErrors) {
+    console.log("errors length", formAddUserData);
+    if (Object.keys(errors).length) {
+      setFindErrors(null);
+      setTest(false);
+      console.log("errors length 2", errors);
       if (defaultData?.product_id) {
-        dispatch(
-          ProductEditDataAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            formAddUserData,
-            parseInt(defaultData.product_id)
-          )
-        );
-        showToastMessage();
+        // dispatch(
+        //   ProductEditDataAction(
+        //     successLoginData?.LoginData?.accessToken ||
+        //       accessToken?.accessToken,
+        //     formAddUserData,
+        //     parseInt(defaultData.product_id)
+        //   )
+        // );
+        // alert("done");
+        // showToastMessage();
       } else {
-        dispatch(
-          ProductAddAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            formAddUserData
-          )
-        );
+        alert("Product Add");
+
+        // dispatch(
+        //   ProductAddAction(
+        //     successLoginData?.LoginData?.accessToken ||
+        //       accessToken?.accessToken,
+        //     formAddUserData
+        //   )
+        // );
       }
     }
   };
 
   const companyhandleSubmit = () => {
     setFindErrors(true);
-    setErrors(CompanyValidate(values, defaultData));
+    setErrors(CompanyValidate(values));
     const formAddUserData = new FormData();
     formAddUserData.append(
       "company_address",
@@ -101,7 +116,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
     );
     formAddUserData.append("website", values?.website || defaultData?.website);
 
-    if (!Object.keys(errors).length && findErrors) {
+    if (!Object.keys(errors).length) {
       dispatch(
         CompanyInfoEditAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
@@ -121,7 +136,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
     data["mobile_no"] = values?.mobile_no || defaultData?.mobile_no;
     data["email"] = values?.email || defaultData?.email;
     data["address"] = values?.address || defaultData?.address;
-    data["tin_no"] = values.tin_no || defaultData?.tin_no;
+    data["tin_no"] = values?.tin_no || defaultData?.tin_no;
     if (!Object.keys(errors).length && findErrors) {
       if (defaultData) {
         dispatch(
@@ -132,6 +147,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
             parseInt(defaultData?.customer_id)
           )
         );
+
         showToastMessage();
       } else {
         dispatch(
@@ -181,12 +197,52 @@ const UseForm = (defaultData, showToastMessage, image) => {
   };
 
   useEffect(() => {
-    if (findErrors) {
-      setErrors(ProductValidate(values, defaultData));
+    if (findErrors === "ProductValidate") {
+      setErrors(ProductValidate(values));
+    }
+    if (findErrors === "CustomerValidate") {
       setErrors(CustomerValidate(values, defaultData));
+    }
+    if (findErrors === "TaxValidate") {
       setErrors(TaxValidate(values, defaultData));
     }
-  }, [defaultData, findErrors, values]);
+    if (Object.keys(errors).length) {
+      setFindErrors("ProductValidate");
+      setTest(null);
+    }
+    if (!Object.keys(errors).length && findErrors === "ProductValidate") {
+      if (defaultData?.product_id) {
+        // dispatch(
+        //   ProductEditDataAction(
+        //     successLoginData?.LoginData?.accessToken ||
+        //       accessToken?.accessToken,
+        //     formAddUserData,
+        //     parseInt(defaultData.product_id)
+        //   )
+        // );
+        if (test) {
+          alert("Product Edit in useEffect");
+        }
+        alert("Product Edit");
+        showToastMessage();
+        setFindErrors(false);
+      } else {
+        // dispatch(
+        //   ProductAddAction(
+        //     successLoginData?.LoginData?.accessToken ||
+        //       accessToken?.accessToken,
+        //     formAddUserData
+        //   )
+        // );
+
+        showToastMessage();
+        setFindErrors(false);
+        if (test) {
+          alert("Product ADD in useEffect");
+        }
+      }
+    }
+  }, [defaultData, errors, findErrors, showToastMessage, test, values]);
 
   const handleOnchange = useCallback(
     (e) =>

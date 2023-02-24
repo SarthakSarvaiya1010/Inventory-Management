@@ -21,12 +21,14 @@ export const TaxListAction = (AccessToken, data) => async (dispatch) => {
       "https://inventory-management-backend.onrender.com/tax",
       {
         headers: { Authorization: `Bearer ${token}` },
-        params: {
-          searchKeyword: data.search ? data.search : null,
-          limit: data.limit,
-          page: data.pageNumber,
-          orderByString: data.orderByString,
-        },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
       }
     );
     dispatch({

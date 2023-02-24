@@ -41,12 +41,16 @@ export default function UsePagination(props) {
               </button>
             );
           } else {
+            console.log("selected", page);
             children = (
               <button
                 style={{
                   backgroundColor: "white",
                   padding: "6px 12px",
-                  color: "green",
+                  color:
+                    0 === page || items.length === page + 1
+                      ? "lightgreen"
+                      : "green",
                   border: "1px solid grey",
                 }}
                 type="button"

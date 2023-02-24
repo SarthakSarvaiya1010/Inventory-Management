@@ -117,7 +117,7 @@ export const CustomerEditDataAction =
     const token = AccessToken;
     try {
       const ProductEditData = await axios.put(
-        `https://inventory-management-backend.onrender.com/edit/customers/${customers_id}`,
+        `http://localhost:3200/edit/customers/${customers_id}`,
         data,
         {
           headers: { Authorization: `Bearer ${token}` },

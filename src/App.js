@@ -19,7 +19,14 @@ import {
   EditInvoicePage,
   CompanyInfoPage,
 } from "./pages/index";
-import ListUser from "./Components/UserData/ListUser";
+import {
+  HomePageAdmin,
+  AdminSideBar,
+  CompanyListPage,
+  UserListPage,
+  UserDeleteListPage,
+} from "./pages/AdminPages/index";
+import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import "./App.css";
@@ -76,22 +83,34 @@ const route = [
   { path: "/addtax", element: <AddTaxPage /> },
   { path: "/tax/edit/:id", element: <AddTaxPage /> },
   { path: "/deletedtax", element: <DeleteTaxPage /> },
-  { path: "/listuser", element: <ListUser /> },
   { path: "/invoice_list", element: <InvoiceListPage /> },
   { path: "/addinvoice", element: <AddInvoicePage /> },
   { path: "/viewdeletedinvoice", element: <ViewDeletedInvoiceList /> },
   { path: "/company_info", element: <CompanyInfoPage /> },
+  { path: "/homepage", element: <HomePageAdmin /> },
+  { path: "/companylist", element: <CompanyListPage /> },
+  { path: "/company/edit/:id", element: <CompanyInfoPage /> },
+  { path: "/userlist", element: <UserListPage /> },
+  { path: "/userdeletelist", element: <UserDeleteListPage /> },
 ];
 
 function App() {
   const [openManu, setOpenManu] = useState(false);
+  const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   return (
     <div className="App">
       <BrowserRouter>
         <ThemeProvider theme={outerTheme}>
           <Header openManu={openManu} setOpenManu={setOpenManu} />
           <Box sx={{ display: "flex" }}>
-            <SideBar openManu={openManu} setOpenManu={setOpenManu} />
+            {successLoginData?.LoginData?.role_id === 2 ||
+            accessToken?.role_id === 2 ? (
+              <SideBar openManu={openManu} setOpenManu={setOpenManu} />
+            ) : (
+              <AdminSideBar openManu={openManu} setOpenManu={setOpenManu} />
+            )}
             <Main open={openManu}>
               <DrawerHeader />
               <Routes>

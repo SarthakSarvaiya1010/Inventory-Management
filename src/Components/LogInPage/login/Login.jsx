@@ -59,7 +59,13 @@ function Login(props) {
       );
       showToastMessage();
       setTimeout(() => {
-        navigate("/productList");
+        if (successLoginData.LoginData.role_id === 2) {
+          navigate("/productList");
+        } else {
+          if (successLoginData.LoginData.role_id === 1) {
+            navigate("/userlist");
+          }
+        }
       }, 2000);
       setTest(false);
       setButtonDisbel(false);

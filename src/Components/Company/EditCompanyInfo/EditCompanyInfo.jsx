@@ -11,25 +11,32 @@ import {
 import UseForm from "../../EditForm/UseForm";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../../../Helpers/Header/Header";
-import { CompanyInfoAction } from "../../../Store/Action/CompanyAction/index";
+import { CompanyInfoByIdAction } from "../../../Store/Action/CompanyAction/index";
+import { useParams } from "react-router";
 import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer, toast } from "react-toastify";
 
 function EditCompanyInfo() {
+  const params = useParams();
+
   const CompanyInfoData = useSelector((state) => state?.CompanyInfo);
-  let CompanyInfo = CompanyInfoData.CompanyInfo.filter(
-    (e) => e.company_id === 4
-  );
-  console.log("CompanyInfo", CompanyInfo, CompanyInfoData);
+  let CompanyInfo = CompanyInfoData?.CompanyInfoId || {};
+
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const dispatch = useDispatch();
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const accessTokenData =
     successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
-
+  const { id } = params;
+  let company_id = parseInt(
+    localStorage?.getItem("CompanyId") || accessToken?.company_id
+  );
   useEffect(() => {
-    dispatch(CompanyInfoAction(accessTokenData));
-  }, [accessTokenData, dispatch]);
+    dispatch(CompanyInfoByIdAction(accessTokenData, company_id));
+    if (id) {
+      localStorage.setItem("CompanyId", id);
+    }
+  }, [accessTokenData, company_id, dispatch, id]);
 
   const imageUploader = React.useRef(null);
   const uploadedImage = React.useRef(null);
@@ -41,11 +48,11 @@ function EditCompanyInfo() {
     });
   };
   const { companyhandleSubmit, values, errors, handleOnchange } = UseForm(
-    CompanyInfo[0],
+    CompanyInfo,
     showToastMessage,
     image
   );
-  console.log("errors", errors);
+  console.log("errors", errors, CompanyInfo);
 
   const hedalImgChage = (event) => {
     const [file] = event.target.files;
@@ -64,7 +71,7 @@ function EditCompanyInfo() {
   };
   return (
     <div>
-      {CompanyInfo?.length ? (
+      {CompanyInfo.length || Object.keys(CompanyInfo).length ? (
         <Container fixed>
           <Header name={"Company Info"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -91,7 +98,7 @@ function EditCompanyInfo() {
                     id="outlined-company_name"
                     label="Company Name"
                     autoComplete="off"
-                    defaultValue={CompanyInfo[0]?.company_name}
+                    defaultValue={CompanyInfo?.company_name}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.product_name}</p>
@@ -102,7 +109,7 @@ function EditCompanyInfo() {
                     name="website"
                     autoComplete="off"
                     type="textarea"
-                    defaultValue={CompanyInfo[0]?.website}
+                    defaultValue={CompanyInfo?.website}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <br />
@@ -112,7 +119,7 @@ function EditCompanyInfo() {
                     type="number"
                     name="phone_no"
                     label="Phone No."
-                    defaultValue={parseInt(CompanyInfo[0]?.phone_no)}
+                    defaultValue={parseInt(CompanyInfo?.phone_no)}
                     onChange={(e) => handleOnchange(e)}
                   ></TextField>
                   <p style={{ color: "red" }}>{errors?.product_type}</p>
@@ -123,7 +130,7 @@ function EditCompanyInfo() {
                     type="number"
                     name="mobile_no"
                     label="Mobile No."
-                    defaultValue={parseInt(CompanyInfo[0]?.mobile_no)}
+                    defaultValue={parseInt(CompanyInfo?.mobile_no)}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.weight}
@@ -138,7 +145,7 @@ function EditCompanyInfo() {
                     multiline
                     name="company_address"
                     label="Company Address"
-                    defaultValue={CompanyInfo[0]?.company_address}
+                    defaultValue={CompanyInfo?.company_address}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
@@ -150,7 +157,7 @@ function EditCompanyInfo() {
                     required
                     name="tin_gst_no"
                     label="TIN GST NO."
-                    defaultValue={CompanyInfo[0]?.tin_gst_no}
+                    defaultValue={CompanyInfo?.tin_gst_no}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
@@ -164,7 +171,7 @@ function EditCompanyInfo() {
                     type="textarea"
                     multiline
                     label="Terms & Condition"
-                    defaultValue={CompanyInfo[0]?.terms_condition}
+                    defaultValue={CompanyInfo?.terms_condition}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
@@ -177,7 +184,7 @@ function EditCompanyInfo() {
                     type="number"
                     name="fax_no"
                     label="Fax No."
-                    defaultValue={CompanyInfo[0]?.fax_no}
+                    defaultValue={CompanyInfo?.fax_no}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
@@ -191,11 +198,11 @@ function EditCompanyInfo() {
                       height: "120px",
                       width: "120px",
                       display:
-                        image || CompanyInfo[0]?.image_src ? "flex" : "none",
+                        image || CompanyInfo?.image_src ? "flex" : "none",
                     }}
                     src={
-                      CompanyInfo[0]?.image_src
-                        ? `http://localhost:3200/${CompanyInfo[0]?.image_src}`
+                      CompanyInfo?.image_src
+                        ? `http://localhost:3200/${CompanyInfo?.image_src}`
                         : "src/"
                     }
                   />
@@ -217,7 +224,7 @@ function EditCompanyInfo() {
                       aria-label="add"
                       variant="extended"
                     >
-                      <AddIcon /> Upload product photo
+                      <AddIcon /> Upload company logo
                     </Fab>
                   </label>
                   ;

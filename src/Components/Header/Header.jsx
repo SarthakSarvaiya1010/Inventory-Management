@@ -57,7 +57,7 @@ export default function Header(props) {
       setTimeout(() => {
         setOpen(false);
         setOpenManu(true);
-      }, 5500);
+      }, 2000);
     }
   }, [setOpenManu, successLoginData.LoginData.statusCode]);
 
