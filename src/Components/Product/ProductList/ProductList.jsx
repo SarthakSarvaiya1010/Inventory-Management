@@ -58,6 +58,8 @@ function ProductList() {
     elements["Product Name"] = e.product_name;
     elements["HSN"] = e.hsn;
     elements["Weight [ In Grams ]"] = e.weight;
+    elements["Image"] = e.image_src;
+
     data.push(elements);
   });
 

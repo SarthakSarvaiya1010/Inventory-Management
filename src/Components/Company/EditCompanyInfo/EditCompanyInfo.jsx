@@ -92,7 +92,7 @@ function EditCompanyInfo() {
                 >
                   <TextField
                     required
-                    error={errors?.product_name ? true : null}
+                    error={errors?.company_name ? true : null}
                     name="
                   company_name"
                     id="outlined-company_name"
@@ -101,7 +101,7 @@ function EditCompanyInfo() {
                     defaultValue={CompanyInfo?.company_name}
                     onChange={(e) => handleOnchange(e)}
                   />
-                  <p style={{ color: "red" }}>{errors?.product_name}</p>
+                  <p style={{ color: "red" }}>{errors?.company_name}</p>
                   <br />
                   <TextField
                     id="outlined-Product"
@@ -114,7 +114,7 @@ function EditCompanyInfo() {
                   />
                   <br />
                   <TextField
-                    error={errors?.product_type ? true : null}
+                    error={errors?.phone_no ? true : null}
                     id="outlined-select-currency-native"
                     type="number"
                     name="phone_no"
@@ -122,10 +122,10 @@ function EditCompanyInfo() {
                     defaultValue={parseInt(CompanyInfo?.phone_no)}
                     onChange={(e) => handleOnchange(e)}
                   ></TextField>
-                  <p style={{ color: "red" }}>{errors?.product_type}</p>
+                  <p style={{ color: "red" }}>{errors?.phone_no}</p>
                   <br />
                   <TextField
-                    error={errors?.weight ? true : null}
+                    error={errors?.mobile_no ? true : null}
                     required
                     type="number"
                     name="mobile_no"
@@ -136,10 +136,10 @@ function EditCompanyInfo() {
                     value={values?.weight}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.weight}</p>
+                  <p style={{ color: "red" }}>{errors?.mobile_no}</p>
                   <br />
                   <TextField
-                    error={errors?.hsn ? true : null}
+                    error={errors?.company_address ? true : null}
                     required
                     type="textarea"
                     multiline
@@ -148,24 +148,24 @@ function EditCompanyInfo() {
                     defaultValue={CompanyInfo?.company_address}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
-                    value={values?.hsn}
+                    value={values?.company_address}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <p style={{ color: "red" }}>{errors?.company_address}</p>
                   <TextField
-                    error={errors?.hsn ? true : null}
+                    error={errors?.tin_gst_no ? true : null}
                     required
                     name="tin_gst_no"
                     label="TIN GST NO."
                     defaultValue={CompanyInfo?.tin_gst_no}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
-                    value={values?.hsn}
+                    value={values?.tin_gst_no}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <p style={{ color: "red" }}>{errors?.tin_gst_no}</p>
                   <TextField
-                    error={errors?.hsn ? true : null}
+                    error={errors?.terms_condition ? true : null}
                     required
                     name="terms_condition"
                     type="textarea"
@@ -177,9 +177,9 @@ function EditCompanyInfo() {
                     value={values?.hsn}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <p style={{ color: "red" }}>{errors?.terms_condition}</p>
                   <TextField
-                    error={errors?.hsn ? true : null}
+                    error={errors?.fax_no ? true : null}
                     required
                     type="number"
                     name="fax_no"
@@ -190,7 +190,7 @@ function EditCompanyInfo() {
                     value={values?.hsn}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <p style={{ color: "red" }}>{errors?.fax_no}</p>
                   <img
                     alt=""
                     ref={uploadedImage}
@@ -202,7 +202,7 @@ function EditCompanyInfo() {
                     }}
                     src={
                       CompanyInfo?.image_src
-                        ? `http://localhost:3200/${CompanyInfo?.image_src}`
+                        ? `https://inventory-management-backend.onrender.com/${CompanyInfo?.image_src}`
                         : "src/"
                     }
                   />

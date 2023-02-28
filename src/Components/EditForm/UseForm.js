@@ -1,20 +1,22 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ProductValidate,
   CustomerValidate,
   TaxValidate,
   CompanyValidate,
+  UserValidate,
 } from "./formValidation";
-import {
-  ProductAddAction,
-  ProductEditDataAction,
-} from "../../Store/Action/ProductAction";
+// import {
+//   ProductAddAction,
+//   ProductEditDataAction,
+// } from "../../Store/Action/ProductAction";
 import {
   CustomerEditDataAction,
   CustomerAddAction,
 } from "../../Store/Action/CustomerAction/index";
 import { CompanyInfoEditAction } from "../../Store/Action/CompanyAction/index";
+import { UserAddAction } from "../../Store/Action/UserAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const UseForm = (defaultData, showToastMessage, image) => {
@@ -111,6 +113,10 @@ const UseForm = (defaultData, showToastMessage, image) => {
       values?.terms_condition || defaultData?.terms_condition
     );
     formAddUserData.append(
+      "terms_condition",
+      values?.fax_no || defaultData?.fax_no
+    );
+    formAddUserData.append(
       "tin_gst_no",
       values?.tin_gst_no || defaultData?.tin_gst_no
     );
@@ -160,6 +166,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
       }
     }
   };
+
   const TaxhandleSubmit = () => {
     console.log(" defaultData", defaultData);
     setFindErrors(true);
@@ -195,7 +202,42 @@ const UseForm = (defaultData, showToastMessage, image) => {
       }
     }
   };
+  const UserhandleSubmit = () => {
+    console.log(" defaultData", defaultData);
+    setFindErrors("UserValidate");
+    setErrors(UserValidate(values, defaultData));
+    const formAddUserData = new FormData();
+    formAddUserData.append("name", values?.name);
+    formAddUserData.append("role_id", values?.role_id);
+    formAddUserData.append("address", values?.address);
+    formAddUserData.append("email", values?.email);
+    formAddUserData.append("password", values?.password);
+    formAddUserData.append("mobile_no", values?.mobile_no);
+    formAddUserData.append("company_id", values?.company_id);
+    formAddUserData.append("image_src", image);
 
+    if (!Object.keys(errors).length && findErrors) {
+      if (defaultData.length > 0) {
+        console.log("edit tax");
+        dispatch(
+          UserAddAction(
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
+            formAddUserData,
+            defaultData[0]?.tax_id
+          )
+        );
+      } else {
+        dispatch(
+          UserAddAction(
+            successLoginData?.LoginData?.accessToken ||
+              accessToken?.accessToken,
+            formAddUserData
+          )
+        );
+      }
+    }
+  };
   useEffect(() => {
     if (findErrors === "ProductValidate") {
       setErrors(ProductValidate(values));
@@ -211,6 +253,45 @@ const UseForm = (defaultData, showToastMessage, image) => {
       setTest(null);
     }
     if (!Object.keys(errors).length && findErrors === "ProductValidate") {
+      if (defaultData?.product_id) {
+        // dispatch(
+        //   ProductEditDataAction(
+        //     successLoginData?.LoginData?.accessToken ||
+        //       accessToken?.accessToken,
+        //     formAddUserData,
+        //     parseInt(defaultData.product_id)
+        //   )
+        // );
+        if (test) {
+          alert("Product Edit in useEffect");
+        }
+        alert("Product Edit");
+        showToastMessage();
+        setFindErrors(false);
+      } else {
+        // dispatch(
+        //   ProductAddAction(
+        //     successLoginData?.LoginData?.accessToken ||
+        //       accessToken?.accessToken,
+        //     formAddUserData
+        //   )
+        // );
+
+        showToastMessage();
+        setFindErrors(false);
+        if (test) {
+          alert("Product ADD in useEffect");
+        }
+      }
+    }
+  }, [defaultData, errors, findErrors, showToastMessage, test, values]);
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      setFindErrors("UserValidate");
+      setTest(null);
+    }
+    if (!Object.keys(errors).length && findErrors === "UserValidate") {
       if (defaultData?.product_id) {
         // dispatch(
         //   ProductEditDataAction(
@@ -264,6 +345,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
     errors,
     handleOnchange,
     companyhandleSubmit,
+    UserhandleSubmit,
   };
 };
 export default UseForm;

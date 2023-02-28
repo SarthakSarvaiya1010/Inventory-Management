@@ -25,6 +25,7 @@ import {
   CompanyListPage,
   UserListPage,
   UserDeleteListPage,
+  AddUserPage,
 } from "./pages/AdminPages/index";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
@@ -92,6 +93,8 @@ const route = [
   { path: "/company/edit/:id", element: <CompanyInfoPage /> },
   { path: "/userlist", element: <UserListPage /> },
   { path: "/userdeletelist", element: <UserDeleteListPage /> },
+  { path: "/adduser", element: <AddUserPage /> },
+  { path: "/user/edit/:id", element: <AddUserPage /> },
 ];
 
 function App() {

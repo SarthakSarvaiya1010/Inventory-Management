@@ -56,7 +56,7 @@ function UserList() {
   });
 
   const headalEdit = (data) => {
-    navigate(`/product/edit/${User.UserData[data - 1]?.user_id}`);
+    navigate(`/user/edit/${User.UserData[data - 1]?.user_uuid}`);
   };
 
   const headalDelete = (data) => {
@@ -147,7 +147,7 @@ function UserList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addproduct");
+                  navigate("/adduser");
                 }}
               >
                 add User
