@@ -10,17 +10,17 @@ const List = styled("ul")({
 });
 
 export default function UsePagination(props) {
-  const { countNumbuer, PageNumber } = props;
+  const { countNumbuer, PageNumber, currentPage } = props;
   const { items } = usePagination({
     count: countNumbuer,
+    defaultPage: currentPage,
   });
 
   return (
     <nav>
       <List>
-        {items.map(({ page, type, selected, ...item }, index) => {
+        {items.map(({ page, type, disabled, selected, ...item }, index) => {
           let children = null;
-
           if (type === "start-ellipsis" || type === "end-ellipsis") {
             children = "…";
           } else if (type === "page") {
@@ -33,6 +33,7 @@ export default function UsePagination(props) {
                   color: selected ? "white" : "green",
                   border: "1px solid grey",
                   padding: "6px 12px",
+                  cursor: "pointer",
                 }}
                 {...item}
               >
@@ -40,17 +41,23 @@ export default function UsePagination(props) {
               </button>
             );
           } else {
-            console.log("selected", page);
+            console.log(
+              "pagetypepagetype",
+              page,
+              type,
+              selected,
+              items.length,
+              disabled
+            );
             children = (
               <button
+                disabled={0 === page || disabled ? true : null}
                 style={{
                   backgroundColor: "white",
                   padding: "6px 12px",
-                  color:
-                    0 === page || items.length === page + 1
-                      ? "lightgreen"
-                      : "green",
+                  color: 0 === page || disabled ? "lightgreen" : "green",
                   border: "1px solid grey",
+                  cursor: "pointer",
                 }}
                 type="button"
                 {...item}

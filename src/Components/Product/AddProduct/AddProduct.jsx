@@ -7,12 +7,11 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
-import UseForm from "../../EditForm/UseForm";
+import useForm from "../../EditForm/useForm";
+// import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductEditAction } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import AddIcon from "@mui/icons-material/Add";
 
 const currencies = [
@@ -30,37 +29,31 @@ function AddProduct() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
-  const ProductEditData = useSelector((state) => state?.ProductEdit);
+  const ProductEditData = useSelector((state) => state?.ProductList);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
-  console.log("id==========>",id);
+  console.log("ProductEditData", ProductEditData);
   const imageUploader = React.useRef(null);
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
 
   const Product_data = ProductEditData?.productEdit;
-  // console.log("params", id, Product_data);
-  // const [values, setvalues] = useState(null);
-  console.log("params", ProductEditData?.productEdit?.image_src, uploadedImage);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const accessTokenData =
     successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
-
-  const showToastMessage = () => {
-    toast.success("Data Updata  Success  !", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  };
-
+  //  useEffect(() => {
+  // if (Product_data?.image_src) {
+  //   setImage(Product_data?.image_src)
+  // }
+  //  },[image])
   useEffect(() => {
     if (id) {
       dispatch(ProductEditAction(accessTokenData, id));
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
-  const { producthandleSubmit, values, errors, handleOnchange } = UseForm(
+  const { producthandleSubmit, values, errors, handleOnchange } = useForm(
     Product_data,
-    showToastMessage,
     image
   );
 
@@ -68,7 +61,7 @@ function AddProduct() {
 
   const handleCancle = () => {
     console.log("done");
-    navigate("/ProductList");
+    navigate("/productlist");
   };
 
   const hedalImgChage = (event) => {
@@ -92,7 +85,10 @@ function AddProduct() {
       {!ProductEditData.loder || !id ? (
         // Object.keys(Product_data).length ? (
         <Container fixed>
-          <Header name={id ? "Edit product" : "Add Product"} SearchBar={false} />
+          <Header
+            name={id ? "Edit product" : "Add Product"}
+            SearchBar={false}
+          />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <DialogContent>
               <br />
@@ -111,13 +107,13 @@ function AddProduct() {
                   spacing={1}
                 >
                   <TextField
-                    required
+                    // {...register("product_name")}
                     error={errors?.product_name ? true : null}
                     name="product_name"
                     id="outlined-Product"
                     label="Product Name"
                     autoComplete="off"
-                    defaultValue={id ? Product_data.product_name : ""}
+                    defaultValue={id ? Product_data?.product_name : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.product_name}</p>
@@ -269,7 +265,6 @@ function AddProduct() {
               </Stack>
               <br />
             </DialogContent>
-            <ToastContainer />
           </Container>
         </Container>
       ) : (

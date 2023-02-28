@@ -187,6 +187,7 @@ function InvoiceList() {
                   InvoiceData.invoiceList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

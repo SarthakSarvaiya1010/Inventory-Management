@@ -1,6 +1,5 @@
 export function ProductValidate(values, Product_data) {
   let errors = {};
-  console.log("values=====>", values);
   if (!values?.product_name) {
     errors.product_name = "product name is required";
   }

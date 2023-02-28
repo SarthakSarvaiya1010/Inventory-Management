@@ -9,7 +9,7 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { CustomerEditAction } from "../../../Store/Action/CustomerAction/index";
 
-import UseForm from "../../EditForm/UseForm";
+import UseForm from "../../EditForm/useForm";
 
 function AddCustomer() {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ function AddCustomer() {
   console.log(values);
 
   const handleCancle = () => {
-    navigate("/customerList");
+    navigate("/customer_list");
   };
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 

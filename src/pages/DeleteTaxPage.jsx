@@ -10,6 +10,7 @@ function DeleteTaxPage() {
   const showToastMessage = (data) => {
     toast.success(data, {
       position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
     });
   };
   useEffect(() => {
@@ -17,7 +18,7 @@ function DeleteTaxPage() {
       showToastMessage(TaxData?.PermanentTaxDeleteData?.message);
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 2000);
     }
   }, [TaxData?.PermanentTaxDeleteData?.statusCode]);
   return (

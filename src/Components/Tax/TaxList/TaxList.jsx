@@ -22,10 +22,9 @@ function TaxList() {
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
-  console.log("TaxData", TaxData?.TaxDeleteSuccessData?.statusCode);
   let limit = 2;
   const data = [];
-
+  console.log("TaxData?.TaxList", TaxData?.TaxList);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   // eslint-disable-next-line array-callback-return
   TaxData?.TaxList.map((e) => {
@@ -201,6 +200,7 @@ function TaxList() {
                   TaxData?.TaxList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

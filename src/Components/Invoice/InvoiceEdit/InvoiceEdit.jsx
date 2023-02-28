@@ -21,8 +21,10 @@ import {
   TableRow,
   TableBody,
   TableFooter,
+  styled,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import Header from "../../../Helpers/Header/Header";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -33,8 +35,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   GetinvoiceAddPageAction,
   GetinvoiceEditDataAction,
+  UpdateInvoiceData,
 } from "../../../Store/Action/InvoiceAction";
 import { useParams } from "react-router";
+import { convert } from "../../../Helpers/misc";
+import { ToWords } from "to-words";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -47,38 +52,70 @@ const commonStyles = {
   p: 2,
   border: 1,
 };
-function InvoiceEdit() {
+function InvoiceEdit(props) {
+  const { testData, EditInvoiceSucessMessage } = props;
+  const toWords = new ToWords();
   const dispatch = useDispatch();
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  const invoivepagedata = JSON.parse(
-    localStorage.getItem("InvoiceEditPageData")
-  );
   const params = useParams();
   const { id } = params;
-  console.log("idididid", id);
+  const InvoicePageData = useSelector((state) => state?.InvoiceData);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const [CustomerListData, setCustomerListData] = useState();
+  const [dateData, setDateData] = useState();
+  const [addtable, setAddTable] = useState();
+  const [product, setProduct] = useState([]);
+  const [discount, setDiscount] = useState();
+  const [disabled, setDisabled] = useState(false);
+  if (EditInvoiceSucessMessage && disabled) {
+    setDisabled(false);
+  }
+  useEffect(() => {
+    if (
+      testData?.productlistdata?.length &&
+      testData?.productlistdata?.length !== addtable
+    ) {
+      setAddTable(testData?.productlistdata?.length);
+      setProduct(testData?.productlistdata);
+      setDiscount(testData?.discount);
+    }
+  }, [InvoicePageData?.invoiceEdit]);
+
   useEffect(() => {
     dispatch(GetinvoiceEditDataAction(accessToken?.accessToken, id));
     dispatch(GetinvoiceAddPageAction(accessToken?.accessToken));
   }, [accessToken?.accessToken, dispatch, id]);
 
-  const [CustomerListData, setCustomerListData] = useState();
+  // calculate Total weight ,rate, amount and billamount
+  let totalAmount = 0;
+  let totalweight = 0;
+  let totalrate = 0;
 
-  const [discount, setDiscount] = useState();
+  product?.forEach((sum) => {
+    totalAmount += sum.amount;
+    totalweight += sum.weight;
+    totalrate += sum.rate;
+  });
+  console.log("totalAmount==>", totalAmount, typeof totalAmount);
+  let SGST = totalAmount
+    ? ((1.5 / 100) * totalAmount).toFixed(2) === "0.00"
+      ? null
+      : ((1.5 / 100) * totalAmount).toFixed(2)
+    : null;
+  let CGST = totalAmount
+    ? ((1.5 / 100) * totalAmount).toFixed(2) === "0.00"
+      ? null
+      : ((1.5 / 100) * totalAmount).toFixed(2)
+    : null;
+  console.log("SGST,CGST", CGST, typeof CGST);
+  const Bill_Amount =
+    totalAmount && SGST && CGST
+      ? totalAmount +
+        parseFloat(SGST) +
+        parseFloat(CGST) -
+        (discount ? discount : 0)
+      : null;
 
-  const InvoicePageData = useSelector((state) => state?.InvoiceData);
-
-  const testData = InvoicePageData?.invoiceEdit?.length
-    ? InvoicePageData?.invoiceEdit
-    : invoivepagedata
-    ? invoivepagedata
-    : [{}];
-  const [addtable, setAddTable] = useState(
-    testData[0]?.productlistdata?.length || 1
-  );
-  console.log("addtable", addtable);
-  const [product, setProduct] = useState(testData[0]?.productlistdata || [{}]);
-  console.log("testData======?", testData);
-
+  // hanglechangeproduct
   const handleChangeProduct = (name, value) => {
     let nameIndex = name.split(" ", 2);
     let index = parseInt(nameIndex[1]) - 1;
@@ -123,10 +160,7 @@ function InvoiceEdit() {
         });
         setProduct([...product]);
       } else {
-        if (
-          existingProduct.length > addtable - 1 &&
-          fieldName === "product_id"
-        ) {
+        if (existingProduct.length > index && fieldName === "product_id") {
           existingrate.forEach((f) => {
             product[index].product_id = value;
             product[index].hsn = hsn_data;
@@ -172,44 +206,33 @@ function InvoiceEdit() {
     }
   };
 
-  // const { sx, ...other } = props;
-  console.log("product", product, CustomerListData);
-
-  const handleCreate = () => {
-    console.log("product", product, CustomerListData);
+  // Handle Update Data
+  const handleUpdate = () => {
+    const UpdatedData = {
+      bill_no: testData?.bill_no,
+      invoice_date: convert(testData?.invoice_date),
+      customer_id: CustomerListData
+        ? CustomerListData.customer_id
+        : testData?.customer_id,
+      taxable_amount: totalAmount
+        ? parseFloat(totalAmount.toFixed(2))
+        : testData?.taxable_amount,
+      sgst: SGST ? parseFloat(SGST) : testData?.sgst,
+      cgst: CGST ? parseFloat(CGST) : testData?.cgst,
+      discount: parseFloat(discount) ? parseFloat(discount) : 0,
+      bill_amount: Bill_Amount
+        ? parseFloat(Bill_Amount.toFixed(2))
+        : testData?.bill_amount,
+      productdata: product ? product : testData?.productlistdata,
+    };
+    const invoice_id = testData?.invoice_id;
+    dispatch(
+      UpdateInvoiceData(accessToken?.accessToken, invoice_id, UpdatedData)
+    );
+    if (UpdatedData) {
+      setDisabled(true);
+    }
   };
-
-  let totalAmount = 0;
-  let totalweight = 0;
-  let totalrate = 0;
-
-  product?.forEach((sum) => {
-    totalAmount += sum.amount;
-    totalweight += sum.weight;
-    totalrate += sum.rate;
-  });
-
-  console.log("weight===>", totalweight);
-
-  console.log("totalAmount==>", totalAmount, typeof totalAmount);
-  let SGST = totalAmount
-    ? ((1.5 / 100) * totalAmount).toFixed(2) === "0.00"
-      ? null
-      : ((1.5 / 100) * totalAmount).toFixed(2)
-    : null;
-  let CGST = totalAmount
-    ? ((1.5 / 100) * totalAmount).toFixed(2) === "0.00"
-      ? null
-      : ((1.5 / 100) * totalAmount).toFixed(2)
-    : null;
-  console.log("SGST,CGST", CGST, typeof CGST);
-  const Bill_Amount =
-    totalAmount && SGST && CGST
-      ? totalAmount +
-        parseFloat(SGST) +
-        parseFloat(CGST) -
-        (discount ? discount : 0)
-      : null;
 
   const handleChange = (event) => {
     const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
@@ -217,38 +240,23 @@ function InvoiceEdit() {
     );
     setCustomerListData(data);
   };
-  const [dateData, setDateData] = useState();
+
   const handleChangeDate = (event) => {
     console.log(event.$d);
     setDateData(event.$d);
   };
   console.log("dateData", dateData);
 
-  const handleDelete = () => {
+  const handleDelete = (index) => {
     setAddTable((prev) => prev - 1);
-    product.splice(addtable - 1, 1);
+    product.splice(index, 1);
   };
-
-  const handleAdd = () => {
-    setAddTable((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (InvoicePageData?.invoiceEdit.length) {
-      localStorage.setItem(
-        "InvoiceEditPageData",
-        JSON.stringify(InvoicePageData?.invoiceEdit)
-      );
-    }
-  }, [InvoicePageData?.invoiceEdit]);
-
-  console.log("InvoicePageData", InvoicePageData);
 
   return (
     <div>
-      {testData[0]?.productlistdata && product.length > 0 ? (
+      {testData?.productlistdata?.length && addtable ? (
         <Container>
-          <Header name={"AddInvoice"} SearchBar={false} />
+          <Header name={"EditInvoice"} SearchBar={false} />
           <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
             <Box
               sx={{
@@ -302,7 +310,7 @@ function InvoiceEdit() {
                           onChange={(e) => handleChange(e)}
                           label="Mobile_no*"
                           name="mobileNo"
-                          defaultValue={testData[0]?.customer_id}
+                          defaultValue={testData?.customer_id}
                         >
                           <MenuItem value={null}>
                             <em>None</em>
@@ -325,11 +333,11 @@ function InvoiceEdit() {
                           name="customer_address"
                           multiline
                           rows={2}
-                          defaultValue={testData[0]?.customer_address}
+                          defaultValue={testData?.customer_address}
                           // maxRows={4}
                           sx={{ width: 1 }}
                           onChange={(e) => handleChange(e)}
-                          value={CustomerListData?.customer_address}
+                          value={CustomerListData?.address}
                         />
                         <br />
                         <TextField
@@ -346,7 +354,7 @@ function InvoiceEdit() {
                           id="standard-basic-2"
                           label="Name "
                           variant="standard"
-                          defaultValue={testData[0]?.customer_name}
+                          defaultValue={testData?.customer_name}
                           sx={{ width: 1 }}
                           name="customer_name"
                           value={CustomerListData?.customer_name}
@@ -359,16 +367,16 @@ function InvoiceEdit() {
                   </Item>
                 </Grid>
                 <Grid item xs={6}>
-                  <Item sx={{ pt: 6, pb: 6 }}>
-                    <Stack spacing={4}>
+                  <Item sx={{ pt: 5, pb: 5 }}>
+                    <Stack spacing={2.5}>
                       <TextField
                         id="standard-basic-3"
                         label="Bill_no"
                         variant="standard"
                         value={
-                          testData[0]?.bill_no > 9
-                            ? testData[0]?.bill_no
-                            : `0${testData[0]?.bill_no}`
+                          testData?.bill_no > 9
+                            ? testData?.bill_no
+                            : `0${testData?.bill_no}`
                         }
                         sx={{ width: 1 }}
                         name="bill_no"
@@ -379,7 +387,7 @@ function InvoiceEdit() {
                         <DatePicker
                           label="Date"
                           value={dateData}
-                          defaultValue={testData[0]?.invoice_date}
+                          defaultValue={testData?.invoice_date}
                           name="date"
                           onChange={(e) => handleChangeDate(e)}
                           renderInput={(params) => <TextField {...params} />}
@@ -419,7 +427,7 @@ function InvoiceEdit() {
                               <Button
                                 variant="contained"
                                 color="success"
-                                onClick={() => handleAdd()}
+                                onClick={() => setAddTable((prev) => prev + 1)}
                               >
                                 <AddIcon />
                               </Button>
@@ -441,6 +449,7 @@ function InvoiceEdit() {
                               sx={{ width: "10px" }}
                             >
                               {ind}
+                              {console.log("index", ind)}
                             </TableCell>
                             <TableCell>
                               <FormControl
@@ -454,7 +463,11 @@ function InvoiceEdit() {
                                 <Select
                                   labelId="demo-simple-select-standard-label"
                                   id="demo-simple-select-standard"
-                                  //   value={age}
+                                  value={
+                                    product[ind - 1]?.product_id
+                                      ? product[ind - 1]?.product_id
+                                      : null
+                                  }
                                   onChange={(e) =>
                                     handleChangeProduct(
                                       "product_id " + ind,
@@ -463,7 +476,7 @@ function InvoiceEdit() {
                                   }
                                   label=" Select Product"
                                   defaultValue={
-                                    testData[0]?.productlistdata[ind - 1]
+                                    testData?.productlistdata[ind - 1]
                                       ?.product_id
                                   }
                                 >
@@ -492,10 +505,9 @@ function InvoiceEdit() {
                                 variant="standard"
                                 type="number"
                                 defaultValue={
-                                  testData[0]?.productlistdata[ind - 1]?.hsn ||
-                                  0
+                                  testData?.productlistdata[ind - 1]?.hsn || 0
                                 }
-                                // value={product[ind - 1]?.hsn || 0 }
+                                value={product[ind - 1]?.hsn || 0}
                               />
                             </TableCell>
                             <TableCell>
@@ -506,9 +518,9 @@ function InvoiceEdit() {
                                 variant="standard"
                                 type="number"
                                 defaultValue={
-                                  testData[0]?.productlistdata[ind - 1]?.weight
+                                  testData?.productlistdata[ind - 1]?.weight
                                 }
-                                // value={product[ind - 1]?.weight}
+                                value={product[ind - 1]?.weight}
                                 onChange={(e) =>
                                   handleChangeProduct(
                                     "weight " + ind,
@@ -525,9 +537,9 @@ function InvoiceEdit() {
                                 type="number"
                                 name={`rate ${ind}`}
                                 defaultValue={
-                                  testData[0]?.productlistdata[ind - 1]?.rate
+                                  testData?.productlistdata[ind - 1]?.rate
                                 }
-                                // value={product[ind - 1]?.rate}
+                                value={product[ind - 1]?.rate}
                                 onChange={(e) =>
                                   handleChangeProduct(
                                     "rate " + ind,
@@ -543,7 +555,7 @@ function InvoiceEdit() {
                                   label="Amount"
                                   variant="standard"
                                   defaultValue={
-                                    testData[0]?.productlistdata[ind - 1]
+                                    testData?.productlistdata[ind - 1]
                                       ?.amount || 0
                                   }
                                   value={
@@ -558,7 +570,7 @@ function InvoiceEdit() {
                                   label="Amount"
                                   variant="standard"
                                   defaultValue={
-                                    testData[0]?.productlistdata[ind - 1]
+                                    testData?.productlistdata[ind - 1]
                                       ?.amount || 0
                                   }
                                   value={product[ind - 1]?.amount?.toFixed(2)}
@@ -566,11 +578,11 @@ function InvoiceEdit() {
                               )}
                             </TableCell>
                             <TableCell>
-                              {i > 0 ? (
+                              {ind > testData?.productlistdata?.length ? (
                                 <Button
                                   variant="outlined"
                                   color="error"
-                                  onClick={(ind) => handleDelete(ind)}
+                                  onClick={() => handleDelete(i)}
                                 >
                                   <ClearIcon />
                                 </Button>
@@ -596,9 +608,9 @@ function InvoiceEdit() {
                               label="Total weight"
                               variant="standard"
                               // defaultValue={
-                              //   testData[0]?.productlistdata[ind - 1]?.amount
+                              //   testData?.productlistdata[ind - 1]?.amount
                               // }
-                              value={totalweight ? totalweight : 0}
+                              value={totalweight ? totalweight.toFixed(2) : 0}
                               sx={{ width: 200 }}
                             />
                           </TableCell>
@@ -607,7 +619,7 @@ function InvoiceEdit() {
                               id="standard-basic-01"
                               label="Total rate"
                               variant="standard"
-                              value={totalrate ? totalrate : 0}
+                              value={totalrate ? totalrate.toFixed(2) : 0}
                             />
                           </TableCell>
                           <TableCell colSpan={2}>
@@ -615,8 +627,11 @@ function InvoiceEdit() {
                               id="standard-basic-02"
                               label="Total Amount"
                               variant="standard"
-                              defaultValue={0}
-                              value={totalAmount?.toFixed(2)}
+                              value={
+                                totalAmount
+                                  ? totalAmount?.toFixed(2)
+                                  : testData?.taxable_amount
+                              }
                             />
                           </TableCell>
                         </TableRow>
@@ -629,49 +644,57 @@ function InvoiceEdit() {
                             <TableCell colSpan={8}></TableCell>
                             <TableCell rowSpan={2}>
                               <TableRow>
+                                <TableCell colSpan={4}></TableCell>
                                 <TableCell>TAXABLE AMOUNT</TableCell>
                                 <TableCell>
                                   <TextField
                                     id="standard-basic"
                                     label="TaxableAmount"
                                     variant="standard"
-                                    value={totalAmount?.toFixed(2)}
+                                    value={
+                                      totalAmount
+                                        ? totalAmount?.toFixed(2)
+                                        : testData?.taxable_amount
+                                    }
                                   />
                                 </TableCell>
                               </TableRow>
                               <TableRow>
+                                <TableCell colSpan={4}></TableCell>
                                 <TableCell>SGST(1.50%)</TableCell>
                                 <TableCell>
                                   <TextField
                                     id="standard-basic-03"
                                     label="SGST"
                                     variant="standard"
-                                    defaultValue={testData[0]?.sgst}
+                                    defaultValue={testData?.sgst}
                                     value={SGST}
                                   />
                                 </TableCell>
                               </TableRow>
                               <TableRow>
+                                <TableCell colSpan={4}></TableCell>
                                 <TableCell>CGST(1.50%)</TableCell>
                                 <TableCell>
                                   <TextField
                                     id="standard-basic-04"
                                     label="CGST"
                                     variant="standard"
-                                    defaultValue={testData[0]?.cgst}
+                                    defaultValue={testData?.cgst}
                                     value={CGST}
                                   />
                                 </TableCell>
                               </TableRow>
                               <TableRow>
+                                <TableCell colSpan={4}></TableCell>
                                 <TableCell>DISCOUNT</TableCell>
                                 <TableCell>
                                   <TextField
                                     id="standard-basic-05"
                                     label="Discount"
                                     variant="standard"
-                                    defaultValue={testData[0]?.discount}
-                                    value={discount}
+                                    // defaultValue={testData?.discount}
+                                    value={discount ? discount : 0}
                                     onChange={(e) =>
                                       setDiscount(e.target.value)
                                     }
@@ -679,14 +702,22 @@ function InvoiceEdit() {
                                 </TableCell>
                               </TableRow>
                               <TableRow>
+                                <TableCell colSpan={4}>
+                                  Rs IN WORDS :{" "}
+                                  {toWords.convert(Bill_Amount.toFixed(2))}{" "}
+                                </TableCell>
                                 <TableCell>BILL AMOUNT</TableCell>
                                 <TableCell>
                                   <TextField
                                     id="standard-basic-06"
                                     label="Bill Amount"
                                     variant="standard"
-                                    defaultValue={testData[0]?.bill_amount}
-                                    value={Bill_Amount?.toFixed(2)}
+                                    defaultValue={testData?.bill_amount}
+                                    value={
+                                      Bill_Amount
+                                        ? Bill_Amount?.toFixed(2)
+                                        : testData?.bill_amount
+                                    }
                                   />
                                 </TableCell>
                               </TableRow>
@@ -774,15 +805,39 @@ function InvoiceEdit() {
                 variant="contained"
                 color="success"
                 sx={{ marginTop: 4 }}
-                onClick={() => handleCreate()}
-                href="https://localhost:3200/Invoice/pdf"
+                onClick={() => handleUpdate()}
+                // href="https://localhost:3200/Invoice/pdf"
               >
-                Create And Print
+                Update And Print
               </Button>
+              {disabled ? (
+                <Backdrop
+                  sx={{
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                  }}
+                  open={disabled}
+                  // onClick={handleClose}
+                >
+                  <CircularProgress color="inherit" />
+                </Backdrop>
+              ) : (
+                ""
+              )}
             </Box>
           </Container>
         </Container>
-      ) : null}
+      ) : (
+        <Stack
+          sx={{ color: "grey.500", height: "80vh" }}
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="success" size="5rem" />
+        </Stack>
+      )}
     </div>
   );
 }

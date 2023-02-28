@@ -11,6 +11,7 @@ import {
   PermanentTaxDeleteAction,
 } from "../../../Store/Action/TaxAction/index";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function DeletedTaxList() {
   const navigate = useNavigate();
@@ -97,111 +98,123 @@ function DeletedTaxList() {
 
   return (
     <div>
-      {TaxData?.TaxDeletList?.length ? (
-        <Container fixed>
-          <Header
-            name={"Deleted Tax List"}
-            SearchBar={true}
-            searchHeadal={searchHeadal}
-            onKeyDown={onKeyDown}
-          />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              spacing={4}
-              sx={{ p: 4 }}
-            >
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/TaxList");
-                }}
-              >
-                back
-              </Button>
-
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/addtax");
-                }}
-              >
-                add Tax
-              </Button>
-            </Stack>
-            <Table
-              data={data}
-              headalDelete={headalDelete}
-              headalEdit={headalEdit}
-              hide={true}
+      {TaxData?.DeletedTaxLoader ? (
+        TaxData?.TaxDeletList?.length ? (
+          <Container fixed>
+            <Header
+              name={"Deleted Tax List"}
+              SearchBar={true}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
             />
-            <Stack
-              sx={{
-                margin: "10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
-                padding: "20px  0 20px 20px",
-              }}
-            >
-              <UsePagination
-                countNumbuer={Math.ceil(
-                  TaxData?.TaxDeletList[0]?.total_count / limit
-                )}
-                PageNumber={setPageNumber}
-              />
-            </Stack>
-          </Container>
-        </Container>
-      ) : (
-        <Container fixed>
-          <Header
-            name={"Deleted Tax List"}
-            SearchBar={false}
-            searchHeadal={searchHeadal}
-            onKeyDown={onKeyDown}
-          />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              spacing={4}
-              sx={{ p: 4 }}
-            >
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/tax_list");
-                }}
+            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
               >
-                back
-              </Button>
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/tax_list");
+                  }}
+                >
+                  back
+                </Button>
 
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/addtax");
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/addtax");
+                  }}
+                >
+                  add Tax
+                </Button>
+              </Stack>
+              <Table
+                data={data}
+                headalDelete={headalDelete}
+                headalEdit={headalEdit}
+                hide={true}
+              />
+              <Stack
+                sx={{
+                  margin: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  padding: "20px  0 20px 20px",
                 }}
               >
-                add Tax
-              </Button>
-            </Stack>
-            <h1 style={{ color: "red", textAlign: "center", padding: "5px" }}>
-              No Any Record OF Deleted Tax
-            </h1>
+                <UsePagination
+                  countNumbuer={Math.ceil(
+                    TaxData?.TaxDeletList[0]?.total_count / limit
+                  )}
+                  PageNumber={setPageNumber}
+                />
+              </Stack>
+            </Container>
           </Container>
-        </Container>
+        ) : (
+          <Container fixed>
+            <Header
+              name={"Deleted Tax List"}
+              SearchBar={false}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
+            />
+            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
+              >
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/tax_list");
+                  }}
+                >
+                  back
+                </Button>
+
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/addtax");
+                  }}
+                >
+                  add Tax
+                </Button>
+              </Stack>
+              <h1 style={{ color: "red", textAlign: "center", padding: "5px" }}>
+                No Any Record OF Deleted Tax
+              </h1>
+            </Container>
+          </Container>
+        )
+      ) : (
+        <Stack
+          sx={{ color: "grey.500", height: "80vh" }}
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="success" size="5rem" />
+        </Stack>
       )}
     </div>
   );

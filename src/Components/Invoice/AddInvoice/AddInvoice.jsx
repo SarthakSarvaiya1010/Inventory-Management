@@ -20,8 +20,10 @@ import {
   TableRow,
   TableBody,
   TableFooter,
+  styled,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import Header from "../../../Helpers/Header/Header";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -33,6 +35,7 @@ import {
   AddInvoiceData,
   GetinvoiceAddPageAction,
 } from "../../../Store/Action/InvoiceAction";
+import InvoiceValidate from "../InvoiceFormValidation";
 import { convert } from "../../../Helpers/misc";
 import { ToWords } from "to-words";
 
@@ -47,41 +50,39 @@ const commonStyles = {
   p: 2,
   border: 1,
 };
-function AddInvoice() {
-  const commonStyles = {
-    p: 2,
-    border: 1,
-  };
+function AddInvoice(props) {
+  const { sucessMessage } = props;
   const dispatch = useDispatch();
   const toWords = new ToWords();
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const InvoicePageData = useSelector((state) => state?.InvoiceData);
   const invoivepagedata = JSON.parse(
     localStorage.getItem("InvoiceAddPageData")
   );
-
-  const InvoicePageData = useSelector((state) => state?.InvoiceData);
   const testData = InvoicePageData?.GetInvoicePagData.length
     ? InvoicePageData?.GetInvoicePagData
     : invoivepagedata
     ? invoivepagedata
     : [{}];
-  console.log("accessToken====>", accessToken?.accessToken);
   const [CustomerListData, setCustomerListData] = useState({
     customer_name: "",
     address: "",
     gst_no: "",
   });
-
+  console.log("CustomerListData", CustomerListData);
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
   const [discount, setDiscount] = useState();
-  const [finalinvoicedata, setFinalInvoiceData] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+  const [errors, setErrors] = useState(null);
+  console.log("errors=========>", errors);
+  const [findErrors, setFindErrors] = useState(null);
 
-  console.log("invoicepdf", InvoicePageData?.InvoicePdf);
-  console.log("CustomerListData", CustomerListData);
-
-  console.log("discount==>", discount);
-  console.log("product_Data", product);
+  if (sucessMessage && disabled) {
+    setDisabled(false);
+    setProduct([]);
+    setCustomerListData(null);
+  }
 
   const handleChangeProduct = (name, value) => {
     let nameIndex = name.split(" ", 2);
@@ -179,11 +180,12 @@ function AddInvoice() {
   let totalAmount = 0;
   let totalweight = 0;
   let totalrate = 0;
-  product.forEach((sum, index) => {
+  product?.forEach((sum, index) => {
     totalAmount += sum.amount;
     totalweight += parseFloat(sum.weight);
     totalrate += parseFloat(sum.rate);
   });
+  console.log("totalAmount", totalAmount);
   let SGST = ((1.5 / 100) * totalAmount).toFixed(2);
   let CGST = ((1.5 / 100) * totalAmount).toFixed(2);
   console.log("SGST,CGST", parseFloat(SGST), parseFloat(CGST));
@@ -195,45 +197,10 @@ function AddInvoice() {
         (discount ? discount : 0)
       : 0;
 
-  var b64;
-  console.log(
-    "InvoicePageData?.InvoicePdf?.InvoicePdf",
-    InvoicePageData?.InvoicePdf?.invoicePdf
-  );
-  if (InvoicePageData?.InvoicePdf?.invoicePdf) {
-    b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
-  }
-
-  // Decode Base64 to binary and show some information about the PDF file (note that I skipped all checks)
-  if (b64) {
-    // var bin = atob(b64);
-
-    // Embed the PDF into the HTML page and show it to the user
-    var obj = document.createElement("object");
-    obj.style.width = "100%";
-    obj.style.height = "1000pt";
-    obj.type = "application/pdf";
-    obj.data = "data:application/pdf;base64," + b64;
-    document.body.appendChild(obj);
-
-    // Insert a link that allows the user to download the PDF file
-    var link = document.createElement("a");
-    link.innerHTML = "Download PDF file";
-    link.download = "invoice.pdf";
-    link.href = "data:application/octet-stream;base64," + b64;
-    document.body.appendChild(link);
-    window.open(link);
-  }
-  const handleChange = (event) => {
-    const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
-      (e) => e.customer_id === event.target.value
-    );
-    setCustomerListData(data);
-  };
-
   const handleDelete = (index) => {
+    console.log("index====>", index);
     setAddTable((prev) => prev - 1);
-    product.splice(addtable - 1, 1);
+    product.splice(index, 1);
   };
   useEffect(() => {
     dispatch(GetinvoiceAddPageAction(accessToken?.accessToken));
@@ -248,6 +215,12 @@ function AddInvoice() {
     }
   }, [InvoicePageData?.GetInvoicePagData]);
 
+  const handleChange = (event) => {
+    const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
+      (e) => e.customer_id === event.target.value
+    );
+    setCustomerListData(data);
+  };
   const handleAddInvoiceData = () => {
     const finalinvoicedata = {
       bill_no: testData[0]?.bill_no,
@@ -260,15 +233,22 @@ function AddInvoice() {
       bill_amount: parseFloat(Bill_Amount.toFixed(2)),
       productdata: product,
     };
-    dispatch(AddInvoiceData(accessToken?.accessToken, finalinvoicedata));
+    setFindErrors(true);
+    setErrors(InvoiceValidate(finalinvoicedata, addtable));
+    console.log("finalinvoicedata", finalinvoicedata);
+    // dispatch(AddInvoiceData(accessToken?.accessToken, finalinvoicedata));
+    // if (finalinvoicedata) {
+    //   setDisabled(true);
+    // }
   };
+  // useEffect(() => {
+  //   setErrors(InvoiceValidate(CustomerListData, product));
+  //   setErrors(InvoiceValidate(CustomerListData, product));
+  // }, [CustomerListData, findErrors]);
   return (
     <div>
       <Container>
         <Header name={"AddInvoice"} SearchBar={false} />
-        <a href="https://codingbeautydev.com" target="_blank" rel="noreferrer">
-          Coding Beauty
-        </a>
         <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
           <Box
             sx={{
@@ -317,6 +297,7 @@ function AddInvoice() {
                         Mobile no
                       </InputLabel>
                       <Select
+                        error={errors?.customer_id ? true : null}
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard-01"
                         //   value={age}
@@ -337,8 +318,10 @@ function AddInvoice() {
                           }
                         )}
                       </Select>
+                      <p style={{ color: "red" }}>{errors?.customer_id}</p>
                       <br />
                       <TextField
+                        error={errors?.customer_address ? true : null}
                         id="standard-basic"
                         label="Address"
                         variant="standard"
@@ -352,6 +335,7 @@ function AddInvoice() {
                             : CustomerListData?.address
                         }
                       />
+                      <p style={{ color: "red" }}>{errors?.customer_address}</p>
                       <br />
                       <TextField
                         id="standard-basic-1"
@@ -364,6 +348,7 @@ function AddInvoice() {
                       <br />
 
                       <TextField
+                        error={errors?.customer_name ? true : null}
                         id="standard-basic-2"
                         label="Name "
                         variant="standard"
@@ -372,7 +357,7 @@ function AddInvoice() {
                         name="Customer_Name"
                         onChange={(e) => handleChange(e)}
                       />
-
+                      <p style={{ color: "red" }}>{errors?.customer_name}</p>
                       <br />
                     </FormControl>
                   </Stack>
@@ -390,16 +375,16 @@ function AddInvoice() {
                       name="bill_no"
                       onChange={(e) => handleChange(e)}
                     />
-                    {/* <br />
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="Date"
-                          value={testData[0]?.date}
-                          name="date"
-                          onChange={(e) => handleChange(e)}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider> */}
+                    <br />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Date"
+                        value={testData[0]?.date}
+                        name="date"
+                        onChange={(e) => handleChange(e)}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
                     <br />
                     <TextField
                       id="standard-basic-4"
@@ -468,11 +453,26 @@ function AddInvoice() {
                             <FormControl variant="standard" sx={{ width: 240 }}>
                               <InputLabel id="demo-simple-select-standard-label">
                                 Select Product
+                                {console.log(
+                                  "product[ind - 1]?.product_id",
+                                  product[ind - 1]?.product_id
+                                )}
                               </InputLabel>
                               <Select
+                                error={
+                                  !product[ind - 1]?.product_id
+                                    ? errors?.product_id
+                                      ? true
+                                      : null
+                                    : ""
+                                }
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
-                                //   value={age}
+                                value={
+                                  product[ind - 1]?.product_id
+                                    ? product[ind - 1]?.product_id
+                                    : null
+                                }
                                 onChange={(e) =>
                                   handleChangeProduct(
                                     "product_id " + ind,
@@ -497,6 +497,11 @@ function AddInvoice() {
                                   }
                                 )}
                               </Select>
+                              <p style={{ color: "red" }}>
+                                {!product[ind - 1]?.product_id
+                                  ? errors?.product_id
+                                  : ""}
+                              </p>
                             </FormControl>
                           </TableCell>
                           <TableCell>
@@ -515,11 +520,19 @@ function AddInvoice() {
                           </TableCell>
                           <TableCell>
                             <TextField
+                              error={
+                                !product[ind - 1]?.weight
+                                  ? errors?.weight
+                                    ? true
+                                    : null
+                                  : ""
+                              }
                               id="standard-basic-6"
                               name={`weight ${ind}`}
                               label="Weight"
                               variant="standard"
                               type="number"
+                              value={product[ind - 1]?.weight}
                               onChange={(e) =>
                                 handleChangeProduct(
                                   "weight " + ind,
@@ -528,15 +541,26 @@ function AddInvoice() {
                               }
                               sx={{ w: 50 }}
                             />
+                            <p style={{ color: "red" }}>
+                              {!product[ind - 1]?.weight ? errors?.weight : ""}
+                            </p>
                           </TableCell>
                           <TableCell>
                             <TextField
+                              error={
+                                !product[ind - 1]?.rate
+                                  ? errors?.rate
+                                    ? true
+                                    : null
+                                  : ""
+                              }
                               id="standard-basic-7"
                               label="Rate"
                               variant="standard"
                               type="number"
                               name={`rate ${ind}`}
                               sx={{ width: 100 }}
+                              value={product[ind - 1]?.rate}
                               onChange={(e) =>
                                 handleChangeProduct(
                                   "rate " + ind,
@@ -544,10 +568,20 @@ function AddInvoice() {
                                 )
                               }
                             />
+                            <p style={{ color: "red" }}>
+                              {!product[ind - 1]?.rate ? errors?.rate : ""}
+                            </p>
                           </TableCell>
                           <TableCell colSpan={1}>
                             {product.length > ind - 1 ? (
                               <TextField
+                                error={
+                                  !product[ind - 1]?.amount
+                                    ? errors?.amount
+                                      ? true
+                                      : null
+                                    : ""
+                                }
                                 id="standard-basic-8"
                                 label="Amount"
                                 variant="standard"
@@ -560,6 +594,13 @@ function AddInvoice() {
                               />
                             ) : (
                               <TextField
+                                error={
+                                  !product[ind - 1]?.amount
+                                    ? errors?.amount
+                                      ? true
+                                      : null
+                                    : ""
+                                }
                                 id="standard-basic-8"
                                 label="Amount"
                                 variant="standard"
@@ -572,13 +613,16 @@ function AddInvoice() {
                                 }
                               />
                             )}
+                            <p style={{ color: "red" }}>
+                              {!product[ind - 1]?.amount ? errors?.amount : ""}
+                            </p>
                           </TableCell>
                           <TableCell>
                             {i > 0 ? (
                               <Button
                                 variant="outlined"
                                 color="error"
-                                onClick={(ind) => handleDelete(ind)}
+                                onClick={() => handleDelete(i)}
                                 sx={{ ml: 2 }}
                               >
                                 <ClearIcon />
@@ -777,6 +821,7 @@ function AddInvoice() {
               </Grid>
             </Grid>
             <Button
+              // disabled={product[addtable - 1]?.product_id ? "" : true}
               variant="contained"
               color="success"
               sx={{ marginTop: 4 }}
@@ -784,6 +829,20 @@ function AddInvoice() {
             >
               Create And Print
             </Button>
+            {disabled ? (
+              <Backdrop
+                sx={{
+                  color: "#fff",
+                  zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={disabled}
+                // onClick={handleClose}
+              >
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            ) : (
+              ""
+            )}
           </Box>
         </Container>
       </Container>
