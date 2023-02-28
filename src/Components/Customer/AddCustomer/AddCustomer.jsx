@@ -37,7 +37,7 @@ function AddCustomer() {
   console.log(values);
 
   const handleCancle = () => {
-    navigate("/customerList");
+    navigate("/customer_list");
   };
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 

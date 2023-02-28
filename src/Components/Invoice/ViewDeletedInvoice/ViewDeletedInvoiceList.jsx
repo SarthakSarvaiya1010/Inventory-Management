@@ -25,6 +25,7 @@ export default function ViewDeletedInvoiceList() {
   console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
+  // eslint-disable-next-line array-callback-return
   DeletedInvoiceList?.DeletedInvoiceList?.map((e) => {
     let elements = {};
     elements["BILL No"] = `0${e.bill_no}`;
@@ -35,7 +36,7 @@ export default function ViewDeletedInvoiceList() {
   });
 
   useEffect(() => {
-    if (DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode == "200") {
+    if (DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode === "200") {
       alert("sucessfully deleted");
       window.location.reload();
     }
@@ -156,7 +157,7 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    navigate("/InvoiceList");
+                    navigate("/invoice_list");
                   }}
                 >
                   back
@@ -221,7 +222,7 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    navigate("/InvoiceList");
+                    navigate("/invoice_list");
                   }}
                 >
                   back

@@ -27,11 +27,13 @@ function DeletedCustomerList() {
 
   console.log("data", CustomerData.customerDeletedList);
   useEffect(() => {
-    if (CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode == "200") {
+    if (
+      CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode === "200"
+    ) {
       alert("Sucessfully Customer Deleted");
       window.location.reload();
     }
-  }, CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode);
+  }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
@@ -168,7 +170,7 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    navigate("/customerList");
+                    navigate("/customer_list");
                   }}
                 >
                   back
@@ -185,29 +187,14 @@ function DeletedCustomerList() {
                   Add New Customer
                 </Button>
               </Stack>
-
-              <Table
-                data={data}
-                headalEdit={headalEdit}
-                headalDelete={headalDelete}
-                hide={true}
-                headalShorting={headalShorting}
-                ShortingHide={shortingIcon}
-              />
-              <Stack
-                sx={{
-                  margin: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  padding: "20px  0 20px 20px",
-                }}
-              >
-                <UsePagination
-                  countNumbuer={Math.ceil(
-                    CustomerData?.customerDeletedList[0]?.total_count / limit
-                  )}
-                  PageNumber={setPageNumber}
+              <Stack>
+                <Table
+                  data={data}
+                  headalEdit={headalEdit}
+                  headalDelete={headalDelete}
+                  hide={true}
+                  headalShorting={headalShorting}
+                  ShortingHide={shortingIcon}
                 />
               </Stack>
             </Container>
@@ -233,7 +220,7 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    navigate("/customerList");
+                    navigate("/customer_list");
                   }}
                 >
                   back

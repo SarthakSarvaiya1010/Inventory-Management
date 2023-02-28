@@ -1,6 +1,7 @@
-import * as React from "react";
+import React from "react";
 import usePagination from "@mui/material/usePagination";
 import { styled } from "@mui/material/styles";
+import { PageLoaderAction } from "../../Store/Action/ProductAction/index";
 
 const List = styled("ul")({
   listStyle: "none",

@@ -30,7 +30,7 @@ function DeletedProductList() {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   useEffect(() => {
-    if (productData?.SucessPermanentDeleteData?.statusCode == "200") {
+    if (productData?.SucessPermanentDeleteData?.statusCode === "200") {
       alert("Sucessfully product deleted");
       window.location.reload();
     }
@@ -87,7 +87,7 @@ function DeletedProductList() {
   // eslint-disable-next-line array-callback-return
   productData.productDeletList.map((e) => {
     let elements = {};
-    elements["Sr. No"] = e.sr_no;
+    elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     elements["Product Name"] = e.product_name;
     elements["Price"] = e?.price || "--";
     elements["HSN"] = e.hsn;

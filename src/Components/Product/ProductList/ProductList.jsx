@@ -30,9 +30,10 @@ function ProductList() {
   console.log("products", products);
   console.log("pageNumber", pageNumber);
 
+  console.log("productData", productData, "test");
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   useEffect(() => {
-    if (productData?.SuccessProductDeleteData?.statusCode == "200") {
+    if (productData?.SuccessProductDeleteData?.statusCode === "200") {
       alert("Sucessfully product deleted");
       window.location.reload();
     }
@@ -57,7 +58,7 @@ function ProductList() {
   // eslint-disable-next-line array-callback-return
   productData.productList.map((e) => {
     let elements = {};
-    elements["Sr. No"] = e.sr_no;
+    elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     elements["Product Name"] = e.product_name;
     elements["HSN"] = e.hsn;
     elements["Weight [ In Grams ]"] = e.weight;

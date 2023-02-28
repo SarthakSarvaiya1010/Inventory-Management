@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
 // import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
@@ -7,111 +6,69 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { InvoiceListAction } from "../../../Store/Action/InvoiceAction/index";
+import {
+  userListAction,
+  userDeleteAction,
+} from "../../../Store/Action/UserAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import { convert } from "../../../Helpers/misc";
 import UsePagination from "../../../Helpers/pagination/Pagination";
-import { DeleteInvoice } from "../../../Store/Action/InvoiceAction/index";
 
-function InvoiceList() {
+function UserList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const InvoiceData = useSelector((state) => state?.InvoiceData);
+  const User = useSelector((state) => state?.User);
   let limit = 2;
-  const data = [];
-  console.log("successLoginData", successLoginData?.LoginData);
-  const [pageNumber, setPageNumber] = useState();
   const [search, setSearch] = useState();
+  const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
-  const [shortingIcon, setShortingIcon] = useState("BILL No");
+  const [shortingIcon, setShortingIcon] = useState("Sr. No");
+  const data = [];
+
+  console.log("User", User, "test");
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
-  InvoiceData.invoiceList.map((e) => {
-    let elements = {};
-    elements["BILL No"] = e.bill_no < 10 ? ` 0${e.bill_no}` : e.bill_no;
-    elements["Invoice Date"] = convert(e.invoice_date);
-    elements["Name"] = e.customer_name;
-    elements["Total Amount"] = e.bill_amount;
-    data.push(elements);
-  });
   useEffect(() => {
-    if (InvoiceData?.SucessDeletedInvoiceData?.statusCode === "200") {
-      alert("sucessfully deleted");
-      window.location.reload();
-    }
-  }, [InvoiceData?.SucessDeletedInvoiceData?.statusCode]);
-  useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-      dispatch(
-        InvoiceListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-        )
-      );
-      localStorage.setItem("InvoiceEditPageData", JSON.stringify([{}]));
-    }
+    dispatch(
+      userListAction(
+        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
+      )
+    );
   }, [
     accessToken?.accessToken,
     dispatch,
+    limit,
     pageNumber,
     shorting,
-    limit,
     successLoginData?.LoginData?.accessToken,
   ]);
+
   // eslint-disable-next-line array-callback-return
+  User.UserData.map((e) => {
+    let elements = {};
+    elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
+    elements["Name"] = e.name;
+    elements["Email Id"] = e.email;
+    elements["Mobile no"] = e.mobile_no;
+    data.push(elements);
+  });
 
   const headalEdit = (data) => {
-    navigate(
-      `/InvoiceList/edit/${InvoiceData.invoiceList[data - 1]?.invoice_id}`
-    );
+    navigate(`/product/edit/${User.UserData[data - 1]?.user_id}`);
   };
 
   const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this invoice?")) {
+    if (window.confirm("Are you sure you want to Delete this Product?")) {
       dispatch(
-        DeleteInvoice(
+        userDeleteAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          InvoiceData.invoiceList[data - 1]?.invoice_id
+          User.UserData[data - 1]?.user_id
         )
       );
     }
-  };
-  const headalShorting = (data_a) => {
-    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
-    switch (data_a) {
-      case "BILL No":
-        if (shorting === "bill_no") {
-          setShorting(null);
-        } else {
-          setShorting("bill_no");
-        }
-        return "done";
-      case "Invoice Date":
-        if (shorting === "invoice_date") {
-          setShorting(null);
-        } else {
-          setShorting("invoice_date");
-        }
-        return "done";
-      case "Name":
-        if (shorting === "customer_name") {
-          setShorting(null);
-        } else {
-          setShorting("customer_name");
-        }
-        return "done";
-      case "Total Amount":
-        if (shorting === "bill_amount") {
-          setShorting(null);
-        } else {
-          setShorting("bill_amount");
-        }
-        return "done";
-      default:
-        setShorting(null);
-        return " state";
-    }
+    // window.location.reload();
   };
 
   const searchHeadal = (e) => {
@@ -120,25 +77,64 @@ function InvoiceList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        InvoiceListAction(
+        userListAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
           { search: search, limit: limit, pageNumber: pageNumber }
         )
       );
     }
   };
+  console.log(search);
+  console.log("setShortingData", shorting);
+
+  const headalShorting = (data_a) => {
+    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
+    switch (data_a) {
+      case "Sr. No":
+        if (shorting === "sr_no") {
+          setShorting(null);
+        } else {
+          setShorting("sr_no");
+        }
+        return "done";
+      case "Name":
+        if (shorting === "name") {
+          setShorting(null);
+        } else {
+          setShorting("name");
+        }
+        return "done";
+      case "Email Id":
+        if (shorting === "email") {
+          setShorting(null);
+        } else {
+          setShorting("email");
+        }
+        return "done";
+      case "Mobile no":
+        if (shorting === "mobile_no") {
+          setShorting(null);
+        } else {
+          setShorting("mobile_no");
+        }
+        return "done";
+      default:
+        setShorting(null);
+        return " state";
+    }
+  };
 
   return (
     <div>
-      {InvoiceData?.invoiceList.length ? (
-        <Container fixed>
+      {User?.UserData?.length ? (
+        <Container fixed sx={{ Width: 100 }}>
           <Header
-            name={"InvoiceList"}
+            name={"User List"}
             SearchBar={true}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
           />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+          <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
             <Stack
               direction="row"
               justifyContent="flex-end"
@@ -150,19 +146,22 @@ function InvoiceList() {
                 variant="text"
                 color="success"
                 sx={{ fontSize: 16 }}
-                onClick={() => navigate("/addinvoice")}
+                onClick={() => {
+                  navigate("/addproduct");
+                }}
               >
-                add invoice
+                add User
               </Button>
+
               <Button
                 variant="text"
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/viewdeletedinvoice ");
+                  navigate("/userdeletelist");
                 }}
               >
-                view deleted invoice
+                view deleted User
               </Button>
             </Stack>
 
@@ -183,11 +182,8 @@ function InvoiceList() {
               }}
             >
               <UsePagination
-                countNumbuer={Math.ceil(
-                  InvoiceData.invoiceList[0]?.total_count / limit
-                )}
+                countNumbuer={Math.ceil(User.UserData[0]?.total_count / limit)}
                 PageNumber={setPageNumber}
-                currentPage={pageNumber}
               />
             </Stack>
           </Container>
@@ -207,4 +203,4 @@ function InvoiceList() {
   );
 }
 
-export default InvoiceList;
+export default UserList;

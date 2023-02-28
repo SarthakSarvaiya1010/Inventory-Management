@@ -26,7 +26,7 @@ export default function EditInvoicePage() {
       autoClose: 2000,
     });
     setTimeout(() => {
-      navigate("/InvoiceList");
+      navigate("/invoice_list");
     }, 2000);
   };
   useEffect(() => {

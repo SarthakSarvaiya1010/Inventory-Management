@@ -43,7 +43,7 @@ function AddTax() {
 
   const handleCancle = () => {
     console.log("done");
-    navigate("/TaxList");
+    navigate("/tax_list");
     // window.location.reload();
   };
 

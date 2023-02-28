@@ -4,6 +4,7 @@ import {
   ProductValidate,
   CustomerValidate,
   TaxValidate,
+  CompanyValidate,
 } from "./formValidation";
 import {
   ProductAddAction,
@@ -13,6 +14,7 @@ import {
   CustomerEditDataAction,
   CustomerAddAction,
 } from "../../Store/Action/CustomerAction/index";
+import { CompanyInfoEditAction } from "../../Store/Action/CompanyAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const useForm = (defaultData, image) => {
@@ -35,6 +37,8 @@ const useForm = (defaultData, image) => {
     setErrors(ProductValidate(values, defaultData));
     const data = {};
     const formAddUserData = new FormData();
+    setFindErrors("ProductValidate");
+    setErrors(ProductValidate(values, defaultData));
     formAddUserData.append(
       "product_name",
       values?.product_name || defaultData?.product_name
@@ -88,6 +92,48 @@ const useForm = (defaultData, image) => {
           )
         );
       }
+    }
+  };
+
+  const companyhandleSubmit = () => {
+    setFindErrors(true);
+    setErrors(CompanyValidate(values));
+    const formAddUserData = new FormData();
+    formAddUserData.append(
+      "company_address",
+      values?.company_address || defaultData?.company_address
+    );
+    formAddUserData.append(
+      "company_name",
+      values?.company_name || defaultData?.company_name
+    );
+    formAddUserData.append("image_src", image);
+    formAddUserData.append(
+      "mobile_no",
+      values?.mobile_no || defaultData?.mobile_no
+    );
+    formAddUserData.append(
+      "phone_no",
+      values?.phone_no || defaultData?.phone_no
+    );
+    formAddUserData.append(
+      "terms_condition",
+      values?.terms_condition || defaultData?.terms_condition
+    );
+    formAddUserData.append(
+      "tin_gst_no",
+      values?.tin_gst_no || defaultData?.tin_gst_no
+    );
+    formAddUserData.append("website", values?.website || defaultData?.website);
+
+    if (!Object.keys(errors).length) {
+      dispatch(
+        CompanyInfoEditAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          formAddUserData,
+          parseInt(defaultData?.company_id)
+        )
+      );
     }
   };
 
@@ -192,6 +238,7 @@ const useForm = (defaultData, image) => {
     setvalues,
     errors,
     handleOnchange,
+    companyhandleSubmit,
   };
 };
 export default useForm;

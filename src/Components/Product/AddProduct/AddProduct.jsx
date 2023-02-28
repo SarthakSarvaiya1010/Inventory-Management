@@ -61,7 +61,7 @@ function AddProduct() {
 
   const handleCancle = () => {
     console.log("done");
-    navigate("/ProductList");
+    navigate("/productlist");
   };
 
   const hedalImgChage = (event) => {

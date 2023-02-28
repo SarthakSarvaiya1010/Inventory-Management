@@ -14,19 +14,19 @@ function Login(props) {
   const showToastMessage = () => {
     toast.success("Login  Success  !", {
       position: toast.POSITION.TOP_CENTER,
-      autoClose:2000
+      autoClose: 2000,
     });
   };
   const showToastMessageServerError = () => {
     toast.error("server is offline  !", {
       position: toast.POSITION.TOP_CENTER,
-      autoClose:2000
+      autoClose: 2000,
     });
   };
   const showToastMessageError = (data) => {
     toast.error(`${data} !`, {
-      autoClose:2000
-      
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
     });
   };
 
@@ -59,7 +59,13 @@ function Login(props) {
       );
       showToastMessage();
       setTimeout(() => {
-        navigate("/productList");
+        if (successLoginData.LoginData.role_id === 2) {
+          navigate("/productList");
+        } else {
+          if (successLoginData.LoginData.role_id === 1) {
+            navigate("/userlist");
+          }
+        }
       }, 2000);
       setTest(false);
       setButtonDisbel(false);

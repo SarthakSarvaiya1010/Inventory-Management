@@ -120,7 +120,7 @@ function DeletedTaxList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    navigate("/TaxList");
+                    navigate("/tax_list");
                   }}
                 >
                   back
@@ -182,7 +182,7 @@ function DeletedTaxList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    navigate("/TaxList");
+                    navigate("/tax_list");
                   }}
                 >
                   back

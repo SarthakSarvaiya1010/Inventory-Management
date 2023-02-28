@@ -29,31 +29,21 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-function SideBar(props) {
+function AdminSideBar(props) {
   const navigate = useNavigate();
 
   const { openManu, setOpenManu } = props;
 
   const theme = useTheme();
   const [Item, setItem] = useState("Product");
-
   const headalClick = (text) => {
     setItem(text);
     switch (text) {
-      case "Product":
-        return navigate("productlist");
-      case "Product Type":
-        return navigate("product_type");
-      case "Tax":
-        return navigate("tax_list");
-      case "Invoice":
-        return navigate("invoice_list");
-      case "Stock Report":
-        return navigate("stock_report");
-      case "Customer":
-        return navigate("customer_list");
-      case "Company Info":
-        return navigate("company_info");
+      case "User":
+        return navigate("/userlist");
+
+      case "Company":
+        return navigate("/companylist");
 
       default:
         return "done";
@@ -87,15 +77,7 @@ function SideBar(props) {
           </DrawerHeader>
           <Divider />
           <List>
-            {[
-              "Product",
-              "Product Type",
-              "Tax",
-              "Invoice",
-              "Stock Report",
-              "Customer",
-              "Company Info",
-            ].map((text, index) => (
+            {["User", "Company"].map((text, index) => (
               <ListItem
                 key={text}
                 disablePadding
@@ -120,4 +102,4 @@ function SideBar(props) {
   );
 }
 
-export default SideBar;
+export default AdminSideBar;
