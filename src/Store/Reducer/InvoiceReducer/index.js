@@ -6,25 +6,39 @@ import {
   GET_DELETED_INVOICE,
   DELETE_INVOICE,
   PARMANENT_DELETE_INVOICE,
+  LIST_LOADER,
+  UPDATE_INVOICE_DATA,
 } from "../../ActionTypes";
 
 const initialstate = {
   invoiceList: [],
+  Loader: false,
   GetInvoicePagData: [],
   invoiceEdit: [],
+  SuccessMessageOfInvoiceEdit: [],
   InvoicePdf: [],
   DeletedInvoiceList: [],
+  DeletedInvoiceLoader: false,
   SucessDeletedInvoiceData: [],
   SucessPermanentDeletedData: [],
 };
 
 const InvoiceReducer = (state = initialstate, action) => {
   switch (action.type) {
+    case LIST_LOADER:
+      return {
+        ...state,
+        invoiceList: action.payload,
+        Loader: true,
+      };
     case INVOICE_LIST:
       return {
         ...state,
         invoiceList: action.payload,
-        invoiceEdit:[]
+        invoiceEdit: [],
+        SuccessMessageOfInvoiceEdit: [],
+        InvoicePdf: [],
+        Loader: true,
       };
     case GET_INVOICE_PAGE:
       console.log("actionpayload,", action.payload);
@@ -50,6 +64,7 @@ const InvoiceReducer = (state = initialstate, action) => {
       return {
         ...state,
         DeletedInvoiceList: action.payload,
+        DeletedInvoiceLoader: true,
       };
     case DELETE_INVOICE:
       return {
@@ -60,6 +75,11 @@ const InvoiceReducer = (state = initialstate, action) => {
       return {
         ...state,
         SucessPermanentDeletedData: action.payload,
+      };
+    case UPDATE_INVOICE_DATA:
+      return {
+        ...state,
+        SuccessMessageOfInvoiceEdit: action.payload,
       };
     default:
       return state;

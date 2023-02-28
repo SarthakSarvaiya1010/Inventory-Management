@@ -10,6 +10,7 @@ function AddTaxPage() {
   const showToastMessage = (data) => {
     toast.success(data, {
       position: toast.POSITION.TOP_CENTER,
+      autoClose :2000
     });
   };
   useEffect(() => {

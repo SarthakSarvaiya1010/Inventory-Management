@@ -35,7 +35,8 @@ function SideBar(props) {
   const { openManu, setOpenManu } = props;
 
   const theme = useTheme();
-  const [Item, setItem] = useState("Product");
+  let ItemName = localStorage.getItem("itemName");
+  const [Item, setItem] = useState(ItemName || "Product");
 
   return (
     <div>
@@ -82,6 +83,7 @@ function SideBar(props) {
                   onClick={() => {
                     setItem(text);
                     navigate(`/${text}List`);
+                    localStorage.setItem("itemName", text);
                   }}
                 >
                   <ListItemIcon>

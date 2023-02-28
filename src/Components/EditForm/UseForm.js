@@ -15,19 +15,23 @@ import {
 } from "../../Store/Action/CustomerAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
-const UseForm = (defaultData, showToastMessage, image) => {
+const useForm = (defaultData, image) => {
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState(null);
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
-  console.log("values", values);
+  console.log("values==>", values);
+  console.log("errors======>", errors);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
-  console.log("Product_data ", defaultData);
-
+  console.log("findError", findErrors, "errors", errors);
+  useEffect(() => {
+    if (defaultData?.length && Object.keys(defaultData).length) {
+      setvalues(defaultData);
+    }
+  }, [defaultData]);
   const producthandleSubmit = () => {
-    setFindErrors(true);
+    setFindErrors("ProductError");
     setErrors(ProductValidate(values, defaultData));
     const data = {};
     const formAddUserData = new FormData();
@@ -47,13 +51,25 @@ const UseForm = (defaultData, showToastMessage, image) => {
     formAddUserData.append("weight", values?.weight || defaultData?.weight);
     formAddUserData.append("image_src", image);
     data["product_name"] = values?.product_name || defaultData?.product_name;
-    data["product_type"] = values?.product_type || defaultData?.product_type;
+    data["product_type"] = values?.product_type
+      ? values?.product_type
+      : "Tax" || defaultData?.product_type;
     data["description"] = values?.Description || defaultData?.description;
-    data["hsn"] = parseFloat(values?.hsn || defaultData?.hsn);
-    data["weight"] = parseFloat(values.weight || defaultData?.weight);
+    data["hsn"] = parseFloat(parseInt(values?.hsn) || defaultData?.hsn);
+    data["weight"] = parseFloat(
+      parseFloat(values.weight) || defaultData?.weight
+    );
     data["image_src"] = image;
-    if (!Object.keys(errors).length && findErrors) {
+    if (
+      !errors?.product_name &&
+      !errors?.product_type &&
+      !errors?.hsn &&
+      !errors?.weight
+    ) {
+      console.log("correct");
       if (defaultData?.product_id) {
+        console.log("done======>");
+        alert("done");
         dispatch(
           ProductEditDataAction(
             successLoginData?.LoginData?.accessToken ||
@@ -62,8 +78,8 @@ const UseForm = (defaultData, showToastMessage, image) => {
             parseInt(defaultData.product_id)
           )
         );
-        showToastMessage();
       } else {
+        alert("product Add");
         dispatch(
           ProductAddAction(
             successLoginData?.LoginData?.accessToken ||
@@ -76,7 +92,7 @@ const UseForm = (defaultData, showToastMessage, image) => {
   };
 
   const customerhandleSubmit = () => {
-    setFindErrors(true);
+    setFindErrors("CustomerError");
     setErrors(CustomerValidate(values, defaultData));
     const data = {};
     data["customer_name"] = values?.customer_name || defaultData?.customer_name;
@@ -84,8 +100,8 @@ const UseForm = (defaultData, showToastMessage, image) => {
     data["email"] = values?.email || defaultData?.email;
     data["address"] = values?.address || defaultData?.address;
     data["tin_no"] = values.tin_no || defaultData?.tin_no;
-    if (!Object.keys(errors).length && findErrors) {
-      if (defaultData) {
+    if (!errors?.customer_name && !errors?.mobile_no && !errors.address) {
+      if (defaultData?.customer_id) {
         dispatch(
           CustomerEditDataAction(
             successLoginData?.LoginData?.accessToken ||
@@ -94,7 +110,6 @@ const UseForm = (defaultData, showToastMessage, image) => {
             parseInt(defaultData?.customer_id)
           )
         );
-        showToastMessage();
       } else {
         dispatch(
           CustomerAddAction(
@@ -107,30 +122,27 @@ const UseForm = (defaultData, showToastMessage, image) => {
     }
   };
   const TaxhandleSubmit = () => {
-    console.log(" defaultData", defaultData);
-    setFindErrors(true);
+    setFindErrors("TaxError");
     setErrors(TaxValidate(values, defaultData));
     const data = {};
-    data["tax_name"] = values?.tax_name || defaultData[0]?.tax_name;
-    data["tax_rate"] = parseFloat(values?.tax_rate) || defaultData[0]?.tax_rate;
-    data["tax_country"] = values?.tax_country || defaultData[0]?.tax_country;
+    data["tax_name"] = values?.tax_name || defaultData?.tax_name;
+    data["tax_rate"] = parseFloat(values?.tax_rate) || defaultData?.tax_rate;
+    data["tax_country"] = values?.tax_country || defaultData?.tax_country;
     data["isactive"] = values?.isactive
       ? values?.isactive
       : "NO" || defaultData?.isactive;
     console.log("data", data);
-    if (!Object.keys(errors).length && findErrors) {
-      if (defaultData.length > 0) {
-        console.log("edit tax");
+    if (!errors?.tax_name && !errors?.tax_rate && !errors?.tax_country) {
+      if (defaultData?.tax_id) {
         dispatch(
           TaxInfoEditAction(
             successLoginData?.LoginData?.accessToken ||
               accessToken?.accessToken,
             data,
-            defaultData[0]?.tax_id
+            defaultData?.tax_id
           )
         );
       } else {
-        console.log("confirm dispatch", Object.keys(data).length === 4);
         dispatch(
           TaxAddAction(
             successLoginData?.LoginData?.accessToken ||
@@ -143,23 +155,34 @@ const UseForm = (defaultData, showToastMessage, image) => {
   };
 
   useEffect(() => {
-    if (findErrors) {
+    if (findErrors === "ProductError") {
       setErrors(ProductValidate(values, defaultData));
+    }
+    if (findErrors === "CustomerError") {
       setErrors(CustomerValidate(values, defaultData));
+    }
+    if (findErrors === "TaxError") {
       setErrors(TaxValidate(values, defaultData));
     }
+    // if (Object.keys(errors).length && findErrors) {
+    //   alert("done");
+    //   setFindErrors(false);
+    // }
   }, [defaultData, findErrors, values]);
 
   const handleOnchange = useCallback(
     (e) =>
       setvalues((values) => {
+        console.log("values===========>", values);
         const newValues = { ...values, [e.target.name]: e.target.value };
+        console.log("newValues===>", newValues);
+        setErrors(ProductValidate(newValues));
+        // setErrors(CustomerValidate(newValues));
+        // setErrors(TaxValidate(newValues));
         return newValues;
       }),
     []
   );
-
-  // console.log(values, "values");
 
   return {
     producthandleSubmit,
@@ -171,4 +194,4 @@ const UseForm = (defaultData, showToastMessage, image) => {
     handleOnchange,
   };
 };
-export default UseForm;
+export default useForm;

@@ -9,6 +9,7 @@ function TaxListPage() {
   const showToastMessage = (data) => {
     toast.success(data, {
       position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
     });
   };
   useEffect(() => {
@@ -16,7 +17,7 @@ function TaxListPage() {
       showToastMessage(TaxData?.TaxDeleteSuccessData?.message);
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 2000);
     }
   }, [TaxData?.TaxDeleteSuccessData?.statusCode]);
   return (

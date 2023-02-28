@@ -11,7 +11,8 @@ import {
   ProductDeleteAction,
 } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
+import { set } from "date-fns";
 
 function ProductList() {
   const navigate = useNavigate();
@@ -19,13 +20,15 @@ function ProductList() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductList);
+  const products = useSelector((state) => state?.ProductList?.productList);
   let limit = 2;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
-  console.log("productData", productData);
+  console.log("products", products);
+  console.log("pageNumber", pageNumber);
 
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   useEffect(() => {
@@ -132,7 +135,7 @@ function ProductList() {
 
   return (
     <div>
-      {productData?.productList?.length ? (
+      {products?.length ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header
             name={"Product List"}
@@ -170,14 +173,25 @@ function ProductList() {
                 view deleted products
               </Button>
             </Stack>
-
-            <Table
-              data={data}
-              headalEdit={headalEdit}
-              headalDelete={headalDelete}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
-            />
+            {products?.length ? (
+              <Table
+                data={data}
+                headalEdit={headalEdit}
+                headalDelete={headalDelete}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+              />
+            ) : (
+              <Stack
+                sx={{ color: "grey.500", height: "80vh" }}
+                spacing={2}
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <CircularProgress color="success" size="5rem" />
+              </Stack>
+            )}
             <Stack
               sx={{
                 margin: "10px",
@@ -192,6 +206,7 @@ function ProductList() {
                   productData?.productList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

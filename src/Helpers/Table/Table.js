@@ -42,8 +42,8 @@ export default function CustomizedTables(props) {
   const { data, headalEdit, headalDelete, hide, headalShorting, ShortingHide } =
     props;
   console.log(data, "headalEdit", Object.keys(data).length, ShortingHide);
-  const column = Object.keys(data[0]);
-  console.log("data======>",data);
+  const column = data.length ? Object.keys(data[0]) : null;
+  console.log("data======>", data);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -55,13 +55,14 @@ export default function CustomizedTables(props) {
               },
             }}
           >
-            {column.map((data) => (
+            {column?.map((data) => (
               <StyledTableCell align="center">
                 {data}
                 {ShortingHide === data ? (
                   <FilterListIcon
                     sx={{
-                      margin: "0 10px 10px 0 ",
+                      marginBottom: "-3px",
+                      marginLeft: "10px",
                       transform: "rotate(180deg)",
                     }}
                     fontSize="small"
@@ -72,7 +73,8 @@ export default function CustomizedTables(props) {
                 ) : (
                   <FilterListOffIcon
                     sx={{
-                      margin: " 0  10px 0 0 ",
+                      marginBottom: "-3px",
+                      marginLeft: "10px",
                       transform: "rotate(180deg)",
                     }}
                     fontSize="small"
@@ -92,7 +94,6 @@ export default function CustomizedTables(props) {
             return (
               <StyledTableRow key={row.name}>
                 {column.map((v) => (
-                  
                   <StyledTableCell
                     align="center"
                     sx={{

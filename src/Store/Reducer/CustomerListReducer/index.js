@@ -1,21 +1,24 @@
-import { CUSTOMER_LIST } from "../../ActionTypes";
+import { CUSTOMER_LIST, LIST_LOADER } from "../../ActionTypes";
 
 const initialstate = {
   CoustomerList: [],
+  Loader: false,
 };
 
 const CustomerListReducer = (state = initialstate, action) => {
   switch (action.type) {
+    case LIST_LOADER:
+      return {
+        ...state,
+        CoustomerList: action.payload,
+        Loader: true,
+      };
     case CUSTOMER_LIST:
       return {
         ...state,
         CoustomerList: action.payload,
+        Loader: false,
       };
-    // case FAILED_ADMIN_LIST:
-    //   return {
-    //     ...state,
-    //     AutherationError: action.payload.data,
-    //   };
 
     default:
       return state;

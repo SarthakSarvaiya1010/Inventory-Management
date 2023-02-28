@@ -11,6 +11,7 @@ import {
 const initialstate = {
   customerEdit: [],
   customerDeletedList: [],
+  DeletedCustomerLoader: false,
   SuccessfullyCustomerDeltetedData: [],
   SuccessPermanentCustomerDeleteData: [],
   loder: true,
@@ -29,6 +30,7 @@ const CustomerEditReducer = (state = initialstate, action) => {
       return {
         ...state,
         customerDeletedList: action.payload,
+        DeletedCustomerLoader: true,
       };
     case CUSTOMER_LIST:
       return {

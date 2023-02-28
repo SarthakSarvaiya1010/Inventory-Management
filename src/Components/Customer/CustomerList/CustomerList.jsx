@@ -10,7 +10,7 @@ import {
   CustomerDeleteAction,
 } from "../../../Store/Action/CustomerAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 
 function CustomerList() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ function CustomerList() {
   const [pageNumber, setPageNumber] = useState();
   let limit = 2;
   const data = [];
-  console.log("SuccesscustomerDeletedData",SuccesscustomerDeletedData);
+  console.log("SuccesscustomerDeletedData", SuccesscustomerDeletedData);
   // eslint-disable-next-line array-callback-return
   CustomerData?.CoustomerList.map((e) => {
     let test = {};
@@ -187,6 +187,7 @@ function CustomerList() {
                   CustomerData?.CoustomerList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

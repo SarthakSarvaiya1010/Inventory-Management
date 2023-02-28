@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InvoiceListAction } from "../../../Store/Action/InvoiceAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 import { DeleteInvoice } from "../../../Store/Action/InvoiceAction/index";
 
 function InvoiceList() {
@@ -187,6 +187,7 @@ function InvoiceList() {
                   InvoiceData.invoiceList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

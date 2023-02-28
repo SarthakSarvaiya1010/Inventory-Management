@@ -8,27 +8,35 @@ import {
   CUSTOMER_ADD,
   PERMANENT_CUSTOMER_DELETE,
   FAILED_PERMANENT_CUSTOMER_DELETE,
+  LIST_LOADER,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
 export const CustomerListAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
-    const ProductList = await axios.get("https://inventory-management-backend.onrender.com/customers", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: data
-        ? {
-            searchKeyword: data.search ? data.search : null,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          }
-        : null,
-    });
     dispatch({
-      type: CUSTOMER_LIST,
-      payload: ProductList.data,
+      type: LIST_LOADER,
+      payload: [],
     });
+    await axios
+      .get("http://localhost:3200/customers", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      })
+      .then((res) => {
+        dispatch({
+          type: CUSTOMER_LIST,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_ADMIN_LIST,
@@ -41,7 +49,7 @@ export const CustomerAddAction = (AccessToken, data) => async (dispatch) => {
   const token = AccessToken;
   try {
     const CustomerAdd = await axios.post(
-      "https://inventory-management-backend.onrender.com/customers",
+      "http://localhost:3200/customers",
       data,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -64,7 +72,7 @@ export const CustomerDelectListAction =
     const token = AccessToken;
     try {
       const CustomerDelectList = await axios.get(
-        "https://inventory-management-backend.onrender.com/delete/customers",
+        "http://localhost:3200/delete/customers",
         {
           headers: { Authorization: `Bearer ${token}` },
           params: {
@@ -92,7 +100,7 @@ export const CustomerEditAction =
     const token = AccessToken;
     try {
       const ProductEdit = await axios.get(
-        `https://inventory-management-backend.onrender.com/customers/${customers_id}`,
+        `http://localhost:3200/customers/${customers_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -114,7 +122,7 @@ export const CustomerEditDataAction =
     const token = AccessToken;
     try {
       const ProductEditData = await axios.put(
-        `https://inventory-management-backend.onrender.com/edit/customers/${customers_id}`,
+        `http://localhost:3200/edit/customers/${customers_id}`,
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -137,7 +145,7 @@ export const CustomerDeleteAction =
     const token = AccessToken;
     try {
       const CustomerDelete = await axios.delete(
-        `https://inventory-management-backend.onrender.com/delete/customers/${customer_id}`,
+        `http://localhost:3200/delete/customers/${customer_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -158,7 +166,7 @@ export const PermanentCustomerDeleteAction =
     const token = AccessToken;
     try {
       const PermanentCustomerDelete = await axios.delete(
-        `https://inventory-management-backend.onrender.com/permanent/delete/customers/${customer_id}`,
+        `http://localhost:3200/permanent/delete/customers/${customer_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

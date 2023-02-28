@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
-import Container from "@mui/material/Container";
-import { Stack, Button } from "@mui/material";
+import { Stack, Button, Container, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   GetDeletedInvoiceList,
   PermanentDeleteInvoice,
 } from "../../../Store/Action/InvoiceAction/index";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 import { convert } from "../../../Helpers/misc";
 
 export default function ViewDeletedInvoiceList() {
@@ -135,113 +134,126 @@ export default function ViewDeletedInvoiceList() {
 
   return (
     <div>
-      {DeletedInvoiceList?.DeletedInvoiceList?.length ? (
-        <Container fixed>
-          <Header
-            name={"Delete Invoice List"}
-            SearchBar={true}
-            searchHeadal={searchHeadal}
-            onKeyDown={onKeyDown}
-          />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              spacing={4}
-              sx={{ p: 4 }}
-            >
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/InvoiceList");
-                }}
-              >
-                back
-              </Button>
-
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/addinvoice");
-                }}
-              >
-                Add Invoice{" "}
-              </Button>
-            </Stack>
-            <Table
-              data={data}
-              headalDelete={headalDelete}
-              //   headalEdit={headalEdit}
-              hide={true}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
+      {DeletedInvoiceList?.DeletedInvoiceLoader ? (
+        DeletedInvoiceList?.DeletedInvoiceList?.length ? (
+          <Container fixed>
+            <Header
+              name={"Delete Invoice List"}
+              SearchBar={true}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
             />
-            <Stack
-              sx={{
-                margin: "10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
-                padding: "20px  0 20px 20px",
-              }}
-            >
-              <UsePagination
-                countNumbuer={Math.ceil(
-                  DeletedInvoiceList?.DeletedInvoiceList[0]?.total_count / limit
-                )}
-                PageNumber={setPageNumber}
-              />
-            </Stack>
-          </Container>
-        </Container>
-      ) : (
-        <Container fixed>
-          <Header
-            name={"Delete Invoice List"}
-            SearchBar={false}
-            searchHeadal={searchHeadal}
-            onKeyDown={onKeyDown}
-          />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              spacing={4}
-              sx={{ p: 4 }}
-            >
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/InvoiceList");
-                }}
+            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
               >
-                back
-              </Button>
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/InvoiceList");
+                  }}
+                >
+                  back
+                </Button>
 
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/addinvoice");
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/addinvoice");
+                  }}
+                >
+                  Add Invoice{" "}
+                </Button>
+              </Stack>
+              <Table
+                data={data}
+                headalDelete={headalDelete}
+                //   headalEdit={headalEdit}
+                hide={true}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+              />
+              <Stack
+                sx={{
+                  margin: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  padding: "20px  0 20px 20px",
                 }}
               >
-                Add Invoice
-              </Button>
-            </Stack>
-            <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
-              No any record found of Deleted Invoice
-            </h1>
+                <UsePagination
+                  countNumbuer={Math.ceil(
+                    DeletedInvoiceList?.DeletedInvoiceList[0]?.total_count /
+                      limit
+                  )}
+                  PageNumber={setPageNumber}
+                />
+              </Stack>
+            </Container>
           </Container>
-        </Container>
+        ) : (
+          <Container fixed>
+            <Header
+              name={"Delete Invoice List"}
+              SearchBar={false}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
+            />
+            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
+              >
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/InvoiceList");
+                  }}
+                >
+                  back
+                </Button>
+
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/addinvoice");
+                  }}
+                >
+                  Add Invoice
+                </Button>
+              </Stack>
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of Deleted Invoice
+              </h1>
+            </Container>
+          </Container>
+        )
+      ) : (
+        <Stack
+          sx={{ color: "grey.500", height: "80vh" }}
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="success" size="5rem" />
+        </Stack>
       )}
     </div>
   );

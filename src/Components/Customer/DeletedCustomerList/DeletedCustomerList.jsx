@@ -10,7 +10,7 @@ import {
   PermanentCustomerDeleteAction,
 } from "../../../Store/Action/CustomerAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 
 function DeletedCustomerList() {
   const navigate = useNavigate();
@@ -146,114 +146,126 @@ function DeletedCustomerList() {
 
   return (
     <div>
-      {CustomerData?.customerDeletedList?.length ? (
-        <Container fixed>
-          <Header
-            name={"Deleted Customer List"}
-            SearchBar={true}
-            searchHeadal={searchHeadal}
-            onKeyDown={onKeyDown}
-          />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              spacing={4}
-              sx={{ p: 4 }}
-            >
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/customerList");
-                }}
-              >
-                back
-              </Button>
-
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/addcustomer");
-                }}
-              >
-                Add New Customer
-              </Button>
-            </Stack>
-
-            <Table
-              data={data}
-              headalEdit={headalEdit}
-              headalDelete={headalDelete}
-              hide={true}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
+      {CustomerData?.DeletedCustomerLoader ? (
+        CustomerData?.customerDeletedList?.length ? (
+          <Container fixed>
+            <Header
+              name={"Deleted Customer List"}
+              SearchBar={true}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
             />
-            <Stack
-              sx={{
-                margin: "10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
-                padding: "20px  0 20px 20px",
-              }}
-            >
-              <UsePagination
-                countNumbuer={Math.ceil(
-                  CustomerData?.customerDeletedList[0]?.total_count / limit
-                )}
-                PageNumber={setPageNumber}
-              />
-            </Stack>
-          </Container>
-        </Container>
-      ) : (
-        <Container fixed>
-          <Header
-            name={"Deleted Customer List"}
-            SearchBar={true}
-            searchHeadal={searchHeadal}
-            onKeyDown={onKeyDown}
-          />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              spacing={4}
-              sx={{ p: 4 }}
-            >
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/customerList");
-                }}
+            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
               >
-                back
-              </Button>
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/customerList");
+                  }}
+                >
+                  back
+                </Button>
 
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/addcustomer");
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/addcustomer");
+                  }}
+                >
+                  Add New Customer
+                </Button>
+              </Stack>
+
+              <Table
+                data={data}
+                headalEdit={headalEdit}
+                headalDelete={headalDelete}
+                hide={true}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+              />
+              <Stack
+                sx={{
+                  margin: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  padding: "20px  0 20px 20px",
                 }}
               >
-                Add New Customer
-              </Button>
-            </Stack>
-            <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
-              No any record found of Deleted Customer
-            </h1>
+                <UsePagination
+                  countNumbuer={Math.ceil(
+                    CustomerData?.customerDeletedList[0]?.total_count / limit
+                  )}
+                  PageNumber={setPageNumber}
+                />
+              </Stack>
+            </Container>
           </Container>
-        </Container>
+        ) : (
+          <Container fixed>
+            <Header
+              name={"Deleted Customer List"}
+              SearchBar={true}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
+            />
+            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
+              >
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/customerList");
+                  }}
+                >
+                  back
+                </Button>
+
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/addcustomer");
+                  }}
+                >
+                  Add New Customer
+                </Button>
+              </Stack>
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of Deleted Customer
+              </h1>
+            </Container>
+          </Container>
+        )
+      ) : (
+        <Stack
+          sx={{ color: "grey.500", height: "80vh" }}
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="success" size="5rem" />
+        </Stack>
       )}
     </div>
   );

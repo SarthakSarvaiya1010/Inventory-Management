@@ -10,7 +10,7 @@ import {
   TaxDeleteAction,
 } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import UsePagination from "../../../Helpers/paginetion/Paginetion";
+import UsePagination from "../../../Helpers/pagination/Pagination";
 
 function TaxList() {
   const navigate = useNavigate();
@@ -22,10 +22,9 @@ function TaxList() {
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
-  console.log("TaxData", TaxData?.TaxDeleteSuccessData?.statusCode);
   let limit = 2;
   const data = [];
-
+  console.log("TaxData?.TaxList", TaxData?.TaxList);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   TaxData?.TaxList.map((e) => {
     let elements = {};
@@ -200,6 +199,7 @@ function TaxList() {
                   TaxData?.TaxList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>
