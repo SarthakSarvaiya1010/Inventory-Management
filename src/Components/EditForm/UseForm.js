@@ -7,10 +7,10 @@ import {
   CompanyValidate,
   UserValidate,
 } from "./formValidation";
-// import {
-//   ProductAddAction,
-//   ProductEditDataAction,
-// } from "../../Store/Action/ProductAction";
+import {
+  ProductAddAction,
+  ProductEditDataAction,
+} from "../../Store/Action/ProductAction";
 import {
   CustomerEditDataAction,
   CustomerAddAction,
@@ -261,7 +261,6 @@ const useForm = (defaultData, image) => {
   useEffect(() => {
     if (Object.keys(errors).length) {
       setFindErrors("UserValidate");
-      setTest(null);
     }
     if (!Object.keys(errors).length && findErrors === "UserValidate") {
       if (defaultData?.product_id) {
@@ -277,7 +276,6 @@ const useForm = (defaultData, image) => {
           alert("Product Edit in useEffect");
         }
         alert("Product Edit");
-        showToastMessage();
         setFindErrors(false);
       } else {
         // dispatch(
@@ -288,14 +286,13 @@ const useForm = (defaultData, image) => {
         //   )
         // );
 
-        showToastMessage();
         setFindErrors(false);
         if (test) {
           alert("Product ADD in useEffect");
         }
       }
     }
-  }, [defaultData, errors, findErrors, showToastMessage, test, values]);
+  }, [defaultData, errors, findErrors, values]);
 
   const handleOnchange = useCallback(
     (e) =>

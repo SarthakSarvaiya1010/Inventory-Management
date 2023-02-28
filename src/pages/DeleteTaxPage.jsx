@@ -14,13 +14,16 @@ function DeleteTaxPage() {
     });
   };
   useEffect(() => {
-    if (TaxData?.PermanentTaxDeleteData?.statusCode == "200") {
+    if (TaxData?.PermanentTaxDeleteData?.statusCode === "200") {
       showToastMessage(TaxData?.PermanentTaxDeleteData?.message);
       setTimeout(() => {
         window.location.reload();
       }, 2000);
     }
-  }, [TaxData?.PermanentTaxDeleteData?.statusCode]);
+  }, [
+    TaxData?.PermanentTaxDeleteData?.message,
+    TaxData?.PermanentTaxDeleteData?.statusCode,
+  ]);
   return (
     <div>
       <ToastContainer />

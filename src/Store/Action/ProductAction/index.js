@@ -21,7 +21,7 @@ export const ProductListAction = (AccessToken, data) => async (dispatch) => {
       payload: [],
     });
     await axios
-      .get("http://localhost:3200/products", {
+      .get("https://inventory-management-backend.onrender.com/products", {
         headers: { Authorization: `Bearer ${token}` },
         params: data
           ? {
@@ -52,7 +52,7 @@ export const ProductEditAction =
     const token = AccessToken;
     try {
       const ProductEdit = await axios.get(
-        `http://localhost:3200/products/${Product_id}`,
+        `https://inventory-management-backend.onrender.com/products/${Product_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -71,13 +71,13 @@ export const ProductEditAction =
 
 export const ProductEditDataAction =
   (AccessToken, data, Product_id) => async (dispatch) => {
-    console.log("data====>",data);
+    console.log("data====>", data);
     // const Product_id = 6;
     const token = AccessToken;
     console.log(token, Product_id, data, "token, Product_id");
     try {
       const ProductEditData = await axios.put(
-        `http://localhost:3200/edit/products/${Product_id}`,
+        `https://inventory-management-backend.onrender.com/edit/products/${Product_id}`,
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -101,7 +101,7 @@ export const ProductAddAction = (AccessToken, data) => async (dispatch) => {
   console.log("data==========>", data);
   try {
     const ProductAdd = await axios.post(
-      "http://localhost:3200/products",
+      "https://inventory-management-backend.onrender.com/products",
       data,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -124,7 +124,7 @@ export const ProductDeleteAction =
     console.log("Product_id", Product_id);
     try {
       const ProductDelete = await axios.delete(
-        `http://localhost:3200/delete/products/${Product_id}`,
+        `https://inventory-management-backend.onrender.com/delete/products/${Product_id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       dispatch({
@@ -144,7 +144,7 @@ export const ProductDeleteListAction =
     const token = AccessToken;
     try {
       const ProductDeleteList = await axios.get(
-        "http://localhost:3200/delete/products",
+        "https://inventory-management-backend.onrender.com/delete/products",
         {
           headers: { Authorization: `Bearer ${token}` },
           params: {
@@ -173,7 +173,7 @@ export const PermanentProductDelete =
     console.log(Product_id);
     try {
       const PermanentProductDelete = await axios.delete(
-        `http://localhost:3200/permanent/delete/products/${Product_id}`,
+        `https://inventory-management-backend.onrender.com/permanent/delete/products/${Product_id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       dispatch({

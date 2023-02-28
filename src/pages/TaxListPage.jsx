@@ -13,13 +13,16 @@ function TaxListPage() {
     });
   };
   useEffect(() => {
-    if (TaxData?.TaxDeleteSuccessData?.statusCode == "200") {
+    if (TaxData?.TaxDeleteSuccessData?.statusCode === "200") {
       showToastMessage(TaxData?.TaxDeleteSuccessData?.message);
       setTimeout(() => {
         window.location.reload();
       }, 2000);
     }
-  }, [TaxData?.TaxDeleteSuccessData?.statusCode]);
+  }, [
+    TaxData?.TaxDeleteSuccessData?.message,
+    TaxData?.TaxDeleteSuccessData?.statusCode,
+  ]);
   return (
     <div>
       <ToastContainer />

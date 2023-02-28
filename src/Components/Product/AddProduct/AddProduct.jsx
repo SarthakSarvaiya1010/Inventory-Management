@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
-import useForm from "../../EditForm/useForm";
+import useForm from "../../EditForm/UseForm";
 // import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductEditAction } from "../../../Store/Action/ProductAction/index";

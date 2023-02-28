@@ -15,12 +15,18 @@ function AddProductPage() {
     if (ProductEditData?.SucessAddProduct?.statusCode === "200") {
       showToastMessage(ProductEditData?.SucessAddProduct?.message);
     }
-  }, [ProductEditData?.SucessAddProduct?.statusCode]);
+  }, [
+    ProductEditData?.SucessAddProduct?.message,
+    ProductEditData?.SucessAddProduct?.statusCode,
+  ]);
   useEffect(() => {
     if (ProductEditData?.SucessEditProduct?.statusCode === "200") {
       showToastMessage(ProductEditData?.SucessEditProduct?.message);
     }
-  }, [ProductEditData?.SucessEditProduct?.statusCode]);
+  }, [
+    ProductEditData?.SucessEditProduct?.message,
+    ProductEditData?.SucessEditProduct?.statusCode,
+  ]);
   return (
     <div>
       <ToastContainer />

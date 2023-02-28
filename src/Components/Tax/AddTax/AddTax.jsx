@@ -15,10 +15,9 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
-import UseForm from "../../EditForm/useForm";
+import UseForm from "../../EditForm/UseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { TaxEditAction } from "../../../Store/Action/TaxAction/index";
-import CircularProgress from "@mui/material/CircularProgress";
 
 function AddTax() {
   const navigate = useNavigate();
@@ -39,7 +38,9 @@ function AddTax() {
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
-  const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(Tax_data[0]);
+  const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(
+    Tax_data[0]
+  );
 
   const handleCancle = () => {
     console.log("done");

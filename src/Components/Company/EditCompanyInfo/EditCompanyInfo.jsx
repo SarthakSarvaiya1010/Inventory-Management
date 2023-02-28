@@ -8,7 +8,7 @@ import {
   Fab,
   Button,
 } from "@mui/material";
-import UseForm from "../../EditForm/useForm";
+import UseForm from "../../EditForm/UseForm";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../../../Helpers/Header/Header";
 import { CompanyInfoByIdAction } from "../../../Store/Action/CompanyAction/index";
