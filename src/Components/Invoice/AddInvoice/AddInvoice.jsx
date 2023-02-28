@@ -221,18 +221,18 @@ function AddInvoice(props) {
     );
     setCustomerListData(data);
   };
+  const finalinvoicedata = {
+    bill_no: testData[0]?.bill_no,
+    invoice_date: convert(new Date()),
+    customer_id: CustomerListData ? CustomerListData.customer_id : "",
+    taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
+    sgst: parseFloat(SGST),
+    cgst: parseFloat(CGST),
+    discount: parseFloat(discount) ? parseFloat(discount) : 0,
+    bill_amount: parseFloat(Bill_Amount.toFixed(2)),
+    productdata: product,
+  };
   const handleAddInvoiceData = () => {
-    const finalinvoicedata = {
-      bill_no: testData[0]?.bill_no,
-      invoice_date: convert(new Date()),
-      customer_id: CustomerListData ? CustomerListData.customer_id : "",
-      taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
-      sgst: parseFloat(SGST),
-      cgst: parseFloat(CGST),
-      discount: parseFloat(discount) ? parseFloat(discount) : 0,
-      bill_amount: parseFloat(Bill_Amount.toFixed(2)),
-      productdata: product,
-    };
     setFindErrors(true);
     setErrors(InvoiceValidate(finalinvoicedata, addtable));
     console.log("finalinvoicedata", finalinvoicedata);
@@ -241,10 +241,11 @@ function AddInvoice(props) {
     //   setDisabled(true);
     // }
   };
-  // useEffect(() => {
-  //   setErrors(InvoiceValidate(CustomerListData, product));
-  //   setErrors(InvoiceValidate(CustomerListData, product));
-  // }, [CustomerListData, findErrors]);
+  useEffect(() => {
+    if (findErrors) {
+      setErrors(InvoiceValidate(finalinvoicedata, addtable));
+    }
+  }, [findErrors, CustomerListData?.customer_id, product]);
   return (
     <div>
       <Container>

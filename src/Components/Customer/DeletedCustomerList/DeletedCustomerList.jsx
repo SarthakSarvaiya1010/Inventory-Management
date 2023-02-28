@@ -196,6 +196,23 @@ function DeletedCustomerList() {
                   headalShorting={headalShorting}
                   ShortingHide={shortingIcon}
                 />
+                <Stack
+                  sx={{
+                    margin: "10px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "flex-end",
+                    padding: "20px  0 20px 20px",
+                  }}
+                >
+                  <UsePagination
+                    countNumbuer={Math.ceil(
+                      CustomerData?.customerDeletedList[0]?.total_count / limit
+                    )}
+                    PageNumber={setPageNumber}
+                    currentPage={pageNumber}
+                  />
+                </Stack>
               </Stack>
             </Container>
           </Container>

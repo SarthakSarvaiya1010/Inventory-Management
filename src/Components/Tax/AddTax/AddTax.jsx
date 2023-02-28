@@ -39,7 +39,9 @@ function AddTax() {
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
-  const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(Tax_data[0]);
+  const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(
+    Tax_data[0]
+  );
 
   const handleCancle = () => {
     console.log("done");
@@ -103,7 +105,7 @@ function AddTax() {
                       error={errors?.tax_country ? true : null}
                       name="tax_country"
                       id="outlined-Product"
-                      label="Tax County"
+                      label="Tax Country"
                       autoComplete="off"
                       defaultValue={id ? TaxData?.TaxEdit[0]?.tax_country : ""}
                       onChange={(e) => handleOnchange(e)}
