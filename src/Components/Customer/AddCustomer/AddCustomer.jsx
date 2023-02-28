@@ -9,7 +9,7 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { CustomerEditAction } from "../../../Store/Action/CustomerAction/index";
 
-import UseForm from "../../EditForm/useForm";
+import UseForm from "../../EditForm/UseForm";
 
 function AddCustomer() {
   const navigate = useNavigate();

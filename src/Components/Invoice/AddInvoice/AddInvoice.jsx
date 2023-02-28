@@ -480,7 +480,7 @@ function AddInvoice(props) {
                                     e.target.value
                                   )
                                 }
-                                label=" Select Product"
+                                label="Select Product"
                               >
                                 <MenuItem value="">
                                   <em>None</em>

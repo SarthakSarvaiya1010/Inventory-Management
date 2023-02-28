@@ -7,11 +7,13 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
-import useForm from "../../EditForm/UseForm";
-// import { useForm } from "react-hook-form";
+import UseForm from "../../EditForm/UseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductEditAction } from "../../../Store/Action/ProductAction/index";
+import { userGetByuuidAction } from "../../../Store/Action/UserAction/index";
+import { CompanyInfoAction } from "../../../Store/Action/CompanyAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AddIcon from "@mui/icons-material/Add";
 
 const currencies = [
@@ -24,44 +26,53 @@ const currencies = [
     label: "One",
   },
 ];
-
-function AddProduct() {
+function AddUser() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
-  const ProductEditData = useSelector((state) => state?.ProductList);
+  const User = useSelector((state) => state?.User);
+  const CompanyInfo = useSelector((state) => state?.CompanyInfo);
+  console.log("CompanyInfo", CompanyInfo.CompanyInfo);
+
+  const currencies_data = CompanyInfo?.CompanyInfo;
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
-  console.log("ProductEditData", ProductEditData);
+  console.log("id==========>", id);
   const imageUploader = React.useRef(null);
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
 
-  const Product_data = ProductEditData?.productEdit;
+  const User_data = User.UserDataByuuid;
+  // console.log("params", id, User_data);
+  // const [values, setvalues] = useState(null);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const accessTokenData =
     successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
-  //  useEffect(() => {
-  // if (Product_data?.image_src) {
-  //   setImage(Product_data?.image_src)
-  // }
-  //  },[image])
+
+  const showToastMessage = () => {
+    toast.success("Data Updata  Success  !", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
   useEffect(() => {
     if (id) {
-      dispatch(ProductEditAction(accessTokenData, id));
+      dispatch(userGetByuuidAction(accessTokenData, id));
     }
+    dispatch(CompanyInfoAction(accessTokenData));
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
-  const { producthandleSubmit, values, errors, handleOnchange } = useForm(
-    Product_data,
+  const { UserhandleSubmit, values, errors, handleOnchange } = UseForm(
+    User_data,
+    showToastMessage,
     image
   );
 
-  console.log("values", values);
+  console.log("values", values, "valueserrorsvalues", errors);
 
   const handleCancle = () => {
     console.log("done");
-    navigate("/productlist");
+    navigate("/userlist");
   };
 
   const hedalImgChage = (event) => {
@@ -79,16 +90,13 @@ function AddProduct() {
     }
     setImage(file);
   };
-
+  console.log("User_data.loder", User);
   return (
     <div>
-      {!ProductEditData.loder || !id ? (
-        // Object.keys(Product_data).length ? (
+      {!User?.loder || !id ? (
+        // Object.keys(User_data).length ? (
         <Container fixed>
-          <Header
-            name={id ? "Edit product" : "Add Product"}
-            SearchBar={false}
-          />
+          <Header name={id ? "Edit User" : "Add User"} SearchBar={false} />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <DialogContent>
               <br />
@@ -107,35 +115,40 @@ function AddProduct() {
                   spacing={1}
                 >
                   <TextField
-                    // {...register("product_name")}
-                    error={errors?.product_name ? true : null}
-                    name="product_name"
-                    id="outlined-Product"
-                    label="Product Name"
+                    required
+                    error={errors?.name ? true : null}
+                    type="text"
+                    name="name"
+                    id="outlined-name-text"
+                    label="Name"
                     autoComplete="off"
-                    defaultValue={id ? Product_data?.product_name : ""}
+                    defaultValue={id ? User_data?.name : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
-                  <p style={{ color: "red" }}>{errors?.product_name}</p>
+                  <p style={{ color: "red" }}>{errors?.name}</p>
                   <br />
                   <TextField
-                    id="outlined-Product"
-                    label="Description"
-                    name="Description"
-                    autoComplete="off"
-                    type="textarea"
-                    defaultValue={id ? Product_data.description : ""}
+                    error={errors?.mobile_no ? true : null}
+                    required
+                    type="number"
+                    name="mobile_no"
+                    label="Mobile No"
+                    defaultValue={id ? User_data.mobile_no : ""}
+                    variant="outlined"
                     onChange={(e) => handleOnchange(e)}
+                    value={values?.mobile_no}
+                    autoComplete="off"
                   />
+                  <p style={{ color: "red" }}>{errors?.mobile_no}</p>
                   <br />
                   <TextField
-                    error={errors?.product_type ? true : null}
+                    error={errors?.company_id ? true : null}
                     id="outlined-select-currency-native"
                     select
-                    name="product_type"
-                    label="Product Type"
+                    name="company_id"
+                    label="Company Name"
                     defaultValue="select One"
-                    // defaultValue={id ? Product_data.description : ""}
+                    // defaultValue={id ? User_data.description : ""}
 
                     SelectProps={{
                       native: true,
@@ -148,29 +161,74 @@ function AddProduct() {
                       </option>
                     ))}
                   </TextField>
-                  <p style={{ color: "red" }}>{errors?.product_type}</p>
+                  <p style={{ color: "red" }}>{errors?.company_id}</p>
                   <br />
                   <TextField
-                    error={errors?.weight ? true : null}
+                    error={errors?.role_id ? true : null}
+                    id="outlined-select-currency-native-role_id"
+                    select
+                    name="role_id"
+                    label="Role"
+                    defaultValue="select One"
+                    // defaultValue={id ? User_data.description : ""}
+                    SelectProps={{
+                      native: true,
+                    }}
+                    onChange={(e) => handleOnchange(e)}
+                  >
+                    {currencies_data?.map((option) => (
+                      <option key={option.value} value={option.company_id}>
+                        {option.company_name}
+                      </option>
+                    ))}
+                  </TextField>
+                  <p style={{ color: "red" }}>{errors?.role_id}</p>
+                  <br />
+                  <TextField
+                    error={errors?.address ? true : null}
                     required
-                    type="number"
-                    name="weight"
-                    label="Weight [In Grams]"
-                    defaultValue={id ? Product_data.weight : ""}
+                    type="textarea"
+                    name="address"
+                    label="address"
+                    defaultValue={id ? User_data.address : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
-                    value={values?.weight}
+                    value={values?.address}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.weight}</p>
+                  <p style={{ color: "red" }}>{errors?.address}</p>
+                  <br />
+                  <TextField
+                    id="outlined-email-text"
+                    label="Email"
+                    name="email"
+                    autoComplete="off"
+                    type="text"
+                    defaultValue={id ? User_data.description : ""}
+                    onChange={(e) => handleOnchange(e)}
+                  />
+                  <p style={{ color: "red" }}>{errors?.email}</p>
                   <br />
                   <TextField
                     error={errors?.hsn ? true : null}
                     required
-                    type="number"
-                    name="hsn"
-                    label="HSN"
-                    defaultValue={id ? Product_data.hsn : ""}
+                    type="password"
+                    name="password"
+                    label="Password"
+                    defaultValue={id ? User_data.hsn : ""}
+                    variant="outlined"
+                    onChange={(e) => handleOnchange(e)}
+                    value={values?.hsn}
+                    autoComplete="off"
+                  />
+                  <br />
+                  <TextField
+                    error={errors?.hsn ? true : null}
+                    required
+                    type="password"
+                    name="confrom_password"
+                    label="Confrom Password"
+                    defaultValue={id ? User_data.hsn : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
@@ -179,17 +237,17 @@ function AddProduct() {
                   <p style={{ color: "red" }}>{errors?.hsn}</p>
                   <br />
                   {/* <TextField
-                    error={errors?.hsn ? true : null}
-                    required
-                    type="number"
-                    name="image_src"
-                    label="image"
-                    defaultValue={id ? Product_data.hsn : ""}
-                    variant="outlined"
-                    onChange={(e) => handleOnchange(e)}
-                    value={values?.hsn}
-                    autoComplete="off"
-                  /> */}
+                      error={errors?.hsn ? true : null}
+                      required
+                      type="number"
+                      name="image_src"
+                      label="image"
+                      defaultValue={id ? User_data.hsn : ""}
+                      variant="outlined"
+                      onChange={(e) => handleOnchange(e)}
+                      value={values?.hsn}
+                      autoComplete="off"
+                    /> */}
                   <img
                     alt=""
                     ref={uploadedImage}
@@ -197,13 +255,13 @@ function AddProduct() {
                       height: "120px",
                       width: "120px",
                       display:
-                        image || ProductEditData?.productEdit?.image_src
+                        image || User_data?.productEdit?.image_src
                           ? "flex"
                           : "none",
                     }}
                     src={
-                      ProductEditData?.productEdit?.image_src
-                        ? `http://localhost:3200/${ProductEditData?.productEdit?.image_src}`
+                      User_data?.productEdit?.image_src
+                        ? `http://localhost:3200/${User_data?.productEdit?.image_src}`
                         : "src/"
                     }
                   />
@@ -242,7 +300,7 @@ function AddProduct() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={producthandleSubmit}
+                    onClick={UserhandleSubmit}
                   >
                     Update
                   </Button>
@@ -250,7 +308,7 @@ function AddProduct() {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={producthandleSubmit}
+                    onClick={UserhandleSubmit}
                   >
                     Submit
                   </Button>
@@ -265,6 +323,7 @@ function AddProduct() {
               </Stack>
               <br />
             </DialogContent>
+            <ToastContainer />
           </Container>
         </Container>
       ) : (
@@ -282,4 +341,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default AddUser;

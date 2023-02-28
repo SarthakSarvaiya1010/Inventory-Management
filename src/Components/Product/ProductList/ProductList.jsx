@@ -12,7 +12,6 @@ import {
 } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
-import { set } from "date-fns";
 
 function ProductList() {
   const navigate = useNavigate();
@@ -62,6 +61,8 @@ function ProductList() {
     elements["Product Name"] = e.product_name;
     elements["HSN"] = e.hsn;
     elements["Weight [ In Grams ]"] = e.weight;
+    elements["Image"] = e.image_src;
+
     data.push(elements);
   });
 

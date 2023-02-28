@@ -78,7 +78,12 @@ function InvoiceEdit(props) {
       setProduct(testData?.productlistdata);
       setDiscount(testData?.discount);
     }
-  }, [InvoicePageData?.invoiceEdit]);
+  }, [
+    InvoicePageData.invoiceEdit,
+    addtable,
+    testData?.discount,
+    testData?.productlistdata,
+  ]);
 
   useEffect(() => {
     dispatch(GetinvoiceEditDataAction(accessToken?.accessToken, id));

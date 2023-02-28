@@ -60,6 +60,7 @@ export const CompanyInfoByIdAction =
 export const CompanyInfoEditAction =
   (AccessToken, data, company_id) => async (dispatch) => {
     const token = AccessToken;
+    console.log("CompanyInfoEditAction", data);
     try {
       const CompanyInfo = await axios.put(
         `https://inventory-management-backend.onrender.com/edit/company_info/${company_id}`,

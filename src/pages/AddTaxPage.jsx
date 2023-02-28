@@ -10,19 +10,25 @@ function AddTaxPage() {
   const showToastMessage = (data) => {
     toast.success(data, {
       position: toast.POSITION.TOP_CENTER,
-      autoClose :2000
+      autoClose: 2000,
     });
   };
   useEffect(() => {
     if (TaxData?.TaxAddSuccessData?.statusCode === "200") {
       showToastMessage(TaxData?.TaxAddSuccessData?.message);
     }
-  }, [TaxData?.TaxAddSuccessData?.statusCode]);
+  }, [
+    TaxData?.TaxAddSuccessData?.message,
+    TaxData?.TaxAddSuccessData?.statusCode,
+  ]);
   useEffect(() => {
     if (TaxData?.TaxEditSucessData?.statusCode === "200") {
       showToastMessage(TaxData?.TaxEditSucessData?.message);
     }
-  }, [TaxData?.TaxEditSucessData?.statusCode]);
+  }, [
+    TaxData?.TaxEditSucessData?.message,
+    TaxData?.TaxEditSucessData?.statusCode,
+  ]);
   return (
     <div>
       {" "}

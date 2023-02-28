@@ -83,3 +83,44 @@ export function CompanyValidate(values) {
 
   return errors;
 }
+export function UserValidate(values) {
+  let errors = {};
+
+  if (!values?.name) {
+    errors.name = "name is required";
+  }
+
+  if (!values?.role_id) {
+    errors.role_id = "Role is required";
+  }
+  if (!values?.company_id) {
+    errors.company_id = "company name is required";
+  }
+
+  if (!values?.address) {
+    errors.address = "Address is required";
+  }
+  if (!values?.mobile_no) {
+    errors.mobile_no = "mobile number is missing ";
+  } else if (
+    !/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(
+      parseInt(values?.mobile_no)
+    )
+  ) {
+    errors.mobile_no = "mobile number is invalid";
+  }
+
+  if (!values?.email) {
+    errors.email = "Email id is missing";
+  } else if (!/\S+@\S+\.\S+/.test(values?.email)) {
+    errors.email = "Email address is invalid";
+  }
+
+  if (!values?.password) {
+    errors.password = "Password is missing";
+  } else if (values?.password?.length < 6) {
+    errors.password = "Password must be 6 or more characters";
+  }
+
+  return errors;
+}
