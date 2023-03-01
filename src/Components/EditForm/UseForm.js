@@ -21,26 +21,25 @@ import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const useForm = (defaultData, image) => {
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
-  console.log("values==>", values);
   console.log("errors======>", errors);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   console.log("findError", findErrors, "errors", errors);
   useEffect(() => {
-    if (defaultData?.length && Object.keys(defaultData).length) {
+    if (defaultData?.length || Object.keys(defaultData).length) {
       setvalues(defaultData);
     }
   }, [defaultData]);
+  console.log("values==>", values);
+
   const producthandleSubmit = () => {
     setFindErrors("ProductError");
     setErrors(ProductValidate(values, defaultData));
     const data = {};
     const formAddUserData = new FormData();
-    setFindErrors("ProductValidate");
-    setErrors(ProductValidate(values, defaultData));
     formAddUserData.append(
       "product_name",
       values?.product_name || defaultData?.product_name
@@ -66,16 +65,8 @@ const useForm = (defaultData, image) => {
       parseFloat(values.weight) || defaultData?.weight
     );
     data["image_src"] = image;
-    if (
-      !errors?.product_name &&
-      !errors?.product_type &&
-      !errors?.hsn &&
-      !errors?.weight
-    ) {
-      console.log("correct");
+    if (Object.keys(errors).length === 0) {
       if (defaultData?.product_id) {
-        console.log("done======>");
-        alert("done");
         dispatch(
           ProductEditDataAction(
             successLoginData?.LoginData?.accessToken ||
@@ -85,7 +76,6 @@ const useForm = (defaultData, image) => {
           )
         );
       } else {
-        alert("product Add");
         dispatch(
           ProductAddAction(
             successLoginData?.LoginData?.accessToken ||
@@ -132,7 +122,7 @@ const useForm = (defaultData, image) => {
     );
     formAddUserData.append("website", values?.website || defaultData?.website);
 
-    if (!Object.keys(errors).length) {
+    if (Object.keys(errors).length === 0) {
       dispatch(
         CompanyInfoEditAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
@@ -152,7 +142,7 @@ const useForm = (defaultData, image) => {
     data["email"] = values?.email || defaultData?.email;
     data["address"] = values?.address || defaultData?.address;
     data["tin_no"] = values.tin_no || defaultData?.tin_no;
-    if (!errors?.customer_name && !errors?.mobile_no && !errors.address) {
+    if (Object.keys(errors).length === 0) {
       if (defaultData?.customer_id) {
         dispatch(
           CustomerEditDataAction(
@@ -185,7 +175,7 @@ const useForm = (defaultData, image) => {
       ? values?.isactive
       : "NO" || defaultData?.isactive;
     console.log("data", data);
-    if (!errors?.tax_name && !errors?.tax_rate && !errors?.tax_country) {
+    if (Object.keys(errors).length === 0) {
       if (defaultData?.tax_id) {
         dispatch(
           TaxInfoEditAction(
@@ -220,9 +210,8 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("company_id", values?.company_id);
     formAddUserData.append("image_src", image);
 
-    if (!Object.keys(errors).length && findErrors) {
+    if (Object.keys(errors).length === 0) {
       if (defaultData.length > 0) {
-        console.log("edit tax");
         dispatch(
           UserAddAction(
             successLoginData?.LoginData?.accessToken ||
@@ -243,6 +232,7 @@ const useForm = (defaultData, image) => {
     }
   };
   useEffect(() => {
+    console.log("findErrors", findErrors);
     if (findErrors === "ProductError") {
       setErrors(ProductValidate(values, defaultData));
     }
@@ -258,51 +248,49 @@ const useForm = (defaultData, image) => {
     // }
   }, [defaultData, findErrors, values]);
 
-  useEffect(() => {
-    if (Object.keys(errors).length) {
-      setFindErrors("UserValidate");
-    }
-    if (!Object.keys(errors).length && findErrors === "UserValidate") {
-      if (defaultData?.product_id) {
-        // dispatch(
-        //   ProductEditDataAction(
-        //     successLoginData?.LoginData?.accessToken ||
-        //       accessToken?.accessToken,
-        //     formAddUserData,
-        //     parseInt(defaultData.product_id)
-        //   )
-        // );
-        if (test) {
-          alert("Product Edit in useEffect");
-        }
-        alert("Product Edit");
-        setFindErrors(false);
-      } else {
-        // dispatch(
-        //   ProductAddAction(
-        //     successLoginData?.LoginData?.accessToken ||
-        //       accessToken?.accessToken,
-        //     formAddUserData
-        //   )
-        // );
+  // useEffect(() => {
+  //   if (errors) {
+  //     if (Object.keys(errors).length) {
+  //       setFindErrors("ProductError");
+  //     }
 
-        setFindErrors(false);
-        if (test) {
-          alert("Product ADD in useEffect");
-        }
-      }
-    }
-  }, [defaultData, errors, findErrors, values]);
+  //     if (!Object.keys(errors).length && findErrors === "UserValidate") {
+  //       if (defaultData?.product_id) {
+  //         // dispatch(
+  //         //   ProductEditDataAction(
+  //         //     successLoginData?.LoginData?.accessToken ||
+  //         //       accessToken?.accessToken,
+  //         //     formAddUserData,
+  //         //     parseInt(defaultData.product_id)
+  //         //   )
+  //         // );
+  //         if (test) {
+  //           alert("Product Edit in useEffect");
+  //         }
+  //         alert("Product Edit");
+  //         setFindErrors(false);
+  //       } else {
+  //         // dispatch(
+  //         //   ProductAddAction(
+  //         //     successLoginData?.LoginData?.accessToken ||
+  //         //       accessToken?.accessToken,
+  //         //     formAddUserData
+  //         //   )
+  //         // );
+
+  //         setFindErrors(false);
+  //         if (test) {
+  //           alert("Product ADD in useEffect");
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [defaultData, errors, findErrors, values]);
 
   const handleOnchange = useCallback(
     (e) =>
       setvalues((values) => {
-        console.log("values===========>", values);
         const newValues = { ...values, [e.target.name]: e.target.value };
-        console.log("newValues===>", newValues);
-        setErrors(ProductValidate(newValues));
-        // setErrors(CustomerValidate(newValues));
-        // setErrors(TaxValidate(newValues));
         return newValues;
       }),
     []

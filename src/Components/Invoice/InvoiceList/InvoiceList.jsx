@@ -78,7 +78,9 @@ function InvoiceList() {
     }
   };
   const headalShorting = (data_a) => {
-    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
+    shortingIcon === data_a
+      ? setShortingIcon(`D ${data_a}`)
+      : setShortingIcon(data_a);
     switch (data_a) {
       case "BILL No":
         if (shorting === "bill_no") {
@@ -88,24 +90,24 @@ function InvoiceList() {
         }
         return "done";
       case "Invoice Date":
-        if (shorting === "invoice_date") {
-          setShorting(null);
+        if (shorting === "ASC/invoice_date") {
+          setShorting("DESC/invoice_date");
         } else {
-          setShorting("invoice_date");
+          setShorting("ASC/invoice_date");
         }
         return "done";
       case "Name":
-        if (shorting === "customer_name") {
-          setShorting(null);
+        if (shorting === "ASC/customer_name") {
+          setShorting("DESC/customer_name");
         } else {
-          setShorting("customer_name");
+          setShorting("ASC/customer_name");
         }
         return "done";
       case "Total Amount":
-        if (shorting === "bill_amount") {
-          setShorting(null);
+        if (shorting === "ASC/bill_amount") {
+          setShorting("DESC/bill_amount");
         } else {
-          setShorting("bill_amount");
+          setShorting("ASC/bill_amount");
         }
         return "done";
       default:

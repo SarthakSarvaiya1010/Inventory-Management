@@ -99,7 +99,7 @@ function DeletedCustomerList() {
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a
-      ? setShortingIcon("Sr. No")
+      ? setShortingIcon(`D ${data_a}`)
       : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
@@ -110,24 +110,24 @@ function DeletedCustomerList() {
         }
         return "done";
       case "Name":
-        if (shorting === "customer_name") {
-          setShorting(null);
+        if (shorting === "ASC/customer_name") {
+          setShorting("DESC/customer_name");
         } else {
-          setShorting("customer_name");
+          setShorting("ASC/customer_name");
         }
         return "done";
       case "Mobile Number":
-        if (shorting === "mobile_no") {
-          setShorting(null);
+        if (shorting === "ASC/mobile_no") {
+          setShorting("DESC/mobile_no");
         } else {
-          setShorting("mobile_no");
+          setShorting("ASC/mobile_no");
         }
         return "done";
       case "Email Id":
-        if (shorting === "email") {
-          setShorting(null);
+        if (shorting === "ASC/email") {
+          setShorting("DESC/email");
         } else {
-          setShorting("email");
+          setShorting("ASC/email");
         }
         return "done";
       default:

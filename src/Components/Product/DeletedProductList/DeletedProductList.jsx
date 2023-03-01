@@ -12,11 +12,13 @@ import {
 } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function DeletedProductList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = [];
+  const [open, setOpen] = React.useState(false);
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const [pageNumber, setPageNumber] = useState();
@@ -102,31 +104,31 @@ function DeletedProductList() {
       : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
-        if (shorting === "sr_no") {
+        if (shorting === "ASC/sr_no") {
           setShorting(null);
         } else {
-          setShorting("sr_no");
+          setShorting("DESC/sr_no");
         }
         return "done";
       case "Product Name":
-        if (shorting === "product_name") {
-          setShorting(null);
+        if (shorting === "ASC/product_name") {
+          setShorting("DESC/product_name");
         } else {
-          setShorting("product_name");
+          setShorting("ASC/product_name");
         }
         return "done";
       case "HSN":
-        if (shorting === "hsn") {
-          setShorting(null);
+        if (shorting === "ASC/hsn") {
+          setShorting("DESC/hsn");
         } else {
-          setShorting("hsn");
+          setShorting("ASC/hsn");
         }
         return "done";
       case "Weight [ In Grams ]":
-        if (shorting === "weight") {
-          setShorting(null);
+        if (shorting === "ASC/weight") {
+          setShorting("DESC/weight");
         } else {
-          setShorting("weight");
+          setShorting("ASC/weight");
         }
         return "done";
       default:
@@ -135,18 +137,26 @@ function DeletedProductList() {
     }
   };
   const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this Product?")) {
-      dispatch(
-        PermanentProductDelete(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          productData.productDeletList[data - 1]?.product_id
-        )
-      );
-    }
+    setOpen(data);
+  };
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(
+      PermanentProductDelete(
+        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+        productData.productDeletList[open - 1]?.product_id
+      )
+    );
   };
 
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this Product?"}
+        finalDelete={finalDelete}
+      />
       {productData?.DeletedProductListLoader ? (
         productData?.productDeletList.length ? (
           <Container fixed>
@@ -257,7 +267,7 @@ function DeletedProductList() {
           </Container>
         )
       ) : (
-        (<Stack
+        <Stack
           sx={{ color: "grey.500", height: "80vh" }}
           spacing={2}
           direction="row"
@@ -265,7 +275,7 @@ function DeletedProductList() {
           alignItems="center"
         >
           <CircularProgress color="success" size="5rem" />
-        </Stack>)
+        </Stack>
       )}
     </div>
   );

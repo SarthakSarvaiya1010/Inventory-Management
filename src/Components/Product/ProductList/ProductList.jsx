@@ -12,10 +12,12 @@ import {
 } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function ProductList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [open, setOpen] = React.useState(false);
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductList);
@@ -26,10 +28,6 @@ function ProductList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
-  console.log("products", products);
-  console.log("pageNumber", pageNumber);
-
-  console.log("productData", productData, "test");
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   useEffect(() => {
     if (productData?.SuccessProductDeleteData?.statusCode === "200") {
@@ -61,7 +59,6 @@ function ProductList() {
     elements["Product Name"] = e.product_name;
     elements["HSN"] = e.hsn;
     elements["Weight [ In Grams ]"] = e.weight;
-    elements["Image"] = e.image_src;
 
     data.push(elements);
   });
@@ -71,15 +68,18 @@ function ProductList() {
   };
 
   const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this Product?")) {
-      dispatch(
-        ProductDeleteAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          productData.productList[data - 1]?.product_id
-        )
-      );
-    }
+    setOpen(data);
+
     // window.location.reload();
+  };
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(
+      ProductDeleteAction(
+        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+        productData.productList[open - 1]?.product_id
+      )
+    );
   };
 
   const searchHeadal = (e) => {
@@ -99,7 +99,9 @@ function ProductList() {
   console.log("setShortingData", shorting);
 
   const headalShorting = (data_a) => {
-    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
+    shortingIcon === data_a
+      ? setShortingIcon(`D ${data_a}`)
+      : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
         if (shorting === "sr_no") {
@@ -109,24 +111,24 @@ function ProductList() {
         }
         return "done";
       case "Product Name":
-        if (shorting === "product_name") {
-          setShorting(null);
+        if (shorting === "ASC/product_name") {
+          setShorting("DESC/product_name");
         } else {
-          setShorting("product_name");
+          setShorting("ASC/product_name");
         }
         return "done";
       case "HSN":
-        if (shorting === "hsn") {
-          setShorting(null);
+        if (shorting === "ASC/hsn") {
+          setShorting("DESC/hsn");
         } else {
-          setShorting("hsn");
+          setShorting("ASC/hsn");
         }
         return "done";
       case "Weight [ In Grams ]":
-        if (shorting === "weight") {
-          setShorting(null);
+        if (shorting === "ASC/weight") {
+          setShorting("DESC/weight");
         } else {
-          setShorting("weight");
+          setShorting("ASC/weight");
         }
         return "done";
       default:
@@ -137,6 +139,13 @@ function ProductList() {
 
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this Product?"}
+        finalDelete={finalDelete}
+      />
+
       {products?.length ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header
@@ -163,7 +172,6 @@ function ProductList() {
               >
                 add product
               </Button>
-
               <Button
                 variant="text"
                 color="success"

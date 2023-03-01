@@ -291,7 +291,7 @@ function AddInvoice(props) {
             >
               <Grid item xs={6}>
                 <Item>
-                  <Stack spacing={1}>
+                  <Stack>
                     <FormControl variant="standard" sx={{ width: 1 }}>
                       <InputLabel id="demo-simple-select-standard-label">
                         Mobile no
@@ -326,7 +326,7 @@ function AddInvoice(props) {
                         label="Address"
                         variant="standard"
                         multiline
-                        rows={2}
+                        // rows={2}
                         // maxRows={4}
                         sx={{ width: 1 }}
                         value={
