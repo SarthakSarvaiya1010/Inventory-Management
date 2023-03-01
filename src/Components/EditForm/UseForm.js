@@ -122,17 +122,14 @@ const useForm = (defaultData, image) => {
       "terms_condition",
       values?.terms_condition || defaultData?.terms_condition
     );
-    formAddUserData.append(
-      "terms_condition",
-      values?.fax_no || defaultData?.fax_no
-    );
+    formAddUserData.append("fax_no", values?.fax_no || defaultData?.fax_no);
     formAddUserData.append(
       "tin_gst_no",
       values?.tin_gst_no || defaultData?.tin_gst_no
     );
     formAddUserData.append("website", values?.website || defaultData?.website);
 
-    if (!Object.keys(errors).length) {
+    if (Object.keys(errors).length === 0) {
       dispatch(
         CompanyInfoEditAction(
           successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
@@ -259,36 +256,38 @@ const useForm = (defaultData, image) => {
   }, [defaultData, findErrors, values]);
 
   useEffect(() => {
-    if (Object.keys(errors).length) {
-      setFindErrors("UserValidate");
-    }
-    if (!Object.keys(errors).length && findErrors === "UserValidate") {
-      if (defaultData?.product_id) {
-        // dispatch(
-        //   ProductEditDataAction(
-        //     successLoginData?.LoginData?.accessToken ||
-        //       accessToken?.accessToken,
-        //     formAddUserData,
-        //     parseInt(defaultData.product_id)
-        //   )
-        // );
-        if (test) {
-          alert("Product Edit in useEffect");
-        }
-        alert("Product Edit");
-        setFindErrors(false);
-      } else {
-        // dispatch(
-        //   ProductAddAction(
-        //     successLoginData?.LoginData?.accessToken ||
-        //       accessToken?.accessToken,
-        //     formAddUserData
-        //   )
-        // );
+    if (errors) {
+      if (Object.keys(errors).length) {
+        setFindErrors("UserValidate");
+      }
+      if (!Object.keys(errors).length && findErrors === "UserValidate") {
+        if (defaultData?.product_id) {
+          // dispatch(
+          //   ProductEditDataAction(
+          //     successLoginData?.LoginData?.accessToken ||
+          //       accessToken?.accessToken,
+          //     formAddUserData,
+          //     parseInt(defaultData.product_id)
+          //   )
+          // );
+          if (test) {
+            alert("Product Edit in useEffect");
+          }
+          alert("Product Edit");
+          setFindErrors(false);
+        } else {
+          // dispatch(
+          //   ProductAddAction(
+          //     successLoginData?.LoginData?.accessToken ||
+          //       accessToken?.accessToken,
+          //     formAddUserData
+          //   )
+          // );
 
-        setFindErrors(false);
-        if (test) {
-          alert("Product ADD in useEffect");
+          setFindErrors(false);
+          if (test) {
+            alert("Product ADD in useEffect");
+          }
         }
       }
     }

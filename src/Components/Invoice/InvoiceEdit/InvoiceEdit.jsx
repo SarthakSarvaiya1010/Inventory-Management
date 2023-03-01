@@ -37,6 +37,7 @@ import {
   GetinvoiceEditDataAction,
   UpdateInvoiceData,
 } from "../../../Store/Action/InvoiceAction";
+import InvoiceValidate from "../InvoiceFormValidation";
 import { useParams } from "react-router";
 import { convert } from "../../../Helpers/misc";
 import { ToWords } from "to-words";
@@ -44,7 +45,7 @@ import { ToWords } from "to-words";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2.5),
   textAlign: "left",
   color: theme.palette.text.secondary,
 }));
@@ -66,6 +67,9 @@ function InvoiceEdit(props) {
   const [product, setProduct] = useState([]);
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
+  const [errors, setErrors] = useState(null);
+  console.log("errors", errors);
+  const [findErrors, setFindErrors] = useState(null);
   if (EditInvoiceSucessMessage && disabled) {
     setDisabled(false);
   }
@@ -211,34 +215,46 @@ function InvoiceEdit(props) {
     }
   };
 
-  // Handle Update Data
-  const handleUpdate = () => {
-    const UpdatedData = {
-      bill_no: testData?.bill_no,
-      invoice_date: convert(testData?.invoice_date),
-      customer_id: CustomerListData
-        ? CustomerListData.customer_id
-        : testData?.customer_id,
-      taxable_amount: totalAmount
-        ? parseFloat(totalAmount.toFixed(2))
-        : testData?.taxable_amount,
-      sgst: SGST ? parseFloat(SGST) : testData?.sgst,
-      cgst: CGST ? parseFloat(CGST) : testData?.cgst,
-      discount: parseFloat(discount) ? parseFloat(discount) : 0,
-      bill_amount: Bill_Amount
-        ? parseFloat(Bill_Amount.toFixed(2))
-        : testData?.bill_amount,
-      productdata: product ? product : testData?.productlistdata,
-    };
-    const invoice_id = testData?.invoice_id;
-    dispatch(
-      UpdateInvoiceData(accessToken?.accessToken, invoice_id, UpdatedData)
-    );
-    if (UpdatedData) {
-      setDisabled(true);
-    }
+  const UpdatedData = {
+    bill_no: testData?.bill_no,
+    invoice_date: convert(testData?.invoice_date),
+    customer_id: CustomerListData
+      ? CustomerListData.customer_id
+      : testData?.customer_id,
+    taxable_amount: totalAmount
+      ? parseFloat(totalAmount.toFixed(2))
+      : testData?.taxable_amount,
+    sgst: SGST ? parseFloat(SGST) : testData?.sgst,
+    cgst: CGST ? parseFloat(CGST) : testData?.cgst,
+    discount: parseFloat(discount) ? parseFloat(discount) : 0,
+    bill_amount: Bill_Amount
+      ? parseFloat(Bill_Amount.toFixed(2))
+      : testData?.bill_amount,
+    productdata: product ? product : testData?.productlistdata,
   };
 
+  // Handle Update Data
+  const handleUpdate = () => {
+    const invoice_id = testData?.invoice_id;
+    setFindErrors(true);
+    setErrors(InvoiceValidate(UpdatedData, addtable));
+    window.scroll(0, 0);
+    if (Object.keys(errors).length === 0) {
+      console.log("UpdatedData", UpdatedData);
+      dispatch(
+        UpdateInvoiceData(accessToken?.accessToken, invoice_id, UpdatedData)
+      );
+
+      if (UpdatedData) {
+        setDisabled(true);
+      }
+    }
+  };
+  useEffect(() => {
+    if (findErrors) {
+      setErrors(InvoiceValidate(UpdatedData, addtable));
+    }
+  }, [findErrors, CustomerListData?.customer_id, product]);
   const handleChange = (event) => {
     const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
       (e) => e.customer_id === event.target.value
@@ -299,7 +315,7 @@ function InvoiceEdit(props) {
             <Box sx={{ width: "100%", mt: 2 }}>
               <Grid
                 container
-                rowSpacing={1}
+                rowSpacing={3}
                 columnSpacing={{ xs: 1, sm: 2, md: 3 }}
               >
                 <Grid item xs={6}>
@@ -310,6 +326,7 @@ function InvoiceEdit(props) {
                           Mobile no
                         </InputLabel>
                         <Select
+                          error={errors?.customer_id ? true : null}
                           labelId="demo-simple-select-standard-label"
                           id="demo-simple-select-standard-01"
                           onChange={(e) => handleChange(e)}
@@ -330,20 +347,25 @@ function InvoiceEdit(props) {
                             }
                           )}
                         </Select>
+                        <p style={{ color: "red", margin: 0 }}>
+                          {errors?.customer_id}
+                        </p>
                         <br />
                         <TextField
+                          error={errors?.customer_address ? true : null}
                           id="standard-basic"
                           label="Address"
                           variant="standard"
                           name="customer_address"
                           multiline
-                          rows={2}
                           defaultValue={testData?.customer_address}
-                          // maxRows={4}
                           sx={{ width: 1 }}
                           onChange={(e) => handleChange(e)}
                           value={CustomerListData?.address}
                         />
+                        <p style={{ color: "red", margin: 0 }}>
+                          {errors?.customer_address}
+                        </p>
                         <br />
                         <TextField
                           id="standard-basic-1"
@@ -354,8 +376,8 @@ function InvoiceEdit(props) {
                           onChange={(e) => handleChange(e)}
                         />
                         <br />
-
                         <TextField
+                          error={errors?.customer_name ? true : null}
                           id="standard-basic-2"
                           label="Name "
                           variant="standard"
@@ -365,15 +387,17 @@ function InvoiceEdit(props) {
                           value={CustomerListData?.customer_name}
                           onChange={(e) => handleChange(e)}
                         />
-
+                        <p style={{ color: "red", margin: 0 }}>
+                          {errors?.customer_name}
+                        </p>
                         <br />
                       </FormControl>
                     </Stack>
                   </Item>
                 </Grid>
                 <Grid item xs={6}>
-                  <Item sx={{ pt: 5, pb: 5 }}>
-                    <Stack spacing={2.5}>
+                  <Item sx={{ pt: 5.5, pb: 5.5 }}>
+                    <Stack spacing={2}>
                       <TextField
                         id="standard-basic-3"
                         label="Bill_no"
@@ -468,6 +492,13 @@ function InvoiceEdit(props) {
                                 <Select
                                   labelId="demo-simple-select-standard-label"
                                   id="demo-simple-select-standard"
+                                  error={
+                                    !product[ind - 1]?.product_id
+                                      ? errors?.product_id
+                                        ? true
+                                        : null
+                                      : ""
+                                  }
                                   value={
                                     product[ind - 1]?.product_id
                                       ? product[ind - 1]?.product_id
@@ -501,6 +532,11 @@ function InvoiceEdit(props) {
                                     }
                                   )}
                                 </Select>
+                                <p style={{ color: "red", margin: 0 }}>
+                                  {!product[ind - 1]?.product_id
+                                    ? errors?.product_id
+                                    : ""}
+                                </p>
                               </FormControl>
                             </TableCell>
                             <TableCell>
@@ -522,6 +558,13 @@ function InvoiceEdit(props) {
                                 label="Weight"
                                 variant="standard"
                                 type="number"
+                                error={
+                                  !product[ind - 1]?.weight
+                                    ? errors?.weight
+                                      ? true
+                                      : null
+                                    : ""
+                                }
                                 defaultValue={
                                   testData?.productlistdata[ind - 1]?.weight
                                 }
@@ -533,6 +576,11 @@ function InvoiceEdit(props) {
                                   )
                                 }
                               />
+                              <p style={{ color: "red", margin: 0 }}>
+                                {!product[ind - 1]?.weight
+                                  ? errors?.weight
+                                  : ""}
+                              </p>
                             </TableCell>
                             <TableCell>
                               <TextField
@@ -541,6 +589,13 @@ function InvoiceEdit(props) {
                                 variant="standard"
                                 type="number"
                                 name={`rate ${ind}`}
+                                error={
+                                  !product[ind - 1]?.rate
+                                    ? errors?.rate
+                                      ? true
+                                      : null
+                                    : ""
+                                }
                                 defaultValue={
                                   testData?.productlistdata[ind - 1]?.rate
                                 }
@@ -552,6 +607,9 @@ function InvoiceEdit(props) {
                                   )
                                 }
                               />
+                              <p style={{ color: "red", margin: 0 }}>
+                                {!product[ind - 1]?.rate ? errors?.rate : ""}
+                              </p>
                             </TableCell>
                             <TableCell colSpan={2}>
                               {product.length > ind - 1 ? (
@@ -559,6 +617,13 @@ function InvoiceEdit(props) {
                                   id="standard-basic-8"
                                   label="Amount"
                                   variant="standard"
+                                  error={
+                                    !product[ind - 1]?.amount
+                                      ? errors?.amount
+                                        ? true
+                                        : null
+                                      : ""
+                                  }
                                   defaultValue={
                                     testData?.productlistdata[ind - 1]
                                       ?.amount || 0
@@ -574,6 +639,13 @@ function InvoiceEdit(props) {
                                   id="standard-basic-8"
                                   label="Amount"
                                   variant="standard"
+                                  error={
+                                    !product[ind - 1]?.amount
+                                      ? errors?.amount
+                                        ? true
+                                        : null
+                                      : ""
+                                  }
                                   defaultValue={
                                     testData?.productlistdata[ind - 1]
                                       ?.amount || 0
@@ -581,6 +653,11 @@ function InvoiceEdit(props) {
                                   value={product[ind - 1]?.amount?.toFixed(2)}
                                 />
                               )}
+                              <p style={{ color: "red", margin: 0 }}>
+                                {!product[ind - 1]?.amount
+                                  ? errors?.amount
+                                  : ""}
+                              </p>
                             </TableCell>
                             <TableCell>
                               {ind > testData?.productlistdata?.length ? (
@@ -612,9 +689,6 @@ function InvoiceEdit(props) {
                               id="standard-basic-9"
                               label="Total weight"
                               variant="standard"
-                              // defaultValue={
-                              //   testData?.productlistdata[ind - 1]?.amount
-                              // }
                               value={totalweight ? totalweight.toFixed(2) : 0}
                               sx={{ width: 200 }}
                             />
@@ -698,7 +772,7 @@ function InvoiceEdit(props) {
                                     id="standard-basic-05"
                                     label="Discount"
                                     variant="standard"
-                                    // defaultValue={testData?.discount}
+                                    defaultValue={testData?.discount}
                                     value={discount ? discount : 0}
                                     onChange={(e) =>
                                       setDiscount(e.target.value)
@@ -747,7 +821,7 @@ function InvoiceEdit(props) {
                     <Box
                       component="ul"
                       aria-labelledby="category-a"
-                      sx={{ pl: 2 }}
+                      sx={{ pl: 2, pb: 5 }}
                     >
                       <li>
                         Payment will not be refunded once the bill is generated
@@ -759,11 +833,12 @@ function InvoiceEdit(props) {
                         sx={{
                           fontWeight: "bold",
                           fontSize: 14,
-                          textAlign: "center",
-                          bottom: 0,
+                          textAlign: "right",
+                          bottom: 3,
                           position: "absolute",
                           left: 0,
                           width: "100%",
+                          padding: "20px  20px 0  0",
                         }}
                       >
                         Customer Signature
@@ -774,7 +849,7 @@ function InvoiceEdit(props) {
                 <Grid item xs={5}>
                   <Item
                     sx={{
-                      height: 150,
+                      height: 200,
                       position: "relative",
                       textAlign: "center",
                     }}
@@ -795,10 +870,11 @@ function InvoiceEdit(props) {
                         fontWeight: "bold",
                         fontSize: 14,
                         textAlign: "center",
-                        bottom: 0,
+                        bottom: 3,
                         position: "absolute",
                         left: 0,
                         width: "100%",
+                        padding: "20px  0 0  0",
                       }}
                     >
                       Authorised Signatory

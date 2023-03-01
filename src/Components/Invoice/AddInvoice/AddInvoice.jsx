@@ -42,7 +42,7 @@ import { ToWords } from "to-words";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2.5),
   textAlign: "left",
   color: theme.palette.text.secondary,
 }));
@@ -75,8 +75,7 @@ function AddInvoice(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState(null);
-  console.log("errors=========>", errors);
-  const [findErrors, setFindErrors] = useState(null);
+  const [findErrors, setFindErrors] = useState(false);
 
   if (sucessMessage && disabled) {
     setDisabled(false);
@@ -235,17 +234,25 @@ function AddInvoice(props) {
   const handleAddInvoiceData = () => {
     setFindErrors(true);
     setErrors(InvoiceValidate(finalinvoicedata, addtable));
-    console.log("finalinvoicedata", finalinvoicedata);
-    // dispatch(AddInvoiceData(accessToken?.accessToken, finalinvoicedata));
-    // if (finalinvoicedata) {
-    //   setDisabled(true);
-    // }
+    window.scroll(0, 0);
+    if (Object.keys(errors).length === 0) {
+      console.log("finalinvoicedata", finalinvoicedata);
+      // dispatch(AddInvoiceData(accessToken?.accessToken, finalinvoicedata));
+      if (finalinvoicedata) {
+        setDisabled(true);
+      }
+    }
   };
   useEffect(() => {
     if (findErrors) {
       setErrors(InvoiceValidate(finalinvoicedata, addtable));
     }
-  }, [findErrors, CustomerListData?.customer_id, product]);
+  }, [
+    findErrors,
+    CustomerListData?.customer_id,
+    product,
+    handleAddInvoiceData,
+  ]);
   return (
     <div>
       <Container>
@@ -287,12 +294,12 @@ function AddInvoice(props) {
           <Box sx={{ width: "100%", mt: 2 }}>
             <Grid
               container
-              rowSpacing={1}
+              rowSpacing={3}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
               <Grid item xs={6}>
                 <Item>
-                  <Stack spacing={1}>
+                  <Stack>
                     <FormControl variant="standard" sx={{ width: 1 }}>
                       <InputLabel id="demo-simple-select-standard-label">
                         Mobile no
@@ -301,7 +308,6 @@ function AddInvoice(props) {
                         error={errors?.customer_id ? true : null}
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard-01"
-                        //   value={age}
                         onChange={(e) => handleChange(e)}
                         label="Mobile_no*"
                         name="customer_mobileNo"
@@ -319,7 +325,9 @@ function AddInvoice(props) {
                           }
                         )}
                       </Select>
-                      <p style={{ color: "red" }}>{errors?.customer_id}</p>
+                      <p style={{ color: "red", margin: 0 }}>
+                        {errors?.customer_id}
+                      </p>
                       <br />
                       <TextField
                         error={errors?.customer_address ? true : null}
@@ -327,8 +335,6 @@ function AddInvoice(props) {
                         label="Address"
                         variant="standard"
                         multiline
-                        rows={2}
-                        // maxRows={4}
                         sx={{ width: 1 }}
                         value={
                           CustomerListData?.address === ""
@@ -336,7 +342,9 @@ function AddInvoice(props) {
                             : CustomerListData?.address
                         }
                       />
-                      <p style={{ color: "red" }}>{errors?.customer_address}</p>
+                      <p style={{ color: "red", margin: 0 }}>
+                        {errors?.customer_address}
+                      </p>
                       <br />
                       <TextField
                         id="standard-basic-1"
@@ -344,7 +352,6 @@ function AddInvoice(props) {
                         variant="standard"
                         sx={{ width: 1 }}
                         name="Customer_Gst_No"
-                        onChange={(e) => handleChange(e)}
                       />
                       <br />
 
@@ -358,15 +365,17 @@ function AddInvoice(props) {
                         name="Customer_Name"
                         onChange={(e) => handleChange(e)}
                       />
-                      <p style={{ color: "red" }}>{errors?.customer_name}</p>
+                      <p style={{ color: "red", margin: 0 }}>
+                        {errors?.customer_name}
+                      </p>
                       <br />
                     </FormControl>
                   </Stack>
                 </Item>
               </Grid>
               <Grid item xs={6}>
-                <Item sx={{ pt: 5, pb: 5 }}>
-                  <Stack spacing={2.5}>
+                <Item sx={{ pt: 5.5, pb: 5.5 }}>
+                  <Stack spacing={2}>
                     <TextField
                       id="standard-basic-3"
                       label="Bill_no"
@@ -393,7 +402,7 @@ function AddInvoice(props) {
                       variant="standard"
                       sx={{ width: 1 }}
                       name="Gst_No"
-                      onChange={(e) => handleChange(e)}
+                      // onChange={(e) => handleChange(e)}
                     />
                   </Stack>
                 </Item>
@@ -454,10 +463,6 @@ function AddInvoice(props) {
                             <FormControl variant="standard" sx={{ width: 240 }}>
                               <InputLabel id="demo-simple-select-standard-label">
                                 Select Product
-                                {console.log(
-                                  "product[ind - 1]?.product_id",
-                                  product[ind - 1]?.product_id
-                                )}
                               </InputLabel>
                               <Select
                                 error={
@@ -498,7 +503,7 @@ function AddInvoice(props) {
                                   }
                                 )}
                               </Select>
-                              <p style={{ color: "red" }}>
+                              <p style={{ color: "red", margin: 0 }}>
                                 {!product[ind - 1]?.product_id
                                   ? errors?.product_id
                                   : ""}
@@ -542,7 +547,7 @@ function AddInvoice(props) {
                               }
                               sx={{ w: 50 }}
                             />
-                            <p style={{ color: "red" }}>
+                            <p style={{ color: "red", margin: 0 }}>
                               {!product[ind - 1]?.weight ? errors?.weight : ""}
                             </p>
                           </TableCell>
@@ -569,7 +574,7 @@ function AddInvoice(props) {
                                 )
                               }
                             />
-                            <p style={{ color: "red" }}>
+                            <p style={{ color: "red", margin: 0 }}>
                               {!product[ind - 1]?.rate ? errors?.rate : ""}
                             </p>
                           </TableCell>
@@ -614,7 +619,7 @@ function AddInvoice(props) {
                                 }
                               />
                             )}
-                            <p style={{ color: "red" }}>
+                            <p style={{ color: "red", margin: 0 }}>
                               {!product[ind - 1]?.amount ? errors?.amount : ""}
                             </p>
                           </TableCell>
@@ -762,7 +767,7 @@ function AddInvoice(props) {
                   <Box
                     component="ul"
                     aria-labelledby="category-a"
-                    sx={{ pl: 2 }}
+                    sx={{ pl: 2, pb: 5 }}
                   >
                     <li>
                       Payment will not be refunded once the bill is generated
@@ -770,15 +775,17 @@ function AddInvoice(props) {
                     <li>No gurantee will be given any 92.5 jewellery</li>
                     <li>Ahmedabad will be jurisdiction for any process</li>
                     <li>Apologies for mistakes</li>
+
                     <Typography
                       sx={{
                         fontWeight: "bold",
                         fontSize: 14,
-                        textAlign: "center",
-                        bottom: 0,
+                        textAlign: "right",
+                        bottom: 3,
                         position: "absolute",
                         left: 0,
                         width: "100%",
+                        padding: "20px  20px 0  0",
                       }}
                     >
                       Customer Signature
@@ -789,7 +796,7 @@ function AddInvoice(props) {
               <Grid item xs={5}>
                 <Item
                   sx={{
-                    height: 150,
+                    height: 200,
                     position: "relative",
                     textAlign: "center",
                   }}
@@ -810,10 +817,11 @@ function AddInvoice(props) {
                       fontWeight: "bold",
                       fontSize: 14,
                       textAlign: "center",
-                      bottom: 0,
+                      bottom: 3,
                       position: "absolute",
                       left: 0,
                       width: "100%",
+                      padding: "20px  0 0  0",
                     }}
                   >
                     Authorised Signatory

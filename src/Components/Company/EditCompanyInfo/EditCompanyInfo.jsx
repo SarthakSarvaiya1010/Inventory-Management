@@ -42,14 +42,8 @@ function EditCompanyInfo() {
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
 
-  const showToastMessage = () => {
-    toast.success("Data Updata  Success  !", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  };
   const { companyhandleSubmit, values, errors, handleOnchange } = UseForm(
     CompanyInfo,
-    showToastMessage,
     image
   );
   console.log("errors", errors, CompanyInfo);
