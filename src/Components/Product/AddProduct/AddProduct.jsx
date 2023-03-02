@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { TextField, DialogContent, Container, Fab } from "@mui/material";
-
 import Header from "../../../Helpers/Header/Header";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 import useForm from "../../EditForm/UseForm";
-// import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductEditAction } from "../../../Store/Action/ProductAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -20,7 +18,7 @@ const currencies = [
     label: "Tax",
   },
   {
-    value: "select ",
+    value: "One",
     label: "One",
   },
 ];
@@ -57,7 +55,6 @@ function AddProduct() {
   console.log("values", values);
 
   const handleCancle = () => {
-    console.log("done");
     navigate("/productlist");
   };
 

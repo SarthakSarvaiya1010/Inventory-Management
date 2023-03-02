@@ -5,7 +5,9 @@ import {
   CUSTOMER_DELETED_LIST,
   CUSTOMER_DELETE,
   CUSTOMER_EDIT_DATA,
+  FAILED_EDIT_CUSTOMERDATA,
   CUSTOMER_ADD,
+  FAILED_ADD_CUSTOMER,
   PERMANENT_CUSTOMER_DELETE,
   FAILED_PERMANENT_CUSTOMER_DELETE,
   LIST_LOADER,
@@ -63,7 +65,7 @@ export const CustomerAddAction = (data) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_ADD_CUSTOMER,
       payload: { data: error.response.data },
     });
   }
@@ -119,6 +121,28 @@ export const CustomerEditAction = (customers_id) => async (dispatch) => {
     });
   }
 };
+// export const CustomerEditDataAction =
+//   (AccessToken, data, customers_id) => async (dispatch) => {
+//     const token = AccessToken;
+//     try {
+//       const ProductEditData = await axios.put(
+//         `https://inventory-management-backend.onrender.com/edit/customers/${customers_id}`,
+//         data,
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       );
+//       dispatch({
+//         type: CUSTOMER_EDIT_DATA,
+//         payload: ProductEditData.data,
+//       });
+//     } catch (error) {
+//       dispatch({
+//         type: FAILED_EDIT_CUSTOMERDATA,
+//         payload: { data: error.response.data },
+//       });
+//     }
+//   };
 
 export const CustomerEditDataAction = (data, id) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
@@ -136,7 +160,7 @@ export const CustomerEditDataAction = (data, id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_EDIT_CUSTOMERDATA,
       payload: { data: error.response.data },
     });
   }

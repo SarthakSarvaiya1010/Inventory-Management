@@ -21,10 +21,6 @@ function DeletedTaxList() {
   const TaxData = useSelector((state) => state?.TaxData);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    dispatch(TaxDelectListAction());
-  }, [dispatch]);
-
   const headalEdit = (data) => {
     console.log("data", data, TaxData?.productDeletList[data - 1]);
     navigate(

@@ -38,15 +38,6 @@ function TaxList() {
     elements["Active"] = e.isactive;
     data.push(elements);
   });
-  useEffect(() => {
-    if (accessToken?.accessToken) {
-      dispatch(TaxListAction());
-    }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    successLoginData?.LoginData?.accessToken,
-  ]);
 
   const finalDelete = () => {
     setOpen(false);

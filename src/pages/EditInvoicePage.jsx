@@ -1,17 +1,23 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import InvoiceEdit from "../Components/Invoice/InvoiceEdit/InvoiceEdit";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function EditInvoicePage() {
   const navigate = useNavigate();
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
-  console.log(
-    "InvoicePageData?.SuccessMessageOfInvoiceEdit",
-    InvoicePageData?.SuccessMessageOfInvoiceEdit?.invoicePdf
-  );
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
   const invoivepagedata = JSON.parse(
     localStorage.getItem("InvoiceEditPageData")
   );
@@ -20,15 +26,11 @@ export default function EditInvoicePage() {
     : invoivepagedata[0]
     ? invoivepagedata
     : [{}];
-  const showToastMessage = (data) => {
-    toast.success(data, {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 2000,
-    });
-    setTimeout(() => {
-      navigate("/invoice_list");
-    }, 2000);
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
   };
+
   useEffect(() => {
     if (InvoicePageData?.invoiceEdit.length) {
       localStorage.setItem(
@@ -38,13 +40,17 @@ export default function EditInvoicePage() {
     }
   }, [InvoicePageData?.invoiceEdit]);
   useEffect(() => {
-    if (InvoicePageData?.SuccessMessageOfInvoiceEdit?.statusCode === "200") {
-      showToastMessage(InvoicePageData?.SuccessMessageOfInvoiceEdit?.message);
+    if (InvoicePageData?.InvoicePdf?.statusCode === "200") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
+      setTimeout(() => {
+        navigate("/invoice_list");
+      }, 2000);
     }
-  });
+  }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
+
   var b64;
-  if (InvoicePageData?.SuccessMessageOfInvoiceEdit?.invoicePdf) {
-    b64 = InvoicePageData?.SuccessMessageOfInvoiceEdit?.invoicePdf;
+  if (InvoicePageData?.InvoicePdf?.invoicePdf) {
+    b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
   }
   if (b64) {
     var obj = document.createElement("object");
@@ -67,12 +73,31 @@ export default function EditInvoicePage() {
   }
   return (
     <div>
-      <ToastContainer />
+      <Snackbar
+        autoHideDuration={2000}
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        {InvoicePageData?.InvoicePdf?.message ? (
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {InvoicePageData?.InvoicePdf?.message}
+          </Alert>
+        ) : (
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {/* {Customers?.ErrorMessage?.data?.message} */}{" "}
+            {"Oppps ,Something went wrong"}
+          </Alert>
+        )}
+      </Snackbar>
       <InvoiceEdit
         testData={testData}
-        EditInvoiceSucessMessage={
-          InvoicePageData?.SuccessMessageOfInvoiceEdit?.statusCode
-        }
+        EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
       />
     </div>
   );

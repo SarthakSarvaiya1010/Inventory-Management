@@ -11,19 +11,30 @@ import {
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { convert } from "../../../Helpers/misc";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function ViewDeletedInvoiceList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const DeletedInvoiceList = useSelector((state) => state?.InvoiceData);
-  const [open, setOpen] = useState(false);
+  const [openPopep, setOpenPopep] = useState(false);
   const data = [];
   let limit = 2;
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("BILL No");
   const [search, setSearch] = useState();
-  console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
 
   // eslint-disable-next-line array-callback-return
   DeletedInvoiceList?.DeletedInvoiceList?.map((e) => {
@@ -34,13 +45,20 @@ export default function ViewDeletedInvoiceList() {
     elements["Total Amount"] = e.bill_amount;
     data.push(elements);
   });
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+  console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
 
   useEffect(() => {
-    if (DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode === "200") {
-      alert("sucessfully deleted");
+    if (
+      DeletedInvoiceList?.SucessMessageOfInvoiceDelete?.statusCode === "200"
+    ) {
+      setState({ open: true, vertical: "top", horizontal: "center" });
       window.location.reload();
     }
-  }, [DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode]);
+  }, [DeletedInvoiceList?.SucessMessageOfInvoiceDelete?.statusCode]);
+
   useEffect(() => {
     dispatch(GetDeletedInvoiceList());
   }, [dispatch]);
@@ -108,18 +126,18 @@ export default function ViewDeletedInvoiceList() {
     }
   };
   const finalDelete = () => {
-    setOpen(false);
+    setOpenPopep(false);
     dispatch(
       PermanentDeleteInvoice(
-        DeletedInvoiceList?.DeletedInvoiceList[open - 1]?.invoice_id
+        DeletedInvoiceList?.DeletedInvoiceList[openPopep - 1]?.invoice_id
       )
     );
   };
   return (
     <div>
       <DialogBox
-        setOpen={setOpen}
-        open={open}
+        setOpen={setOpenPopep}
+        open={openPopep}
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
@@ -164,11 +182,25 @@ export default function ViewDeletedInvoiceList() {
               </Stack>
               <Table
                 data={data}
-                headalDelete={setOpen}
+                headalDelete={setOpenPopep}
                 hide={true}
                 headalShorting={headalShorting}
                 ShortingHide={shortingIcon}
               />
+              <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                open={open}
+                onClose={handleClose}
+                key={vertical + horizontal}
+              >
+                <Alert
+                  onClose={handleClose}
+                  severity="success"
+                  sx={{ width: "100%" }}
+                >
+                  {DeletedInvoiceList?.SucessMessageOfInvoiceDelete?.message}
+                </Alert>
+              </Snackbar>
               <Stack
                 sx={{
                   margin: "10px",

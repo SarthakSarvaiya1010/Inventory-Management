@@ -1,42 +1,70 @@
 import React, { useEffect } from "react";
 import AddProduct from "../Components/Product/AddProduct/AddProduct";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddProductPage() {
   const ProductEditData = useSelector((state) => state?.ProductList);
   const navigate = useNavigate();
-
-  const showToastMessage = (data) => {
-    toast.success(data, {
-      position: toast.POSITION.TOP_CENTER,
-    });
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  const handleClose = () => {
+    setState({ ...state, open: false });
   };
   useEffect(() => {
-    if (ProductEditData?.SucessAddProduct?.statusCode === "200") {
-      showToastMessage(ProductEditData?.SucessAddProduct?.message);
+    if (ProductEditData?.SucessMessage?.statusCode === "200") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
         navigate("/productlist");
-      }, 2100);
+      }, 2000);
     }
   }, [
-    ProductEditData?.SucessAddProduct?.message,
-    ProductEditData?.SucessAddProduct?.statusCode,
+    ProductEditData?.SucessMessage?.message,
+    ProductEditData?.SucessMessage?.statusCode,
     navigate,
   ]);
+
   useEffect(() => {
-    if (ProductEditData?.SucessEditProduct?.statusCode === "200") {
-      showToastMessage(ProductEditData?.SucessEditProduct?.message);
+    if (ProductEditData?.ErrorMessage?.data?.statusCode === "400") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
     }
   }, [
-    ProductEditData?.SucessEditProduct?.message,
-    ProductEditData?.SucessEditProduct?.statusCode,
+    ProductEditData?.ErrorMessage?.data?.statusCode,
+    ProductEditData?.ErrorMessage?.data?.message,
   ]);
   return (
     <div>
-      <ToastContainer />
+      <Snackbar
+        autoHideDuration={2000}
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        {ProductEditData?.SucessMessage?.message ? (
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {ProductEditData?.SucessMessage?.message}
+          </Alert>
+        ) : (
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {ProductEditData?.ErrorMessage?.data?.message}
+          </Alert>
+        )}
+      </Snackbar>
       <AddProduct />
     </div>
   );

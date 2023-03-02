@@ -18,16 +18,12 @@ function CustomerList() {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const CustomerData = useSelector((state) => state?.CustomerList);
-  const SuccesscustomerDeletedData = useSelector(
-    (state) => state?.CustomerEdit?.SuccessfullyCustomerDeltetedData
-  );
   const [search, setSearch] = useState(null);
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [pageNumber, setPageNumber] = useState();
   let limit = 2;
   const data = [];
-  console.log("SuccesscustomerDeletedData", SuccesscustomerDeletedData);
   // eslint-disable-next-line array-callback-return
   CustomerData?.CoustomerList.map((e) => {
     let test = {};
@@ -38,14 +34,6 @@ function CustomerList() {
     data.push(test);
   });
   console.log("CustomerData", CustomerData);
-  useEffect(() => {
-    if (SuccesscustomerDeletedData?.statusCode === "200") {
-      window.location.reload();
-    }
-  }, [
-    SuccesscustomerDeletedData.StatusCode,
-    SuccesscustomerDeletedData?.statusCode,
-  ]);
   const headalEdit = (data) => {
     console.log(data, CustomerData?.CoustomerList[data - 1]);
 
@@ -64,7 +52,6 @@ function CustomerList() {
     console.log(e.target.value, "e.target.value");
     setSearch(e.target.value);
   };
-  console.log("search", search);
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -130,7 +117,7 @@ function CustomerList() {
       <DialogBox
         setOpen={setOpen}
         open={open}
-        DialogText={"Are you sure you want to Delete this customer?"}
+        DialogText={"Are you sure you want to Remove Customer?"}
         finalDelete={finalDelete}
       />
       {CustomerData?.CoustomerList?.length ? (

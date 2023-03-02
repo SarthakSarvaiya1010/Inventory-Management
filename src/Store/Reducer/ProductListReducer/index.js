@@ -3,8 +3,10 @@ import {
   LIST_LOADER,
   PRODUCT_EDIT,
   PRODUCT_ADD,
+  FAILED_ADD_PRODUCT,
   PRODUCT_DELETE,
   PRODUCT_EDIT_DATA,
+  FAILED_EDIT_PRODUCT_DATA,
   PRODUCT_DELETE_LIST,
   PERMANENT_PRODUCT_DELETE,
 } from "../../ActionTypes";
@@ -15,11 +17,10 @@ const initialstate = {
   productList: [],
   productEdit: [],
   productDeletList: [],
-  SucessAddProduct: [],
-  SucessEditProduct: [],
-  SuccessProductDeleteData: [],
   DeletedProductListLoader: false,
-  SucessPermanentDeleteData: [],
+  ErrorMessage: [],
+  SucessMessage: [],
+  SuccessMessageProductDelete: [],
 };
 
 const ProductListReducer = (state = initialstate, action) => {
@@ -37,8 +38,9 @@ const ProductListReducer = (state = initialstate, action) => {
         ...state,
         productList: action.payload,
         productEdit: [],
-        SucessEditProduct: [],
-        SucessAddProduct : [],
+        SucessMessage: [],
+        ErrorMessage: [],
+        SuccessMessageProductDelete: [],
         Loader: false,
         loder: true,
       };
@@ -51,17 +53,27 @@ const ProductListReducer = (state = initialstate, action) => {
     case PRODUCT_ADD:
       return {
         ...state,
-        SucessAddProduct: action.payload,
+        SucessMessage: action.payload,
+      };
+    case FAILED_ADD_PRODUCT:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
       };
     case PRODUCT_DELETE:
       return {
         ...state,
-        SuccessProductDeleteData: action.payload,
+        SuccessMessageProductDelete: action.payload,
       };
     case PRODUCT_EDIT_DATA:
       return {
         ...state,
-        SucessEditProduct: action.payload,
+        SucessMessage: action.payload,
+      };
+    case FAILED_EDIT_PRODUCT_DATA:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
       };
     case PRODUCT_DELETE_LIST:
       return {
@@ -72,7 +84,7 @@ const ProductListReducer = (state = initialstate, action) => {
     case PERMANENT_PRODUCT_DELETE:
       return {
         ...state,
-        SucessPermanentDeleteData: action.payload,
+        SuccessMessageProductDelete: action.payload,
       };
     default:
       return state;

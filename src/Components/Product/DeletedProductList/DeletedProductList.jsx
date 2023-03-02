@@ -25,22 +25,12 @@ function DeletedProductList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [search, setSearch] = useState();
-
   const productData = useSelector((state) => state?.ProductList);
   console.log("productData", productData?.SucessPermanentDeleteData);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   useEffect(() => {
-    if (productData?.SucessPermanentDeleteData?.statusCode === "200") {
-      alert("Sucessfully product deleted");
-      window.location.reload();
-    }
-  });
-  useEffect(() => {
-    if (accessToken?.accessToken) {
-      dispatch(ProductDeleteListAction());
-    }
-  }, [accessToken?.accessToken, dispatch]);
+    dispatch(ProductDeleteListAction());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -179,6 +169,7 @@ function DeletedProductList() {
                   add product
                 </Button>
               </Stack>
+
               <Table
                 data={data}
                 headalEdit={headalEdit}
@@ -187,6 +178,7 @@ function DeletedProductList() {
                 headalShorting={headalShorting}
                 ShortingHide={shortingIcon}
               />
+
               <Stack
                 sx={{
                   margin: "10px",

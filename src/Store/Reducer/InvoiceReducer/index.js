@@ -15,12 +15,12 @@ const initialstate = {
   Loader: false,
   GetInvoicePagData: [],
   invoiceEdit: [],
-  SuccessMessageOfInvoiceEdit: [],
   InvoicePdf: [],
   DeletedInvoiceList: [],
   DeletedInvoiceLoader: false,
-  SucessDeletedInvoiceData: [],
-  SucessPermanentDeletedData: [],
+  SucessMessageOfInvoiceDelete: [],
+  // SucessMessageOfInvoiceDelete: [],
+  // SucessPermanentDeletedData: [],
 };
 
 const InvoiceReducer = (state = initialstate, action) => {
@@ -36,8 +36,8 @@ const InvoiceReducer = (state = initialstate, action) => {
         ...state,
         invoiceList: action.payload,
         invoiceEdit: [],
-        SuccessMessageOfInvoiceEdit: [],
         InvoicePdf: [],
+        SucessMessageOfInvoiceDelete:[],
         Loader: true,
       };
     case GET_INVOICE_PAGE:
@@ -69,17 +69,17 @@ const InvoiceReducer = (state = initialstate, action) => {
     case DELETE_INVOICE:
       return {
         ...state,
-        SucessDeletedInvoiceData: action.payload,
+        SucessMessageOfInvoiceDelete: action.payload,
       };
     case PARMANENT_DELETE_INVOICE:
       return {
         ...state,
-        SucessPermanentDeletedData: action.payload,
+        SucessMessageOfInvoiceDelete: action.payload,
       };
     case UPDATE_INVOICE_DATA:
       return {
         ...state,
-        SuccessMessageOfInvoiceEdit: action.payload,
+        InvoicePdf: action.payload,
       };
     default:
       return state;

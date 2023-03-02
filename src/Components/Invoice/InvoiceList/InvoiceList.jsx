@@ -26,23 +26,19 @@ function InvoiceList() {
   const [pageNumber, setPageNumber] = useState();
   const [search, setSearch] = useState();
   const [shorting, setShorting] = useState();
-  const [shortingIcon, setShortingIcon] = useState("BILL No");
+  const [shortingIcon, setShortingIcon] = useState("Sr.No");
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   InvoiceData.invoiceList.map((e) => {
     let elements = {};
+    elements["Sr.No"] = e.sr_no;
     elements["BILL No"] = e.bill_no < 10 ? ` 0${e.bill_no}` : e.bill_no;
     elements["Invoice Date"] = convert(e.invoice_date);
     elements["Name"] = e.customer_name;
     elements["Total Amount"] = e.bill_amount;
     data.push(elements);
   });
-  useEffect(() => {
-    if (InvoiceData?.SucessDeletedInvoiceData?.statusCode === "200") {
-      alert("sucessfully deleted");
-      window.location.reload();
-    }
-  }, [InvoiceData?.SucessDeletedInvoiceData?.statusCode]);
+
   useEffect(() => {
     if (accessToken?.accessToken) {
       dispatch(
@@ -72,6 +68,13 @@ function InvoiceList() {
       ? setShortingIcon(`D ${data_a}`)
       : setShortingIcon(data_a);
     switch (data_a) {
+      case "Sr.No":
+        if (shorting === "sr_no") {
+          setShorting(null);
+        } else {
+          setShorting("sr_no");
+        }
+        return "done";
       case "BILL No":
         if (shorting === "bill_no") {
           setShorting(null);

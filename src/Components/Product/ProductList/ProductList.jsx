@@ -29,12 +29,6 @@ function ProductList() {
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  useEffect(() => {
-    if (productData?.SuccessProductDeleteData?.statusCode === "200") {
-      alert("Sucessfully product deleted");
-      window.location.reload();
-    }
-  }, [productData?.SuccessProductDeleteData?.statusCode]);
 
   useEffect(() => {
     dispatch(

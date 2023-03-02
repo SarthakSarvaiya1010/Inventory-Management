@@ -87,7 +87,7 @@ export default function CustomizedTables(props) {
                     sx={{
                       marginBottom: "-3px",
                       marginLeft: "10px",
-                      transform: "rotate(180deg)",
+                      transform: " rotate(180deg)",
                     }}
                     fontSize="small"
                     onClick={() => {

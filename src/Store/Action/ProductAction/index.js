@@ -3,8 +3,10 @@ import {
   FAILED_ADMIN_LIST,
   PRODUCT_EDIT,
   PRODUCT_ADD,
+  FAILED_ADD_PRODUCT,
   PRODUCT_DELETE,
   PRODUCT_EDIT_DATA,
+  FAILED_EDIT_PRODUCT_DATA,
   PRODUCT_DELETE_LIST,
   PERMANENT_PRODUCT_DELETE,
   FAILED_PERMANENT_PRODUCT_DELTETE,
@@ -62,7 +64,7 @@ export const ProductEditAction = (Product_id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_EDIT_PRODUCT_DATA,
       payload: { data: error.response.data },
     });
   }
@@ -106,7 +108,7 @@ export const ProductAddAction = (data) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_ADD_PRODUCT,
       payload: { data: error.response.data },
     });
   }

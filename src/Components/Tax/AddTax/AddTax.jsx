@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  CircularProgress,
 } from "@mui/material";
 import Header from "../../../Helpers/Header/Header";
 import Stack from "@mui/material/Stack";
@@ -39,7 +40,7 @@ function AddTax() {
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
   const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(
-    Tax_data[0]
+    Tax_data[0] ? Tax_data[0] : []
   );
 
   const handleCancle = () => {
@@ -104,7 +105,7 @@ function AddTax() {
                       error={errors?.tax_country ? true : null}
                       name="tax_country"
                       id="outlined-Product"
-                      label="Tax County"
+                      label="Tax Country"
                       autoComplete="off"
                       defaultValue={id ? TaxData?.TaxEdit[0]?.tax_country : ""}
                       onChange={(e) => handleOnchange(e)}
@@ -173,28 +174,26 @@ function AddTax() {
             </Container>
           </Container>
         ) : (
-          "amisha"
-          // <Stack
-          //   sx={{ color: "grey.500", height: "80vh" }}
-          //   spacing={2}
-          //   direction="row"
-          //   justifyContent="center"
-          //   alignItems="center"
-          // >
-          //   <CircularProgress color="success" size="5rem" />
-          // </Stack>
+          <Stack
+            sx={{ color: "grey.500", height: "80vh" }}
+            spacing={2}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <CircularProgress color="success" size="5rem" />
+          </Stack>
         )
       ) : (
-        "dsds"
-        // <Stack
-        //   sx={{ color: "grey.500", height: "80vh" }}
-        //   spacing={2}
-        //   direction="row"
-        //   justifyContent="center"
-        //   alignItems="center"
-        // >
-        //   <CircularProgress color="success" size="5rem" />
-        // </Stack>
+        <Stack
+          sx={{ color: "grey.500", height: "80vh" }}
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="success" size="5rem" />
+        </Stack>
       )}
     </div>
   );

@@ -42,7 +42,7 @@ import { ToWords } from "to-words";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2.5),
   textAlign: "left",
   color: theme.palette.text.secondary,
 }));
@@ -71,11 +71,11 @@ function AddInvoice(props) {
   console.log("CustomerListData", CustomerListData);
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
+  console.log("product=====>", product);
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
-  const [errors, setErrors] = useState(null);
-  const [findErrors, setFindErrors] = useState(null);
-  console.log("errors=========>", errors, findErrors);
+  const [errors, setErrors] = useState({});
+  const [findErrors, setFindErrors] = useState(false);
 
   if (sucessMessage && disabled) {
     setDisabled(false);
@@ -83,7 +83,27 @@ function AddInvoice(props) {
     setCustomerListData(null);
   }
 
+  let totalAmount = 0;
+  let totalweight = 0;
+  let totalrate = 0;
+  product?.forEach((sum, index) => {
+    totalAmount += sum.amount;
+    totalweight += parseFloat(sum.weight);
+    totalrate += parseFloat(sum.rate);
+  });
+  console.log("totalAmount", totalAmount);
+  let SGST = ((1.5 / 100) * totalAmount).toFixed(2);
+  let CGST = ((1.5 / 100) * totalAmount).toFixed(2);
+  console.log("SGST,CGST", parseFloat(SGST), parseFloat(CGST));
+  const Bill_Amount =
+    totalAmount && SGST && CGST
+      ? totalAmount +
+        parseFloat(SGST) +
+        parseFloat(CGST) -
+        (discount ? discount : 0)
+      : 0;
   const handleChangeProduct = (name, value) => {
+    console.log("value========>", value, name);
     let nameIndex = name.split(" ", 2);
     let index = parseInt(nameIndex[1]) - 1;
     console.log("index===?", index, value);
@@ -113,13 +133,19 @@ function AddInvoice(props) {
       setProduct([...product]);
     } else {
       if (existingrate.length > 0 && fieldName === "rate") {
+        console.log("existingrate", existingrate);
         existingrate.forEach((f) => {
           product[index].product_id = product[index]?.product_id;
           product[index].hsn = product[index]?.hsn;
           product[index].weight = product[index]?.weight;
           product[index].rate = value;
+          console.log(
+            "product[index]?.weight && value",
+            product[index]?.weight,
+            value
+          );
           product[index].amount =
-            product[index]?.weight && value
+            value && product[index]?.weight
               ? parseFloat(product[index]?.weight) * parseFloat(value)
               : 0;
         });
@@ -174,26 +200,6 @@ function AddInvoice(props) {
   // const { sx, ...other } = props;
   console.log("productproduct", product);
 
-  let totalAmount = 0;
-  let totalweight = 0;
-  let totalrate = 0;
-  product?.forEach((sum, index) => {
-    totalAmount += sum.amount;
-    totalweight += parseFloat(sum.weight);
-    totalrate += parseFloat(sum.rate);
-  });
-  console.log("totalAmount", totalAmount);
-  let SGST = ((1.5 / 100) * totalAmount).toFixed(2);
-  let CGST = ((1.5 / 100) * totalAmount).toFixed(2);
-  console.log("SGST,CGST", parseFloat(SGST), parseFloat(CGST));
-  const Bill_Amount =
-    totalAmount && SGST && CGST
-      ? totalAmount +
-        parseFloat(SGST) +
-        parseFloat(CGST) -
-        (discount ? discount : 0)
-      : 0;
-
   const handleDelete = (index) => {
     console.log("index====>", index);
     setAddTable((prev) => prev - 1);
@@ -218,18 +224,19 @@ function AddInvoice(props) {
     );
     setCustomerListData(data);
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const finalinvoicedata = {
+    bill_no: testData[0]?.bill_no,
+    invoice_date: convert(new Date()),
+    customer_id: CustomerListData ? CustomerListData.customer_id : "",
+    taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
+    sgst: parseFloat(SGST),
+    cgst: parseFloat(CGST),
+    discount: parseFloat(discount) ? parseFloat(discount) : 0,
+    bill_amount: parseFloat(Bill_Amount.toFixed(2)),
+    productdata: product,
+  };
   const handleAddInvoiceData = () => {
-    const finalinvoicedata = {
-      bill_no: testData[0]?.bill_no,
-      invoice_date: convert(new Date()),
-      customer_id: CustomerListData ? CustomerListData.customer_id : "",
-      taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
-      sgst: parseFloat(SGST),
-      cgst: parseFloat(CGST),
-      discount: parseFloat(discount) ? parseFloat(discount) : 0,
-      bill_amount: parseFloat(Bill_Amount.toFixed(2)),
-      productdata: product,
-    };
     setFindErrors(true);
     setErrors(InvoiceValidate(finalinvoicedata, addtable));
     console.log("finalinvoicedata", finalinvoicedata);
@@ -238,10 +245,19 @@ function AddInvoice(props) {
       setDisabled(true);
     }
   };
-  // useEffect(() => {
-  //   setErrors(InvoiceValidate(CustomerListData, product));
-  //   setErrors(InvoiceValidate(CustomerListData, product));
-  // }, [CustomerListData, findErrors]);
+
+  useEffect(() => {
+    if (findErrors) {
+      setErrors(InvoiceValidate(finalinvoicedata, addtable));
+    }
+  }, [
+    findErrors,
+    CustomerListData.customer_id,
+    product,
+    finalinvoicedata,
+    addtable,
+  ]);
+
   return (
     <div>
       <Container>
@@ -283,7 +299,7 @@ function AddInvoice(props) {
           <Box sx={{ width: "100%", mt: 2 }}>
             <Grid
               container
-              rowSpacing={1}
+              rowSpacing={3}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
               <Grid item xs={6}>
@@ -297,7 +313,6 @@ function AddInvoice(props) {
                         error={errors?.customer_id ? true : null}
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard-01"
-                        //   value={age}
                         onChange={(e) => handleChange(e)}
                         label="Mobile_no*"
                         name="customer_mobileNo"
@@ -315,7 +330,9 @@ function AddInvoice(props) {
                           }
                         )}
                       </Select>
-                      <p style={{ color: "red" }}>{errors?.customer_id}</p>
+                      <p style={{ color: "red", margin: 0 }}>
+                        {errors?.customer_id}
+                      </p>
                       <br />
                       <TextField
                         error={errors?.customer_address ? true : null}
@@ -323,8 +340,6 @@ function AddInvoice(props) {
                         label="Address"
                         variant="standard"
                         multiline
-                        // rows={2}
-                        // maxRows={4}
                         sx={{ width: 1 }}
                         value={
                           CustomerListData?.address === ""
@@ -332,7 +347,9 @@ function AddInvoice(props) {
                             : CustomerListData?.address
                         }
                       />
-                      <p style={{ color: "red" }}>{errors?.customer_address}</p>
+                      <p style={{ color: "red", margin: 0 }}>
+                        {errors?.customer_address}
+                      </p>
                       <br />
                       <TextField
                         id="standard-basic-1"
@@ -340,7 +357,6 @@ function AddInvoice(props) {
                         variant="standard"
                         sx={{ width: 1 }}
                         name="Customer_Gst_No"
-                        onChange={(e) => handleChange(e)}
                       />
                       <br />
 
@@ -354,15 +370,17 @@ function AddInvoice(props) {
                         name="Customer_Name"
                         onChange={(e) => handleChange(e)}
                       />
-                      <p style={{ color: "red" }}>{errors?.customer_name}</p>
+                      <p style={{ color: "red", margin: 0 }}>
+                        {errors?.customer_name}
+                      </p>
                       <br />
                     </FormControl>
                   </Stack>
                 </Item>
               </Grid>
               <Grid item xs={6}>
-                <Item sx={{ pt: 5, pb: 5 }}>
-                  <Stack spacing={2.5}>
+                <Item sx={{ pt: 5.5, pb: 5.5 }}>
+                  <Stack spacing={2}>
                     <TextField
                       id="standard-basic-3"
                       label="Bill_no"
@@ -389,7 +407,7 @@ function AddInvoice(props) {
                       variant="standard"
                       sx={{ width: 1 }}
                       name="Gst_No"
-                      onChange={(e) => handleChange(e)}
+                      // onChange={(e) => handleChange(e)}
                     />
                   </Stack>
                 </Item>
@@ -431,206 +449,211 @@ function AddInvoice(props) {
                         </TableCell>
                       </TableRow>
                     </TableHead>
-                    {Array.from({ length: addtable }, (_, i, ind = i + 1) => (
-                      <TableBody>
-                        <TableRow
-                          // key={row.name}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            sx={{ width: "10px" }}
+                    {Array.from({ length: addtable }, (_, i, ind = i + 1) => {
+                      return (
+                        <TableBody>
+                          <TableRow
+                            // key={row.name}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
                           >
-                            {ind}
-                          </TableCell>
-                          <TableCell>
-                            <FormControl variant="standard" sx={{ width: 240 }}>
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Select Product
-                                {console.log(
-                                  "product[ind - 1]?.product_id",
-                                  product[ind - 1]?.product_id
-                                )}
-                              </InputLabel>
-                              <Select
-                                error={
-                                  !product[ind - 1]?.product_id
-                                    ? errors?.product_id
-                                      ? true
-                                      : null
-                                    : ""
-                                }
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={
-                                  product[ind - 1]?.product_id
-                                    ? product[ind - 1]?.product_id
-                                    : null
-                                }
-                                onChange={(e) =>
-                                  handleChangeProduct(
-                                    "product_id " + ind,
-                                    e.target.value
-                                  )
-                                }
-                                label="Select Product"
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              sx={{ width: "10px" }}
+                            >
+                              {ind}
+                            </TableCell>
+                            <TableCell>
+                              <FormControl
+                                variant="standard"
+                                sx={{ width: 240 }}
                               >
-                                <MenuItem value="">
-                                  <em>None</em>
-                                </MenuItem>
-                                {InvoicePageData?.GetInvoicePagData[0]?.productList?.map(
-                                  (e, index) => {
-                                    return (
-                                      <MenuItem
-                                        value={e.product_id}
-                                        key={index}
-                                      >
-                                        {e.product_name}
-                                      </MenuItem>
-                                    );
+                                <InputLabel id="demo-simple-select-standard-label">
+                                  Select Product
+                                </InputLabel>
+                                <Select
+                                  error={
+                                    !product[ind - 1]?.product_id
+                                      ? errors?.product_id
+                                        ? true
+                                        : null
+                                      : ""
                                   }
-                                )}
-                              </Select>
-                              <p style={{ color: "red" }}>
-                                {!product[ind - 1]?.product_id
-                                  ? errors?.product_id
-                                  : ""}
-                              </p>
-                            </FormControl>
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              id="standard-basic-5"
-                              label="Hsn"
-                              variant="standard"
-                              type="number"
-                              value={
-                                product[ind - 1]?.hsn
-                                  ? product[ind - 1]?.hsn
-                                  : 0
-                              }
-                              sx={{ width: 70 }}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              error={
-                                !product[ind - 1]?.weight
-                                  ? errors?.weight
-                                    ? true
-                                    : null
-                                  : ""
-                              }
-                              id="standard-basic-6"
-                              name={`weight ${ind}`}
-                              label="Weight"
-                              variant="standard"
-                              type="number"
-                              value={product[ind - 1]?.weight}
-                              onChange={(e) =>
-                                handleChangeProduct(
-                                  "weight " + ind,
-                                  parseFloat(e.target.value)
-                                )
-                              }
-                              sx={{ w: 50 }}
-                            />
-                            <p style={{ color: "red" }}>
-                              {!product[ind - 1]?.weight ? errors?.weight : ""}
-                            </p>
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              error={
-                                !product[ind - 1]?.rate
-                                  ? errors?.rate
-                                    ? true
-                                    : null
-                                  : ""
-                              }
-                              id="standard-basic-7"
-                              label="Rate"
-                              variant="standard"
-                              type="number"
-                              name={`rate ${ind}`}
-                              sx={{ width: 100 }}
-                              value={product[ind - 1]?.rate}
-                              onChange={(e) =>
-                                handleChangeProduct(
-                                  "rate " + ind,
-                                  parseFloat(e.target.value)
-                                )
-                              }
-                            />
-                            <p style={{ color: "red" }}>
-                              {!product[ind - 1]?.rate ? errors?.rate : ""}
-                            </p>
-                          </TableCell>
-                          <TableCell colSpan={1}>
-                            {product.length > ind - 1 ? (
-                              <TextField
-                                error={
-                                  !product[ind - 1]?.amount
-                                    ? errors?.amount
-                                      ? true
+                                  labelId="demo-simple-select-standard-label"
+                                  id="demo-simple-select-standard"
+                                  value={
+                                    product[ind - 1]?.product_id
+                                      ? product[ind - 1]?.product_id
                                       : null
-                                    : ""
-                                }
-                                id="standard-basic-8"
-                                label="Amount"
-                                variant="standard"
-                                sx={{ width: 100 }}
-                                value={
-                                  product[ind - 1]?.amount === "NaN"
-                                    ? 0
-                                    : product[ind - 1]?.amount?.toFixed(2)
-                                }
-                              />
-                            ) : (
+                                  }
+                                  onChange={(e) =>
+                                    handleChangeProduct(
+                                      "product_id " + ind,
+                                      e.target.value
+                                    )
+                                  }
+                                  label="Select Product"
+                                >
+                                  <MenuItem value="">
+                                    <em>None</em>
+                                  </MenuItem>
+                                  {InvoicePageData?.GetInvoicePagData[0]?.productList?.map(
+                                    (e, index) => {
+                                      return (
+                                        <MenuItem
+                                          value={e.product_id}
+                                          key={index}
+                                        >
+                                          {e.product_name}
+                                        </MenuItem>
+                                      );
+                                    }
+                                  )}
+                                </Select>
+                                <p style={{ color: "red", margin: 0 }}>
+                                  {!product[ind - 1]?.product_id
+                                    ? errors?.product_id
+                                    : ""}
+                                </p>
+                              </FormControl>
+                            </TableCell>
+                            <TableCell>
                               <TextField
-                                error={
-                                  !product[ind - 1]?.amount
-                                    ? errors?.amount
-                                      ? true
-                                      : null
-                                    : ""
-                                }
-                                id="standard-basic-8"
-                                label="Amount"
+                                id="standard-basic-5"
+                                label="Hsn"
                                 variant="standard"
-                                sx={{ width: 100, p: 0 }}
+                                type="number"
                                 value={
-                                  typeof product[ind - 1]?.amount !==
-                                  "undefined"
-                                    ? (product[ind - 1]?.amount).toFixed(2)
+                                  product[ind - 1]?.hsn
+                                    ? product[ind - 1]?.hsn
                                     : 0
                                 }
+                                sx={{ width: 70 }}
                               />
-                            )}
-                            <p style={{ color: "red" }}>
-                              {!product[ind - 1]?.amount ? errors?.amount : ""}
-                            </p>
-                          </TableCell>
-                          <TableCell>
-                            {i > 0 ? (
-                              <Button
-                                variant="outlined"
-                                color="error"
-                                onClick={() => handleDelete(i)}
-                                sx={{ ml: 2 }}
-                              >
-                                <ClearIcon />
-                              </Button>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    ))}
+                            </TableCell>
+                            <TableCell>
+                              <TextField
+                                error={
+                                  !product[ind - 1]?.weight
+                                    ? errors?.weight
+                                      ? true
+                                      : null
+                                    : ""
+                                }
+                                id="standard-basic-6"
+                                name={`weight ${ind}`}
+                                label="Weight"
+                                variant="standard"
+                                type="number"
+                                value={product[ind - 1]?.weight}
+                                onChange={(e) =>
+                                  handleChangeProduct(
+                                    "weight " + ind,
+                                    parseFloat(e.target.value)
+                                  )
+                                }
+                                sx={{ w: 50 }}
+                              />
+                              <p style={{ color: "red", margin: 0 }}>
+                                {!product[ind - 1]?.weight
+                                  ? errors?.weight
+                                  : ""}
+                              </p>
+                            </TableCell>
+                            <TableCell>
+                              <TextField
+                                error={
+                                  !product[ind - 1]?.rate
+                                    ? errors?.rate
+                                      ? true
+                                      : null
+                                    : ""
+                                }
+                                id="standard-basic-7"
+                                label="Rate"
+                                variant="standard"
+                                type="number"
+                                name={`rate ${ind}`}
+                                sx={{ width: 100 }}
+                                value={product[ind - 1]?.rate}
+                                onChange={(e) =>
+                                  handleChangeProduct(
+                                    "rate " + ind,
+                                    parseFloat(e.target.value)
+                                  )
+                                }
+                              />
+                              <p style={{ color: "red", margin: 0 }}>
+                                {!product[ind - 1]?.rate ? errors?.rate : ""}
+                              </p>
+                            </TableCell>
+                            <TableCell colSpan={1}>
+                              {product.length > ind - 1 ? (
+                                <TextField
+                                  error={
+                                    !product[ind - 1]?.amount
+                                      ? errors?.amount
+                                        ? true
+                                        : null
+                                      : ""
+                                  }
+                                  id="standard-basic-8"
+                                  label="Amount"
+                                  variant="standard"
+                                  sx={{ width: 100 }}
+                                  value={
+                                    product[ind - 1]?.amount === "NaN"
+                                      ? 0
+                                      : product[ind - 1]?.amount?.toFixed(2)
+                                  }
+                                />
+                              ) : (
+                                <TextField
+                                  error={
+                                    !product[ind - 1]?.amount
+                                      ? errors?.amount
+                                        ? true
+                                        : null
+                                      : ""
+                                  }
+                                  id="standard-basic-8"
+                                  label="Amount"
+                                  variant="standard"
+                                  sx={{ width: 100, p: 0 }}
+                                  value={
+                                    typeof product[ind - 1]?.amount !==
+                                    "undefined"
+                                      ? (product[ind - 1]?.amount).toFixed(2)
+                                      : 0
+                                  }
+                                />
+                              )}
+                              <p style={{ color: "red", margin: 0 }}>
+                                {!product[ind - 1]?.amount
+                                  ? errors?.amount
+                                  : ""}
+                              </p>
+                            </TableCell>
+                            <TableCell>
+                              {i > 0 ? (
+                                <Button
+                                  variant="outlined"
+                                  color="error"
+                                  onClick={() => handleDelete(i)}
+                                  sx={{ ml: 2 }}
+                                >
+                                  <ClearIcon />
+                                </Button>
+                              ) : (
+                                ""
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      );
+                    })}
                     <TableFooter>
                       <TableRow>
                         <TableCell colSpan={1} />
@@ -729,7 +752,9 @@ function AddInvoice(props) {
                         <TableRow>
                           <TableCell colSpan={4}>
                             Rs IN WORDS :{" "}
-                            {toWords.convert(Bill_Amount.toFixed(2))}{" "}
+                            {Bill_Amount
+                              ? toWords.convert(Bill_Amount.toFixed(2))
+                              : "Zero"}{" "}
                           </TableCell>
 
                           <TableCell>BILL AMOUNT</TableCell>
@@ -758,7 +783,7 @@ function AddInvoice(props) {
                   <Box
                     component="ul"
                     aria-labelledby="category-a"
-                    sx={{ pl: 2 }}
+                    sx={{ pl: 2, pb: 5 }}
                   >
                     <li>
                       Payment will not be refunded once the bill is generated
@@ -766,15 +791,17 @@ function AddInvoice(props) {
                     <li>No gurantee will be given any 92.5 jewellery</li>
                     <li>Ahmedabad will be jurisdiction for any process</li>
                     <li>Apologies for mistakes</li>
+
                     <Typography
                       sx={{
                         fontWeight: "bold",
                         fontSize: 14,
-                        textAlign: "center",
-                        bottom: 0,
+                        textAlign: "right",
+                        bottom: 3,
                         position: "absolute",
                         left: 0,
                         width: "100%",
+                        padding: "20px  20px 0  0",
                       }}
                     >
                       Customer Signature
@@ -785,7 +812,7 @@ function AddInvoice(props) {
               <Grid item xs={5}>
                 <Item
                   sx={{
-                    height: 150,
+                    height: 200,
                     position: "relative",
                     textAlign: "center",
                   }}
@@ -806,10 +833,11 @@ function AddInvoice(props) {
                       fontWeight: "bold",
                       fontSize: 14,
                       textAlign: "center",
-                      bottom: 0,
+                      bottom: 3,
                       position: "absolute",
                       left: 0,
                       width: "100%",
+                      padding: "20px  0 0  0",
                     }}
                   >
                     Authorised Signatory

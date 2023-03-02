@@ -21,6 +21,7 @@ function EditCompanyInfo() {
 
   const CompanyInfoData = useSelector((state) => state?.CompanyInfo);
   let CompanyInfo = CompanyInfoData?.CompanyInfoId || {};
+  console.log("CompanyInfo=======>", CompanyInfo);
 
   const dispatch = useDispatch();
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
@@ -85,8 +86,7 @@ function EditCompanyInfo() {
                   <TextField
                     required
                     error={errors?.company_name ? true : null}
-                    name="
-                  company_name"
+                    name="company_name"
                     id="outlined-company_name"
                     label="Company Name"
                     autoComplete="off"
@@ -96,6 +96,7 @@ function EditCompanyInfo() {
                   <p style={{ color: "red" }}>{errors?.company_name}</p>
                   <br />
                   <TextField
+                    error={errors?.website ? true : null}
                     id="outlined-Product"
                     label="Website"
                     name="website"
@@ -104,6 +105,7 @@ function EditCompanyInfo() {
                     defaultValue={CompanyInfo?.website}
                     onChange={(e) => handleOnchange(e)}
                   />
+                  <p style={{ color: "red" }}>{errors?.website}</p>
                   <br />
                   <TextField
                     error={errors?.phone_no ? true : null}

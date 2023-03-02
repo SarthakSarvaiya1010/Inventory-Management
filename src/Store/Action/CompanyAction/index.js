@@ -4,6 +4,7 @@ import {
   FAILED_ADMIN_LIST,
   COMPANY_INFO_BY_ID,
   COMPANY_DELETE,
+  FAILED_COMPANY_INFO_EDIT,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -57,6 +58,29 @@ export const CompanyInfoByIdAction = (company_id) => async (dispatch) => {
     });
   }
 };
+// export const CompanyInfoEditAction =
+//   (AccessToken, data, company_id) => async (dispatch) => {
+//     const token = AccessToken;
+//     console.log("CompanyInfoEditAction", data);
+//     try {
+//       const CompanyInfo = await axios.put(
+//         `https://inventory-management-backend.onrender.com/edit/company_info/${company_id}`,
+//         data,
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       );
+//       dispatch({
+//         type: COMPANY_INFO_EDIT,
+//         payload: CompanyInfo.data,
+//       });
+//     } catch (error) {
+//       dispatch({
+//         type: FAILED_COMPANY_INFO_EDIT,
+//         payload: { data: error.response.data },
+//       });
+//     }
+//   };
 
 export const CompanyInfoEditAction = (data, company_id) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
@@ -75,7 +99,7 @@ export const CompanyInfoEditAction = (data, company_id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_COMPANY_INFO_EDIT,
       payload: { data: error.response.data },
     });
   }

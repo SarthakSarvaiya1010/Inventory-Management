@@ -23,7 +23,9 @@ function DeletedCustomerList() {
   const [search, setSearch] = useState();
   const [open, setOpen] = useState(false);
 
-  const CustomerData = useSelector((state) => state?.CustomerEdit);
+  const CustomerData = useSelector((state) => state?.CustomerList);
+
+  console.log("data", CustomerData.customerDeletedList);
   useEffect(() => {
     if (
       CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode === "200"
