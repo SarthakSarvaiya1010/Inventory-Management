@@ -21,15 +21,15 @@ export function CustomerValidate(values, data) {
   let errors = {};
 
   if (!values?.customer_name) {
-    errors.customer_name = " name is required";
+    errors.customer_name = " Customer name is required";
   }
 
   if (!values?.mobile_no) {
-    errors.mobile_no = "product type is required";
+    errors.mobile_no = "Mobile No is required";
   }
 
   if (!values?.address) {
-    errors.address = "HSN is required";
+    errors.address = "Adress is  required";
   }
 
   return errors;

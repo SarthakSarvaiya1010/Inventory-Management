@@ -107,31 +107,31 @@ function CompanyList() {
         }
         return "done";
       case "Company Name":
-        if (shorting === "company_name") {
-          setShorting(null);
+        if (shorting === "ASC/company_name") {
+          setShorting("DESC/company_name");
         } else {
-          setShorting("company_name");
+          setShorting("ASC/company_name");
         }
         return "done";
       case "Website":
-        if (shorting === "website") {
-          setShorting(null);
+        if (shorting === "ASC/website") {
+          setShorting("DESC/website");
         } else {
-          setShorting("website");
+          setShorting("ASC/website");
         }
         return "done";
       case "Mobile no.":
-        if (shorting === "mobile_no") {
-          setShorting(null);
+        if (shorting === "ASC/mobile_no") {
+          setShorting("DESC/mobile_no");
         } else {
-          setShorting("mobile_no");
+          setShorting("ASC/mobile_no");
         }
         return "done";
       case "Tin GST no":
-        if (shorting === "tin_gst_no") {
-          setShorting(null);
+        if (shorting === "ASC/tin_gst_no") {
+          setShorting("DESC/tin_gst_no");
         } else {
-          setShorting("tin_gst_no");
+          setShorting("ASC/tin_gst_no");
         }
         return "done";
       default:

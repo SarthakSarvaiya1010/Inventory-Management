@@ -5,7 +5,9 @@ import {
   CUSTOMER_DELETED_LIST,
   CUSTOMER_DELETE,
   CUSTOMER_EDIT_DATA,
+  FAILED_EDIT_CUSTOMERDATA,
   CUSTOMER_ADD,
+  FAILED_ADD_CUSTOMER,
   PERMANENT_CUSTOMER_DELETE,
   FAILED_PERMANENT_CUSTOMER_DELETE,
   LIST_LOADER,
@@ -61,7 +63,7 @@ export const CustomerAddAction = (AccessToken, data) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_ADD_CUSTOMER,
       payload: { data: error.response.data },
     });
   }
@@ -134,7 +136,7 @@ export const CustomerEditDataAction =
       });
     } catch (error) {
       dispatch({
-        type: FAILED_ADMIN_LIST,
+        type: FAILED_EDIT_CUSTOMERDATA,
         payload: { data: error.response.data },
       });
     }

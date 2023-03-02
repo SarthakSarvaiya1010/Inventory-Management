@@ -1,10 +1,12 @@
 import {
   TAX_LIST,
   TAX_ADD,
+  FAILED_TAX_ADD,
   TAX_EDIT,
   TAX_DELETED_LIST,
   TAX_DELETE,
   TAX_INFO_EDIT,
+  FAILED_TAX_INFO_EDIT,
   PERMANENT_TAX_DELETE,
   LIST_LOADER,
 } from "../../ActionTypes";
@@ -12,13 +14,12 @@ import {
 const initialstate = {
   TaxList: [],
   TaxEdit: [],
-  TaxAddSuccessData: [],
-  TaxEditSucessData: [],
   TaxDeletList: [],
-  TaxDeleteSuccessData: [],
   DeletedTaxLoader: false,
-  PermanentTaxDeleteData: [],
   loder: false,
+  ErrorMessage: [],
+  SucessMessage: [],
+  SuccessDeleteTaxMessage: [],
 };
 
 const TaxReducer = (state = initialstate, action) => {
@@ -33,15 +34,23 @@ const TaxReducer = (state = initialstate, action) => {
       return {
         ...state,
         TaxList: action.payload,
-        TaxEditSucessData: [],
-        TaxAddSuccessData: [],
+        TaxEdit: [],
+        SucessMessage: [],
+        ErrorMessage: [],
+        SuccessDeleteTaxMessage: [],
         loder: false,
       };
     case TAX_ADD:
       return {
         ...state,
-        TaxAddSuccessData: action.payload,
+        SucessMessage: action.payload,
       };
+    case FAILED_TAX_ADD: {
+      return {
+        ...state,
+        ErrorMessage: action.payload,
+      };
+    }
     case TAX_EDIT:
       return {
         ...state,
@@ -57,17 +66,22 @@ const TaxReducer = (state = initialstate, action) => {
     case TAX_DELETE:
       return {
         ...state,
-        TaxDeleteSuccessData: action.payload,
+        SuccessDeleteTaxMessage: action.payload,
       };
     case TAX_INFO_EDIT:
       return {
         ...state,
-        TaxEditSucessData: action.payload,
+        SucessMessage: action.payload,
+      };
+    case FAILED_TAX_INFO_EDIT:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
       };
     case PERMANENT_TAX_DELETE:
       return {
         ...state,
-        PermanentTaxDeleteData: action.payload,
+        SuccessDeleteTaxMessage: action.payload,
       };
     default:
       return state;

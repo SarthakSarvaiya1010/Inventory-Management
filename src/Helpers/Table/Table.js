@@ -55,6 +55,7 @@ export default function CustomizedTables(props) {
               },
             }}
           >
+            {console.log("ShortingHide", ShortingHide)}
             {column?.map((data) => (
               <StyledTableCell align="center">
                 {data}
@@ -64,6 +65,17 @@ export default function CustomizedTables(props) {
                       marginBottom: "-3px",
                       marginLeft: "10px",
                       transform: "rotate(180deg)",
+                    }}
+                    fontSize="small"
+                    onClick={() => {
+                      headalShorting(data);
+                    }}
+                  />
+                ) : ShortingHide === `D ${data}` ? (
+                  <FilterListIcon
+                    sx={{
+                      marginBottom: "-3px",
+                      marginLeft: "10px",
                     }}
                     fontSize="small"
                     onClick={() => {

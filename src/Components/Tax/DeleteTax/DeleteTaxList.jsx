@@ -23,6 +23,7 @@ function DeletedTaxList() {
   console.log("successLoginData", TaxData);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
+
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(

@@ -1,31 +1,53 @@
 import React, { useEffect } from "react";
 import TaxList from "../Components/Tax/TaxList/TaxList";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function TaxListPage() {
   const TaxData = useSelector((state) => state?.TaxData);
-  const showToastMessage = (data) => {
-    toast.success(data, {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 2000,
-    });
+  const navigate = useNavigate();
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  const handleClose = () => {
+    setState({ ...state, open: false });
   };
+
   useEffect(() => {
-    if (TaxData?.TaxDeleteSuccessData?.statusCode === "200") {
-      showToastMessage(TaxData?.TaxDeleteSuccessData?.message);
+    if (TaxData?.SuccessDeleteTaxMessage?.statusCode === "200") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
+        navigate("/tax_list");
         window.location.reload();
       }, 2000);
     }
   }, [
-    TaxData?.TaxDeleteSuccessData?.message,
-    TaxData?.TaxDeleteSuccessData?.statusCode,
+    TaxData?.SuccessDeleteTaxMessage?.message,
+    TaxData?.SuccessDeleteTaxMessage?.statusCode,
+    navigate
   ]);
   return (
     <div>
-      <ToastContainer />
+      <Snackbar
+        autoHideDuration={2000}
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          {TaxData?.SuccessDeleteTaxMessage?.message}
+        </Alert>
+      </Snackbar>
       <TaxList />
     </div>
   );

@@ -1,4 +1,5 @@
 export default function InvoiceValidate(values, addtable) {
+  console.log("values======>", values, addtable);
   let errors = {};
   if (!values?.bill_no) {
     errors.bill_no = "bill_no is required";
@@ -15,15 +16,36 @@ export default function InvoiceValidate(values, addtable) {
   if (!values?.productdata[addtable - 1]?.product_id) {
     errors.product_id = "Please Select Product ";
   }
-  if (!values?.productdata[addtable - 1]?.weight) {
+  if (
+    !values?.productdata[addtable - 1]?.weight ||
+    values?.productdata[addtable - 1]?.weight == "NaN"
+  ) {
     errors.weight = "weight is required ";
   }
-  if (!values?.productdata[addtable - 1]?.rate) {
+  if (
+    !values?.productdata[addtable - 1]?.rate ||
+    values?.productdata[addtable - 1]?.rate == "NaN"
+  ) {
     errors.rate = "rate is required ";
   }
-  if (!values?.productdata[addtable - 1]?.amount) {
+  if (
+    !values?.productdata[addtable - 1]?.amount ||
+    values?.productdata[addtable - 1]?.amount == "NaN"
+  ) {
     errors.amount = "amount is required ";
   }
+
+  values?.productdata?.map((data, index) => {
+    if (values?.productdata[index]?.weight) {
+      errors.weight = "weight is required ";
+    }
+    if (!values?.productdata[index]?.product_id) {
+      errors.product_id = "Please Select Product ";
+    }
+    if (!values?.productdata[index]?.rate) {
+      errors.rate = "rate is required ";
+    }
+  });
 
   return errors;
 }

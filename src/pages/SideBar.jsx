@@ -35,10 +35,13 @@ function SideBar(props) {
   const { openManu, setOpenManu } = props;
 
   const theme = useTheme();
-  const [Item, setItem] = useState("Product");
+  const [Item, setItem] = useState(
+    localStorage?.getItem("ItemName") || "Product"
+  );
 
   const headalClick = (text) => {
     setItem(text);
+    localStorage.setItem("ItemName", text);
     switch (text) {
       case "Product":
         return navigate("productlist");
@@ -54,7 +57,6 @@ function SideBar(props) {
         return navigate("customer_list");
       case "Company Info":
         return navigate("company_info");
-
       default:
         return "done";
     }

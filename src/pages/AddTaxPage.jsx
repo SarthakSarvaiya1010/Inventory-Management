@@ -1,38 +1,61 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import AddTax from "../Components/Tax/AddTax/AddTax";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddTaxPage() {
   const TaxData = useSelector((state) => state?.TaxData);
   console.log("TaxData=======>", TaxData);
-  const showToastMessage = (data) => {
-    toast.success(data, {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 2000,
-    });
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  const handleClose = () => {
+    setState({ ...state, open: false });
   };
+
   useEffect(() => {
-    if (TaxData?.TaxAddSuccessData?.statusCode === "200") {
-      showToastMessage(TaxData?.TaxAddSuccessData?.message);
+    if (TaxData?.SucessMessage?.statusCode === "200") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [
-    TaxData?.TaxAddSuccessData?.message,
-    TaxData?.TaxAddSuccessData?.statusCode,
-  ]);
+  }, [TaxData?.SucessMessage?.message, TaxData?.SucessMessage?.statusCode]);
+
   useEffect(() => {
-    if (TaxData?.TaxEditSucessData?.statusCode === "200") {
-      showToastMessage(TaxData?.TaxEditSucessData?.message);
+    if (TaxData?.ErrorMessage?.data?.statusCode === 400) {
+      setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [
-    TaxData?.TaxEditSucessData?.message,
-    TaxData?.TaxEditSucessData?.statusCode,
-  ]);
+  }, [TaxData?.ErrorMessage?.data?.statusCode]);
   return (
     <div>
       {" "}
-      <ToastContainer />
+      <Snackbar
+        autoHideDuration={6000}
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        {TaxData?.SucessMessage?.message ? (
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {TaxData?.SucessMessage?.message}
+          </Alert>
+        ) : (
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {TaxData?.ErrorMessage?.data?.message}
+          </Alert>
+        )}
+      </Snackbar>
       <AddTax />
     </div>
   );

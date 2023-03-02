@@ -20,62 +20,33 @@ import { UserAddAction } from "../../Store/Action/UserAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const useForm = (defaultData, image) => {
+  console.log("defaultData", defaultData);
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
-  console.log("values==>", values);
   console.log("errors======>", errors);
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  console.log("findError", findErrors, "errors", errors);
   useEffect(() => {
-    if (defaultData?.length && Object.keys(defaultData).length) {
+    if (defaultData?.length || Object.keys(defaultData)?.length) {
       setvalues(defaultData);
     }
   }, [defaultData]);
+  console.log("values==>", values);
+
   const producthandleSubmit = () => {
     setFindErrors("ProductError");
     setErrors(ProductValidate(values, defaultData));
-    const data = {};
     const formAddUserData = new FormData();
-    setFindErrors("ProductValidate");
-    setErrors(ProductValidate(values, defaultData));
-    formAddUserData.append(
-      "product_name",
-      values?.product_name || defaultData?.product_name
-    );
-    formAddUserData.append(
-      "product_type",
-      values?.product_type || defaultData?.product_type
-    );
-    formAddUserData.append(
-      "description",
-      values?.Description || defaultData?.description
-    );
-    formAddUserData.append("hsn", values?.hsn || defaultData?.hsn);
-    formAddUserData.append("weight", values?.weight || defaultData?.weight);
-    formAddUserData.append("image_src", image);
-    data["product_name"] = values?.product_name || defaultData?.product_name;
-    data["product_type"] = values?.product_type
-      ? values?.product_type
-      : "Tax" || defaultData?.product_type;
-    data["description"] = values?.Description || defaultData?.description;
-    data["hsn"] = parseFloat(parseInt(values?.hsn) || defaultData?.hsn);
-    data["weight"] = parseFloat(
-      parseFloat(values.weight) || defaultData?.weight
-    );
-    data["image_src"] = image;
-    if (
-      !errors?.product_name &&
-      !errors?.product_type &&
-      !errors?.hsn &&
-      !errors?.weight
-    ) {
-      console.log("correct");
+    formAddUserData.append("product_name", values?.product_name);
+    formAddUserData.append("product_type", values?.product_type);
+    formAddUserData.append("description", values?.description);
+    formAddUserData.append("hsn", values?.hsn);
+    formAddUserData.append("weight", values?.weight);
+    formAddUserData.append("image_src", image ? image : null);
+    if (Object.keys(errors).length === 0) {
       if (defaultData?.product_id) {
-        console.log("done======>");
-        alert("done");
         dispatch(
           ProductEditDataAction(
             successLoginData?.LoginData?.accessToken ||
@@ -85,7 +56,6 @@ const useForm = (defaultData, image) => {
           )
         );
       } else {
-        alert("product Add");
         dispatch(
           ProductAddAction(
             successLoginData?.LoginData?.accessToken ||
@@ -98,36 +68,18 @@ const useForm = (defaultData, image) => {
   };
 
   const companyhandleSubmit = () => {
-    setFindErrors(true);
+    setFindErrors("CompanyError");
     setErrors(CompanyValidate(values));
     const formAddUserData = new FormData();
-    formAddUserData.append(
-      "company_address",
-      values?.company_address || defaultData?.company_address
-    );
-    formAddUserData.append(
-      "company_name",
-      values?.company_name || defaultData?.company_name
-    );
+    formAddUserData.append("company_address", values?.company_address);
+    formAddUserData.append("company_name", values?.company_name);
     formAddUserData.append("image_src", image);
-    formAddUserData.append(
-      "mobile_no",
-      values?.mobile_no || defaultData?.mobile_no
-    );
-    formAddUserData.append(
-      "phone_no",
-      values?.phone_no || defaultData?.phone_no
-    );
-    formAddUserData.append(
-      "terms_condition",
-      values?.terms_condition || defaultData?.terms_condition
-    );
-    formAddUserData.append("fax_no", values?.fax_no || defaultData?.fax_no);
-    formAddUserData.append(
-      "tin_gst_no",
-      values?.tin_gst_no || defaultData?.tin_gst_no
-    );
-    formAddUserData.append("website", values?.website || defaultData?.website);
+    formAddUserData.append("mobile_no", values?.mobile_no);
+    formAddUserData.append("phone_no", values?.phone_no);
+    formAddUserData.append("terms_condition", values?.terms_condition);
+    formAddUserData.append("fax_no", values?.fax_no);
+    formAddUserData.append("tin_gst_no", values?.tin_gst_no);
+    formAddUserData.append("website", values?.website);
 
     if (Object.keys(errors).length === 0) {
       dispatch(
@@ -144,12 +96,12 @@ const useForm = (defaultData, image) => {
     setFindErrors("CustomerError");
     setErrors(CustomerValidate(values, defaultData));
     const data = {};
-    data["customer_name"] = values?.customer_name || defaultData?.customer_name;
-    data["mobile_no"] = values?.mobile_no || defaultData?.mobile_no;
-    data["email"] = values?.email || defaultData?.email;
-    data["address"] = values?.address || defaultData?.address;
-    data["tin_no"] = values.tin_no || defaultData?.tin_no;
-    if (!errors?.customer_name && !errors?.mobile_no && !errors.address) {
+    data["customer_name"] = values?.customer_name;
+    data["mobile_no"] = values?.mobile_no;
+    data["email"] = values?.email;
+    data["address"] = values?.address;
+    data["tin_no"] = values.tin_no;
+    if (Object.keys(errors).length === 0) {
       if (defaultData?.customer_id) {
         dispatch(
           CustomerEditDataAction(
@@ -175,14 +127,14 @@ const useForm = (defaultData, image) => {
     setFindErrors("TaxError");
     setErrors(TaxValidate(values, defaultData));
     const data = {};
-    data["tax_name"] = values?.tax_name || defaultData?.tax_name;
-    data["tax_rate"] = parseFloat(values?.tax_rate) || defaultData?.tax_rate;
-    data["tax_country"] = values?.tax_country || defaultData?.tax_country;
+    data["tax_name"] = values?.tax_name;
+    data["tax_rate"] = parseFloat(values?.tax_rate);
+    data["tax_country"] = values?.tax_country;
     data["isactive"] = values?.isactive
       ? values?.isactive
-      : "NO" || defaultData?.isactive;
+      : defaultData?.isactive || "NO";
     console.log("data", data);
-    if (!errors?.tax_name && !errors?.tax_rate && !errors?.tax_country) {
+    if (Object.keys(errors).length === 0) {
       if (defaultData?.tax_id) {
         dispatch(
           TaxInfoEditAction(
@@ -217,9 +169,8 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("company_id", values?.company_id);
     formAddUserData.append("image_src", image);
 
-    if (!Object.keys(errors).length && findErrors) {
+    if (Object.keys(errors).length === 0) {
       if (defaultData.length > 0) {
-        console.log("edit tax");
         dispatch(
           UserAddAction(
             successLoginData?.LoginData?.accessToken ||
@@ -240,6 +191,7 @@ const useForm = (defaultData, image) => {
     }
   };
   useEffect(() => {
+    console.log("findErrors", findErrors);
     if (findErrors === "ProductError") {
       setErrors(ProductValidate(values, defaultData));
     }
@@ -249,59 +201,15 @@ const useForm = (defaultData, image) => {
     if (findErrors === "TaxError") {
       setErrors(TaxValidate(values, defaultData));
     }
-    // if (Object.keys(errors).length && findErrors) {
-    //   alert("done");
-    //   setFindErrors(false);
-    // }
-  }, [defaultData, findErrors, values]);
-
-  useEffect(() => {
-    if (errors) {
-      if (Object.keys(errors).length) {
-        setFindErrors("UserValidate");
-      }
-      if (!Object.keys(errors).length && findErrors === "UserValidate") {
-        if (defaultData?.product_id) {
-          // dispatch(
-          //   ProductEditDataAction(
-          //     successLoginData?.LoginData?.accessToken ||
-          //       accessToken?.accessToken,
-          //     formAddUserData,
-          //     parseInt(defaultData.product_id)
-          //   )
-          // );
-          if (test) {
-            alert("Product Edit in useEffect");
-          }
-          alert("Product Edit");
-          setFindErrors(false);
-        } else {
-          // dispatch(
-          //   ProductAddAction(
-          //     successLoginData?.LoginData?.accessToken ||
-          //       accessToken?.accessToken,
-          //     formAddUserData
-          //   )
-          // );
-
-          setFindErrors(false);
-          if (test) {
-            alert("Product ADD in useEffect");
-          }
-        }
-      }
+    if (findErrors === "CompanyError") {
+      setErrors(CompanyValidate(values));
     }
-  }, [defaultData, errors, findErrors, values]);
+  }, [defaultData, findErrors, values]);
 
   const handleOnchange = useCallback(
     (e) =>
       setvalues((values) => {
-        console.log("values===========>", values);
         const newValues = { ...values, [e.target.name]: e.target.value };
-        console.log("newValues===>", newValues);
-        setErrors(ProductValidate(newValues));
-        // setErrors(CustomerValidate(newValues));
-        // setErrors(TaxValidate(newValues));
         return newValues;
       }),
     []

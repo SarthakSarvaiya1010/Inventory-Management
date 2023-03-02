@@ -60,7 +60,6 @@ function AddProduct() {
   console.log("values", values);
 
   const handleCancle = () => {
-    console.log("done");
     navigate("/productlist");
   };
 
@@ -121,7 +120,7 @@ function AddProduct() {
                   <TextField
                     id="outlined-Product"
                     label="Description"
-                    name="Description"
+                    name="description"
                     autoComplete="off"
                     type="textarea"
                     defaultValue={id ? Product_data.description : ""}

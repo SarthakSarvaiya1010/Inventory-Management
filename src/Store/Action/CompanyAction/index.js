@@ -4,6 +4,7 @@ import {
   FAILED_ADMIN_LIST,
   COMPANY_INFO_BY_ID,
   COMPANY_DELETE,
+  FAILED_COMPANY_INFO_EDIT
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -75,7 +76,7 @@ export const CompanyInfoEditAction =
       });
     } catch (error) {
       dispatch({
-        type: FAILED_ADMIN_LIST,
+        type: FAILED_COMPANY_INFO_EDIT,
         payload: { data: error.response.data },
       });
     }

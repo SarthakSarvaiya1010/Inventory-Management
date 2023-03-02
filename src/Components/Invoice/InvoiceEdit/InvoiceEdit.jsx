@@ -68,7 +68,7 @@ function InvoiceEdit(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState(null);
-  console.log("errors", errors);
+  console.log("errors", errors, "product", product);
   const [findErrors, setFindErrors] = useState(null);
   if (EditInvoiceSucessMessage && disabled) {
     setDisabled(false);
@@ -163,7 +163,7 @@ function InvoiceEdit(props) {
           product[index].weight = product[index]?.weight;
           product[index].rate = value;
           product[index].amount =
-            product[0]?.weight && value
+            product[index]?.weight && value
               ? parseFloat(product[index]?.weight) * parseFloat(value)
               : 0;
         });
@@ -230,7 +230,7 @@ function InvoiceEdit(props) {
     bill_amount: Bill_Amount
       ? parseFloat(Bill_Amount.toFixed(2))
       : testData?.bill_amount,
-    productdata: product ? product : testData?.productlistdata,
+    productdata: product,
   };
 
   // Handle Update Data
@@ -239,7 +239,10 @@ function InvoiceEdit(props) {
     setFindErrors(true);
     setErrors(InvoiceValidate(UpdatedData, addtable));
     window.scroll(0, 0);
-    if (Object.keys(errors).length === 0) {
+    if (
+      Object.keys(errors).length === 0 ||
+      (UpdatedData?.customer_id && UpdatedData?.productdata?.length > 0)
+    ) {
       console.log("UpdatedData", UpdatedData);
       dispatch(
         UpdateInvoiceData(accessToken?.accessToken, invoice_id, UpdatedData)
@@ -706,11 +709,7 @@ function InvoiceEdit(props) {
                               id="standard-basic-02"
                               label="Total Amount"
                               variant="standard"
-                              value={
-                                totalAmount
-                                  ? totalAmount?.toFixed(2)
-                                  : testData?.taxable_amount
-                              }
+                              value={totalAmount ? totalAmount?.toFixed(2) : 0}
                             />
                           </TableCell>
                         </TableRow>
@@ -731,9 +730,7 @@ function InvoiceEdit(props) {
                                     label="TaxableAmount"
                                     variant="standard"
                                     value={
-                                      totalAmount
-                                        ? totalAmount?.toFixed(2)
-                                        : testData?.taxable_amount
+                                      totalAmount ? totalAmount?.toFixed(2) : 0
                                     }
                                   />
                                 </TableCell>
@@ -746,8 +743,8 @@ function InvoiceEdit(props) {
                                     id="standard-basic-03"
                                     label="SGST"
                                     variant="standard"
-                                    defaultValue={testData?.sgst}
-                                    value={SGST}
+                                    // defaultValue={testData?.sgst}
+                                    value={SGST ? SGST : 0}
                                   />
                                 </TableCell>
                               </TableRow>
@@ -759,8 +756,8 @@ function InvoiceEdit(props) {
                                     id="standard-basic-04"
                                     label="CGST"
                                     variant="standard"
-                                    defaultValue={testData?.cgst}
-                                    value={CGST}
+                                    // defaultValue={testData?.cgst}
+                                    value={CGST ? CGST : 0}
                                   />
                                 </TableCell>
                               </TableRow>
@@ -783,7 +780,9 @@ function InvoiceEdit(props) {
                               <TableRow>
                                 <TableCell colSpan={4}>
                                   Rs IN WORDS :{" "}
-                                  {toWords.convert(Bill_Amount.toFixed(2))}{" "}
+                                  {Bill_Amount
+                                    ? toWords?.convert(Bill_Amount?.toFixed(2))
+                                    : "Zero"}{" "}
                                 </TableCell>
                                 <TableCell>BILL AMOUNT</TableCell>
                                 <TableCell>
@@ -791,11 +790,9 @@ function InvoiceEdit(props) {
                                     id="standard-basic-06"
                                     label="Bill Amount"
                                     variant="standard"
-                                    defaultValue={testData?.bill_amount}
+                                    // defaultValue={testData?.bill_amount}
                                     value={
-                                      Bill_Amount
-                                        ? Bill_Amount?.toFixed(2)
-                                        : testData?.bill_amount
+                                      Bill_Amount ? Bill_Amount?.toFixed(2) : 0
                                     }
                                   />
                                 </TableCell>

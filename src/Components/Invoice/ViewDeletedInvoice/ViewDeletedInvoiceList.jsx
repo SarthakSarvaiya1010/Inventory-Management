@@ -10,6 +10,12 @@ import {
 } from "../../../Store/Action/InvoiceAction/index";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { convert } from "../../../Helpers/misc";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function ViewDeletedInvoiceList() {
   const navigate = useNavigate();
@@ -22,8 +28,12 @@ export default function ViewDeletedInvoiceList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("BILL No");
   const [search, setSearch] = useState();
-  console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
 
   // eslint-disable-next-line array-callback-return
   DeletedInvoiceList?.DeletedInvoiceList?.map((e) => {
@@ -34,13 +44,21 @@ export default function ViewDeletedInvoiceList() {
     elements["Total Amount"] = e.bill_amount;
     data.push(elements);
   });
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+  console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   useEffect(() => {
-    if (DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode === "200") {
-      alert("sucessfully deleted");
+    if (
+      DeletedInvoiceList?.SucessMessageOfInvoiceDelete?.statusCode === "200"
+    ) {
+      setState({ open: true, vertical: "top", horizontal: "center" });
       window.location.reload();
     }
-  }, [DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode]);
+  }, [DeletedInvoiceList?.SucessMessageOfInvoiceDelete?.statusCode]);
+
   useEffect(() => {
     if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
       dispatch(
@@ -97,24 +115,24 @@ export default function ViewDeletedInvoiceList() {
         }
         return "done";
       case "Invoice Date":
-        if (shorting === "invoice_date") {
-          setShorting(null);
+        if (shorting === "ASC/invoice_date") {
+          setShorting("DESC/invoice_date");
         } else {
-          setShorting("invoice_date");
+          setShorting("ASC/invoice_date");
         }
         return "done";
       case "Name":
-        if (shorting === "customer_name") {
-          setShorting(null);
+        if (shorting === "ASC/customer_name") {
+          setShorting("DESC/customer_name");
         } else {
-          setShorting("customer_name");
+          setShorting("ASC/customer_name");
         }
         return "done";
       case "Total Amount":
-        if (shorting === "bill_amount") {
-          setShorting(null);
+        if (shorting === "ASC/bill_amount") {
+          setShorting("DESC/bill_amount");
         } else {
-          setShorting("bill_amount");
+          setShorting("ASC/bill_amount");
         }
         return "done";
       default:
@@ -182,6 +200,20 @@ export default function ViewDeletedInvoiceList() {
                 headalShorting={headalShorting}
                 ShortingHide={shortingIcon}
               />
+              <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                open={open}
+                onClose={handleClose}
+                key={vertical + horizontal}
+              >
+                <Alert
+                  onClose={handleClose}
+                  severity="success"
+                  sx={{ width: "100%" }}
+                >
+                  {DeletedInvoiceList?.SucessMessageOfInvoiceDelete?.message}
+                </Alert>
+              </Snackbar>
               <Stack
                 sx={{
                   margin: "10px",
