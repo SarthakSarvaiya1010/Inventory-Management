@@ -12,30 +12,18 @@ import {
 } from "../../../Store/Action/TaxAction/index";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import CircularProgress from "@mui/material/CircularProgress";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function DeletedTaxList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = [];
-
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const TaxData = useSelector((state) => state?.TaxData);
-  console.log("successLoginData", TaxData);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-      dispatch(
-        TaxDelectListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-        )
-      );
-    }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+    dispatch(TaxDelectListAction());
+  }, [dispatch]);
 
   const headalEdit = (data) => {
     console.log("data", data, TaxData?.productDeletList[data - 1]);
@@ -58,19 +46,8 @@ function DeletedTaxList() {
   const [pageNumber, setPageNumber] = useState();
 
   useEffect(() => {
-    dispatch(
-      TaxDelectListAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber }
-      )
-    );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+    dispatch(TaxDelectListAction({ limit: limit, pageNumber: pageNumber }));
+  }, [dispatch, limit, pageNumber]);
 
   const searchHeadal = (e) => {
     setSearch(e.target.value);
@@ -78,26 +55,28 @@ function DeletedTaxList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        TaxDelectListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
-      );
-    }
-  };
-  const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this Tax?")) {
-      dispatch(
-        PermanentTaxDeleteAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          TaxData?.TaxDeletList[data - 1]?.tax_id
-        )
+        TaxDelectListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
 
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(PermanentTaxDeleteAction(TaxData?.TaxDeletList[data - 1]?.tax_id));
+  };
+
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this Tax?"}
+        finalDelete={finalDelete}
+      />
       {TaxData?.DeletedTaxLoader ? (
         TaxData?.TaxDeletList?.length ? (
           <Container fixed>
@@ -139,7 +118,7 @@ function DeletedTaxList() {
               </Stack>
               <Table
                 data={data}
-                headalDelete={headalDelete}
+                headalDelete={setOpen}
                 headalEdit={headalEdit}
                 hide={true}
               />

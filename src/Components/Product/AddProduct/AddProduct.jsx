@@ -30,7 +30,6 @@ function AddProduct() {
   const dispatch = useDispatch();
   const params = useParams();
   const ProductEditData = useSelector((state) => state?.ProductList);
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
   console.log("ProductEditData", ProductEditData);
   const imageUploader = React.useRef(null);
@@ -38,9 +37,7 @@ function AddProduct() {
   const [image, setImage] = React.useState(null);
 
   const Product_data = ProductEditData?.productEdit;
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  const accessTokenData =
-    successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
+
   //  useEffect(() => {
   // if (Product_data?.image_src) {
   //   setImage(Product_data?.image_src)
@@ -48,9 +45,9 @@ function AddProduct() {
   //  },[image])
   useEffect(() => {
     if (id) {
-      dispatch(ProductEditAction(accessTokenData, id));
+      dispatch(ProductEditAction(id));
     }
-  }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
+  }, [dispatch, id]);
 
   const { producthandleSubmit, values, errors, handleOnchange } = useForm(
     Product_data,
@@ -121,7 +118,7 @@ function AddProduct() {
                   <TextField
                     id="outlined-Product"
                     label="Description"
-                    name="Description"
+                    name="description"
                     autoComplete="off"
                     type="textarea"
                     defaultValue={id ? Product_data.description : ""}

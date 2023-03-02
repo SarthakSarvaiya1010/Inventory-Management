@@ -17,7 +17,7 @@ import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 function ProductList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductList);
@@ -38,10 +38,11 @@ function ProductList() {
 
   useEffect(() => {
     dispatch(
-      ProductListAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      ProductListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
   }, [
     accessToken?.accessToken,
@@ -75,10 +76,7 @@ function ProductList() {
   const finalDelete = () => {
     setOpen(false);
     dispatch(
-      ProductDeleteAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        productData.productList[open - 1]?.product_id
-      )
+      ProductDeleteAction(productData.productList[open - 1]?.product_id)
     );
   };
 
@@ -88,10 +86,11 @@ function ProductList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        ProductListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        ProductListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
@@ -145,7 +144,6 @@ function ProductList() {
         DialogText={"Are you sure you want to Delete this Product?"}
         finalDelete={finalDelete}
       />
-
       {products?.length ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header

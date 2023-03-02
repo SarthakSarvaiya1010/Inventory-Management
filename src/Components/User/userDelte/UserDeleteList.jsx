@@ -14,7 +14,6 @@ function UserDeleteList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const User = useSelector((state) => state?.User);
   let limit = 2;
   const [search, setSearch] = useState();
@@ -23,24 +22,15 @@ function UserDeleteList() {
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
 
-  console.log("User", User, "test");
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
   useEffect(() => {
     dispatch(
-      userDelteListAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      userDelteListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
 
   // eslint-disable-next-line array-callback-return
   User.UserDeleteList.map((e) => {
@@ -58,12 +48,7 @@ function UserDeleteList() {
 
   const headalDelete = (data) => {
     if (window.confirm("Are you sure you want to Delete this Product?")) {
-      dispatch(
-        userDelteListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          User.UserDeleteList[data - 1]?.product_id
-        )
-      );
+      dispatch(userDelteListAction(User.UserDeleteList[data - 1]?.product_id));
     }
     // window.location.reload();
   };
@@ -74,10 +59,11 @@ function UserDeleteList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        userDelteListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        userDelteListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };

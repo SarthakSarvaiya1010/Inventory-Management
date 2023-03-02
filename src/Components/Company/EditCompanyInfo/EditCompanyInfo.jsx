@@ -14,7 +14,7 @@ import Header from "../../../Helpers/Header/Header";
 import { CompanyInfoByIdAction } from "../../../Store/Action/CompanyAction/index";
 import { useParams } from "react-router";
 import AddIcon from "@mui/icons-material/Add";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 function EditCompanyInfo() {
   const params = useParams();
@@ -22,34 +22,26 @@ function EditCompanyInfo() {
   const CompanyInfoData = useSelector((state) => state?.CompanyInfo);
   let CompanyInfo = CompanyInfoData?.CompanyInfoId || {};
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const dispatch = useDispatch();
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  const accessTokenData =
-    successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
+
   const { id } = params;
   let company_id = parseInt(
     localStorage?.getItem("CompanyId") || accessToken?.company_id
   );
   useEffect(() => {
-    dispatch(CompanyInfoByIdAction(accessTokenData, company_id));
+    dispatch(CompanyInfoByIdAction(company_id));
     if (id) {
       localStorage.setItem("CompanyId", id);
     }
-  }, [accessTokenData, company_id, dispatch, id]);
+  }, [company_id, dispatch, id]);
 
   const imageUploader = React.useRef(null);
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
 
-  const showToastMessage = () => {
-    toast.success("Data Updata  Success  !", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  };
   const { companyhandleSubmit, values, errors, handleOnchange } = UseForm(
     CompanyInfo,
-    showToastMessage,
     image
   );
   console.log("errors", errors, CompanyInfo);
@@ -152,6 +144,7 @@ function EditCompanyInfo() {
                     autoComplete="off"
                   />
                   <p style={{ color: "red" }}>{errors?.company_address}</p>
+                  <br />
                   <TextField
                     error={errors?.tin_gst_no ? true : null}
                     required
@@ -164,6 +157,7 @@ function EditCompanyInfo() {
                     autoComplete="off"
                   />
                   <p style={{ color: "red" }}>{errors?.tin_gst_no}</p>
+                  <br />
                   <TextField
                     error={errors?.terms_condition ? true : null}
                     required
@@ -178,6 +172,7 @@ function EditCompanyInfo() {
                     autoComplete="off"
                   />
                   <p style={{ color: "red" }}>{errors?.terms_condition}</p>
+                  <br />
                   <TextField
                     error={errors?.fax_no ? true : null}
                     required
@@ -191,6 +186,7 @@ function EditCompanyInfo() {
                     autoComplete="off"
                   />
                   <p style={{ color: "red" }}>{errors?.fax_no}</p>
+                  <br />
                   <img
                     alt=""
                     ref={uploadedImage}

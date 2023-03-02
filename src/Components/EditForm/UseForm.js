@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   ProductValidate,
   CustomerValidate,
@@ -24,10 +24,6 @@ const useForm = (defaultData, image) => {
   const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
-  console.log("errors======>", errors);
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  console.log("findError", findErrors, "errors", errors);
   useEffect(() => {
     if (defaultData?.length || Object.keys(defaultData).length) {
       setvalues(defaultData);
@@ -38,51 +34,23 @@ const useForm = (defaultData, image) => {
   const producthandleSubmit = () => {
     setFindErrors("ProductError");
     setErrors(ProductValidate(values, defaultData));
-    const data = {};
     const formAddUserData = new FormData();
-    formAddUserData.append(
-      "product_name",
-      values?.product_name || defaultData?.product_name
-    );
-    formAddUserData.append(
-      "product_type",
-      values?.product_type || defaultData?.product_type
-    );
-    formAddUserData.append(
-      "description",
-      values?.Description || defaultData?.description
-    );
-    formAddUserData.append("hsn", values?.hsn || defaultData?.hsn);
-    formAddUserData.append("weight", values?.weight || defaultData?.weight);
-    formAddUserData.append("image_src", image);
-    data["product_name"] = values?.product_name || defaultData?.product_name;
-    data["product_type"] = values?.product_type
-      ? values?.product_type
-      : "Tax" || defaultData?.product_type;
-    data["description"] = values?.Description || defaultData?.description;
-    data["hsn"] = parseFloat(parseInt(values?.hsn) || defaultData?.hsn);
-    data["weight"] = parseFloat(
-      parseFloat(values.weight) || defaultData?.weight
-    );
-    data["image_src"] = image;
+    formAddUserData.append("product_name", values?.product_name || "");
+    formAddUserData.append("product_type", values?.product_type || "");
+    formAddUserData.append("description", values?.description || "");
+    formAddUserData.append("hsn", values?.hsn || "");
+    formAddUserData.append("weight", values?.weight || "");
+    formAddUserData.append("image_src", image || null);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.product_id) {
         dispatch(
           ProductEditDataAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
             formAddUserData,
             parseInt(defaultData.product_id)
           )
         );
       } else {
-        dispatch(
-          ProductAddAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            formAddUserData
-          )
-        );
+        dispatch(ProductAddAction(formAddUserData));
       }
     }
   };
@@ -91,41 +59,19 @@ const useForm = (defaultData, image) => {
     setFindErrors(true);
     setErrors(CompanyValidate(values));
     const formAddUserData = new FormData();
-    formAddUserData.append(
-      "company_address",
-      values?.company_address || defaultData?.company_address
-    );
-    formAddUserData.append(
-      "company_name",
-      values?.company_name || defaultData?.company_name
-    );
+    formAddUserData.append("company_address", values?.company_address || "");
+    formAddUserData.append("company_name", values?.company_name || "");
     formAddUserData.append("image_src", image);
-    formAddUserData.append(
-      "mobile_no",
-      values?.mobile_no || defaultData?.mobile_no
-    );
-    formAddUserData.append(
-      "phone_no",
-      values?.phone_no || defaultData?.phone_no
-    );
-    formAddUserData.append(
-      "terms_condition",
-      values?.terms_condition || defaultData?.terms_condition
-    );
-    formAddUserData.append(
-      "terms_condition",
-      values?.fax_no || defaultData?.fax_no
-    );
-    formAddUserData.append(
-      "tin_gst_no",
-      values?.tin_gst_no || defaultData?.tin_gst_no
-    );
-    formAddUserData.append("website", values?.website || defaultData?.website);
+    formAddUserData.append("mobile_no", values?.mobile_no || "");
+    formAddUserData.append("phone_no", values?.phone_no || "");
+    formAddUserData.append("terms_condition", values?.terms_condition || "");
+    formAddUserData.append("fax_no", values?.fax_no || "");
+    formAddUserData.append("tin_gst_no", values?.tin_gst_no || "");
+    formAddUserData.append("website", values?.website || "");
 
     if (Object.keys(errors).length === 0) {
       dispatch(
         CompanyInfoEditAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
           formAddUserData,
           parseInt(defaultData?.company_id)
         )
@@ -145,21 +91,10 @@ const useForm = (defaultData, image) => {
     if (Object.keys(errors).length === 0) {
       if (defaultData?.customer_id) {
         dispatch(
-          CustomerEditDataAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            data,
-            parseInt(defaultData?.customer_id)
-          )
+          CustomerEditDataAction(data, parseInt(defaultData?.customer_id))
         );
       } else {
-        dispatch(
-          CustomerAddAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            data
-          )
-        );
+        dispatch(CustomerAddAction(data));
       }
     }
   };
@@ -177,22 +112,9 @@ const useForm = (defaultData, image) => {
     console.log("data", data);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.tax_id) {
-        dispatch(
-          TaxInfoEditAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            data,
-            defaultData?.tax_id
-          )
-        );
+        dispatch(TaxInfoEditAction(data, defaultData?.tax_id));
       } else {
-        dispatch(
-          TaxAddAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            data
-          )
-        );
+        dispatch(TaxAddAction(data));
       }
     }
   };
@@ -212,22 +134,9 @@ const useForm = (defaultData, image) => {
 
     if (Object.keys(errors).length === 0) {
       if (defaultData.length > 0) {
-        dispatch(
-          UserAddAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            formAddUserData,
-            defaultData[0]?.tax_id
-          )
-        );
+        dispatch(UserAddAction(formAddUserData, defaultData[0]?.tax_id));
       } else {
-        dispatch(
-          UserAddAction(
-            successLoginData?.LoginData?.accessToken ||
-              accessToken?.accessToken,
-            formAddUserData
-          )
-        );
+        dispatch(UserAddAction(formAddUserData));
       }
     }
   };
@@ -258,8 +167,6 @@ const useForm = (defaultData, image) => {
   //       if (defaultData?.product_id) {
   //         // dispatch(
   //         //   ProductEditDataAction(
-  //         //     successLoginData?.LoginData?.accessToken ||
-  //         //       accessToken?.accessToken,
   //         //     formAddUserData,
   //         //     parseInt(defaultData.product_id)
   //         //   )
@@ -272,8 +179,6 @@ const useForm = (defaultData, image) => {
   //       } else {
   //         // dispatch(
   //         //   ProductAddAction(
-  //         //     successLoginData?.LoginData?.accessToken ||
-  //         //       accessToken?.accessToken,
   //         //     formAddUserData
   //         //   )
   //         // );

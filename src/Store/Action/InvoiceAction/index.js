@@ -18,9 +18,9 @@ import {
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const InvoiceListAction = (AccessToken, data) => async (dispatch) => {
-  const token = AccessToken;
-  console.log("data", data);
+export const InvoiceListAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     dispatch({
       type: LIST_LOADER,
@@ -28,7 +28,7 @@ export const InvoiceListAction = (AccessToken, data) => async (dispatch) => {
     });
     await axios
       .get("https://inventory-management-backend.onrender.com/invoicelist", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {
               searchKeyword: data.search,
@@ -52,12 +52,13 @@ export const InvoiceListAction = (AccessToken, data) => async (dispatch) => {
   }
 };
 
-export const GetinvoiceAddPageAction = (AccessToken) => async (dispatch) => {
-  const token = AccessToken;
+export const GetinvoiceAddPageAction = () => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     const GetInvoicepageData = await axios.get(
       "https://inventory-management-backend.onrender.com/getinvoicepage",
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
     );
     dispatch({
       type: GET_INVOICE_PAGE,
@@ -70,33 +71,33 @@ export const GetinvoiceAddPageAction = (AccessToken) => async (dispatch) => {
     });
   }
 };
-export const GetinvoiceEditDataAction =
-  (AccessToken, Invoice_id) => async (dispatch) => {
-    const token = AccessToken;
-    try {
-      const GetInvoicepageData = await axios.get(
-        `https://inventory-management-backend.onrender.com/invoicelistbyid/${Invoice_id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch({
-        type: GET_INVOICE_EDIT_DATA,
-        payload: GetInvoicepageData.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_INVOICE_PAGE,
-        payload: { data: error.response.data },
-      });
-    }
-  };
-export const AddInvoiceData = (AccessToken, data) => async (dispatch) => {
-  const token = AccessToken;
+export const GetinvoiceEditDataAction = (Invoice_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const GetInvoicepageData = await axios.get(
+      `https://inventory-management-backend.onrender.com/invoicelistbyid/${Invoice_id}`,
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+    );
+    dispatch({
+      type: GET_INVOICE_EDIT_DATA,
+      payload: GetInvoicepageData.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_INVOICE_PAGE,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const AddInvoiceData = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   try {
     const AddInvoiceData = await axios.post(
       "https://inventory-management-backend.onrender.com/addinvoice",
       data,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
     );
     dispatch({
       type: ADD_INVOICE,
@@ -109,42 +110,41 @@ export const AddInvoiceData = (AccessToken, data) => async (dispatch) => {
     });
   }
 };
-export const GetDeletedInvoiceList =
-  (AccessToken, data) => async (dispatch) => {
-    const token = AccessToken;
-
-    try {
-      const GetDeletedInvoiceData = await axios.get(
-        "https://inventory-management-backend.onrender.com/invoiceDeletelist",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params: {
-            searchKeyword: data.search,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          },
-        }
-      );
-      dispatch({
-        type: GET_DELETED_INVOICE,
-        payload: GetDeletedInvoiceData.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_GET_DELETED_INVOICE,
-        payload: { data: error.response.data },
-      });
-    }
-  };
-export const DeleteInvoice = (AccessToken, invoice_id) => async (dispatch) => {
-  console.log("invoice_id", invoice_id, "accesstoken", AccessToken);
-  const token = AccessToken;
+export const GetDeletedInvoiceList = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  try {
+    const GetDeletedInvoiceData = await axios.get(
+      "https://inventory-management-backend.onrender.com/invoiceDeletelist",
+      {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+        params: data
+          ? {
+              searchKeyword: data.search,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      }
+    );
+    dispatch({
+      type: GET_DELETED_INVOICE,
+      payload: GetDeletedInvoiceData.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_GET_DELETED_INVOICE,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const DeleteInvoice = (invoice_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   try {
     const DeleteInvoice = await axios.delete(
       `https://inventory-management-backend.onrender.com/DeleteInvoice/${invoice_id}`,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
     );
     dispatch({
       type: DELETE_INVOICE,
@@ -157,46 +157,42 @@ export const DeleteInvoice = (AccessToken, invoice_id) => async (dispatch) => {
     });
   }
 };
-export const PermanentDeleteInvoice =
-  (AccessToken, invoice_id) => async (dispatch) => {
-    console.log("invoice_id", invoice_id, "accesstoken", AccessToken);
-    const token = AccessToken;
+export const PermanentDeleteInvoice = (invoice_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
-    try {
-      const PermanentDeleteInvoice = await axios.delete(
-        `https://inventory-management-backend.onrender.com/PermanentDeleteInvoice/${invoice_id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch({
-        type: PARMANENT_DELETE_INVOICE,
-        payload: PermanentDeleteInvoice.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_PERMANENT_DELETE_INVOICE,
-        payload: { data: error.response.data },
-      });
-    }
-  };
-export const UpdateInvoiceData =
-  (AccessToken, invoice_id, data) => async (dispatch) => {
-    console.log("data", data, "accesstoken", AccessToken);
-    const token = AccessToken;
+  try {
+    const PermanentDeleteInvoice = await axios.delete(
+      `https://inventory-management-backend.onrender.com/PermanentDeleteInvoice/${invoice_id}`,
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+    );
+    dispatch({
+      type: PARMANENT_DELETE_INVOICE,
+      payload: PermanentDeleteInvoice.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_PERMANENT_DELETE_INVOICE,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const UpdateInvoiceData = (invoice_id, data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
-    try {
-      const UpdateInvoiceData = await axios.put(
-        `https://inventory-management-backend.onrender.com/UpdateInvoiceData/${invoice_id}`,
-        data,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch({
-        type: UPDATE_INVOICE_DATA,
-        payload: UpdateInvoiceData.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_UPDATE_INVOICE_DATA,
-        payload: { data: error.response.data },
-      });
-    }
-  };
+  try {
+    const UpdateInvoiceData = await axios.put(
+      `https://inventory-management-backend.onrender.com/UpdateInvoiceData/${invoice_id}`,
+      data,
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+    );
+    dispatch({
+      type: UPDATE_INVOICE_DATA,
+      payload: UpdateInvoiceData.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_UPDATE_INVOICE_DATA,
+      payload: { data: error.response.data },
+    });
+  }
+};

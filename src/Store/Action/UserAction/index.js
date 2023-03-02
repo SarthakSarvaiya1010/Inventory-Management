@@ -8,13 +8,14 @@ import {
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const userListAction = (AccessToken, data) => async (dispatch) => {
-  const token = AccessToken;
+export const userListAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     const userList = await axios.get(
       "https://inventory-management-backend.onrender.com/users",
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {
               searchKeyword: data.search ? data.search : null,
@@ -36,34 +37,35 @@ export const userListAction = (AccessToken, data) => async (dispatch) => {
     });
   }
 };
-export const userGetByuuidAction =
-  (AccessToken, user_uuid) => async (dispatch) => {
-    const token = AccessToken;
-    try {
-      const userList = await axios.get(
-        `https://inventory-management-backend.onrender.com/users/${user_uuid}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      dispatch({
-        type: USER_GET_BY_UUID,
-        payload: userList.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
-export const userDelteListAction = (AccessToken, data) => async (dispatch) => {
-  const token = AccessToken;
+export const userGetByuuidAction = (user_uuid) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const userList = await axios.get(
+      `https://inventory-management-backend.onrender.com/users/${user_uuid}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+      }
+    );
+    dispatch({
+      type: USER_GET_BY_UUID,
+      payload: userList.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const userDelteListAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     const userList = await axios.get(
       "https://inventory-management-backend.onrender.com/delete/users",
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {
               searchKeyword: data.search ? data.search : null,
@@ -86,13 +88,14 @@ export const userDelteListAction = (AccessToken, data) => async (dispatch) => {
   }
 };
 
-export const userDeleteAction = (AccessToken, user_id) => async (dispatch) => {
-  const token = AccessToken;
+export const userDeleteAction = (user_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     const userList = await axios.delete(
       `https://inventory-management-backend.onrender.com/delete/users/${user_id}`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
       }
     );
     dispatch({
@@ -107,15 +110,14 @@ export const userDeleteAction = (AccessToken, user_id) => async (dispatch) => {
   }
 };
 
-export const UserAddAction = (AccessToken, data) => async (dispatch) => {
-  // const Product_id = 6;
-  const token = AccessToken;
-  console.log("data==========>", data);
+export const UserAddAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     const UserAdd = await axios.post(
       "https://inventory-management-backend.onrender.com/users",
       data,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
     );
     dispatch({
       type: USER_ADD,

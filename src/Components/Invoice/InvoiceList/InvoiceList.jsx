@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { DeleteInvoice } from "../../../Store/Action/InvoiceAction/index";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function InvoiceList() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ function InvoiceList() {
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const InvoiceData = useSelector((state) => state?.InvoiceData);
   let limit = 2;
+  const [open, setOpen] = useState(false);
   const data = [];
   console.log("successLoginData", successLoginData?.LoginData);
   const [pageNumber, setPageNumber] = useState();
@@ -42,23 +44,17 @@ function InvoiceList() {
     }
   }, [InvoiceData?.SucessDeletedInvoiceData?.statusCode]);
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
+    if (accessToken?.accessToken) {
       dispatch(
-        InvoiceListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-        )
+        InvoiceListAction({
+          limit: limit,
+          pageNumber: pageNumber,
+          orderByString: shorting,
+        })
       );
       localStorage.setItem("InvoiceEditPageData", JSON.stringify([{}]));
     }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    pageNumber,
-    shorting,
-    limit,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [accessToken?.accessToken, dispatch, pageNumber, shorting, limit]);
   // eslint-disable-next-line array-callback-return
 
   const headalEdit = (data) => {
@@ -67,15 +63,9 @@ function InvoiceList() {
     );
   };
 
-  const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this invoice?")) {
-      dispatch(
-        DeleteInvoice(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          InvoiceData.invoiceList[data - 1]?.invoice_id
-        )
-      );
-    }
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(DeleteInvoice(InvoiceData.invoiceList[open - 1]?.invoice_id));
   };
   const headalShorting = (data_a) => {
     shortingIcon === data_a
@@ -122,16 +112,23 @@ function InvoiceList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        InvoiceListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        InvoiceListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
 
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this invoice?"}
+        finalDelete={finalDelete}
+      />
       {InvoiceData?.invoiceList.length ? (
         <Container fixed>
           <Header
@@ -171,7 +168,7 @@ function InvoiceList() {
             <Table
               data={data}
               headalEdit={headalEdit}
-              headalDelete={headalDelete}
+              headalDelete={setOpen}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
             />

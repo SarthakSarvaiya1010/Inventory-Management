@@ -12,9 +12,9 @@ import {
 } from "../../ActionTypes/index";
 import axios from "axios";
 
-export const ProductListAction = (AccessToken, data) => async (dispatch) => {
-  const token = AccessToken;
-  console.log(data, " data");
+export const ProductListAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     dispatch({
       type: LIST_LOADER,
@@ -22,7 +22,7 @@ export const ProductListAction = (AccessToken, data) => async (dispatch) => {
     });
     await axios
       .get("https://inventory-management-backend.onrender.com/products", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {
               searchKeyword: data.search,
@@ -46,64 +46,59 @@ export const ProductListAction = (AccessToken, data) => async (dispatch) => {
   }
 };
 
-export const ProductEditAction =
-  (AccessToken, Product_id) => async (dispatch) => {
-    // const Product_id = 6;
-    const token = AccessToken;
-    try {
-      const ProductEdit = await axios.get(
-        `https://inventory-management-backend.onrender.com/products/${Product_id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      dispatch({
-        type: PRODUCT_EDIT,
-        payload: ProductEdit.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
+export const ProductEditAction = (Product_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
-export const ProductEditDataAction =
-  (AccessToken, data, Product_id) => async (dispatch) => {
-    console.log("data====>", data);
-    // const Product_id = 6;
-    const token = AccessToken;
-    console.log(token, Product_id, data, "token, Product_id");
-    try {
-      const ProductEditData = await axios.put(
-        `https://inventory-management-backend.onrender.com/edit/products/${Product_id}`,
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      dispatch({
-        type: PRODUCT_EDIT_DATA,
-        payload: ProductEditData.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
+  try {
+    const ProductEdit = await axios.get(
+      `https://inventory-management-backend.onrender.com/products/${Product_id}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+      }
+    );
+    dispatch({
+      type: PRODUCT_EDIT,
+      payload: ProductEdit.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
 
-export const ProductAddAction = (AccessToken, data) => async (dispatch) => {
-  // const Product_id = 6;
-  const token = AccessToken;
-  console.log("data==========>", data);
+export const ProductEditDataAction = (data, Product_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const ProductEditData = await axios.put(
+      `https://inventory-management-backend.onrender.com/edit/products/${Product_id}`,
+      data,
+      {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+      }
+    );
+    dispatch({
+      type: PRODUCT_EDIT_DATA,
+      payload: ProductEditData.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
+
+export const ProductAddAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   try {
     const ProductAdd = await axios.post(
       "https://inventory-management-backend.onrender.com/products",
       data,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
     );
     dispatch({
       type: PRODUCT_ADD,
@@ -117,73 +112,68 @@ export const ProductAddAction = (AccessToken, data) => async (dispatch) => {
   }
 };
 
-export const ProductDeleteAction =
-  (AccessToken, Product_id) => async (dispatch) => {
-    // const Product_id = 6;
-    const token = AccessToken;
-    console.log("Product_id", Product_id);
-    try {
-      const ProductDelete = await axios.delete(
-        `https://inventory-management-backend.onrender.com/delete/products/${Product_id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch({
-        type: PRODUCT_DELETE,
-        payload: ProductDelete.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
-export const ProductDeleteListAction =
-  (AccessToken, data) => async (dispatch) => {
-    // const Product_id = 6;
-    const token = AccessToken;
-    try {
-      const ProductDeleteList = await axios.get(
-        "https://inventory-management-backend.onrender.com/delete/products",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params: {
-            searchKeyword: data.search,
-            limit: data.limit,
-            page: data.pageNumber,
-            orderByString: data.orderByString,
-          },
-        }
-      );
-      dispatch({
-        type: PRODUCT_DELETE_LIST,
-        payload: ProductDeleteList.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_ADMIN_LIST,
-        payload: { data: error.response.data },
-      });
-    }
-  };
-export const PermanentProductDelete =
-  (AccessToken, Product_id) => async (dispatch) => {
-    // const Product_id = 6;
-    const token = AccessToken;
-    console.log(Product_id);
-    try {
-      const PermanentProductDelete = await axios.delete(
-        `https://inventory-management-backend.onrender.com/permanent/delete/products/${Product_id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch({
-        type: PERMANENT_PRODUCT_DELETE,
-        payload: PermanentProductDelete.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FAILED_PERMANENT_PRODUCT_DELTETE,
-        payload: { data: error.response.data },
-      });
-    }
-  };
+export const ProductDeleteAction = (Product_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const ProductDelete = await axios.delete(
+      `https://inventory-management-backend.onrender.com/delete/products/${Product_id}`,
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+    );
+    dispatch({
+      type: PRODUCT_DELETE,
+      payload: ProductDelete.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const ProductDeleteListAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const ProductDeleteList = await axios.get(
+      "https://inventory-management-backend.onrender.com/delete/products",
+      {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+        params: {
+          searchKeyword: data.search,
+          limit: data.limit,
+          page: data.pageNumber,
+          orderByString: data.orderByString,
+        },
+      }
+    );
+    dispatch({
+      type: PRODUCT_DELETE_LIST,
+      payload: ProductDeleteList.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const PermanentProductDelete = (Product_id) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const PermanentProductDelete = await axios.delete(
+      `https://inventory-management-backend.onrender.com/permanent/delete/products/${Product_id}`,
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+    );
+    dispatch({
+      type: PERMANENT_PRODUCT_DELETE,
+      payload: PermanentProductDelete.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_PERMANENT_PRODUCT_DELTETE,
+      payload: { data: error.response.data },
+    });
+  }
+};

@@ -17,7 +17,6 @@ function UserList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const User = useSelector((state) => state?.User);
   let limit = 2;
   const [search, setSearch] = useState();
@@ -27,23 +26,16 @@ function UserList() {
   const data = [];
 
   console.log("User", User, "test");
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   useEffect(() => {
     dispatch(
-      userListAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      userListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
 
   // eslint-disable-next-line array-callback-return
   User.UserData.map((e) => {
@@ -61,12 +53,7 @@ function UserList() {
 
   const headalDelete = (data) => {
     if (window.confirm("Are you sure you want to Delete this Product?")) {
-      dispatch(
-        userDeleteAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          User.UserData[data - 1]?.user_id
-        )
-      );
+      dispatch(userDeleteAction(User.UserData[data - 1]?.user_id));
     }
     // window.location.reload();
   };
@@ -77,10 +64,7 @@ function UserList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        userListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        userListAction({ search: search, limit: limit, pageNumber: pageNumber })
       );
     }
   };

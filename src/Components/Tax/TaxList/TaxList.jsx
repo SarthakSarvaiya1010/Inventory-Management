@@ -11,6 +11,7 @@ import {
 } from "../../../Store/Action/TaxAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function TaxList() {
   const navigate = useNavigate();
@@ -22,9 +23,10 @@ function TaxList() {
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
+  const [open, setOpen] = useState(false);
   let limit = 2;
   const data = [];
-  console.log("TaxData?.TaxList", TaxData?.TaxList);
+
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   // eslint-disable-next-line array-callback-return
   TaxData?.TaxList.map((e) => {
@@ -37,49 +39,33 @@ function TaxList() {
     data.push(elements);
   });
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-      dispatch(
-        TaxListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-        )
-      );
+    if (accessToken?.accessToken) {
+      dispatch(TaxListAction());
     }
   }, [
     accessToken?.accessToken,
     dispatch,
     successLoginData?.LoginData?.accessToken,
   ]);
-  // eslint-disable-next-line array-callback-return
 
-  const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this Tax?")) {
-      dispatch(
-        TaxDeleteAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          TaxData?.TaxList[data - 1]?.tax_id
-        )
-      );
-    }
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(TaxDeleteAction(TaxData?.TaxList[open - 1]?.tax_id));
   };
+
   const headalEdit = (data) => {
     navigate(`/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`);
   };
 
   useEffect(() => {
     dispatch(
-      TaxListAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      TaxListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
 
   const searchHeadal = (e) => {
     setSearch(e.target.value);
@@ -140,7 +126,12 @@ function TaxList() {
 
   return (
     <div>
-      {" "}
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this Tax?"}
+        finalDelete={finalDelete}
+      />
       {TaxData?.TaxList.length ? (
         <Container fixed>
           <Header
@@ -182,7 +173,7 @@ function TaxList() {
             <Table
               data={data}
               headalEdit={headalEdit}
-              headalDelete={headalDelete}
+              headalDelete={setOpen}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
             />

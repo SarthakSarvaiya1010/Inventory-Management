@@ -12,12 +12,12 @@ import {
 } from "../../../Store/Action/CompanyAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function CompanyList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
   let limit = 2;
   const [search, setSearch] = useState();
@@ -25,9 +25,10 @@ function CompanyList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
+  const [open, setOpen] = useState(false);
 
   console.log("productData", CompanyInfo, "test");
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   useEffect(() => {
     if (CompanyInfo?.SuccessProductDeleteData?.statusCode === "200") {
       alert("Sucessfully product deleted");
@@ -37,19 +38,13 @@ function CompanyList() {
 
   useEffect(() => {
     dispatch(
-      CompanyInfoAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      CompanyInfoAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
 
   // eslint-disable-next-line array-callback-return
   CompanyInfo?.CompanyInfo?.map((e) => {
@@ -69,16 +64,12 @@ function CompanyList() {
     navigate(`/company/edit/${CompanyInfo.CompanyInfo[data - 1]?.company_id}`);
   };
 
-  const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this Company?")) {
-      dispatch(
-        CompanyDeleteAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          CompanyInfo?.CompanyInfo[data - 1]?.company_id
-        )
-      );
-      window.location.reload();
-    }
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(
+      CompanyDeleteAction(CompanyInfo?.CompanyInfo[data - 1]?.company_id)
+    );
+    window.location.reload();
   };
 
   const searchHeadal = (e) => {
@@ -87,9 +78,11 @@ function CompanyList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        CompanyInfoAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-        )
+        CompanyInfoAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
@@ -142,6 +135,12 @@ function CompanyList() {
 
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this Company?"}
+        finalDelete={finalDelete}
+      />
       {CompanyInfo?.CompanyInfo?.length ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header
@@ -184,7 +183,7 @@ function CompanyList() {
             <Table
               data={data}
               headalEdit={headalEdit}
-              headalDelete={headalDelete}
+              headalDelete={setOpen}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
             />

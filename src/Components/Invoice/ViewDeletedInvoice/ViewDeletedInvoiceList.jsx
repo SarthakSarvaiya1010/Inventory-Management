@@ -10,12 +10,13 @@ import {
 } from "../../../Store/Action/InvoiceAction/index";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { convert } from "../../../Helpers/misc";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 export default function ViewDeletedInvoiceList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const DeletedInvoiceList = useSelector((state) => state?.InvoiceData);
+  const [open, setOpen] = useState(false);
   const data = [];
   let limit = 2;
   const [pageNumber, setPageNumber] = useState();
@@ -23,7 +24,6 @@ export default function ViewDeletedInvoiceList() {
   const [shortingIcon, setShortingIcon] = useState("BILL No");
   const [search, setSearch] = useState();
   console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   // eslint-disable-next-line array-callback-return
   DeletedInvoiceList?.DeletedInvoiceList?.map((e) => {
@@ -42,44 +42,29 @@ export default function ViewDeletedInvoiceList() {
     }
   }, [DeletedInvoiceList?.SucessPermanentDeletedData?.statusCode]);
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-      dispatch(
-        GetDeletedInvoiceList(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-        )
-      );
-    }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+    dispatch(GetDeletedInvoiceList());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(
-      GetDeletedInvoiceList(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      GetDeletedInvoiceList({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
   const searchHeadal = (e) => {
     setSearch(e.target.value);
   };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        GetDeletedInvoiceList(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        GetDeletedInvoiceList({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
@@ -122,19 +107,22 @@ export default function ViewDeletedInvoiceList() {
         return " state";
     }
   };
-  const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this invoice?")) {
-      dispatch(
-        PermanentDeleteInvoice(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          DeletedInvoiceList?.DeletedInvoiceList[data - 1]?.invoice_id
-        )
-      );
-    }
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(
+      PermanentDeleteInvoice(
+        DeletedInvoiceList?.DeletedInvoiceList[open - 1]?.invoice_id
+      )
+    );
   };
-
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this invoice?"}
+        finalDelete={finalDelete}
+      />
       {DeletedInvoiceList?.DeletedInvoiceLoader ? (
         DeletedInvoiceList?.DeletedInvoiceList?.length ? (
           <Container fixed>
@@ -176,8 +164,7 @@ export default function ViewDeletedInvoiceList() {
               </Stack>
               <Table
                 data={data}
-                headalDelete={headalDelete}
-                //   headalEdit={headalEdit}
+                headalDelete={setOpen}
                 hide={true}
                 headalShorting={headalShorting}
                 ShortingHide={shortingIcon}

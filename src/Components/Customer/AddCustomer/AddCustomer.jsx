@@ -17,7 +17,6 @@ function AddCustomer() {
   const dispatch = useDispatch();
   const { id } = params;
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const CustomerEditData = useSelector((state) => state?.CustomerEdit);
   const Customer_data = CustomerEditData.customerEdit[0];
 
@@ -39,23 +38,12 @@ function AddCustomer() {
   const handleCancle = () => {
     navigate("/customer_list");
   };
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   useEffect(() => {
     if (id) {
-      dispatch(
-        CustomerEditAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          id
-        )
-      );
+      dispatch(CustomerEditAction(id));
     }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    id,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, id]);
   return (
     <div>
       {!CustomerEditData.loder || !id ? (

@@ -54,7 +54,6 @@ function AddInvoice(props) {
   const { sucessMessage } = props;
   const dispatch = useDispatch();
   const toWords = new ToWords();
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
   const invoivepagedata = JSON.parse(
     localStorage.getItem("InvoiceAddPageData")
@@ -75,8 +74,8 @@ function AddInvoice(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState(null);
-  console.log("errors=========>", errors);
   const [findErrors, setFindErrors] = useState(null);
+  console.log("errors=========>", errors, findErrors);
 
   if (sucessMessage && disabled) {
     setDisabled(false);
@@ -101,7 +100,6 @@ function AddInvoice(props) {
       hsn_data = hsn_data_1[0]?.hsn;
     }
     if (existingweight.length > 0 && fieldName === "weight") {
-      console.log("weightblockhere");
       existingweight.forEach((f) => {
         product[index].product_id = product[index]?.product_id;
         product[index].hsn = product[index]?.hsn;
@@ -128,7 +126,6 @@ function AddInvoice(props) {
         setProduct([...product]);
       } else {
         if (existingProduct.length > index && fieldName === "product_id") {
-          console.log("productidhere");
           existingProduct.forEach((f) => {
             product[index].product_id = value;
             product[index].hsn = hsn_data;
@@ -175,7 +172,7 @@ function AddInvoice(props) {
   };
 
   // const { sx, ...other } = props;
-  console.log("product", product);
+  console.log("productproduct", product);
 
   let totalAmount = 0;
   let totalweight = 0;
@@ -203,8 +200,8 @@ function AddInvoice(props) {
     product.splice(index, 1);
   };
   useEffect(() => {
-    dispatch(GetinvoiceAddPageAction(accessToken?.accessToken));
-  }, [accessToken?.accessToken, dispatch]);
+    dispatch(GetinvoiceAddPageAction());
+  }, [dispatch]);
 
   useEffect(() => {
     if (InvoicePageData?.GetInvoicePagData.length) {
@@ -236,10 +233,10 @@ function AddInvoice(props) {
     setFindErrors(true);
     setErrors(InvoiceValidate(finalinvoicedata, addtable));
     console.log("finalinvoicedata", finalinvoicedata);
-    // dispatch(AddInvoiceData(accessToken?.accessToken, finalinvoicedata));
-    // if (finalinvoicedata) {
-    //   setDisabled(true);
-    // }
+    dispatch(AddInvoiceData(finalinvoicedata));
+    if (finalinvoicedata) {
+      setDisabled(true);
+    }
   };
   // useEffect(() => {
   //   setErrors(InvoiceValidate(CustomerListData, product));

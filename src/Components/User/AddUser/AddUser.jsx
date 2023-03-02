@@ -35,7 +35,7 @@ function AddUser() {
   console.log("CompanyInfo", CompanyInfo.CompanyInfo);
 
   const currencies_data = CompanyInfo?.CompanyInfo;
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
+
   const { id } = params;
   console.log("id==========>", id);
   const imageUploader = React.useRef(null);
@@ -43,11 +43,6 @@ function AddUser() {
   const [image, setImage] = React.useState(null);
 
   const User_data = User.UserDataByuuid;
-  // console.log("params", id, User_data);
-  // const [values, setvalues] = useState(null);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  const accessTokenData =
-    successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
 
   const showToastMessage = () => {
     toast.success("Data Updata  Success  !", {
@@ -57,10 +52,10 @@ function AddUser() {
 
   useEffect(() => {
     if (id) {
-      dispatch(userGetByuuidAction(accessTokenData, id));
+      dispatch(userGetByuuidAction(id));
     }
-    dispatch(CompanyInfoAction(accessTokenData));
-  }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
+    dispatch(CompanyInfoAction());
+  }, [dispatch, id]);
 
   const { UserhandleSubmit, values, errors, handleOnchange } = UseForm(
     User_data,

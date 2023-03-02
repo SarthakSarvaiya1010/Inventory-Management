@@ -59,7 +59,6 @@ function InvoiceEdit(props) {
   const params = useParams();
   const { id } = params;
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [CustomerListData, setCustomerListData] = useState();
   const [dateData, setDateData] = useState();
   const [addtable, setAddTable] = useState();
@@ -86,9 +85,9 @@ function InvoiceEdit(props) {
   ]);
 
   useEffect(() => {
-    dispatch(GetinvoiceEditDataAction(accessToken?.accessToken, id));
-    dispatch(GetinvoiceAddPageAction(accessToken?.accessToken));
-  }, [accessToken?.accessToken, dispatch, id]);
+    dispatch(GetinvoiceEditDataAction(id));
+    dispatch(GetinvoiceAddPageAction());
+  }, [dispatch, id]);
 
   // calculate Total weight ,rate, amount and billamount
   let totalAmount = 0;
@@ -231,9 +230,7 @@ function InvoiceEdit(props) {
       productdata: product ? product : testData?.productlistdata,
     };
     const invoice_id = testData?.invoice_id;
-    dispatch(
-      UpdateInvoiceData(accessToken?.accessToken, invoice_id, UpdatedData)
-    );
+    dispatch(UpdateInvoiceData(invoice_id, UpdatedData));
     if (UpdatedData) {
       setDisabled(true);
     }

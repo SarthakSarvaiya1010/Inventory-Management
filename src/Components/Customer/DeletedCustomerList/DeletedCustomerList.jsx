@@ -11,6 +11,7 @@ import {
 } from "../../../Store/Action/CustomerAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function DeletedCustomerList() {
   const navigate = useNavigate();
@@ -20,12 +21,9 @@ function DeletedCustomerList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [search, setSearch] = useState();
+  const [open, setOpen] = useState(false);
 
   const CustomerData = useSelector((state) => state?.CustomerEdit);
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
-  console.log("data", CustomerData.customerDeletedList);
   useEffect(() => {
     if (
       CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode === "200"
@@ -35,18 +33,8 @@ function DeletedCustomerList() {
     }
   }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-      dispatch(
-        CustomerDelectListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-        )
-      );
-    }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+    dispatch(CustomerDelectListAction());
+  }, [dispatch]);
   const data = [];
 
   // eslint-disable-next-line array-callback-return
@@ -73,29 +61,24 @@ function DeletedCustomerList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        CustomerDelectListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        CustomerDelectListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
 
   useEffect(() => {
     dispatch(
-      CustomerDelectListAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      CustomerDelectListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a
@@ -135,19 +118,24 @@ function DeletedCustomerList() {
         return " state";
     }
   };
-  const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this invoice?")) {
-      dispatch(
-        PermanentCustomerDeleteAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          CustomerData.customerDeletedList[data - 1]?.customer_id
-        )
-      );
-    }
+
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(
+      PermanentCustomerDeleteAction(
+        CustomerData.customerDeletedList[open - 1]?.customer_id
+      )
+    );
   };
 
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this customer?"}
+        finalDelete={finalDelete}
+      />
       {CustomerData?.DeletedCustomerLoader ? (
         CustomerData?.customerDeletedList?.length ? (
           <Container fixed>
@@ -191,7 +179,7 @@ function DeletedCustomerList() {
                 <Table
                   data={data}
                   headalEdit={headalEdit}
-                  headalDelete={headalDelete}
+                  headalDelete={setOpen}
                   hide={true}
                   headalShorting={headalShorting}
                   ShortingHide={shortingIcon}

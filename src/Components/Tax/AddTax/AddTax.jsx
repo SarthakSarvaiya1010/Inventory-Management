@@ -34,7 +34,7 @@ function AddTax() {
 
   useEffect(() => {
     if (id) {
-      dispatch(TaxEditAction(accessTokenData, id));
+      dispatch(TaxEditAction(id));
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 

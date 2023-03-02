@@ -21,8 +21,6 @@ function CustomerList() {
   const SuccesscustomerDeletedData = useSelector(
     (state) => state?.CustomerEdit?.SuccessfullyCustomerDeltetedData
   );
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [search, setSearch] = useState(null);
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
@@ -42,7 +40,6 @@ function CustomerList() {
   console.log("CustomerData", CustomerData);
   useEffect(() => {
     if (SuccesscustomerDeletedData?.statusCode === "200") {
-      alert("SucessFully Customer Deleted");
       window.location.reload();
     }
   }, [
@@ -57,17 +54,10 @@ function CustomerList() {
     );
   };
 
-  const headalDelete = (data) => {
-    setOpen(data);
-  };
-
   const finalDelete = () => {
     setOpen(false);
     dispatch(
-      CustomerDeleteAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        CustomerData.CoustomerList[open - 1]?.customer_id
-      )
+      CustomerDeleteAction(CustomerData.CoustomerList[open - 1]?.customer_id)
     );
   };
   const searchHeadal = (e) => {
@@ -78,23 +68,24 @@ function CustomerList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        CustomerListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        CustomerListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
 
   useEffect(() => {
     dispatch(
-      CustomerListAction(accessToken?.accessToken, {
+      CustomerListAction({
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
       })
     );
-  }, [accessToken?.accessToken, dispatch, limit, pageNumber, shorting]);
+  }, [dispatch, limit, pageNumber, shorting]);
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a
@@ -139,7 +130,7 @@ function CustomerList() {
       <DialogBox
         setOpen={setOpen}
         open={open}
-        DialogText={"Are you sure you want to Delete this invoice?"}
+        DialogText={"Are you sure you want to Delete this customer?"}
         finalDelete={finalDelete}
       />
       {CustomerData?.CoustomerList?.length ? (
@@ -184,7 +175,7 @@ function CustomerList() {
             <Table
               data={data}
               headalEdit={headalEdit}
-              headalDelete={headalDelete}
+              headalDelete={setOpen}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
             />

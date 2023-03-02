@@ -20,7 +20,6 @@ function DeletedProductList() {
   const data = [];
   const [open, setOpen] = React.useState(false);
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const [pageNumber, setPageNumber] = useState();
   let limit = 2;
   const [shorting, setShorting] = useState();
@@ -38,44 +37,31 @@ function DeletedProductList() {
     }
   });
   useEffect(() => {
-    if (successLoginData?.LoginData?.accessToken || accessToken?.accessToken) {
-      dispatch(
-        ProductDeleteListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken
-        )
-      );
+    if (accessToken?.accessToken) {
+      dispatch(ProductDeleteListAction());
     }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [accessToken?.accessToken, dispatch]);
 
   useEffect(() => {
     dispatch(
-      ProductDeleteListAction(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        { limit: limit, pageNumber: pageNumber, orderByString: shorting }
-      )
+      ProductDeleteListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
   const searchHeadal = (e) => {
     setSearch(e.target.value);
   };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        ProductDeleteListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        ProductDeleteListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
@@ -142,10 +128,7 @@ function DeletedProductList() {
   const finalDelete = () => {
     setOpen(false);
     dispatch(
-      PermanentProductDelete(
-        successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-        productData.productDeletList[open - 1]?.product_id
-      )
+      PermanentProductDelete(productData.productDeletList[open - 1]?.product_id)
     );
   };
 
