@@ -137,7 +137,7 @@ export default function ViewDeletedInvoiceList() {
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
-      {DeletedInvoiceList?.DeletedInvoiceLoader ? (
+      {!DeletedInvoiceList?.Loader ? (
         DeletedInvoiceList?.DeletedInvoiceList?.length ? (
           <Container fixed>
             <Header
@@ -212,6 +212,7 @@ export default function ViewDeletedInvoiceList() {
                       limit
                   )}
                   PageNumber={setPageNumber}
+                  currentPage={pageNumber}
                 />
               </Stack>
             </Container>

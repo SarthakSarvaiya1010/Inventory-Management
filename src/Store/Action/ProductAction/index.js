@@ -138,22 +138,29 @@ export const ProductDeleteListAction = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   try {
-    const ProductDeleteList = await axios.get(
-      "https://inventory-management-backend.onrender.com/delete/products",
-      {
-        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
-        params: {
-          searchKeyword: data.search,
-          limit: data.limit,
-          page: data.pageNumber,
-          orderByString: data.orderByString,
-        },
-      }
-    );
     dispatch({
-      type: PRODUCT_DELETE_LIST,
-      payload: ProductDeleteList.data,
+      type: LIST_LOADER,
+      payload: [],
     });
+    await axios
+      .get(
+        "https://inventory-management-backend.onrender.com/delete/products",
+        {
+          headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+          params: {
+            searchKeyword: data.search,
+            limit: data.limit,
+            page: data.pageNumber,
+            orderByString: data.orderByString,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: PRODUCT_DELETE_LIST,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_ADMIN_LIST,

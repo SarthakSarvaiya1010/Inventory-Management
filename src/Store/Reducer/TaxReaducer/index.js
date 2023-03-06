@@ -61,6 +61,7 @@ const TaxReducer = (state = initialstate, action) => {
       return {
         ...state,
         TaxDeletList: action.payload,
+        loder: false,
         DeletedTaxLoader: true,
       };
     case TAX_DELETE:

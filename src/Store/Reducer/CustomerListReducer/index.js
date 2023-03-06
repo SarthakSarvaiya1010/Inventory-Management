@@ -53,6 +53,7 @@ const CustomerListReducer = (state = initialstate, action) => {
       return {
         ...state,
         customerDeletedList: action.payload,
+        Loader: false,
         DeletedCustomerLoader: true,
       };
     case CUSTOMER_DELETE:

@@ -202,6 +202,7 @@ function CompanyList() {
                   CompanyInfo?.CompanyInfo[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

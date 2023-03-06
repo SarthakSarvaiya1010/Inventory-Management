@@ -16,14 +16,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddIcon from "@mui/icons-material/Add";
 
-const currencies = [
+const Role = [
   {
-    value: "Tax",
-    label: "Tax",
+    value: 1,
+    label: "Master Admin",
   },
   {
-    value: "select ",
-    label: "One",
+    value: 2,
+    label: "Admin",
   },
 ];
 function AddUser() {
@@ -34,7 +34,8 @@ function AddUser() {
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
   console.log("CompanyInfo", CompanyInfo.CompanyInfo);
 
-  const currencies_data = CompanyInfo?.CompanyInfo;
+  const CompanyListData = CompanyInfo?.CompanyInfo;
+  console.log("CompanyListData", CompanyListData);
 
   const { id } = params;
   console.log("id==========>", id);
@@ -44,11 +45,11 @@ function AddUser() {
 
   const User_data = User.UserDataByuuid;
 
-  const showToastMessage = () => {
-    toast.success("Data Updata  Success  !", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  };
+  // const showToastMessage = () => {
+  //   toast.success("Data Updata  Success  !", {
+  //     position: toast.POSITION.TOP_CENTER,
+  //   });
+  // };
 
   useEffect(() => {
     if (id) {
@@ -59,7 +60,6 @@ function AddUser() {
 
   const { UserhandleSubmit, values, errors, handleOnchange } = UseForm(
     User_data,
-    showToastMessage,
     image
   );
 
@@ -150,9 +150,10 @@ function AddUser() {
                     }}
                     onChange={(e) => handleOnchange(e)}
                   >
-                    {currencies.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
+                    <option>Select The Company</option>
+                    {CompanyListData?.map((option) => (
+                      <option key={option.value} value={option.company_id}>
+                        {option.company_name}
                       </option>
                     ))}
                   </TextField>
@@ -171,9 +172,10 @@ function AddUser() {
                     }}
                     onChange={(e) => handleOnchange(e)}
                   >
-                    {currencies_data?.map((option) => (
-                      <option key={option.value} value={option.company_id}>
-                        {option.company_name}
+                    <option>Select The Role </option>
+                    {Role?.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </TextField>
@@ -278,7 +280,7 @@ function AddUser() {
                       aria-label="add"
                       variant="extended"
                     >
-                      <AddIcon /> Upload product photo
+                      <AddIcon /> Upload User photo
                     </Fab>
                   </label>
                   ;

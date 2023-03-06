@@ -76,10 +76,10 @@ function InvoiceList() {
         }
         return "done";
       case "BILL No":
-        if (shorting === "bill_no") {
-          setShorting(null);
+        if (shorting === "ASC/bill_no") {
+          setShorting("DESC/bill_no");
         } else {
-          setShorting("bill_no");
+          setShorting("ASC/bill_no");
         }
         return "done";
       case "Invoice Date":
@@ -132,7 +132,7 @@ function InvoiceList() {
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
-      {InvoiceData?.invoiceList.length ? (
+      {InvoiceData?.invoiceList?.length ? (
         <Container fixed>
           <Header
             name={"InvoiceList"}

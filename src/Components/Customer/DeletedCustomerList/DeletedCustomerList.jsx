@@ -136,7 +136,7 @@ function DeletedCustomerList() {
         DialogText={"Are you sure you want to Delete this customer?"}
         finalDelete={finalDelete}
       />
-      {CustomerData?.DeletedCustomerLoader ? (
+      {!CustomerData?.Loader ? (
         CustomerData?.customerDeletedList?.length ? (
           <Container fixed>
             <Header

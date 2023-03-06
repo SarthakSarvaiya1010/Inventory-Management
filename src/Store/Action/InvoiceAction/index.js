@@ -113,24 +113,31 @@ export const AddInvoiceData = (data) => async (dispatch) => {
 export const GetDeletedInvoiceList = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   try {
-    const GetDeletedInvoiceData = await axios.get(
-      "https://inventory-management-backend.onrender.com/invoiceDeletelist",
-      {
-        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
-        params: data
-          ? {
-              searchKeyword: data.search,
-              limit: data.limit,
-              page: data.pageNumber,
-              orderByString: data.orderByString,
-            }
-          : null,
-      }
-    );
     dispatch({
-      type: GET_DELETED_INVOICE,
-      payload: GetDeletedInvoiceData.data,
+      type: LIST_LOADER,
+      payload: [],
     });
+    await axios
+      .get(
+        "https://inventory-management-backend.onrender.com/invoiceDeletelist",
+        {
+          headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+          params: data
+            ? {
+                searchKeyword: data.search,
+                limit: data.limit,
+                page: data.pageNumber,
+                orderByString: data.orderByString,
+              }
+            : null,
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: GET_DELETED_INVOICE,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_GET_DELETED_INVOICE,

@@ -5,6 +5,7 @@ import {
   USER_DELETE,
   USER_GET_BY_UUID,
   USER_ADD,
+  LIST_LOADER,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -12,9 +13,12 @@ export const userListAction = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   try {
-    const userList = await axios.get(
-      "https://inventory-management-backend.onrender.com/users",
-      {
+    dispatch({
+      type: LIST_LOADER,
+      payload: [],
+    });
+    await axios
+      .get("https://inventory-management-backend.onrender.com/users", {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {
@@ -24,12 +28,13 @@ export const userListAction = (data) => async (dispatch) => {
               orderByString: data.orderByString,
             }
           : null,
-      }
-    );
-    dispatch({
-      type: USER_LIST,
-      payload: userList.data,
-    });
+      })
+      .then((res) => {
+        dispatch({
+          type: USER_LIST,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_ADMIN_LIST,
@@ -62,9 +67,12 @@ export const userDelteListAction = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   try {
-    const userList = await axios.get(
-      "https://inventory-management-backend.onrender.com/delete/users",
-      {
+    dispatch({
+      type: LIST_LOADER,
+      payload: [],
+    });
+    await axios
+      .get("https://inventory-management-backend.onrender.com/delete/users", {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {
@@ -74,12 +82,13 @@ export const userDelteListAction = (data) => async (dispatch) => {
               orderByString: data.orderByString,
             }
           : null,
-      }
-    );
-    dispatch({
-      type: USER_DELTE_LIST,
-      payload: userList.data,
-    });
+      })
+      .then((res) => {
+        dispatch({
+          type: USER_DELTE_LIST,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_ADMIN_LIST,

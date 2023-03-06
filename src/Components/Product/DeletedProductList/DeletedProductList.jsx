@@ -27,6 +27,7 @@ function DeletedProductList() {
   const [search, setSearch] = useState();
   const productData = useSelector((state) => state?.ProductList);
   console.log("productData", productData?.SucessPermanentDeleteData);
+  console.log("productData?.DeletedProductListLoader", productData?.Loader);
 
   useEffect(() => {
     dispatch(ProductDeleteListAction());
@@ -130,8 +131,8 @@ function DeletedProductList() {
         DialogText={"Are you sure you want to Delete this Product?"}
         finalDelete={finalDelete}
       />
-      {productData?.DeletedProductListLoader ? (
-        productData?.productDeletList.length ? (
+      {!productData?.Loader ? (
+        productData?.productDeletList?.length ? (
           <Container fixed>
             <Header
               name={"Delete Product List"}
@@ -193,6 +194,7 @@ function DeletedProductList() {
                     productData?.productDeletList[0]?.total_count / limit
                   )}
                   PageNumber={setPageNumber}
+                  currentPage={pageNumber}
                 />
               </Stack>
             </Container>
