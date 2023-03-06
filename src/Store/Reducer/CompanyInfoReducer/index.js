@@ -20,12 +20,16 @@ const CompanyInfoReducer = (state = initialstate, action) => {
       return {
         ...state,
         CompanyInfo: action.payload,
+        SucessMessageOfEditCompanyInfo: [],
+        ErrorMessageOfEditComapanyInfo: [],
         loder: true,
       };
     case COMPANY_INFO_BY_ID:
       return {
         ...state,
         CompanyInfoId: action.payload,
+        SucessMessageOfEditCompanyInfo: [],
+        ErrorMessageOfEditComapanyInfo: [],
         loder: true,
       };
 

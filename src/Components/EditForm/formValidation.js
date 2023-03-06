@@ -26,6 +26,12 @@ export function CustomerValidate(values, data) {
 
   if (!values?.mobile_no) {
     errors.mobile_no = "Mobile No is required";
+  } else if (
+    !/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(
+      parseInt(values?.mobile_no)
+    )
+  ) {
+    errors.mobile_no = "mobile number is invalid";
   }
 
   if (!values?.address) {
@@ -67,6 +73,12 @@ export function CompanyValidate(values) {
   }
   if (!values?.mobile_no) {
     errors.mobile_no = "mobile no is required";
+  } else if (
+    !/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(
+      parseInt(values?.mobile_no)
+    )
+  ) {
+    errors.mobile_no = "mobile number is invalid";
   }
   if (!values?.phone_no) {
     errors.phone_no = "phone no is required";

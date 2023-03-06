@@ -34,9 +34,7 @@ function DeletedCustomerList() {
       window.location.reload();
     }
   }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);
-  useEffect(() => {
-    dispatch(CustomerDelectListAction());
-  }, [dispatch]);
+
   const data = [];
 
   // eslint-disable-next-line array-callback-return

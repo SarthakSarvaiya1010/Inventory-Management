@@ -64,7 +64,7 @@ export const ProductEditAction = (Product_id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_EDIT_PRODUCT_DATA,
+      type: FAILED_ADMIN_LIST,
       payload: { data: error.response.data },
     });
   }
@@ -72,6 +72,7 @@ export const ProductEditAction = (Product_id) => async (dispatch) => {
 
 export const ProductEditDataAction = (data, Product_id) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  console.log("data=====>", data);
 
   try {
     const ProductEditData = await axios.put(
@@ -87,7 +88,7 @@ export const ProductEditDataAction = (data, Product_id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_EDIT_PRODUCT_DATA,
       payload: { data: error.response.data },
     });
   }

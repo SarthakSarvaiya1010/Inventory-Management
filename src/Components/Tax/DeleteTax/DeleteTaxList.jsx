@@ -61,8 +61,12 @@ function DeletedTaxList() {
   };
 
   const finalDelete = () => {
+    console.log(
+      "TaxData?.TaxDeletList[data - 1]?.tax_id",
+      TaxData?.TaxDeletList[data]
+    );
     setOpen(false);
-    dispatch(PermanentTaxDeleteAction(TaxData?.TaxDeletList[data - 1]?.tax_id));
+    dispatch(PermanentTaxDeleteAction(TaxData?.TaxDeletList[open - 1]?.tax_id));
   };
 
   return (

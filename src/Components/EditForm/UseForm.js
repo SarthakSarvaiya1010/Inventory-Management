@@ -160,6 +160,7 @@ const useForm = (defaultData, image) => {
   const handleOnchange = useCallback(
     (e) =>
       setvalues((values) => {
+        console.log("values===>", values);
         const newValues = { ...values, [e.target.name]: e.target.value };
         return newValues;
       }),

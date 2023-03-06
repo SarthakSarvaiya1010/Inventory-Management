@@ -11,6 +11,7 @@ const List = styled("ul")({
 
 export default function UsePagination(props) {
   const { countNumbuer, PageNumber, currentPage } = props;
+  let getpageNumber = localStorage.getItem("PageNumber");
   const { items } = usePagination({
     count: countNumbuer,
     defaultPage: currentPage,
@@ -73,6 +74,7 @@ export default function UsePagination(props) {
               onClick={() => {
                 console.log("children", page);
                 PageNumber(page);
+                localStorage.setItem("PageNumber", page);
               }}
             >
               {children}

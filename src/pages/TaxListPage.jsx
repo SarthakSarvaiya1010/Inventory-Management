@@ -33,7 +33,7 @@ function TaxListPage() {
   }, [
     TaxData?.SuccessDeleteTaxMessage?.message,
     TaxData?.SuccessDeleteTaxMessage?.statusCode,
-    navigate
+    navigate,
   ]);
   return (
     <div>

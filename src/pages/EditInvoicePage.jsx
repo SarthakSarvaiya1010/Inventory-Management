@@ -44,7 +44,7 @@ export default function EditInvoicePage() {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
         navigate("/invoice_list");
-      }, 2000);
+      }, 4000);
     }
   }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
 
@@ -64,17 +64,19 @@ export default function EditInvoicePage() {
     link.download = "invoice.pdf";
     link.href = "data:application/pdf;base64," + b64;
     document.body.appendChild(link);
-    let pdfWindow = window.open("");
-    pdfWindow.document.write(
-      "<iframe width='100%' height='100%' src='data:application/pdf;base64, " +
-        encodeURI(b64) +
-        "'></iframe>"
-    );
+    setTimeout(() => {
+      let pdfWindow = window.open("");
+      pdfWindow.document.write(
+        "<iframe width='100%' height='100%' src='data:application/pdf;base64, " +
+          encodeURI(b64) +
+          "'></iframe>"
+      );
+    }, 3000);
   }
   return (
     <div>
       <Snackbar
-        autoHideDuration={2000}
+        autoHideDuration={4000}
         anchorOrigin={{ vertical, horizontal }}
         open={open}
         onClose={handleClose}

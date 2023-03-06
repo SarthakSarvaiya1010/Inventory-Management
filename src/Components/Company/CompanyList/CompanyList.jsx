@@ -19,6 +19,7 @@ function CompanyList() {
   const dispatch = useDispatch();
 
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
+  console.log("Companyinfo");
   let limit = 2;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();

@@ -200,7 +200,7 @@ function EditCompanyInfo() {
                     }}
                     src={
                       CompanyInfo?.image_src
-                        ? `https://inventory-management-backend.onrender.com/${CompanyInfo?.image_src}`
+                        ? `data:image/png;base64,${CompanyInfo?.image_src}`
                         : "src/"
                     }
                   />
