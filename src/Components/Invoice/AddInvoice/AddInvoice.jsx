@@ -68,6 +68,7 @@ function AddInvoice(props) {
     address: "",
     gst_no: "",
   });
+  console.log("productproduct", product);
   console.log("CustomerListData", CustomerListData);
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
@@ -103,7 +104,6 @@ function AddInvoice(props) {
         (discount ? discount : 0)
       : 0;
   const handleChangeProduct = (name, value) => {
-    console.log("value========>", value, name);
     let nameIndex = name.split(" ", 2);
     let index = parseInt(nameIndex[1]) - 1;
     console.log("index===?", index, value);
@@ -198,7 +198,7 @@ function AddInvoice(props) {
   };
 
   // const { sx, ...other } = props;
-  console.log("productproduct", product);
+
 
   const handleDelete = (index) => {
     console.log("index====>", index);
