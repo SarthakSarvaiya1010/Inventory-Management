@@ -53,6 +53,7 @@ const CustomerListReducer = (state = initialstate, action) => {
       return {
         ...state,
         customerDeletedList: action.payload,
+        Loader: false,
         DeletedCustomerLoader: true,
       };
     case CUSTOMER_DELETE:
@@ -85,7 +86,6 @@ const CustomerListReducer = (state = initialstate, action) => {
         ...state,
         SuccessMessageOfCustomerDeleted: action.payload,
       };
-
     default:
       return state;
   }

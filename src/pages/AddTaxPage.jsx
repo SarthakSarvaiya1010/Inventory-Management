@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import AddTax from "../Components/Tax/AddTax/AddTax";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -10,6 +11,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function AddTaxPage() {
   const TaxData = useSelector((state) => state?.TaxData);
+  const navigate = useNavigate();
   console.log("TaxData=======>", TaxData);
   const [state, setState] = React.useState({
     open: false,
@@ -24,6 +26,9 @@ function AddTaxPage() {
   useEffect(() => {
     if (TaxData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
+      setTimeout(() => {
+        navigate("/tax_list");
+      }, 2000);
     }
   }, [TaxData?.SucessMessage?.message, TaxData?.SucessMessage?.statusCode]);
 
@@ -52,7 +57,9 @@ function AddTaxPage() {
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            {TaxData?.ErrorMessage?.data?.message}
+            {TaxData?.ErrorMessage?.data?.message
+              ? TaxData?.ErrorMessage?.data?.message
+              : "Opps Something Went wrong"}
           </Alert>
         )}
       </Snackbar>

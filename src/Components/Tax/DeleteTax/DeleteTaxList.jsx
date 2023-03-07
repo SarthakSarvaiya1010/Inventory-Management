@@ -61,8 +61,12 @@ function DeletedTaxList() {
   };
 
   const finalDelete = () => {
+    console.log(
+      "TaxData?.TaxDeletList[data - 1]?.tax_id",
+      TaxData?.TaxDeletList[data]
+    );
     setOpen(false);
-    dispatch(PermanentTaxDeleteAction(TaxData?.TaxDeletList[data - 1]?.tax_id));
+    dispatch(PermanentTaxDeleteAction(TaxData?.TaxDeletList[open - 1]?.tax_id));
   };
 
   return (
@@ -73,7 +77,7 @@ function DeletedTaxList() {
         DialogText={"Are you sure you want to Delete this Tax?"}
         finalDelete={finalDelete}
       />
-      {TaxData?.DeletedTaxLoader ? (
+      {!TaxData?.loder ? (
         TaxData?.TaxDeletList?.length ? (
           <Container fixed>
             <Header
@@ -132,6 +136,7 @@ function DeletedTaxList() {
                     TaxData?.TaxDeletList[0]?.total_count / limit
                   )}
                   PageNumber={setPageNumber}
+                  currentPage={pageNumber}
                 />
               </Stack>
             </Container>

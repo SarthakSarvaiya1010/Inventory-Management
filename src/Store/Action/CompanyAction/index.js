@@ -6,6 +6,7 @@ import {
   COMPANY_DELETE,
   DELETE_COMPANY_INFO,
   ADD_COMPANY_INFO,
+  PERMANENT_COMPANY_DELETE,
   FAILED_COMPANY_INFO_EDIT,
 } from "../../ActionTypes/index";
 import axios from "axios";
@@ -159,17 +160,16 @@ export const CompanyInfoEditAction = (data, company_id) => async (dispatch) => {
   }
 };
 
-export const CompanyDeleteAction = (Product_id) => async (dispatch) => {
+export const CompanyDeleteAction = (company_id) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
   try {
-    const ProductDelete = await axios.delete(
-      `https://inventory-management-backend.onrender.com/delete/company_info/${Product_id}`,
+    const CompanyDelete = await axios.delete(
+      `https://inventory-management-backend.onrender.com/delete/company_info/${company_id}`,
       { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
     );
     dispatch({
       type: COMPANY_DELETE,
-      payload: ProductDelete.data,
+      payload: CompanyDelete.data,
     });
   } catch (error) {
     dispatch({
@@ -178,3 +178,23 @@ export const CompanyDeleteAction = (Product_id) => async (dispatch) => {
     });
   }
 };
+
+export const PermanentCompanyDeleteAction =
+  (company_id) => async (dispatch) => {
+    const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    try {
+      const CompanyDelete = await axios.delete(
+        `https://inventory-management-backend.onrender.com/permanent/delete/company_info/${company_id}`,
+        { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+      );
+      dispatch({
+        type: PERMANENT_COMPANY_DELETE,
+        payload: CompanyDelete.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FAILED_ADMIN_LIST,
+        payload: { data: error.response.data },
+      });
+    }
+  };

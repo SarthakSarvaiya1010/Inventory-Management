@@ -19,6 +19,7 @@ function CompanyList() {
   const dispatch = useDispatch();
 
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
+  console.log("Companyinfo");
   let limit = 2;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
@@ -67,9 +68,9 @@ function CompanyList() {
   const finalDelete = () => {
     setOpen(false);
     dispatch(
-      CompanyDeleteAction(CompanyInfo?.CompanyInfo[data - 1]?.company_id)
+      CompanyDeleteAction(CompanyInfo?.CompanyInfo[open - 1]?.company_id)
     );
-    window.location.reload();
+    // window.location.reload();
   };
 
   const searchHeadal = (e) => {
@@ -201,6 +202,7 @@ function CompanyList() {
                   CompanyInfo?.CompanyInfo[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

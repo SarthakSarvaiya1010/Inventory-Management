@@ -7,10 +7,8 @@ export const userLogin = (data) => async (dispatch) => {
       "https://inventory-management-backend.onrender.com/login ",
       data
     );
-
     dispatch({
       type: AUTH,
-
       payload: { data: res.data },
     });
   } catch (error) {

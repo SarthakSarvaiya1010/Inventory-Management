@@ -45,12 +45,11 @@ const TaxReducer = (state = initialstate, action) => {
         ...state,
         SucessMessage: action.payload,
       };
-    case FAILED_TAX_ADD: {
+    case FAILED_TAX_ADD:
       return {
         ...state,
         ErrorMessage: action.payload,
       };
-    }
     case TAX_EDIT:
       return {
         ...state,
@@ -61,6 +60,7 @@ const TaxReducer = (state = initialstate, action) => {
       return {
         ...state,
         TaxDeletList: action.payload,
+        loder: false,
         DeletedTaxLoader: true,
       };
     case TAX_DELETE:

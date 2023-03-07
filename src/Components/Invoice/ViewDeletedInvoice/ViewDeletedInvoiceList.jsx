@@ -39,7 +39,7 @@ export default function ViewDeletedInvoiceList() {
   // eslint-disable-next-line array-callback-return
   DeletedInvoiceList?.DeletedInvoiceList?.map((e) => {
     let elements = {};
-    elements["BILL No"] = `0${e.bill_no}`;
+    elements["BILL No"] = e.bill_no < 10 ? ` 0${e.bill_no}` : e.bill_no;
     elements["Invoice Date"] = convert(e.invoice_date);
     elements["Name"] = e.customer_name;
     elements["Total Amount"] = e.bill_amount;
@@ -58,10 +58,6 @@ export default function ViewDeletedInvoiceList() {
       window.location.reload();
     }
   }, [DeletedInvoiceList?.SucessMessageOfInvoiceDelete?.statusCode]);
-
-  useEffect(() => {
-    dispatch(GetDeletedInvoiceList());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -141,7 +137,7 @@ export default function ViewDeletedInvoiceList() {
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
-      {DeletedInvoiceList?.DeletedInvoiceLoader ? (
+      {!DeletedInvoiceList?.Loader ? (
         DeletedInvoiceList?.DeletedInvoiceList?.length ? (
           <Container fixed>
             <Header
@@ -216,6 +212,7 @@ export default function ViewDeletedInvoiceList() {
                       limit
                   )}
                   PageNumber={setPageNumber}
+                  currentPage={pageNumber}
                 />
               </Stack>
             </Container>

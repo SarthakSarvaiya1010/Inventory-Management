@@ -88,8 +88,6 @@ function ProductList() {
       );
     }
   };
-  console.log(search);
-  console.log("setShortingData", shorting);
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a

@@ -34,9 +34,7 @@ function DeletedCustomerList() {
       window.location.reload();
     }
   }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);
-  useEffect(() => {
-    dispatch(CustomerDelectListAction());
-  }, [dispatch]);
+
   const data = [];
 
   // eslint-disable-next-line array-callback-return
@@ -138,7 +136,7 @@ function DeletedCustomerList() {
         DialogText={"Are you sure you want to Delete this customer?"}
         finalDelete={finalDelete}
       />
-      {CustomerData?.DeletedCustomerLoader ? (
+      {!CustomerData?.Loader ? (
         CustomerData?.customerDeletedList?.length ? (
           <Container fixed>
             <Header

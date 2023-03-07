@@ -26,7 +26,6 @@ function DeletedProductList() {
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [search, setSearch] = useState();
   const productData = useSelector((state) => state?.ProductList);
-  console.log("productData", productData?.SucessPermanentDeleteData);
 
   useEffect(() => {
     dispatch(ProductDeleteListAction());
@@ -56,7 +55,6 @@ function DeletedProductList() {
     }
   };
   const headalEdit = (data) => {
-    console.log("data", data, productData?.productDeletList[data - 1]);
     navigate(
       `/product/edit/${productData?.productDeletList[data - 1]?.product_id}`
     );
@@ -130,8 +128,8 @@ function DeletedProductList() {
         DialogText={"Are you sure you want to Delete this Product?"}
         finalDelete={finalDelete}
       />
-      {productData?.DeletedProductListLoader ? (
-        productData?.productDeletList.length ? (
+      {!productData?.Loader ? (
+        productData?.productDeletList?.length ? (
           <Container fixed>
             <Header
               name={"Delete Product List"}
@@ -193,6 +191,7 @@ function DeletedProductList() {
                     productData?.productDeletList[0]?.total_count / limit
                   )}
                   PageNumber={setPageNumber}
+                  currentPage={pageNumber}
                 />
               </Stack>
             </Container>

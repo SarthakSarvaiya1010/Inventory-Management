@@ -35,7 +35,7 @@ import {
   AddInvoiceData,
   GetinvoiceAddPageAction,
 } from "../../../Store/Action/InvoiceAction";
-import InvoiceValidate from "../InvoiceFormValidation";
+import { InvoiceValidate } from "../InvoiceFormValidation";
 import { convert } from "../../../Helpers/misc";
 import { ToWords } from "to-words";
 
@@ -75,6 +75,7 @@ function AddInvoice(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
+  console.log("errors", errors);
   const [findErrors, setFindErrors] = useState(false);
 
   if (sucessMessage && disabled) {
@@ -88,8 +89,8 @@ function AddInvoice(props) {
   let totalrate = 0;
   product?.forEach((sum, index) => {
     totalAmount += sum.amount;
-    totalweight += parseFloat(sum.weight);
-    totalrate += parseFloat(sum.rate);
+    totalweight += sum.weight ? parseFloat(sum.weight) : 0;
+    totalrate += sum.rate ? parseFloat(sum.rate) : 0;
   });
   console.log("totalAmount", totalAmount);
   let SGST = ((1.5 / 100) * totalAmount).toFixed(2);
@@ -225,36 +226,55 @@ function AddInvoice(props) {
     setCustomerListData(data);
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const finalinvoicedata = {
-    bill_no: testData[0]?.bill_no,
-    invoice_date: convert(new Date()),
-    customer_id: CustomerListData ? CustomerListData.customer_id : "",
-    taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
-    sgst: parseFloat(SGST),
-    cgst: parseFloat(CGST),
-    discount: parseFloat(discount) ? parseFloat(discount) : 0,
-    bill_amount: parseFloat(Bill_Amount.toFixed(2)),
-    productdata: product,
-  };
+  let finalinvoicedata;
   const handleAddInvoiceData = () => {
     setFindErrors(true);
+    finalinvoicedata = {
+      bill_no: testData[0]?.bill_no,
+      invoice_date: convert(new Date()),
+      customer_id: CustomerListData ? CustomerListData.customer_id : "",
+      taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
+      sgst: parseFloat(SGST),
+      cgst: parseFloat(CGST),
+      discount: parseFloat(discount) ? parseFloat(discount) : 0,
+      bill_amount: parseFloat(Bill_Amount.toFixed(2)),
+      productdata: product,
+    };
     setErrors(InvoiceValidate(finalinvoicedata, addtable));
-    console.log("finalinvoicedata", finalinvoicedata);
-    dispatch(AddInvoiceData(finalinvoicedata));
-    if (finalinvoicedata) {
-      setDisabled(true);
+    window.scroll(0, 0);
+    if (
+      Object.keys(errors).length === 0 &&
+      finalinvoicedata?.customer_id &&
+      finalinvoicedata?.productdata?.length > 0
+    ) {
+      console.log("finalinvoicedata", finalinvoicedata);
+      dispatch(AddInvoiceData(finalinvoicedata));
+      if (finalinvoicedata) {
+        setDisabled(true);
+      }
     }
   };
 
   useEffect(() => {
     if (findErrors) {
+      finalinvoicedata = {
+        bill_no: testData[0]?.bill_no,
+        invoice_date: convert(new Date()),
+        customer_id: CustomerListData ? CustomerListData?.customer_id : "",
+        taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
+        sgst: parseFloat(SGST),
+        cgst: parseFloat(CGST),
+        discount: parseFloat(discount) ? parseFloat(discount) : 0,
+        bill_amount: parseFloat(Bill_Amount.toFixed(2)),
+        productdata: product,
+      };
       setErrors(InvoiceValidate(finalinvoicedata, addtable));
     }
   }, [
     findErrors,
-    CustomerListData.customer_id,
-    product,
     finalinvoicedata,
+    CustomerListData?.customer_id,
+    product,
     addtable,
   ]);
 
@@ -407,6 +427,7 @@ function AddInvoice(props) {
                       variant="standard"
                       sx={{ width: 1 }}
                       name="Gst_No"
+                      value={"24BWOPP9863M2ZF"}
                       // onChange={(e) => handleChange(e)}
                     />
                   </Stack>

@@ -37,7 +37,7 @@ import {
   GetinvoiceEditDataAction,
   UpdateInvoiceData,
 } from "../../../Store/Action/InvoiceAction";
-import InvoiceValidate from "../InvoiceFormValidation";
+import { InvoiceEditValidate } from "../InvoiceFormValidation";
 import { useParams } from "react-router";
 import { convert } from "../../../Helpers/misc";
 import { ToWords } from "to-words";
@@ -60,13 +60,14 @@ function InvoiceEdit(props) {
   const params = useParams();
   const { id } = params;
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [CustomerListData, setCustomerListData] = useState();
   const [dateData, setDateData] = useState();
   const [addtable, setAddTable] = useState();
   const [product, setProduct] = useState([]);
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState({});
   console.log("errors", errors, "product", product);
   const [findErrors, setFindErrors] = useState(null);
   if (EditInvoiceSucessMessage && disabled) {
@@ -81,17 +82,12 @@ function InvoiceEdit(props) {
       setProduct(testData?.productlistdata);
       setDiscount(testData?.discount);
     }
-  }, [
-    InvoicePageData.invoiceEdit,
-    addtable,
-    testData?.discount,
-    testData?.productlistdata,
-  ]);
+  }, [testData?.discount, testData?.productlistdata?.length]);
 
   useEffect(() => {
     dispatch(GetinvoiceEditDataAction(id));
     dispatch(GetinvoiceAddPageAction());
-  }, [dispatch, id]);
+  }, [accessToken?.accessToken, dispatch, id]);
 
   // calculate Total weight ,rate, amount and billamount
   let totalAmount = 0;
@@ -214,7 +210,6 @@ function InvoiceEdit(props) {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const UpdatedData = {
     bill_no: testData?.bill_no,
     invoice_date: convert(testData?.invoice_date),
@@ -237,11 +232,12 @@ function InvoiceEdit(props) {
   const handleUpdate = () => {
     const invoice_id = testData?.invoice_id;
     setFindErrors(true);
-    setErrors(InvoiceValidate(UpdatedData, addtable));
+    setErrors(InvoiceEditValidate(UpdatedData, addtable));
     window.scroll(0, 0);
     if (
-      Object.keys(errors).length === 0 ||
-      (UpdatedData?.customer_id && UpdatedData?.productdata?.length > 0)
+      Object.keys(errors).length === 0 &&
+      UpdatedData?.customer_id &&
+      UpdatedData?.productdata?.length > 0
     ) {
       console.log("UpdatedData", UpdatedData);
       dispatch(UpdateInvoiceData(invoice_id, UpdatedData));
@@ -252,10 +248,8 @@ function InvoiceEdit(props) {
     }
   };
   useEffect(() => {
-    if (findErrors) {
-      setErrors(InvoiceValidate(UpdatedData, addtable));
-    }
-  }, [findErrors, UpdatedData, addtable]);
+    setErrors(InvoiceEditValidate(UpdatedData, addtable));
+  }, [findErrors, CustomerListData?.customer_id, product]);
   const handleChange = (event) => {
     const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
       (e) => e.customer_id === event.target.value

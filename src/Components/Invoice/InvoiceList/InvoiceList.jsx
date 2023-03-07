@@ -132,7 +132,7 @@ function InvoiceList() {
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
-      {InvoiceData?.invoiceList.length ? (
+      {InvoiceData?.invoiceList?.length ? (
         <Container fixed>
           <Header
             name={"InvoiceList"}

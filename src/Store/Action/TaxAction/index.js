@@ -74,9 +74,12 @@ export const TaxEditAction = (Tax_id) => async (dispatch) => {
 export const TaxDelectListAction = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   try {
-    const TaxDelectList = await axios.get(
-      "https://inventory-management-backend.onrender.com/delete/tax",
-      {
+    dispatch({
+      type: LIST_LOADER,
+      payload: [],
+    });
+    await axios
+      .get("https://inventory-management-backend.onrender.com/delete/tax", {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {
@@ -85,12 +88,13 @@ export const TaxDelectListAction = (data) => async (dispatch) => {
               page: data.pageNumber,
             }
           : null,
-      }
-    );
-    dispatch({
-      type: TAX_DELETED_LIST,
-      payload: TaxDelectList.data,
-    });
+      })
+      .then((res) => {
+        dispatch({
+          type: TAX_DELETED_LIST,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_ADMIN_LIST,

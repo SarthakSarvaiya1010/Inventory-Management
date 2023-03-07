@@ -79,6 +79,7 @@ const ProductListReducer = (state = initialstate, action) => {
       return {
         ...state,
         productDeletList: action.payload,
+        Loader: false,
         DeletedProductListLoader: true,
       };
     case PERMANENT_PRODUCT_DELETE:

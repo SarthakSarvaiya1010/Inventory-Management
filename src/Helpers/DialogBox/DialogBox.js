@@ -18,9 +18,6 @@ export default function AlertDialogSlide(props) {
 
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Slide in alert dialog
-      </Button> */}
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -29,11 +26,7 @@ export default function AlertDialogSlide(props) {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>{DialogText}</DialogTitle>
-        {/* <DialogContent>
-          <DialogContentText ContentText id="alert-dialog-slide-description">
-            {DialogText}
-          </DialogContentText>
-        </DialogContent> */}
+
         <DialogActions>
           <Button onClick={finalDelete}>Yes</Button>
           <Button sx={{ color: "Red" }} onClick={handleClose}>

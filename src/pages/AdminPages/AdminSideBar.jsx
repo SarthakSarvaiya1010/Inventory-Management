@@ -35,9 +35,10 @@ function AdminSideBar(props) {
   const { openManu, setOpenManu } = props;
 
   const theme = useTheme();
-  const [Item, setItem] = useState("User");
+  const [Item, setItem] = useState(localStorage?.getItem("ItemName") || "User");
   const headalClick = (text) => {
     setItem(text);
+    localStorage.setItem("ItemName", text);
     switch (text) {
       case "User":
         return navigate("/userlist");

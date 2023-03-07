@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import AddProduct from "../Components/Product/AddProduct/AddProduct";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
+// import Snackbar from "@mui/material/Snackbar";
+// import MuiAlert from "@mui/material/Alert";
+import SanckBar from "../Helpers/SanckBar/SanckBar";
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+// const Alert = React.forwardRef(function Alert(props, ref) {
+//   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+// });
 
 function AddProductPage() {
   const ProductEditData = useSelector((state) => state?.ProductList);
@@ -17,10 +18,7 @@ function AddProductPage() {
     vertical: "top",
     horizontal: "center",
   });
-  const { vertical, horizontal, open } = state;
-  const handleClose = () => {
-    setState({ ...state, open: false });
-  };
+
   useEffect(() => {
     if (ProductEditData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
@@ -42,9 +40,17 @@ function AddProductPage() {
     ProductEditData?.ErrorMessage?.data?.statusCode,
     ProductEditData?.ErrorMessage?.data?.message,
   ]);
+  console.log("ProductEditData?.ErrorMessage?.data?.message", ProductEditData);
   return (
     <div>
-      <Snackbar
+      <SanckBar
+        alertMessage={ProductEditData?.SucessMessage?.message}
+        alertErrorMessage={ProductEditData?.ErrorMessage?.data?.message}
+        state={state}
+        setState={setState}
+      />
+
+      {/* <Snackbar
         autoHideDuration={2000}
         anchorOrigin={{ vertical, horizontal }}
         open={open}
@@ -64,7 +70,7 @@ function AddProductPage() {
             {ProductEditData?.ErrorMessage?.data?.message}
           </Alert>
         )}
-      </Snackbar>
+      </Snackbar> */}
       <AddProduct />
     </div>
   );

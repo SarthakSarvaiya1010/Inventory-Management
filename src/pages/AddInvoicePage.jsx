@@ -32,7 +32,7 @@ function AddInvoicePage() {
         window.location.reload();
       }, 4000);
     }
-  }, [InvoicePageData?.InvoicePdf?.statusCode,navigate]);
+  }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
   var b64;
   if (InvoicePageData?.InvoicePdf?.invoicePdf) {
     b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
@@ -54,12 +54,12 @@ function AddInvoicePage() {
           encodeURI(b64) +
           "'></iframe>"
       );
-    }, 3000);
+    }, 2000);
   }
   return (
     <div>
       <Snackbar
-        autoHideDuration={2000}
+        autoHideDuration={4000}
         anchorOrigin={{ vertical, horizontal }}
         open={open}
         onClose={handleClose}

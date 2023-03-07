@@ -64,7 +64,7 @@ export const ProductEditAction = (Product_id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_EDIT_PRODUCT_DATA,
+      type: FAILED_ADMIN_LIST,
       payload: { data: error.response.data },
     });
   }
@@ -72,6 +72,7 @@ export const ProductEditAction = (Product_id) => async (dispatch) => {
 
 export const ProductEditDataAction = (data, Product_id) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  console.log("data=====>", data);
 
   try {
     const ProductEditData = await axios.put(
@@ -87,7 +88,7 @@ export const ProductEditDataAction = (data, Product_id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FAILED_ADMIN_LIST,
+      type: FAILED_EDIT_PRODUCT_DATA,
       payload: { data: error.response.data },
     });
   }
@@ -137,22 +138,29 @@ export const ProductDeleteListAction = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   try {
-    const ProductDeleteList = await axios.get(
-      "https://inventory-management-backend.onrender.com/delete/products",
-      {
-        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
-        params: {
-          searchKeyword: data.search,
-          limit: data.limit,
-          page: data.pageNumber,
-          orderByString: data.orderByString,
-        },
-      }
-    );
     dispatch({
-      type: PRODUCT_DELETE_LIST,
-      payload: ProductDeleteList.data,
+      type: LIST_LOADER,
+      payload: [],
     });
+    await axios
+      .get(
+        "https://inventory-management-backend.onrender.com/delete/products",
+        {
+          headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+          params: {
+            searchKeyword: data.search,
+            limit: data.limit,
+            page: data.pageNumber,
+            orderByString: data.orderByString,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: PRODUCT_DELETE_LIST,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_ADMIN_LIST,

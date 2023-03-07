@@ -37,8 +37,8 @@ const InvoiceReducer = (state = initialstate, action) => {
         invoiceList: action.payload,
         invoiceEdit: [],
         InvoicePdf: [],
-        SucessMessageOfInvoiceDelete:[],
-        Loader: true,
+        SucessMessageOfInvoiceDelete: [],
+        Loader: false,
       };
     case GET_INVOICE_PAGE:
       console.log("actionpayload,", action.payload);
@@ -58,12 +58,12 @@ const InvoiceReducer = (state = initialstate, action) => {
         ...state,
         InvoicePdf: action.payload,
       };
-
     case GET_DELETED_INVOICE:
       console.log("actionpayload,", action.payload);
       return {
         ...state,
         DeletedInvoiceList: action.payload,
+        Loader: false,
         DeletedInvoiceLoader: true,
       };
     case DELETE_INVOICE:

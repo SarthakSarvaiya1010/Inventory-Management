@@ -6,7 +6,10 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { userDelteListAction } from "../../../Store/Action/UserAction/index";
+import {
+  userDelteListAction,
+  userDeleteAction,
+} from "../../../Store/Action/UserAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 
@@ -34,6 +37,7 @@ function UserDeleteList() {
 
   // eslint-disable-next-line array-callback-return
   User.UserDeleteList.map((e) => {
+    console.log("eeeeeeeee=>", e);
     let elements = {};
     elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     elements["Name"] = e.name;
@@ -43,12 +47,12 @@ function UserDeleteList() {
   });
 
   const headalEdit = (data) => {
-    navigate(`/product/edit/${User.UserDeleteList[data - 1]?.user_id}`);
+    navigate(`/product/edit/${User.UserDeleteList[data - 1]?.user_uuid}`);
   };
 
   const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this Product?")) {
-      dispatch(userDelteListAction(User.UserDeleteList[data - 1]?.product_id));
+    if (window.confirm("Are you sure you want to Delete this User?")) {
+      // dispatch(userDeleteAction(User.UserDeleteList[data - 1]?.user_uuid));
     }
     // window.location.reload();
   };
@@ -109,71 +113,116 @@ function UserDeleteList() {
 
   return (
     <div>
-      {User?.UserDeleteList?.length ? (
-        <Container fixed sx={{ Width: 100 }}>
-          <Header
-            name={"User List"}
-            SearchBar={true}
-            searchHeadal={searchHeadal}
-            onKeyDown={onKeyDown}
-          />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              spacing={4}
-              sx={{ p: 4 }}
-            >
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/addproduct");
-                }}
-              >
-                add User
-              </Button>
-
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  navigate("/deletedproduct");
-                }}
-              >
-                view deleted User
-              </Button>
-            </Stack>
-
-            <Table
-              data={data}
-              hide={true}
-              headalEdit={headalEdit}
-              headalDelete={headalDelete}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
+      {!User?.Loader ? (
+        User?.UserDeleteList?.length ? (
+          <Container fixed sx={{ Width: 100 }}>
+            <Header
+              name={"Delete User List"}
+              SearchBar={true}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
             />
-            <Stack
-              sx={{
-                margin: "10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
-                padding: "20px  0 20px 20px",
-              }}
-            >
-              <UsePagination
-                countNumbuer={Math.ceil(
-                  User.UserDeleteList[0]?.total_count / limit
-                )}
-                PageNumber={setPageNumber}
+            <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
+              >
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/adduser");
+                  }}
+                >
+                  add User
+                </Button>
+
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/userlist");
+                  }}
+                >
+                  Back
+                </Button>
+              </Stack>
+
+              <Table
+                data={data}
+                hide={true}
+                headalEdit={headalEdit}
+                headalDelete={headalDelete}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
               />
-            </Stack>
+              <Stack
+                sx={{
+                  margin: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  padding: "20px  0 20px 20px",
+                }}
+              >
+                <UsePagination
+                  countNumbuer={Math.ceil(
+                    User.UserDeleteList[0]?.total_count / limit
+                  )}
+                  PageNumber={setPageNumber}
+                />
+              </Stack>
+            </Container>
           </Container>
-        </Container>
+        ) : (
+          <Container fixed sx={{ Width: 100 }}>
+            <Header
+              name={"Delete User List"}
+              SearchBar={false}
+              searchHeadal={searchHeadal}
+              onKeyDown={onKeyDown}
+            />
+            <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={4}
+                sx={{ p: 4 }}
+              >
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/adduser");
+                  }}
+                >
+                  add User
+                </Button>
+
+                <Button
+                  variant="text"
+                  color="success"
+                  sx={{ fontSize: 16 }}
+                  onClick={() => {
+                    navigate("/userlist");
+                  }}
+                >
+                  Back
+                </Button>
+              </Stack>
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of Deleted User
+              </h1>
+            </Container>
+          </Container>
+        )
       ) : (
         <Stack
           sx={{ color: "grey.500", height: "80vh" }}

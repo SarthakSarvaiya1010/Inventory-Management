@@ -7,7 +7,7 @@ import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  CompanyDeleteAction,
+  PermanentCompanyDeleteAction,
   DeleteCompanyInfoAction,
 } from "../../../Store/Action/CompanyAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -69,7 +69,9 @@ function CompanyDeleteList() {
   const finalDelete = () => {
     setOpen(false);
     dispatch(
-      CompanyDeleteAction(CompanyInfo?.DeleteCompanyInfo[data - 1]?.company_id)
+      PermanentCompanyDeleteAction(
+        CompanyInfo?.DeleteCompanyInfo[open - 1]?.company_id
+      )
     );
     window.location.reload();
   };

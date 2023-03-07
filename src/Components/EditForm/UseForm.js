@@ -141,12 +141,12 @@ const useForm = (defaultData, image) => {
     setErrors(UserValidate(values, defaultData));
     const formAddUserData = new FormData();
     formAddUserData.append("name", values?.name);
-    formAddUserData.append("role_id", values?.role_id);
+    formAddUserData.append("role_id", parseInt(values?.role_id));
     formAddUserData.append("address", values?.address);
     formAddUserData.append("email", values?.email);
     formAddUserData.append("password", values?.password);
     formAddUserData.append("mobile_no", values?.mobile_no);
-    formAddUserData.append("company_id", values?.company_id);
+    formAddUserData.append("company_id", parseInt(values?.company_id));
     formAddUserData.append("image_src", image);
 
     if (Object.keys(errors).length === 0) {
@@ -171,11 +171,15 @@ const useForm = (defaultData, image) => {
     if (findErrors === "CompanyError") {
       setErrors(CompanyValidate(values));
     }
+    if (findErrors === "UserValidate") {
+      setErrors(UserValidate(values, defaultData));
+    }
   }, [defaultData, findErrors, values]);
 
   const handleOnchange = useCallback(
     (e) =>
       setvalues((values) => {
+        console.log("values===>", values);
         const newValues = { ...values, [e.target.name]: e.target.value };
         return newValues;
       }),

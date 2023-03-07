@@ -17,10 +17,6 @@ const currencies = [
     value: "Tax",
     label: "Tax",
   },
-  {
-    value: "One",
-    label: "One",
-  },
 ];
 
 function AddProduct() {
@@ -33,15 +29,8 @@ function AddProduct() {
   const imageUploader = React.useRef(null);
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
-
   const Product_data = ProductEditData?.productEdit;
 
-  useEffect(() => {
-    if (Product_data) {
-      console.log("Product_data", Product_data);
-      setImage(Product_data?.image_src);
-    }
-  }, [Product_data]);
   useEffect(() => {
     if (id) {
       dispatch(ProductEditAction(id));
@@ -129,14 +118,15 @@ function AddProduct() {
                     select
                     name="product_type"
                     label="Product Type"
-                    defaultValue="select One"
-                    // defaultValue={id ? Product_data.description : ""}
-
+                    defaultValue={id ? Product_data?.product_type : ""}
                     SelectProps={{
                       native: true,
                     }}
                     onChange={(e) => handleOnchange(e)}
                   >
+                    <option value={null}>
+                      <em>None</em>
+                    </option>
                     {currencies.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -198,7 +188,7 @@ function AddProduct() {
                     }}
                     src={
                       ProductEditData?.productEdit?.image_src
-                        ? `data:image/jpeg;base64,${ProductEditData?.productEdit?.image_src}`
+                        ? `data:image/png;base64,${ProductEditData?.productEdit?.image_src}`
                         : "src/"
                     }
                   />

@@ -168,6 +168,7 @@ function UserList() {
               <UsePagination
                 countNumbuer={Math.ceil(User.UserData[0]?.total_count / limit)}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>

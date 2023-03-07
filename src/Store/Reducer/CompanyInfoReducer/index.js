@@ -6,6 +6,7 @@ import {
   FAILED_COMPANY_INFO_EDIT,
   COMPANY_DELETE,
   ADD_COMPANY_INFO,
+  PERMANENT_COMPANY_DELETE,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -23,6 +24,8 @@ const CompanyInfoReducer = (state = initialstate, action) => {
       return {
         ...state,
         CompanyInfo: action.payload,
+        SucessMessageOfEditCompanyInfo: [],
+        ErrorMessageOfEditComapanyInfo: [],
         loder: true,
       };
     case DELETE_COMPANY_INFO:
@@ -36,13 +39,19 @@ const CompanyInfoReducer = (state = initialstate, action) => {
         ...state,
         ...action.payload,
       };
+    case PERMANENT_COMPANY_DELETE:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case COMPANY_INFO_BY_ID:
       return {
         ...state,
         CompanyInfoId: action.payload,
+        SucessMessageOfEditCompanyInfo: [],
+        ErrorMessageOfEditComapanyInfo: [],
         loder: true,
       };
-
     case COMPANY_INFO_EDIT:
       return {
         ...state,

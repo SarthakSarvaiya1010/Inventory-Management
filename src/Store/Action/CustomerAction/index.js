@@ -75,24 +75,31 @@ export const CustomerDelectListAction = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
   try {
-    const CustomerDelectList = await axios.get(
-      "https://inventory-management-backend.onrender.com/delete/customers",
-      {
-        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
-        params: data
-          ? {
-              searchKeyword: data.search ? data.search : null,
-              limit: data.limit,
-              page: data.pageNumber,
-              orderByString: data.orderByString,
-            }
-          : null,
-      }
-    );
     dispatch({
-      type: CUSTOMER_DELETED_LIST,
-      payload: CustomerDelectList.data,
+      type: LIST_LOADER,
+      payload: [],
     });
+    await axios
+      .get(
+        "https://inventory-management-backend.onrender.com/delete/customers",
+        {
+          headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+          params: data
+            ? {
+                searchKeyword: data.search ? data.search : null,
+                limit: data.limit,
+                page: data.pageNumber,
+                orderByString: data.orderByString,
+              }
+            : null,
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: CUSTOMER_DELETED_LIST,
+          payload: res.data,
+        });
+      });
   } catch (error) {
     dispatch({
       type: FAILED_ADMIN_LIST,

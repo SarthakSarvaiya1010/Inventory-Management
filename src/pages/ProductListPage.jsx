@@ -29,7 +29,7 @@ function AddProductPage() {
         window.location.reload();
       }, 2000);
     }
-  }, [productData?.SuccessMessageProductDelete?.statusCode,navigate]);
+  }, [productData?.SuccessMessageProductDelete?.statusCode, navigate]);
   return (
     <div>
       <Snackbar
