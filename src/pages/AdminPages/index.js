@@ -4,3 +4,5 @@ export { default as CompanyListPage } from "./CompanyListPage";
 export { default as UserListPage } from "./UserListPage";
 export { default as UserDeleteListPage } from "./UserDeleteListPage";
 export { default as AddUserPage } from "./AddUserPage";
+export { default as AddCompanyPage } from "./AddCompanyPage";
+export { default as DeleteCompanyListPage } from "./DeleteCompanyListPage";

@@ -30,16 +30,16 @@ function EditCompanyInfo() {
   let company_id = parseInt(
     localStorage?.getItem("CompanyId") || accessToken?.company_id
   );
+
+  const imageUploader = React.useRef(null);
+  const uploadedImage = React.useRef(null);
+  const [image, setImage] = React.useState(null);
   useEffect(() => {
     dispatch(CompanyInfoByIdAction(company_id));
     if (id) {
       localStorage.setItem("CompanyId", id);
     }
   }, [company_id, dispatch, id]);
-
-  const imageUploader = React.useRef(null);
-  const uploadedImage = React.useRef(null);
-  const [image, setImage] = React.useState(null);
 
   const { companyhandleSubmit, values, errors, handleOnchange } = UseForm(
     CompanyInfo,
@@ -200,7 +200,7 @@ function EditCompanyInfo() {
                     }}
                     src={
                       CompanyInfo?.image_src
-                        ? `https://inventory-management-backend.onrender.com/${CompanyInfo?.image_src}`
+                        ? `data:image/jpeg;base64,${CompanyInfo?.image_src}`
                         : "src/"
                     }
                   />

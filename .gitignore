@@ -23,5 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .vercel
+/src/dummy
 
 /inventory_management.zip

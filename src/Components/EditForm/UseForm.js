@@ -15,7 +15,10 @@ import {
   CustomerEditDataAction,
   CustomerAddAction,
 } from "../../Store/Action/CustomerAction/index";
-import { CompanyInfoEditAction } from "../../Store/Action/CompanyAction/index";
+import {
+  CompanyInfoEditAction,
+  AddCompanyInfoAction,
+} from "../../Store/Action/CompanyAction/index";
 import { UserAddAction } from "../../Store/Action/UserAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
@@ -26,7 +29,11 @@ const useForm = (defaultData, image) => {
   const [findErrors, setFindErrors] = useState(null);
   const [values, setvalues] = useState(null);
   useEffect(() => {
-    if (defaultData?.length || Object.keys(defaultData)?.length) {
+    if (
+      defaultData?.length || defaultData
+        ? Object?.keys(defaultData)?.length
+        : defaultData?.length
+    ) {
       setvalues(defaultData);
     }
   }, [defaultData]);
@@ -71,12 +78,21 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("website", values?.website);
 
     if (Object.keys(errors).length === 0) {
-      dispatch(
-        CompanyInfoEditAction(
-          formAddUserData,
-          parseInt(defaultData?.company_id)
-        )
-      );
+      if (defaultData?.length) {
+        dispatch(
+          CompanyInfoEditAction(
+            formAddUserData,
+            parseInt(defaultData?.company_id)
+          )
+        );
+      } else {
+        dispatch(
+          AddCompanyInfoAction(
+            formAddUserData,
+            parseInt(defaultData?.company_id)
+          )
+        );
+      }
     }
   };
 
@@ -134,7 +150,7 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("image_src", image);
 
     if (Object.keys(errors).length === 0) {
-      if (defaultData.length > 0) {
+      if (defaultData?.length > 0) {
         dispatch(UserAddAction(formAddUserData, defaultData[0]?.tax_id));
       } else {
         dispatch(UserAddAction(formAddUserData));

@@ -162,7 +162,7 @@ function CompanyList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addproduct");
+                  navigate("/addcompany");
                 }}
               >
                 add Company
@@ -173,7 +173,7 @@ function CompanyList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/deletedproduct");
+                  navigate("/deletecompanylist");
                 }}
               >
                 view deleted Company

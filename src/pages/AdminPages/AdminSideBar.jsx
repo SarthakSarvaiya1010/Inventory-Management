@@ -35,7 +35,7 @@ function AdminSideBar(props) {
   const { openManu, setOpenManu } = props;
 
   const theme = useTheme();
-  const [Item, setItem] = useState("Product");
+  const [Item, setItem] = useState("User");
   const headalClick = (text) => {
     setItem(text);
     switch (text) {

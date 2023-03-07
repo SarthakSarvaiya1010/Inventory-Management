@@ -4,6 +4,8 @@ import {
   FAILED_ADMIN_LIST,
   COMPANY_INFO_BY_ID,
   COMPANY_DELETE,
+  DELETE_COMPANY_INFO,
+  ADD_COMPANY_INFO,
   FAILED_COMPANY_INFO_EDIT,
 } from "../../ActionTypes/index";
 import axios from "axios";
@@ -37,6 +39,36 @@ export const CompanyInfoAction = (data) => async (dispatch) => {
     });
   }
 };
+export const DeleteCompanyInfoAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const DeleteCompanyInfo = await axios.get(
+      "https://inventory-management-backend.onrender.com/delete/company_info",
+      {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      }
+    );
+    dispatch({
+      type: DELETE_COMPANY_INFO,
+      payload: DeleteCompanyInfo.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
+
 export const CompanyInfoByIdAction = (company_id) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
@@ -49,6 +81,28 @@ export const CompanyInfoByIdAction = (company_id) => async (dispatch) => {
     );
     dispatch({
       type: COMPANY_INFO_BY_ID,
+      payload: CompanyInfo.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const AddCompanyInfoAction = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const CompanyInfo = await axios.post(
+      `https://inventory-management-backend.onrender.com/add/company_info`,
+      data,
+      {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+      }
+    );
+    dispatch({
+      type: ADD_COMPANY_INFO,
       payload: CompanyInfo.data,
     });
   } catch (error) {

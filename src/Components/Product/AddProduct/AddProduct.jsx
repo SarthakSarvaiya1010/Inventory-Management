@@ -36,11 +36,12 @@ function AddProduct() {
 
   const Product_data = ProductEditData?.productEdit;
 
-  //  useEffect(() => {
-  // if (Product_data?.image_src) {
-  //   setImage(Product_data?.image_src)
-  // }
-  //  },[image])
+  useEffect(() => {
+    if (Product_data) {
+      console.log("Product_data", Product_data);
+      setImage(Product_data?.image_src);
+    }
+  }, [Product_data]);
   useEffect(() => {
     if (id) {
       dispatch(ProductEditAction(id));
@@ -197,7 +198,7 @@ function AddProduct() {
                     }}
                     src={
                       ProductEditData?.productEdit?.image_src
-                        ? `http://localhost:3200/${ProductEditData?.productEdit?.image_src}`
+                        ? `data:image/jpeg;base64,${ProductEditData?.productEdit?.image_src}`
                         : "src/"
                     }
                   />
