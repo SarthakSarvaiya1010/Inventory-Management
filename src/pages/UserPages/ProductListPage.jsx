@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import CustomerList from "../Components/Customer/CustomerList/CustomerList";
+import { useSelector } from "react-redux";
+import ProductLisit from "../../Components/Product/ProductList/ProductList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function CustomerListPage() {
-  const CustomerData = useSelector((state) => state?.CustomerList);
+function AddProductPage() {
+  const productData = useSelector((state) => state?.ProductList);
   const navigate = useNavigate();
   const [state, setState] = React.useState({
     open: false,
@@ -22,14 +22,14 @@ function CustomerListPage() {
     setState({ ...state, open: false });
   };
   useEffect(() => {
-    if (CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode === "200") {
+    if (productData?.SuccessMessageProductDelete?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        navigate("/customer_list");
+        navigate("/productlist");
         window.location.reload();
       }, 2000);
     }
-  }, [CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode,navigate]);
+  }, [productData?.SuccessMessageProductDelete?.statusCode, navigate]);
   return (
     <div>
       <Snackbar
@@ -39,12 +39,12 @@ function CustomerListPage() {
         key={vertical + horizontal}
       >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          {CustomerData?.SuccessMessageOfCustomerDeleted?.message}
+          {productData?.SuccessMessageProductDelete?.message}
         </Alert>
       </Snackbar>
-      <CustomerList />
+      <ProductLisit />
     </div>
   );
 }
 
-export default CustomerListPage;
+export default AddProductPage;

@@ -18,7 +18,7 @@ import {
   AddInvoicePage,
   EditInvoicePage,
   CompanyInfoPage,
-} from "./pages/index";
+} from "./pages/UserPages/index";
 import {
   HomePageAdmin,
   AdminSideBar,

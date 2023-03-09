@@ -1,17 +1,15 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import ProductLisit from "../Components/Product/ProductList/ProductList";
+import InvoiceList from "../../Components/Invoice/InvoiceList/InvoiceList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { useNavigate } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function AddProductPage() {
-  const productData = useSelector((state) => state?.ProductList);
-  const navigate = useNavigate();
+function InvoiceListPage() {
+  const InvoiceData = useSelector((state) => state?.InvoiceData);
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -22,14 +20,11 @@ function AddProductPage() {
     setState({ ...state, open: false });
   };
   useEffect(() => {
-    if (productData?.SuccessMessageProductDelete?.statusCode === "200") {
+    if (InvoiceData?.SucessMessageOfInvoiceDelete?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
-      setTimeout(() => {
-        navigate("/productlist");
-        window.location.reload();
-      }, 2000);
+      window.location.reload();
     }
-  }, [productData?.SuccessMessageProductDelete?.statusCode, navigate]);
+  }, [InvoiceData?.SucessMessageOfInvoiceDelete?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -39,12 +34,12 @@ function AddProductPage() {
         key={vertical + horizontal}
       >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          {productData?.SuccessMessageProductDelete?.message}
+          {InvoiceData?.SucessMessageOfInvoiceDelete?.message}
         </Alert>
       </Snackbar>
-      <ProductLisit />
+      <InvoiceList />
     </div>
   );
 }
 
-export default AddProductPage;
+export default InvoiceListPage;

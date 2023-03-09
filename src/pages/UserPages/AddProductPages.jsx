@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import AddProduct from "../Components/Product/AddProduct/AddProduct";
+import AddProduct from "../../Components/Product/AddProduct/AddProduct";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 // import Snackbar from "@mui/material/Snackbar";
 // import MuiAlert from "@mui/material/Alert";
-import SanckBar from "../Helpers/SanckBar/SanckBar";
+import SanckBar from "../../Helpers/SanckBar/SanckBar";
 
 // const Alert = React.forwardRef(function Alert(props, ref) {
 //   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

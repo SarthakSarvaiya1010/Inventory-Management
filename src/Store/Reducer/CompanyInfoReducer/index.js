@@ -15,6 +15,7 @@ const initialstate = {
   CompanyInfoId: [],
   SucessMessageOfEditCompanyInfo: [],
   ErrorMessageOfEditComapanyInfo: [],
+  SucessMessage: [],
   loder: true,
 };
 

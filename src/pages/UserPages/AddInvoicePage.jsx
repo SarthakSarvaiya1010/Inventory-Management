@@ -1,53 +1,38 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useEffect } from "react";
+import AddInvoice from "../../Components/Invoice/AddInvoice/AddInvoice";
 import { useSelector } from "react-redux";
-import InvoiceEdit from "../Components/Invoice/InvoiceEdit/InvoiceEdit";
-import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function EditInvoicePage() {
-  const navigate = useNavigate();
+function AddInvoicePage() {
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
+  console.log("InvoicePageData?.InvoicePdf", InvoicePageData?.InvoicePdf);
+  const navigate = useNavigate();
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
     horizontal: "center",
   });
   const { vertical, horizontal, open } = state;
-  const invoivepagedata = JSON.parse(
-    localStorage.getItem("InvoiceEditPageData")
-  );
-  const testData = InvoicePageData?.invoiceEdit?.length
-    ? InvoicePageData?.invoiceEdit[0]
-    : invoivepagedata[0]
-    ? invoivepagedata
-    : [{}];
-
   const handleClose = () => {
     setState({ ...state, open: false });
   };
 
   useEffect(() => {
-    if (InvoicePageData?.invoiceEdit.length) {
-      localStorage.setItem(
-        "InvoiceEditPageData",
-        JSON.stringify(InvoicePageData?.invoiceEdit)
-      );
-    }
-  }, [InvoicePageData?.invoiceEdit]);
-  useEffect(() => {
     if (InvoicePageData?.InvoicePdf?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
         navigate("/invoice_list");
+        window.location.reload();
       }, 4000);
     }
   }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
-
   var b64;
   if (InvoicePageData?.InvoicePdf?.invoicePdf) {
     b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
@@ -58,9 +43,7 @@ export default function EditInvoicePage() {
     obj.style.height = "1000pt";
     obj.type = "application/pdf";
     obj.data = "data:application/pdf;base64," + b64;
-    // document.body.appendChild(obj);
     var link = document.createElement("a");
-    // link.innerHTML = "Download PDF file";
     link.download = "invoice.pdf";
     link.href = "data:application/pdf;base64," + b64;
     document.body.appendChild(link);
@@ -71,7 +54,7 @@ export default function EditInvoicePage() {
           encodeURI(b64) +
           "'></iframe>"
       );
-    }, 3000);
+    }, 2000);
   }
   return (
     <div>
@@ -92,15 +75,13 @@ export default function EditInvoicePage() {
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            {/* {Customers?.ErrorMessage?.data?.message} */}{" "}
-            {"Oppps ,Something went wrong"}
+            {/* {Customers?.ErrorMessage?.data?.message} */}
           </Alert>
         )}
       </Snackbar>
-      <InvoiceEdit
-        testData={testData}
-        EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
-      />
+      <AddInvoice sucessMessage={InvoicePageData?.InvoicePdf?.statusCode} />
     </div>
   );
 }
+
+export default AddInvoicePage;

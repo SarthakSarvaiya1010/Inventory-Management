@@ -82,6 +82,7 @@ function InvoiceEdit(props) {
       setProduct(testData?.productlistdata);
       setDiscount(testData?.discount);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testData?.discount, testData?.productlistdata?.length]);
 
   useEffect(() => {
@@ -249,6 +250,7 @@ function InvoiceEdit(props) {
   };
   useEffect(() => {
     setErrors(InvoiceEditValidate(UpdatedData, addtable));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [findErrors, CustomerListData?.customer_id, product]);
   const handleChange = (event) => {
     const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import EditCompanyInfo from "../Components/Company/EditCompanyInfo/EditCompanyInfo";
+import EditCompanyInfo from "../../Components/Company/EditCompanyInfo/EditCompanyInfo";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
@@ -31,8 +31,7 @@ function CompanyInfoPage() {
   }, [CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode, navigate]);
   useEffect(() => {
     if (
-      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode ===
-      400
+      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode === 400
     ) {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }

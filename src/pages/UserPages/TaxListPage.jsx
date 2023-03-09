@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import TaxList from "../Components/Tax/TaxList/TaxList";
+import TaxList from "../../Components/Tax/TaxList/TaxList";
 import { useSelector } from "react-redux";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";

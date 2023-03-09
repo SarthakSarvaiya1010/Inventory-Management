@@ -129,7 +129,7 @@ function AddInvoice(props) {
         product[index].amount =
           value && product[index]?.rate
             ? parseFloat(value) * parseFloat(product[index]?.rate)
-            : 0;
+            : parseFloat(value) * parseFloat(product[index]?.rate);
       });
       setProduct([...product]);
     } else {
@@ -148,7 +148,7 @@ function AddInvoice(props) {
           product[index].amount =
             value && product[index]?.weight
               ? parseFloat(product[index]?.weight) * parseFloat(value)
-              : 0;
+              : parseFloat(product[index]?.weight) * parseFloat(value);
         });
         setProduct([...product]);
       } else {
@@ -257,6 +257,7 @@ function AddInvoice(props) {
 
   useEffect(() => {
     if (findErrors) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       finalinvoicedata = {
         bill_no: testData[0]?.bill_no,
         invoice_date: convert(new Date()),
@@ -372,11 +373,16 @@ function AddInvoice(props) {
                       </p>
                       <br />
                       <TextField
-                        id="standard-basic-1"
-                        label="Customer_Gst_No"
+                        id="standard-basic-12"
+                        label="Customer Gst No"
                         variant="standard"
                         sx={{ width: 1 }}
                         name="Customer_Gst_No"
+                        value={
+                          CustomerListData?.tin_no === ""
+                            ? ""
+                            : CustomerListData?.tin_no
+                        }
                       />
                       <br />
 

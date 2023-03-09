@@ -55,25 +55,25 @@ export function InvoiceEditValidate(values) {
     );
     if (
       !values?.productdata[index]?.weight ||
-      values?.productdata[index]?.weight == "NaN"
+      values?.productdata[index]?.weight === "NaN"
     ) {
       errors.weight = "weight is required ";
     }
     if (
       !values?.productdata[index]?.product_id ||
-      values?.productdata[index]?.product_id == "NaN"
+      values?.productdata[index]?.product_id === "NaN"
     ) {
       errors.product_id = "Please Select Product ";
     }
     if (
       !values?.productdata[index]?.rate ||
-      values?.productdata[index]?.rate == "NaN"
+      values?.productdata[index]?.rate === "NaN"
     ) {
       errors.rate = "rate is required ";
     }
     if (
       !values?.productdata[index]?.amount ||
-      values?.productdata[index]?.amount == "NaN"
+      values?.productdata[index]?.amount === "NaN"
     ) {
       errors.amount = "amount is required ";
     }

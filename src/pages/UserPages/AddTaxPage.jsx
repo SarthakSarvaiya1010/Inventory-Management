@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
-import AddCustomer from "../Components/Customer/AddCustomer/AddCustomer";
+import { useSelector } from "react-redux";
+import AddTax from "../../Components/Tax/AddTax/AddTax";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function AddCustomerPage() {
-  const Customers = useSelector((state) => state?.CustomerList);
+function AddTaxPage() {
+  const TaxData = useSelector((state) => state?.TaxData);
   const navigate = useNavigate();
+  console.log("TaxData=======>", TaxData);
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -21,52 +22,50 @@ function AddCustomerPage() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
+
   useEffect(() => {
-    if (Customers?.SucessMessage?.statusCode === "200") {
+    if (TaxData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        navigate("/customer_list");
+        navigate("/tax_list");
       }, 2000);
     }
-  }, [
-    Customers?.SucessMessage?.message,
-    Customers?.SucessMessage?.statusCode,
-    navigate,
-  ]);
+  }, [TaxData?.SucessMessage?.statusCode, navigate]);
+
   useEffect(() => {
-    if (Customers?.ErrorMessage?.data?.statusCode === 400) {
+    if (TaxData?.ErrorMessage?.data?.statusCode === 400) {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [
-    Customers?.ErrorMessage?.data?.statusCode,
-    Customers?.ErrorMessage?.data?.message,
-  ]);
+  }, [TaxData?.ErrorMessage?.data?.statusCode]);
   return (
     <div>
+      {" "}
       <Snackbar
-        autoHideDuration={2000}
+        autoHideDuration={6000}
         anchorOrigin={{ vertical, horizontal }}
         open={open}
         onClose={handleClose}
         key={vertical + horizontal}
       >
-        {Customers?.SucessMessage?.message ? (
+        {TaxData?.SucessMessage?.message ? (
           <Alert
             onClose={handleClose}
             severity="success"
             sx={{ width: "100%" }}
           >
-            {Customers?.SucessMessage?.message}
+            {TaxData?.SucessMessage?.message}
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            {Customers?.ErrorMessage?.data?.message}
+            {TaxData?.ErrorMessage?.data?.message
+              ? TaxData?.ErrorMessage?.data?.message
+              : "Opps Something Went wrong"}
           </Alert>
         )}
       </Snackbar>
-      <AddCustomer />
+      <AddTax />
     </div>
   );
 }
 
-export default AddCustomerPage;
+export default AddTaxPage;

@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userGetByuuidAction } from "../../../Store/Action/UserAction/index";
 import { CompanyInfoAction } from "../../../Store/Action/CompanyAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddIcon from "@mui/icons-material/Add";
 

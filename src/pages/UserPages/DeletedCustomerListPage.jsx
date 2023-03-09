@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import InvoiceList from "../Components/Invoice/InvoiceList/InvoiceList";
+import DeletedCustomerList from "../../Components/Customer/DeletedCustomerList/DeletedCustomerList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function InvoiceListPage() {
-  const InvoiceData = useSelector((state) => state?.InvoiceData);
+function DeletedCustomerListPage() {
+  const CustomerData = useSelector((state) => state?.CustomerList);
+  const navigate = useNavigate();
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -20,11 +22,14 @@ function InvoiceListPage() {
     setState({ ...state, open: false });
   };
   useEffect(() => {
-    if (InvoiceData?.SucessMessageOfInvoiceDelete?.statusCode === "200") {
+    if (CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
-      window.location.reload();
+      setTimeout(() => {
+        navigate("/deletedcustomer");
+        window.location.reload();
+      }, 2000);
     }
-  }, [InvoiceData?.SucessMessageOfInvoiceDelete?.statusCode]);
+  }, [CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode, navigate]);
   return (
     <div>
       <Snackbar
@@ -34,12 +39,12 @@ function InvoiceListPage() {
         key={vertical + horizontal}
       >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          {InvoiceData?.SucessMessageOfInvoiceDelete?.message}
+          {CustomerData?.SuccessMessageOfCustomerDeleted?.message}
         </Alert>
       </Snackbar>
-      <InvoiceList />
+      <DeletedCustomerList />
     </div>
   );
 }
 
-export default InvoiceListPage;
+export default DeletedCustomerListPage;

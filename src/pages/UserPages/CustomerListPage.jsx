@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import DeletedCustomerList from "../Components/Customer/DeletedCustomerList/DeletedCustomerList";
+import CustomerList from "../../Components/Customer/CustomerList/CustomerList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function DeletedCustomerListPage() {
+function CustomerListPage() {
   const CustomerData = useSelector((state) => state?.CustomerList);
   const navigate = useNavigate();
   const [state, setState] = React.useState({
@@ -25,11 +25,11 @@ function DeletedCustomerListPage() {
     if (CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        navigate("/deletedcustomer");
+        navigate("/customer_list");
         window.location.reload();
       }, 2000);
     }
-  }, [CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode,navigate]);
+  }, [CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode, navigate]);
   return (
     <div>
       <Snackbar
@@ -42,9 +42,9 @@ function DeletedCustomerListPage() {
           {CustomerData?.SuccessMessageOfCustomerDeleted?.message}
         </Alert>
       </Snackbar>
-      <DeletedCustomerList />
+      <CustomerList />
     </div>
   );
 }
 
-export default DeletedCustomerListPage;
+export default CustomerListPage;
