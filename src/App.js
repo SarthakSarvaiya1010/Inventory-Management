@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Components/Header/Header";
 import HomePage from "./Components/HomePage/HomePage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -34,6 +34,7 @@ import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import "./App.css";
 import ViewDeletedInvoiceList from "./Components/Invoice/ViewDeletedInvoice/ViewDeletedInvoiceList";
+import Protected from "./pages/Protected/Protected";
 const outerTheme = createTheme({
   palette: {
     primary: {
@@ -72,7 +73,6 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 );
 
 const route = [
-  { path: "/", element: <HomePage /> },
   { path: "/productlist", element: <ProductListPage /> },
   { path: "/addproduct", element: <AddProductPage /> },
   { path: "/product/edit/:id", element: <AddProductPage /> },
@@ -103,8 +103,16 @@ const route = [
 
 function App() {
   const [openManu, setOpenManu] = useState(false);
+  const [user, setUser] = useState("not");
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  useEffect(() => {
+    if (successLoginData?.LoginData?.role_id || accessToken?.role_id) {
+      setUser({
+        roles: ["super"],
+      });
+    }
+  }, [accessToken?.role_id, successLoginData?.LoginData?.role_id]);
 
   return (
     <div className="App">
@@ -121,9 +129,20 @@ function App() {
             <Main open={openManu}>
               <DrawerHeader />
               <Routes>
+                <Route path="/" element={<HomePage />} />
                 {route.map((route) => {
                   return (
-                    <Route path={route.path} element={route.element}></Route>
+                    <Route
+                      path={route.path}
+                      element={
+                        <Protected
+                          isAllowed={!!user && user?.roles?.includes("super")}
+                          redirectPath="/"
+                        >
+                          {route.element}
+                        </Protected>
+                      }
+                    ></Route>
                   );
                 })}
               </Routes>

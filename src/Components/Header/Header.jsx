@@ -123,7 +123,7 @@ export default function Header(props) {
                     setTimeout(() => {
                       navigate("/");
                       window.location.reload();
-                    }, 5500);
+                    }, 2000);
                   }}
                 >
                   Log out

@@ -60,13 +60,13 @@ function Login(props) {
       showToastMessage();
       setTimeout(() => {
         if (successLoginData.LoginData.role_id === 2) {
-          navigate("/productList");
+          navigate("/productlist");
         } else {
           if (successLoginData.LoginData.role_id === 1) {
             navigate("/userlist");
           }
         }
-      }, 2000);
+      }, 2100);
       setTest(false);
       setButtonDisbel(false);
     } else if (
