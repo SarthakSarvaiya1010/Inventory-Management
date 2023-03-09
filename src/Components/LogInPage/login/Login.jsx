@@ -49,6 +49,9 @@ function Login(props) {
 
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const NavigateItemName = window.localStorage.getItem("NavigateItemName");
+
   console.log("successLoginData", successLoginData?.FailedLoginData);
 
   useEffect(() => {
@@ -80,13 +83,30 @@ function Login(props) {
       setButtonDisbel(false);
     }
   }, [
+    accessToken?.role_id,
     navigate,
     successLoginData?.FailedLoginData,
     successLoginData.LoginData,
     successLoginData.LoginData.statusCode,
     test,
   ]);
-
+  useEffect(() => {
+    if (accessToken?.role_id === 2) {
+      if (NavigateItemName) {
+        navigate(NavigateItemName);
+      } else {
+        navigate("/productlist");
+      }
+    } else {
+      if (accessToken?.role_id === 1) {
+        if (NavigateItemName) {
+          navigate(NavigateItemName);
+        } else {
+          navigate("/userlist");
+        }
+      }
+    }
+  }, [NavigateItemName, accessToken?.role_id, navigate]);
   return (
     <div>
       <div>

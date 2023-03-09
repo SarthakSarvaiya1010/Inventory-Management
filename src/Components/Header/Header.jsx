@@ -41,7 +41,7 @@ export default function Header(props) {
   const showToastMessage = () => {
     toast.success("Logout  Success  !", {
       position: toast.POSITION.TOP_CENTER,
-      autoClose: 2000,
+      autoClose: 200,
     });
   };
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
@@ -123,7 +123,7 @@ export default function Header(props) {
                     setTimeout(() => {
                       navigate("/");
                       window.location.reload();
-                    }, 2000);
+                    }, 500);
                   }}
                 >
                   Log out

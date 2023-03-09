@@ -35,6 +35,8 @@ import { Box } from "@mui/material";
 import "./App.css";
 import ViewDeletedInvoiceList from "./Components/Invoice/ViewDeletedInvoice/ViewDeletedInvoiceList";
 import Protected from "./pages/Protected/Protected";
+import Login from "./Components/LogInPage/login/Login";
+
 const outerTheme = createTheme({
   palette: {
     primary: {
@@ -90,6 +92,8 @@ const route = [
   { path: "/addinvoice", element: <AddInvoicePage /> },
   { path: "/viewdeletedinvoice", element: <ViewDeletedInvoiceList /> },
   { path: "/company_info", element: <CompanyInfoPage /> },
+];
+const adminroute = [
   { path: "/homepage", element: <HomePageAdmin /> },
   { path: "/companylist", element: <CompanyListPage /> },
   { path: "/addcompany", element: <AddCompanyPage /> },
@@ -107,9 +111,20 @@ function App() {
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   useEffect(() => {
-    if (successLoginData?.LoginData?.role_id || accessToken?.role_id) {
+    if (
+      successLoginData?.LoginData?.role_id === 2 ||
+      accessToken?.role_id === 2
+    ) {
       setUser({
-        roles: ["super"],
+        roles: ["user"],
+      });
+    }
+    if (
+      successLoginData?.LoginData?.role_id === 1 ||
+      accessToken?.role_id === 1
+    ) {
+      setUser({
+        roles: ["admin"],
       });
     }
   }, [accessToken?.role_id, successLoginData?.LoginData?.role_id]);
@@ -129,15 +144,38 @@ function App() {
             <Main open={openManu}>
               <DrawerHeader />
               <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route
+                  path="/"
+                  element={
+                    <Protected isAllowed={!!!accessToken} redirectPath="/login">
+                      <HomePage />
+                    </Protected>
+                  }
+                />
+                <Route path="/login" element={<Login setOpen={false} />} />
                 {route.map((route) => {
                   return (
                     <Route
                       path={route.path}
                       element={
                         <Protected
-                          isAllowed={!!user && user?.roles?.includes("super")}
-                          redirectPath="/"
+                          isAllowed={!!user && user?.roles?.includes("user")}
+                          redirectPath="/login"
+                        >
+                          {route.element}
+                        </Protected>
+                      }
+                    ></Route>
+                  );
+                })}
+                {adminroute.map((route) => {
+                  return (
+                    <Route
+                      path={route.path}
+                      element={
+                        <Protected
+                          isAllowed={!!user && user?.roles?.includes("admin")}
+                          redirectPath="/login"
                         >
                           {route.element}
                         </Protected>
@@ -153,5 +191,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
