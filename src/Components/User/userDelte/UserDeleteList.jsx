@@ -44,7 +44,11 @@ function UserDeleteList() {
   });
 
   const headalEdit = (data) => {
-    navigate(`/product/edit/${User.UserDeleteList[data - 1]?.user_uuid}`);
+    localStorage.setItem(
+      "NavigateItemName",
+      `/user/edit/${User.UserDeleteList[data - 1]?.user_uuid}`
+    );
+    navigate(`/user/edit/${User.UserDeleteList[data - 1]?.user_uuid}`);
   };
 
   const headalDelete = (data) => {
@@ -68,8 +72,6 @@ function UserDeleteList() {
       );
     }
   };
-  console.log(search);
-  console.log("setShortingData", shorting);
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
@@ -132,6 +134,7 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "adduser");
                     navigate("/adduser");
                   }}
                 >
@@ -143,6 +146,7 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "userlist");
                     navigate("/userlist");
                   }}
                 >
@@ -197,6 +201,7 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "adduser");
                     navigate("/adduser");
                   }}
                 >
@@ -208,6 +213,7 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "userlist");
                     navigate("/userlist");
                   }}
                 >

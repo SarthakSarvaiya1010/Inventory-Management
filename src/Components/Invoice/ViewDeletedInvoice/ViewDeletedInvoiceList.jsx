@@ -159,6 +159,7 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "invoice_list");
                     navigate("/invoice_list");
                   }}
                 >
@@ -170,6 +171,7 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "addinvoice");
                     navigate("/addinvoice");
                   }}
                 >
@@ -238,6 +240,7 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "invoice_list");
                     navigate("/invoice_list");
                   }}
                 >
@@ -249,6 +252,7 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "addinvoice");
                     navigate("/addinvoice");
                   }}
                 >

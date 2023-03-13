@@ -67,6 +67,7 @@ function AddUser() {
 
   const handleCancle = () => {
     console.log("done");
+    localStorage.setItem("NavigateItemName", "userlist");
     navigate("/userlist");
   };
 

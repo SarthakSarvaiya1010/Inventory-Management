@@ -35,8 +35,10 @@ function CustomerList() {
   });
   console.log("CustomerData", CustomerData);
   const headalEdit = (data) => {
-    console.log(data, CustomerData?.CoustomerList[data - 1]);
-
+    localStorage.setItem(
+      "NavigateItemName",
+      `customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
+    );
     navigate(
       `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
     );
@@ -141,6 +143,7 @@ function CustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "addcustomer");
                   navigate("/addcustomer");
                 }}
               >
@@ -152,6 +155,7 @@ function CustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "deletedcustomer");
                   navigate("/deletedcustomer");
                 }}
               >

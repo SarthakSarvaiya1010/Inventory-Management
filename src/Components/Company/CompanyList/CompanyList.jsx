@@ -62,6 +62,10 @@ function CompanyList() {
   });
 
   const headalEdit = (data) => {
+    localStorage.setItem(
+      "NavigateItemName",
+      `/company/edit/${CompanyInfo.CompanyInfo[data - 1]?.company_id}`
+    );
     navigate(`/company/edit/${CompanyInfo.CompanyInfo[data - 1]?.company_id}`);
   };
 
@@ -163,6 +167,7 @@ function CompanyList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "addcompany");
                   navigate("/addcompany");
                 }}
               >
@@ -174,6 +179,7 @@ function CompanyList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "deletecompanylist");
                   navigate("/deletecompanylist");
                 }}
               >

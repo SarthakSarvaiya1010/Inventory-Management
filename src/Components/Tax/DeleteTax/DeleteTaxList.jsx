@@ -99,6 +99,7 @@ function DeletedTaxList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "tax_list");
                     navigate("/tax_list");
                   }}
                 >
@@ -110,6 +111,7 @@ function DeletedTaxList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "addtax");
                     navigate("/addtax");
                   }}
                 >
@@ -162,6 +164,7 @@ function DeletedTaxList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "tax_list");
                     navigate("/tax_list");
                   }}
                 >
@@ -173,6 +176,7 @@ function DeletedTaxList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "addtax");
                     navigate("/addtax");
                   }}
                 >

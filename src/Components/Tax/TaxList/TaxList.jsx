@@ -45,6 +45,10 @@ function TaxList() {
   };
 
   const headalEdit = (data) => {
+    localStorage.setItem(
+      "NavigateItemName",
+      `/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`
+    );
     navigate(`/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`);
   };
 
@@ -144,6 +148,7 @@ function TaxList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "addtax");
                   navigate("/addtax");
                 }}
               >
@@ -155,6 +160,7 @@ function TaxList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "deletedtax");
                   navigate("/deletedtax");
                 }}
               >

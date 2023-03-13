@@ -61,6 +61,11 @@ function CompanyDeleteList() {
   });
 
   const headalEdit = (data) => {
+    localStorage.setItem(
+      "NavigateItemName",
+      `/company/edit/${CompanyInfo.DeleteCompanyInfo[data - 1]?.company_id}`
+    );
+
     navigate(
       `/company/edit/${CompanyInfo.DeleteCompanyInfo[data - 1]?.company_id}`
     );
@@ -166,6 +171,7 @@ function CompanyDeleteList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "/companylist");
                   navigate("/companylist");
                 }}
               >
@@ -177,6 +183,7 @@ function CompanyDeleteList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "/addcompany");
                   navigate("/addcompany");
                 }}
               >

@@ -59,6 +59,10 @@ function ProductList() {
   });
 
   const headalEdit = (data) => {
+    localStorage.setItem(
+      "NavigateItemName",
+      `product/edit/${productData.productList[data - 1]?.product_id}`
+    );
     navigate(`/product/edit/${productData.productList[data - 1]?.product_id}`);
   };
 
@@ -157,6 +161,7 @@ function ProductList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "addproduct");
                   navigate("/addproduct");
                 }}
               >
@@ -167,6 +172,7 @@ function ProductList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "deletedproduct");
                   navigate("/deletedproduct");
                 }}
               >

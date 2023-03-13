@@ -24,7 +24,6 @@ function AddCompanyInfo() {
     test,
     image
   );
-  console.log("errors", errors);
 
   const hedalImgChage = (event) => {
     const [file] = event.target.files;
@@ -44,7 +43,7 @@ function AddCompanyInfo() {
   return (
     <div>
       <Container fixed>
-        <Header name={"Company Info"} SearchBar={false} />
+        <Header name={"Add Company "} SearchBar={false} />
         <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
           <DialogContent>
             <Box

@@ -45,6 +45,7 @@ function AddTax() {
 
   const handleCancle = () => {
     console.log("done");
+    localStorage.setItem("NavigateItemName", "tax_list");
     navigate("/tax_list");
     // window.location.reload();
   };

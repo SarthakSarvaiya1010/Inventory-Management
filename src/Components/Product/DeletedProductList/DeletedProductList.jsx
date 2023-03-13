@@ -150,6 +150,7 @@ function DeletedProductList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "productList");
                     navigate("/productList");
                   }}
                 >
@@ -161,6 +162,7 @@ function DeletedProductList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "addproduct");
                     navigate("/addproduct");
                   }}
                 >

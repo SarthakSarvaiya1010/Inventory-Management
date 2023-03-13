@@ -48,6 +48,10 @@ function UserList() {
   });
 
   const headalEdit = (data) => {
+    localStorage.setItem(
+      "NavigateItemName",
+      `/user/edit/${User.UserData[data - 1]?.user_uuid}`
+    );
     navigate(`/user/edit/${User.UserData[data - 1]?.user_uuid}`);
   };
 
@@ -131,6 +135,7 @@ function UserList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "adduser");
                   navigate("/adduser");
                 }}
               >
@@ -142,6 +147,7 @@ function UserList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
+                  localStorage.setItem("NavigateItemName", "userdeletelist");
                   navigate("/userdeletelist");
                 }}
               >

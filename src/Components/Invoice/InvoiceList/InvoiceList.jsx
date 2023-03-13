@@ -54,6 +54,10 @@ function InvoiceList() {
   // eslint-disable-next-line array-callback-return
 
   const headalEdit = (data) => {
+    localStorage.setItem(
+      "NavigateItemName",
+      `/InvoiceList/edit/${InvoiceData.invoiceList[data - 1]?.invoice_id}`
+    );
     navigate(
       `/InvoiceList/edit/${InvoiceData.invoiceList[data - 1]?.invoice_id}`
     );
@@ -152,7 +156,10 @@ function InvoiceList() {
                 variant="text"
                 color="success"
                 sx={{ fontSize: 16 }}
-                onClick={() => navigate("/addinvoice")}
+                onClick={() => {
+                  localStorage.setItem("NavigateItemName", "addinvoice");
+                  navigate("/addinvoice");
+                }}
               >
                 add invoice
               </Button>
@@ -161,7 +168,11 @@ function InvoiceList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/viewdeletedinvoice ");
+                  localStorage.setItem(
+                    "NavigateItemName",
+                    "viewdeletedinvoice"
+                  );
+                  navigate("/viewdeletedinvoice");
                 }}
               >
                 view deleted invoice

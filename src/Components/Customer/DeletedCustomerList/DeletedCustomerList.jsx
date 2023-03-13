@@ -158,6 +158,7 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "customer_list");
                     navigate("/customer_list");
                   }}
                 >
@@ -169,6 +170,7 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "addcustomer");
                     navigate("/addcustomer");
                   }}
                 >
@@ -225,6 +227,7 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "customer_list");
                     navigate("/customer_list");
                   }}
                 >
@@ -236,6 +239,7 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
+                    localStorage.setItem("NavigateItemName", "addcustomer");
                     navigate("/addcustomer");
                   }}
                 >

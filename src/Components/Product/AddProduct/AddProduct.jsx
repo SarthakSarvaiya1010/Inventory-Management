@@ -45,6 +45,7 @@ function AddProduct() {
   console.log("values", values);
 
   const handleCancle = () => {
+    localStorage.setItem("NavigateItemName", "productlist");
     navigate("/productlist");
   };
 
