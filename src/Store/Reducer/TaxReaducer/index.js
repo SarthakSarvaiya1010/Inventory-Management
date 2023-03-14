@@ -9,6 +9,7 @@ import {
   FAILED_TAX_INFO_EDIT,
   PERMANENT_TAX_DELETE,
   LIST_LOADER,
+  FAILED_ADMIN_LIST,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -29,6 +30,11 @@ const TaxReducer = (state = initialstate, action) => {
         ...state,
         TaxList: action.payload,
         loder: true,
+      };
+    case FAILED_ADMIN_LIST:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
       };
     case TAX_LIST:
       return {

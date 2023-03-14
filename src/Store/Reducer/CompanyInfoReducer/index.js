@@ -7,6 +7,7 @@ import {
   COMPANY_DELETE,
   ADD_COMPANY_INFO,
   PERMANENT_COMPANY_DELETE,
+  FAILED_ADMIN_LIST,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -16,6 +17,7 @@ const initialstate = {
   SucessMessageOfEditCompanyInfo: [],
   ErrorMessageOfEditComapanyInfo: [],
   SucessMessage: [],
+  ErrorMessage: [],
   loder: true,
 };
 
@@ -39,6 +41,11 @@ const CompanyInfoReducer = (state = initialstate, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case FAILED_ADMIN_LIST:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
       };
     case PERMANENT_COMPANY_DELETE:
       return {

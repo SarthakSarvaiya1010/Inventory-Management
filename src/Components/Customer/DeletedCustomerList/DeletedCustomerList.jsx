@@ -35,6 +35,12 @@ function DeletedCustomerList() {
     }
   }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);
 
+  useEffect(() => {
+    if (CustomerData?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [CustomerData?.ErrorMessage?.data?.message]);
+
   const data = [];
 
   // eslint-disable-next-line array-callback-return

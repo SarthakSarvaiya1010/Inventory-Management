@@ -18,8 +18,6 @@ function ProductList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const productData = useSelector((state) => state?.ProductList);
   const products = useSelector((state) => state?.ProductList?.productList);
   let limit = 2;
@@ -28,8 +26,6 @@ function ProductList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
   useEffect(() => {
     dispatch(
       ProductListAction({
@@ -38,14 +34,15 @@ function ProductList() {
         orderByString: shorting,
       })
     );
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    limit,
-    pageNumber,
-    shorting,
-    successLoginData?.LoginData?.accessToken,
-  ]);
+  }, [dispatch, limit, pageNumber, shorting]);
+
+  useEffect(() => {
+    if (productData?.ErrorMessage?.data?.message === "Authorization error") {
+      console.log("AuthError", "Authorization error");
+      localStorage.setItem("AuthError", "Authorization error");
+      // navigate("/");
+    }
+  }, [navigate, productData?.ErrorMessage?.data?.message]);
 
   // eslint-disable-next-line array-callback-return
   productData.productList.map((e) => {

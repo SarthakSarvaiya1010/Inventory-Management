@@ -30,12 +30,18 @@ function AddProduct() {
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
   const Product_data = ProductEditData?.productEdit;
+  const productData = useSelector((state) => state?.ProductList);
 
   useEffect(() => {
     if (id) {
       dispatch(ProductEditAction(id));
     }
   }, [dispatch, id]);
+  useEffect(() => {
+    if (productData?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [navigate, productData?.ErrorMessage?.data?.message]);
 
   const { producthandleSubmit, values, errors, handleOnchange } = useForm(
     Product_data,

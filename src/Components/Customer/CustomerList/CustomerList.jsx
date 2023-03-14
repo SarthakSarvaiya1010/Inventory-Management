@@ -76,6 +76,12 @@ function CustomerList() {
     );
   }, [dispatch, limit, pageNumber, shorting]);
 
+  useEffect(() => {
+    if (CustomerData?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [CustomerData?.ErrorMessage?.data?.message]);
+
   const headalShorting = (data_a) => {
     shortingIcon === data_a
       ? setShortingIcon(`D ${data_a}`)

@@ -110,14 +110,23 @@ function App() {
   const [user, setUser] = useState("not");
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
+  console.log(
+    !!user && user?.roles?.includes("user"),
+    "!!user && user?.roles?.includes()"
+  );
   useEffect(() => {
-    if (successLoginData?.LoginData?.role_id === 2) {
+    if (
+      successLoginData?.LoginData?.role_id === 2 ||
+      accessToken?.role_id === 2
+    ) {
       setUser({
         roles: ["user"],
       });
     }
-    if (successLoginData?.LoginData?.role_id === 1) {
+    if (
+      successLoginData?.LoginData?.role_id === 1 ||
+      accessToken?.role_id === 1
+    ) {
       setUser({
         roles: ["admin"],
       });

@@ -45,11 +45,18 @@ export default function Header(props) {
     });
   };
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const AuthError = window.localStorage.getItem("AuthError");
   console.log("successLoginData", successLoginData);
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
   const { openManu, setOpenManu } = props;
+  useEffect(() => {
+    if (AuthError === "Authorization error") {
+      setOpen(true);
+      localStorage.clear();
+    }
+  }, [AuthError]);
 
   useEffect(() => {
     if (successLoginData.LoginData.statusCode === "200") {

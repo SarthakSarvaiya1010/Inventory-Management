@@ -32,6 +32,12 @@ function UserDeleteList() {
     );
   }, [dispatch, limit, pageNumber, shorting]);
 
+  useEffect(() => {
+    if (User?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [User?.ErrorMessage?.data?.message]);
+
   // eslint-disable-next-line array-callback-return
   User.UserDeleteList.map((e) => {
     console.log("eeeeeeeee=>", e);

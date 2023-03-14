@@ -5,6 +5,7 @@ import {
   USER_ADD,
   USER_GET_BY_UUID,
   LIST_LOADER,
+  FAILED_ADMIN_LIST,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -24,6 +25,11 @@ const UserReducer = (state = initialstate, action) => {
         ...state,
         UserData: action.payload,
         Loader: true,
+      };
+    case FAILED_ADMIN_LIST:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
       };
     case USER_LIST:
       return {

@@ -58,6 +58,12 @@ function AddUser() {
     dispatch(CompanyInfoAction());
   }, [dispatch, id]);
 
+  useEffect(() => {
+    if (User?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [User?.ErrorMessage?.data?.message]);
+
   const { UserhandleSubmit, values, errors, handleOnchange } = UseForm(
     User_data,
     image

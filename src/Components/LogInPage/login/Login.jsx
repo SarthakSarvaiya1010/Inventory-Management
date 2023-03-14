@@ -60,6 +60,7 @@ function Login(props) {
         "LoginData",
         JSON.stringify(successLoginData.LoginData)
       );
+      localStorage.setItem("AuthError", "Authorization");
       showToastMessage();
       setTimeout(() => {
         if (successLoginData.LoginData.role_id === 2) {

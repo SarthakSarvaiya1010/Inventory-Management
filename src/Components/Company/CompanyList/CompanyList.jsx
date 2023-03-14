@@ -38,6 +38,12 @@ function CompanyList() {
   }, [CompanyInfo?.SuccessProductDeleteData?.statusCode]);
 
   useEffect(() => {
+    if (CompanyInfo?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [navigate, CompanyInfo?.ErrorMessage?.data?.message]);
+
+  useEffect(() => {
     dispatch(
       CompanyInfoAction({
         limit: limit,

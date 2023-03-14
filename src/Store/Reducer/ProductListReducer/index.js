@@ -9,6 +9,7 @@ import {
   FAILED_EDIT_PRODUCT_DATA,
   PRODUCT_DELETE_LIST,
   PERMANENT_PRODUCT_DELETE,
+  FAILED_ADMIN_LIST,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -71,6 +72,12 @@ const ProductListReducer = (state = initialstate, action) => {
         SucessMessage: action.payload,
       };
     case FAILED_EDIT_PRODUCT_DATA:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
+      };
+    case FAILED_ADMIN_LIST:
+      console.log("");
       return {
         ...state,
         ErrorMessage: action.payload,

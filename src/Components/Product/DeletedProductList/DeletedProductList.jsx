@@ -30,6 +30,11 @@ function DeletedProductList() {
   useEffect(() => {
     dispatch(ProductDeleteListAction());
   }, [dispatch]);
+  useEffect(() => {
+    if (productData?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [navigate, productData?.ErrorMessage?.data?.message]);
 
   useEffect(() => {
     dispatch(

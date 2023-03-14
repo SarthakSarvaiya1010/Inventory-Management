@@ -9,6 +9,7 @@ import {
   FAILED_ADD_CUSTOMER,
   PERMANENT_CUSTOMER_DELETE,
   FAILED_EDIT_CUSTOMERDATA,
+  FAILED_ADMIN_LIST,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -47,6 +48,11 @@ const CustomerListReducer = (state = initialstate, action) => {
         ...state,
         customerEdit: action.payload,
         loder: false,
+      };
+    case FAILED_ADMIN_LIST:
+      return {
+        ...state,
+        ErrorMessage: action.payload,
       };
     case CUSTOMER_DELETED_LIST:
       console.log("12345", action.payload);

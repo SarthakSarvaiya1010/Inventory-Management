@@ -62,6 +62,12 @@ function TaxList() {
     );
   }, [dispatch, limit, pageNumber, shorting]);
 
+  useEffect(() => {
+    if (TaxData?.ErrorMessage?.data?.message === "Authorization error") {
+      localStorage.setItem("AuthError", "Authorization error");
+    }
+  }, [TaxData?.ErrorMessage?.data?.message]);
+
   const searchHeadal = (e) => {
     setSearch(e.target.value);
   };
