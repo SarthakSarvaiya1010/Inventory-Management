@@ -44,26 +44,19 @@ function SideBar(props) {
     localStorage.setItem("ItemName", text);
     switch (text) {
       case "Product":
-        localStorage.setItem("NavigateItemName", "productlist");
         return navigate("productlist");
       case "Product Type":
-        localStorage.setItem("NavigateItemName", "product_type");
         return navigate("product_type");
       case "Tax":
-        localStorage.setItem("NavigateItemName", "tax_list");
-        return navigate("tax_list");
+        return navigate("/tax_list");
       case "Invoice":
-        localStorage.setItem("NavigateItemName", "invoice_list");
         return navigate("invoice_list");
       case "Stock Report":
-        localStorage.setItem("NavigateItemName", "stock_report");
         return navigate("stock_report");
       case "Customer":
-        localStorage.setItem("NavigateItemName", "customer_list");
         return navigate("customer_list");
       case "Company Info":
-        localStorage.setItem("NavigateItemName", "company_info");
-        return navigate("company_info");
+        return navigate("/company_info");
       default:
         return "done";
     }

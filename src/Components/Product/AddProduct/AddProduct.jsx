@@ -92,9 +92,9 @@ function AddProduct() {
                   spacing={1}
                 >
                   <TextField
+                    name="product_name"
                     // {...register("product_name")}
                     error={errors?.product_name ? true : null}
-                    name="product_name"
                     id="outlined-Product"
                     label="Product Name"
                     autoComplete="off"
@@ -104,9 +104,9 @@ function AddProduct() {
                   <p style={{ color: "red" }}>{errors?.product_name}</p>
                   <br />
                   <TextField
+                    name="description"
                     id="outlined-Product"
                     label="Description"
-                    name="description"
                     autoComplete="off"
                     type="textarea"
                     defaultValue={id ? Product_data.description : ""}
@@ -114,10 +114,10 @@ function AddProduct() {
                   />
                   <br />
                   <TextField
+                    name="product_type"
                     error={errors?.product_type ? true : null}
                     id="outlined-select-currency-native"
                     select
-                    name="product_type"
                     label="Product Type"
                     defaultValue={id ? Product_data?.product_type : ""}
                     SelectProps={{
@@ -137,10 +137,10 @@ function AddProduct() {
                   <p style={{ color: "red" }}>{errors?.product_type}</p>
                   <br />
                   <TextField
+                    name="weight"
                     error={errors?.weight ? true : null}
                     required
                     type="number"
-                    name="weight"
                     label="Weight [In Grams]"
                     defaultValue={id ? Product_data.weight : ""}
                     variant="outlined"

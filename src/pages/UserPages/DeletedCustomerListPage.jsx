@@ -25,6 +25,7 @@ function DeletedCustomerListPage() {
     if (CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
+        localStorage.setItem("NavigateItemName", "deletedcustomer");
         navigate("/deletedcustomer");
         window.location.reload();
       }, 2000);

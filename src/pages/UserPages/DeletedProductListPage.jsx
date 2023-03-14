@@ -25,6 +25,7 @@ function DeletedProductListPage() {
     if (productData?.SuccessMessageProductDelete?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
+        localStorage.setItem("NavigateItemName", "deletedproduct");
         navigate("/deletedproduct");
         window.location.reload();
       }, 2000);

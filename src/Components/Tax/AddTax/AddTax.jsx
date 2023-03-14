@@ -102,9 +102,9 @@ function AddTax() {
 
                     <br />
                     <TextField
+                      name="tax_country"
                       required
                       error={errors?.tax_country ? true : null}
-                      name="tax_country"
                       id="outlined-Product"
                       label="Tax Country"
                       autoComplete="off"

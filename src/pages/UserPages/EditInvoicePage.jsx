@@ -43,8 +43,9 @@ export default function EditInvoicePage() {
     if (InvoicePageData?.InvoicePdf?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
+        localStorage.setItem("NavigateItemName", "invoice_list");
         navigate("/invoice_list");
-      }, 4000);
+      }, 2000);
     }
   }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
 

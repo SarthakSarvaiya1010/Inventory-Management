@@ -9,7 +9,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function AddProductPage() {
+function ProductListPage() {
   const productData = useSelector((state) => state?.ProductList);
   const navigate = useNavigate();
   const [state, setState] = React.useState({
@@ -23,6 +23,7 @@ function AddProductPage() {
   };
   useEffect(() => {
     if (productData?.SuccessMessageProductDelete?.statusCode === "200") {
+      alert("done");
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
         navigate("/productlist");
@@ -47,4 +48,4 @@ function AddProductPage() {
   );
 }
 
-export default AddProductPage;
+export default ProductListPage;

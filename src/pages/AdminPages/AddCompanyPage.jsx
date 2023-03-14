@@ -21,6 +21,7 @@ function AddCompanyPage() {
     if (CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
+        localStorage.setItem("NavigateItemName", "company_info");
         navigate("/company_info");
       }, 2000);
     }

@@ -202,7 +202,7 @@ function AddUser() {
                     name="email"
                     autoComplete="off"
                     type="text"
-                    defaultValue={id ? User_data.description : ""}
+                    defaultValue={id ? User_data.email : ""}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.email}</p>
@@ -213,7 +213,7 @@ function AddUser() {
                     type="password"
                     name="password"
                     label="Password"
-                    defaultValue={id ? User_data.hsn : ""}
+                    defaultValue={id ? User_data.password : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
@@ -226,7 +226,7 @@ function AddUser() {
                     type="password"
                     name="confrom_password"
                     label="Confrom Password"
-                    defaultValue={id ? User_data.hsn : ""}
+                    defaultValue={id ? User_data.password : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.hsn}
@@ -234,18 +234,6 @@ function AddUser() {
                   />
                   <p style={{ color: "red" }}>{errors?.hsn}</p>
                   <br />
-                  {/* <TextField
-                      error={errors?.hsn ? true : null}
-                      required
-                      type="number"
-                      name="image_src"
-                      label="image"
-                      defaultValue={id ? User_data.hsn : ""}
-                      variant="outlined"
-                      onChange={(e) => handleOnchange(e)}
-                      value={values?.hsn}
-                      autoComplete="off"
-                    /> */}
                   <img
                     alt=""
                     ref={uploadedImage}

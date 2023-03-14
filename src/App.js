@@ -110,19 +110,14 @@ function App() {
   const [user, setUser] = useState("not");
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
   useEffect(() => {
-    if (
-      successLoginData?.LoginData?.role_id === 2 ||
-      accessToken?.role_id === 2
-    ) {
+    if (successLoginData?.LoginData?.role_id === 2) {
       setUser({
         roles: ["user"],
       });
     }
-    if (
-      successLoginData?.LoginData?.role_id === 1 ||
-      accessToken?.role_id === 1
-    ) {
+    if (successLoginData?.LoginData?.role_id === 1) {
       setUser({
         roles: ["admin"],
       });
@@ -147,12 +142,11 @@ function App() {
                 <Route
                   path="/"
                   element={
-                    <Protected isAllowed={!!!accessToken} redirectPath="/login">
-                      <HomePage />
-                    </Protected>
+                    // <Protected isAllowed={!!!accessToken} redirectPath="/login">
+                    <HomePage />
+                    // </Protected>
                   }
                 />
-                <Route path="/login" element={<Login setOpen={false} />} />
                 {route.map((route) => {
                   return (
                     <Route
@@ -160,7 +154,7 @@ function App() {
                       element={
                         <Protected
                           isAllowed={!!user && user?.roles?.includes("user")}
-                          redirectPath="/login"
+                          redirectPath="/"
                         >
                           {route.element}
                         </Protected>
@@ -175,7 +169,7 @@ function App() {
                       element={
                         <Protected
                           isAllowed={!!user && user?.roles?.includes("admin")}
-                          redirectPath="/login"
+                          redirectPath="/"
                         >
                           {route.element}
                         </Protected>

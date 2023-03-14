@@ -23,7 +23,6 @@ import { UserAddAction } from "../../Store/Action/UserAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const useForm = (defaultData, image) => {
-  console.log("defaultData", defaultData);
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [findErrors, setFindErrors] = useState(null);

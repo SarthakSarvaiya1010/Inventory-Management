@@ -50,7 +50,7 @@ function Login(props) {
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  const NavigateItemName = window.localStorage.getItem("NavigateItemName");
+  // const NavigateItemName = window.localStorage.getItem("NavigateItemName");
 
   console.log("successLoginData", successLoginData?.FailedLoginData);
 
@@ -90,23 +90,23 @@ function Login(props) {
     successLoginData.LoginData.statusCode,
     test,
   ]);
-  useEffect(() => {
-    if (accessToken?.role_id === 2) {
-      if (NavigateItemName) {
-        navigate(NavigateItemName);
-      } else {
-        navigate("/productlist");
-      }
-    } else {
-      if (accessToken?.role_id === 1) {
-        if (NavigateItemName) {
-          navigate(NavigateItemName);
-        } else {
-          navigate("/userlist");
-        }
-      }
-    }
-  }, [NavigateItemName, accessToken?.role_id, navigate]);
+  // useEffect(() => {
+  //   if (accessToken?.role_id === 2) {
+  //     if (NavigateItemName) {
+  //       navigate(NavigateItemName);
+  //     } else {
+  //       navigate("/productlist");
+  //     }
+  //   } else {
+  //     if (accessToken?.role_id === 1) {
+  //       if (NavigateItemName) {
+  //         navigate(NavigateItemName);
+  //       } else {
+  //         navigate("/userlist");
+  //       }
+  //     }
+  //   }
+  // }, [NavigateItemName, accessToken?.role_id, navigate]);
   return (
     <div>
       <div>
