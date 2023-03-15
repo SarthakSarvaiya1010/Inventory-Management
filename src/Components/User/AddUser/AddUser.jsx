@@ -32,10 +32,8 @@ function AddUser() {
   const params = useParams();
   const User = useSelector((state) => state?.User);
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
-  console.log("CompanyInfo", CompanyInfo.CompanyInfo);
 
   const CompanyListData = CompanyInfo?.CompanyInfo;
-  console.log("CompanyListData", CompanyListData);
 
   const { id } = params;
   console.log("id==========>", id);
@@ -149,9 +147,8 @@ function AddUser() {
                     select
                     name="company_id"
                     label="Company Name"
-                    defaultValue="select One"
-                    // defaultValue={id ? User_data.description : ""}
-
+                    // defaultValue="select One"
+                    defaultValue={id ? User_data.company_id : "select One"}
                     SelectProps={{
                       native: true,
                     }}
@@ -172,8 +169,8 @@ function AddUser() {
                     select
                     name="role_id"
                     label="Role"
-                    defaultValue="select One"
-                    // defaultValue={id ? User_data.description : ""}
+                    // defaultValue="select One"
+                    defaultValue={id ? User_data.role_id : "select One"}
                     SelectProps={{
                       native: true,
                     }}
@@ -235,7 +232,7 @@ function AddUser() {
                     defaultValue={id ? User_data.password : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
-                    value={values?.hsn}
+                    value={values?.confrom_password}
                     autoComplete="off"
                   />
                   <p style={{ color: "red" }}>{errors?.hsn}</p>

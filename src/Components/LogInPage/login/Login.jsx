@@ -52,8 +52,6 @@ function Login(props) {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   // const NavigateItemName = window.localStorage.getItem("NavigateItemName");
 
-  console.log("successLoginData", successLoginData?.FailedLoginData);
-
   useEffect(() => {
     if (successLoginData.LoginData.statusCode === "200" && test) {
       localStorage.setItem(

@@ -6,6 +6,7 @@ import {
   USER_GET_BY_UUID,
   USER_ADD,
   LIST_LOADER,
+  USER_EDIT,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -130,6 +131,26 @@ export const UserAddAction = (data) => async (dispatch) => {
     );
     dispatch({
       type: USER_ADD,
+      payload: UserAdd.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADMIN_LIST,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const UserEditAction = (data, user_uuid) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const UserAdd = await axios.put(
+      `https://inventory-management-backend.onrender.com/edit/users/${user_uuid}`,
+      data,
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+    );
+    dispatch({
+      type: USER_EDIT,
       payload: UserAdd.data,
     });
   } catch (error) {

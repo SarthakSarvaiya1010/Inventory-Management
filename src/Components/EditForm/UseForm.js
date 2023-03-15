@@ -19,7 +19,10 @@ import {
   CompanyInfoEditAction,
   AddCompanyInfoAction,
 } from "../../Store/Action/CompanyAction/index";
-import { UserAddAction } from "../../Store/Action/UserAction/index";
+import {
+  UserAddAction,
+  UserEditAction,
+} from "../../Store/Action/UserAction/index";
 import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
 
 const useForm = (defaultData, image) => {
@@ -149,8 +152,8 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("image_src", image);
 
     if (Object.keys(errors).length === 0) {
-      if (defaultData?.length > 0) {
-        dispatch(UserAddAction(formAddUserData, defaultData[0]?.tax_id));
+      if (Object.keys(defaultData).length > 0) {
+        dispatch(UserEditAction(formAddUserData, defaultData?.user_uuid));
       } else {
         dispatch(UserAddAction(formAddUserData));
       }

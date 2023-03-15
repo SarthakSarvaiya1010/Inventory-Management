@@ -38,11 +38,9 @@ function ProductList() {
 
   useEffect(() => {
     if (productData?.ErrorMessage?.data?.message === "Authorization error") {
-      console.log("AuthError", "Authorization error");
       localStorage.setItem("AuthError", "Authorization error");
-      // navigate("/");
     }
-  }, [navigate, productData?.ErrorMessage?.data?.message]);
+  }, [productData?.ErrorMessage?.data?.message]);
 
   // eslint-disable-next-line array-callback-return
   productData.productList.map((e) => {

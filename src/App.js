@@ -35,7 +35,6 @@ import { Box } from "@mui/material";
 import "./App.css";
 import ViewDeletedInvoiceList from "./Components/Invoice/ViewDeletedInvoice/ViewDeletedInvoiceList";
 import Protected from "./pages/Protected/Protected";
-import Login from "./Components/LogInPage/login/Login";
 
 const outerTheme = createTheme({
   palette: {
@@ -107,12 +106,22 @@ const adminroute = [
 
 function App() {
   const [openManu, setOpenManu] = useState(false);
-  const [user, setUser] = useState("not");
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const [user, setUser] = useState(
+    accessToken?.role_id === 2
+      ? {
+          roles: ["user"],
+        }
+      : accessToken?.role_id === 1
+      ? {
+          roles: ["admin"],
+        }
+      : "not"
+  );
+  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   console.log(
-    !!user && user?.roles?.includes("user"),
-    "!!user && user?.roles?.includes()"
+    "!!user && user?.roles?.includes(user)",
+    !!user && user?.roles?.includes("user")
   );
   useEffect(() => {
     if (
