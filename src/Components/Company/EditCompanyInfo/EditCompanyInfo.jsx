@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Header from "../../../Helpers/Header/Header";
 import { CompanyInfoByIdAction } from "../../../Store/Action/CompanyAction/index";
 import { useParams } from "react-router";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer } from "react-toastify";
 
@@ -246,7 +247,17 @@ function EditCompanyInfo() {
             </DialogContent>
           </Container>
         </Container>
-      ) : null}
+      ) : (
+        <Stack
+          sx={{ color: "grey.500", height: "80vh" }}
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="success" size="5rem" />
+        </Stack>
+      )}
     </div>
   );
 }
