@@ -16,7 +16,7 @@ import axios from "axios";
 
 export const ProductListAction = (data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
+  console.log("accessToken", accessToken);
   try {
     dispatch({
       type: LIST_LOADER,

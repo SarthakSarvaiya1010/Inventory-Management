@@ -36,13 +36,6 @@ function AddCustomer() {
     localStorage.setItem("NavigateItemName", "customer_list");
     navigate("/customer_list");
   };
-  useEffect(() => {
-    if (
-      CustomerEditData?.ErrorMessage?.data?.message === "Authorization error"
-    ) {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [CustomerEditData?.ErrorMessage?.data?.message]);
 
   useEffect(() => {
     if (id) {

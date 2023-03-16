@@ -17,7 +17,7 @@ function DeletedCustomerList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [pageNumber, setPageNumber] = useState();
-  let limit = 2;
+  let limit = 4;
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [search, setSearch] = useState();
@@ -34,12 +34,6 @@ function DeletedCustomerList() {
       window.location.reload();
     }
   }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);
-
-  useEffect(() => {
-    if (CustomerData?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [CustomerData?.ErrorMessage?.data?.message]);
 
   const data = [];
 

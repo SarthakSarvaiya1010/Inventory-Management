@@ -19,7 +19,7 @@ function InvoiceList() {
   const dispatch = useDispatch();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const InvoiceData = useSelector((state) => state?.InvoiceData);
-  let limit = 2;
+  let limit = 4;
   const [open, setOpen] = useState(false);
   const data = [];
   console.log("successLoginData", successLoginData?.LoginData);

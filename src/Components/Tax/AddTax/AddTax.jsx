@@ -39,12 +39,6 @@ function AddTax() {
     }
   }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
 
-  useEffect(() => {
-    if (TaxData?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [TaxData?.ErrorMessage?.data?.message]);
-
   const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(
     Tax_data[0] ? Tax_data[0] : []
   );

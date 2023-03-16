@@ -24,7 +24,7 @@ export default function ViewDeletedInvoiceList() {
   const DeletedInvoiceList = useSelector((state) => state?.InvoiceData);
   const [openPopep, setOpenPopep] = useState(false);
   const data = [];
-  let limit = 2;
+  let limit = 4;
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("BILL No");

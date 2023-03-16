@@ -22,7 +22,7 @@ function CustomerList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [pageNumber, setPageNumber] = useState();
-  let limit = 2;
+  let limit = 4;
   const data = [];
   // eslint-disable-next-line array-callback-return
   CustomerData?.CoustomerList.map((e) => {
@@ -75,12 +75,6 @@ function CustomerList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-
-  useEffect(() => {
-    if (CustomerData?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [CustomerData?.ErrorMessage?.data?.message]);
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a

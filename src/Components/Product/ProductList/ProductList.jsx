@@ -15,15 +15,15 @@ import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function ProductList() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate(null);
+  const dispatch = useDispatch(null);
   const [open, setOpen] = useState(false);
   const productData = useSelector((state) => state?.ProductList);
   const products = useSelector((state) => state?.ProductList?.productList);
-  let limit = 2;
-  const [search, setSearch] = useState();
-  const [pageNumber, setPageNumber] = useState();
-  const [shorting, setShorting] = useState();
+  let limit = 4;
+  const [search, setSearch] = useState(null);
+  const [pageNumber, setPageNumber] = useState(null);
+  const [shorting, setShorting] = useState(null);
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
   useEffect(() => {
@@ -35,12 +35,6 @@ function ProductList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-
-  useEffect(() => {
-    if (productData?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [productData?.ErrorMessage?.data?.message]);
 
   // eslint-disable-next-line array-callback-return
   productData.productList.map((e) => {

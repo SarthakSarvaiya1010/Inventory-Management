@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Stack,
   TextField,
@@ -13,7 +13,6 @@ import Header from "../../../Helpers/Header/Header";
 
 import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
 
 function AddCompanyInfo() {
   const imageUploader = React.useRef(null);
@@ -25,15 +24,6 @@ function AddCompanyInfo() {
     test,
     image
   );
-  const CompanyInfoData = useSelector((state) => state?.CompanyInfo);
-  useEffect(() => {
-    if (
-      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.message ===
-      "Authorization error"
-    ) {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.message]);
 
   const hedalImgChage = (event) => {
     const [file] = event.target.files;

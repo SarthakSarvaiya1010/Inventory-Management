@@ -15,7 +15,7 @@ function UserDeleteList() {
   const dispatch = useDispatch();
 
   const User = useSelector((state) => state?.User);
-  let limit = 2;
+  let limit = 4;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
@@ -31,12 +31,6 @@ function UserDeleteList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-
-  useEffect(() => {
-    if (User?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [User?.ErrorMessage?.data?.message]);
 
   // eslint-disable-next-line array-callback-return
   User.UserDeleteList.map((e) => {

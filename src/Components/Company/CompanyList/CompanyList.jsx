@@ -20,7 +20,7 @@ function CompanyList() {
 
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
   console.log("Companyinfo");
-  let limit = 2;
+  let limit = 4;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
@@ -36,12 +36,6 @@ function CompanyList() {
       window.location.reload();
     }
   }, [CompanyInfo?.SuccessProductDeleteData?.statusCode]);
-
-  useEffect(() => {
-    if (CompanyInfo?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [navigate, CompanyInfo?.ErrorMessage?.data?.message]);
 
   useEffect(() => {
     dispatch(

@@ -24,7 +24,7 @@ function TaxList() {
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
   const [open, setOpen] = useState(false);
-  let limit = 2;
+  let limit = 4;
   const data = [];
 
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
@@ -61,12 +61,6 @@ function TaxList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-
-  useEffect(() => {
-    if (TaxData?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [TaxData?.ErrorMessage?.data?.message]);
 
   const searchHeadal = (e) => {
     setSearch(e.target.value);

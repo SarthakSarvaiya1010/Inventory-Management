@@ -37,19 +37,13 @@ function DeletedTaxList() {
     elements["Tax Country"] = e.tax_country;
     data.push(elements);
   });
-  let limit = 2;
+  let limit = 4;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
 
   useEffect(() => {
     dispatch(TaxDelectListAction({ limit: limit, pageNumber: pageNumber }));
   }, [dispatch, limit, pageNumber]);
-
-  useEffect(() => {
-    if (TaxData?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [TaxData?.ErrorMessage?.data?.message]);
 
   const searchHeadal = (e) => {
     setSearch(e.target.value);

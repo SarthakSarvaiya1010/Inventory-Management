@@ -45,19 +45,19 @@ export default function Header(props) {
     });
   };
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const AuthError = window.localStorage.getItem("AuthError");
+  const AuthErrorData = useSelector((state) => state?.UserLoginReducer);
   console.log("successLoginData", successLoginData);
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
   const { openManu, setOpenManu } = props;
+  console.log("AuthErrorData", AuthErrorData?.AuthError?.message);
   useEffect(() => {
-    if (AuthError === "Authorization error") {
+    if (AuthErrorData?.AuthError?.message === "Authorization error") {
       setOpen(true);
       localStorage.clear();
     }
-  }, [AuthError]);
-
+  }, [AuthErrorData?.AuthError?.message, navigate]);
   useEffect(() => {
     if (successLoginData.LoginData.statusCode === "200") {
       setTimeout(() => {

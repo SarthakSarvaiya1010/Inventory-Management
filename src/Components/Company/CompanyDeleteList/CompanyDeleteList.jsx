@@ -19,7 +19,7 @@ function CompanyDeleteList() {
   const dispatch = useDispatch();
 
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
-  let limit = 2;
+  let limit = 4;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
@@ -45,12 +45,6 @@ function CompanyDeleteList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-  useEffect(() => {
-    if (CompanyInfo?.ErrorMessage?.data?.message === "Authorization error") {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [CompanyInfo?.ErrorMessage?.data?.message]);
-
   // eslint-disable-next-line array-callback-return
   CompanyInfo?.DeleteCompanyInfo?.map((e) => {
     let elements = {};

@@ -40,14 +40,6 @@ function EditCompanyInfo() {
       localStorage.setItem("CompanyId", id);
     }
   }, [company_id, dispatch, id]);
-  useEffect(() => {
-    if (
-      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.message ===
-      "Authorization error"
-    ) {
-      localStorage.setItem("AuthError", "Authorization error");
-    }
-  }, [CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.message]);
 
   const { companyhandleSubmit, values, errors, handleOnchange } = UseForm(
     CompanyInfo,
