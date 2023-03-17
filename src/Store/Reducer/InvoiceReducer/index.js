@@ -8,6 +8,7 @@ import {
   PARMANENT_DELETE_INVOICE,
   LIST_LOADER,
   UPDATE_INVOICE_DATA,
+  PRINT_INVOICE,
 } from "../../ActionTypes";
 
 const initialstate = {
@@ -19,6 +20,7 @@ const initialstate = {
   DeletedInvoiceList: [],
   DeletedInvoiceLoader: false,
   SucessMessageOfInvoiceDelete: [],
+  PrintInvoicePdf: [],
   // SucessMessageOfInvoiceDelete: [],
   // SucessPermanentDeletedData: [],
 };
@@ -80,6 +82,12 @@ const InvoiceReducer = (state = initialstate, action) => {
       return {
         ...state,
         InvoicePdf: action.payload,
+      };
+    case PRINT_INVOICE:
+      return {
+        ...state,
+        PrintInvoicePdf: action.payload,
+        invoiceEdit: [],
       };
     default:
       return state;

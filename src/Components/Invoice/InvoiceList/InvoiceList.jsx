@@ -4,10 +4,14 @@ import React, { useEffect, useState } from "react";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
 import Container from "@mui/material/Container";
-import { Stack, Button } from "@mui/material";
+import { Stack, Button, Backdrop } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { InvoiceListAction } from "../../../Store/Action/InvoiceAction/index";
+import {
+  GetinvoiceEditDataAction,
+  InvoiceListAction,
+  PrintInvoiceData,
+} from "../../../Store/Action/InvoiceAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
 import UsePagination from "../../../Helpers/pagination/Pagination";
@@ -26,8 +30,10 @@ function InvoiceList() {
   const [pageNumber, setPageNumber] = useState();
   const [search, setSearch] = useState();
   const [shorting, setShorting] = useState();
+  const [print, setPrint] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  const [disabled, setDisabled] = useState(false);
 
   InvoiceData.invoiceList.map((e) => {
     let elements = {};
@@ -54,10 +60,6 @@ function InvoiceList() {
   // eslint-disable-next-line array-callback-return
 
   const headalEdit = (data) => {
-    localStorage.setItem(
-      "NavigateItemName",
-      `/InvoiceList/edit/${InvoiceData.invoiceList[data - 1]?.invoice_id}`
-    );
     navigate(
       `/InvoiceList/edit/${InvoiceData.invoiceList[data - 1]?.invoice_id}`
     );
@@ -127,7 +129,80 @@ function InvoiceList() {
       );
     }
   };
+  const InvoicePageData = useSelector((state) => state?.InvoiceData);
+  if (
+    InvoicePageData?.invoiceEdit.length > 0 &&
+    InvoicePageData.PrintInvoicePdf.length === 0 &&
+    print === "PrintInvoiceData"
+  ) {
+    let count = 0;
+    let data = {};
+    let product_data = [];
+    data["bill_amount"] = InvoicePageData?.invoiceEdit[0].bill_amount;
+    data["bill_no"] = InvoicePageData?.invoiceEdit[0].bill_no;
+    data["cgst"] = InvoicePageData?.invoiceEdit[0].cgst;
+    data["customer_id"] = InvoicePageData?.invoiceEdit[0].customer_id;
+    data["discount"] = InvoicePageData?.invoiceEdit[0].discount;
+    data["invoice_date"] = InvoicePageData?.invoiceEdit[0].invoice_date;
+    data["sgst"] = InvoicePageData?.invoiceEdit[0].sgst;
+    data["taxable_amount"] = InvoicePageData?.invoiceEdit[0].taxable_amount;
+    InvoicePageData?.invoiceEdit[0].productlistdata.map((e) => {
+      count++;
+      let dummy = {};
+      dummy["amount"] = e.amount;
+      dummy["hsn"] = e.hsn;
+      dummy["product_id"] = e.product_id;
+      dummy["rate"] = e.rate;
+      dummy["weight"] = e.weight;
+      product_data.push(dummy);
+    });
+    data["productdata"] = product_data;
 
+    if (count === InvoicePageData?.invoiceEdit[0].productlistdata.length) {
+      setDisabled(true);
+      count = 0;
+      setPrint("StartPrint");
+      dispatch(PrintInvoiceData(data));
+    }
+  }
+  console.log("InvoicePageData", InvoicePageData, InvoicePageData?.invoiceEdit);
+  const headalPrint = (data) => {
+    setPrint("PrintInvoiceData");
+    dispatch(
+      GetinvoiceEditDataAction(InvoiceData.invoiceList[data - 1]?.invoice_id)
+    );
+  };
+
+  var b64;
+  if (
+    InvoicePageData?.PrintInvoicePdf?.status === "success" &&
+    print === "StartPrint"
+  ) {
+    b64 = InvoicePageData?.PrintInvoicePdf?.invoicePdf;
+    setPrint(null);
+  }
+  if (b64) {
+    var obj = document.createElement("object");
+    obj.style.width = "100%";
+    obj.style.height = "1000pt";
+    obj.type = "application/pdf";
+    obj.data = "data:application/pdf;base64," + b64;
+    // document.body.appendChild(obj);
+    var link = document.createElement("a");
+    // link.innerHTML = "Download PDF file";
+    link.download = "invoice.pdf";
+    link.href = "data:application/pdf;base64," + b64;
+    document.body.appendChild(link);
+    setTimeout(() => {
+      let pdfWindow = window.open("");
+      setDisabled(false);
+      pdfWindow.document.write(
+        "<iframe width='100%' height='100%' src='data:application/pdf;base64, " +
+          encodeURI(b64) +
+          "'></iframe>"
+      );
+    }, 3000);
+  }
   return (
     <div>
       <DialogBox
@@ -136,6 +211,7 @@ function InvoiceList() {
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
+
       {InvoiceData?.invoiceList?.length ? (
         <Container fixed>
           <Header
@@ -185,6 +261,8 @@ function InvoiceList() {
               headalDelete={setOpen}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
+              printIcon={true}
+              headalPrint={headalPrint}
             />
             <Stack
               sx={{
@@ -204,6 +282,20 @@ function InvoiceList() {
               />
             </Stack>
           </Container>
+          {disabled ? (
+            <Backdrop
+              sx={{
+                color: "#fff",
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+              }}
+              open={disabled}
+              // onClick={handleClose}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          ) : (
+            ""
+          )}
         </Container>
       ) : (
         <Stack

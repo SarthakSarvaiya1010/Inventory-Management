@@ -60,7 +60,6 @@ function InvoiceEdit(props) {
   const params = useParams();
   const { id } = params;
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [CustomerListData, setCustomerListData] = useState();
   const [dateData, setDateData] = useState();
   const [addtable, setAddTable] = useState();
@@ -88,7 +87,7 @@ function InvoiceEdit(props) {
   useEffect(() => {
     dispatch(GetinvoiceEditDataAction(id));
     dispatch(GetinvoiceAddPageAction());
-  }, [accessToken?.accessToken, dispatch, id]);
+  }, [dispatch, id]);
 
   // calculate Total weight ,rate, amount and billamount
   let totalAmount = 0;

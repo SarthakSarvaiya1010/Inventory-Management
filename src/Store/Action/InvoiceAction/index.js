@@ -15,6 +15,7 @@ import {
   LIST_LOADER,
   UPDATE_INVOICE_DATA,
   FAILED_UPDATE_INVOICE_DATA,
+  PRINT_INVOICE,
 } from "../../ActionTypes/index";
 import axios from "axios";
 
@@ -185,7 +186,7 @@ export const PermanentDeleteInvoice = (invoice_id) => async (dispatch) => {
 };
 export const UpdateInvoiceData = (invoice_id, data) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-
+  console.log("datadata", data);
   try {
     const UpdateInvoiceData = await axios.put(
       `https://inventory-management-backend.onrender.com/UpdateInvoiceData/${invoice_id}`,
@@ -199,6 +200,26 @@ export const UpdateInvoiceData = (invoice_id, data) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: FAILED_UPDATE_INVOICE_DATA,
+      payload: { data: error.response.data },
+    });
+  }
+};
+export const PrintInvoiceData = (data) => async (dispatch) => {
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+
+  try {
+    const AddInvoiceData = await axios.post(
+      "https://inventory-management-backend.onrender.com/printinvoice",
+      data,
+      { headers: { Authorization: `Bearer ${accessToken?.accessToken}` } }
+    );
+    dispatch({
+      type: PRINT_INVOICE,
+      payload: AddInvoiceData.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_ADD_INVOICE,
       payload: { data: error.response.data },
     });
   }
