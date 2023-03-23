@@ -18,6 +18,8 @@ import {
   AddInvoicePage,
   EditInvoicePage,
   CompanyInfoPage,
+  ResetPasswordPage,
+  SetPasswordPage,
 } from "./pages/UserPages/index";
 import {
   HomePageAdmin,
@@ -162,6 +164,22 @@ function App() {
                   element={
                     // <Protected isAllowed={!!!accessToken} redirectPath="/login">
                     <HomePage />
+                    // </Protected>
+                  }
+                />
+                <Route
+                  path="/resetpassword"
+                  element={
+                    // <Protected isAllowed={!!!accessToken} redirectPath="/login">
+                    <ResetPasswordPage />
+                    // </Protected>
+                  }
+                />
+                <Route
+                  path="/resetpassword/:id"
+                  element={
+                    // <Protected isAllowed={!!!accessToken} redirectPath="/login">
+                    <SetPasswordPage />
                     // </Protected>
                   }
                 />

@@ -14,6 +14,7 @@ import { IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import PrintIcon from "@mui/icons-material/Print";
+import LoginIcon from "@mui/icons-material/Login";
 // import IconButton from "@material-ui/core/IconButton";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -49,6 +50,8 @@ export default function CustomizedTables(props) {
     ShortingHide,
     printIcon,
     headalPrint,
+    LoginIconShow,
+    headallogin,
   } = props;
   console.log(data, "headalEdit", Object.keys(data).length, ShortingHide);
   const column = data.length ? Object.keys(data[0]) : null;
@@ -130,10 +133,36 @@ export default function CustomizedTables(props) {
                   </StyledTableCell>
                 ))}
                 <StyledTableCell align="center">
+                  {LoginIconShow ? (
+                    <>
+                      <IconButton onClick={() => headallogin(index)}>
+                        <LoginIcon
+                          style={{ color: "darkpink" }}
+                          fontSize="17px"
+                        />
+                        <Typography
+                          variant="h6"
+                          component="text"
+                          sx={{
+                            fontSize: "17px",
+                            marginLeft: "5px",
+                            color: "green",
+                          }}
+                        >
+                          Login
+                        </Typography>
+                      </IconButton>
+                    </>
+                  ) : (
+                    ""
+                  )}
                   {printIcon ? (
                     <>
                       <IconButton onClick={() => headalPrint(index)}>
-                        <PrintIcon style={{ color: "green" }} fontSize="17px" />
+                        <PrintIcon
+                          style={{ color: "darkpink" }}
+                          fontSize="17px"
+                        />
                         <Typography
                           variant="h6"
                           component="text"

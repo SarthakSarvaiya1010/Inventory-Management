@@ -12,3 +12,5 @@ export { default as SideBar } from "./SideBar";
 export { default as AddInvoicePage } from "./AddInvoicePage";
 export { default as EditInvoicePage } from "./EditInvoicePage";
 export { default as CompanyInfoPage } from "./CompanyInfoPage";
+export { default as ResetPasswordPage } from "./ResetPasswordPage";
+export { default as SetPasswordPage } from "./SetPasswordPage";

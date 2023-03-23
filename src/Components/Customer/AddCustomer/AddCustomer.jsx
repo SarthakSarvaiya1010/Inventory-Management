@@ -33,7 +33,6 @@ function AddCustomer() {
   console.log(values);
 
   const handleCancle = () => {
-    localStorage.setItem("NavigateItemName", "customer_list");
     navigate("/customer_list");
   };
 

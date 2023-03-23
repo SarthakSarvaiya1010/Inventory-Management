@@ -160,7 +160,6 @@ const useForm = (defaultData, image) => {
     }
   };
   useEffect(() => {
-    console.log("findErrors", findErrors);
     if (findErrors === "ProductError") {
       setErrors(ProductValidate(values, defaultData));
     }
@@ -181,7 +180,6 @@ const useForm = (defaultData, image) => {
   const handleOnchange = useCallback(
     (e) =>
       setvalues((values) => {
-        console.log("values===>", values);
         const newValues = { ...values, [e.target.name]: e.target.value };
         return newValues;
       }),

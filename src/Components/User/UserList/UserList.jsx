@@ -9,9 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   userListAction,
   userDeleteAction,
+  userGetByuuidAction,
 } from "../../../Store/Action/UserAction/index";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import { quickLogin } from "../../../Store/Action/AuthAction";
 
 function UserList() {
   const navigate = useNavigate();
@@ -23,9 +25,10 @@ function UserList() {
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
+  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const data = [];
 
-  console.log("User", User, "test");
+  console.log("UserUserUser==>", User.UserDataByuuid, "test");
 
   useEffect(() => {
     dispatch(
@@ -36,6 +39,36 @@ function UserList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
+
+  useEffect(() => {
+    if (Object.keys(User.UserDataByuuid).length) {
+      dispatch(quickLogin(User.UserDataByuuid));
+    }
+  }, [User.UserDataByuuid, dispatch, navigate]);
+  useEffect(() => {
+    if (successLoginData.LoginData.statusCode === "200") {
+      localStorage.setItem(
+        "LoginData",
+        JSON.stringify(successLoginData.LoginData)
+      );
+      localStorage.setItem("AuthError", "Authorization");
+      setTimeout(() => {
+        if (successLoginData.LoginData.role_id === 2) {
+          navigate("/productlist");
+        } else {
+          if (successLoginData.LoginData.role_id === 1) {
+            navigate("/userlist");
+          }
+        }
+      }, 2100);
+    } else if (successLoginData?.FailedLoginData?.status === "server_offline") {
+    }
+  }, [
+    navigate,
+    successLoginData?.FailedLoginData,
+    successLoginData.LoginData,
+    successLoginData.LoginData.statusCode,
+  ]);
 
   // eslint-disable-next-line array-callback-return
   User.UserData.map((e) => {
@@ -48,11 +81,11 @@ function UserList() {
   });
 
   const headalEdit = (data) => {
-    localStorage.setItem(
-      "NavigateItemName",
-      `/user/edit/${User.UserData[data - 1]?.user_uuid}`
-    );
     navigate(`/user/edit/${User.UserData[data - 1]?.user_uuid}`);
+  };
+
+  const headallogin = (data) => {
+    dispatch(userGetByuuidAction(User.UserData[data - 1]?.user_uuid));
   };
 
   const headalDelete = (data) => {
@@ -161,6 +194,8 @@ function UserList() {
               headalDelete={headalDelete}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
+              LoginIconShow={true}
+              headallogin={headallogin}
             />
             <Stack
               sx={{

@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  // AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-  Dialog,
-} from "../../Helpers/indexMui/indexmui";
+
+import { Dialog, Toolbar, Typography, Button, IconButton } from "@mui/material";
+
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 import Login from "../LogInPage/login/Login";

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { TextField, DialogContent, DialogTitle } from "@mui/material";
+import {
+  TextField,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import Stack from "@mui/material/Stack";
 import "./Login.css";
 import Button from "@mui/material/Button";
@@ -82,7 +87,6 @@ function Login(props) {
       setButtonDisbel(false);
     }
   }, [
-    accessToken?.role_id,
     navigate,
     successLoginData?.FailedLoginData,
     successLoginData.LoginData,
@@ -142,6 +146,9 @@ function Login(props) {
                 onChange={(e) => setpassWord(e.target.value)}
               />
             </Stack>
+            <Typography>
+              <a href="/resetpassword">ResetPassword</a>
+            </Typography>
           </Box>
           <Stack
             direction="row"
