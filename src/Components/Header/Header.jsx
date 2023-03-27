@@ -54,13 +54,13 @@ export default function Header(props) {
     }
   }, [AuthErrorData?.AuthError?.message, navigate]);
   useEffect(() => {
-    if (successLoginData.LoginData.statusCode === "200") {
+    if (successLoginData?.LoginData?.statusCode === "200") {
       setTimeout(() => {
         setOpen(false);
         setOpenManu(true);
       }, 2000);
     }
-  }, [setOpenManu, successLoginData.LoginData.statusCode]);
+  }, [setOpenManu, successLoginData?.LoginData?.statusCode]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -102,7 +102,7 @@ export default function Header(props) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Inventory
             </Typography>
-            {successLoginData.LoginData.statusCode === "200" ||
+            {successLoginData?.LoginData?.statusCode === "200" ||
             accessToken?.statusCode ? (
               <>
                 <Typography variant="h5" component="div">

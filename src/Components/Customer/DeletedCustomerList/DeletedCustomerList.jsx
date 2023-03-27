@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   CustomerDelectListAction,
   PermanentCustomerDeleteAction,
-} from "../../../Store/Action/CustomerAction/index";
+} from "../../../Redux/CustomerRedux/CustomerThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";

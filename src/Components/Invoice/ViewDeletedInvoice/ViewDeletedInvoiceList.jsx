@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   GetDeletedInvoiceList,
   PermanentDeleteInvoice,
-} from "../../../Store/Action/InvoiceAction/index";
+} from "../../../Redux/InvoiceRedux/InvoiceThunk";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { convert } from "../../../Helpers/misc";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";

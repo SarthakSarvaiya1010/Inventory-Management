@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   CustomerListAction,
   CustomerDeleteAction,
-} from "../../../Store/Action/CustomerAction/index";
+} from "../../../Redux/CustomerRedux/CustomerThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
@@ -143,7 +143,6 @@ function CustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "addcustomer");
                   navigate("/addcustomer");
                 }}
               >
@@ -155,7 +154,6 @@ function CustomerList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "deletedcustomer");
                   navigate("/deletedcustomer");
                 }}
               >

@@ -11,22 +11,23 @@ import {
   GetinvoiceEditDataAction,
   InvoiceListAction,
   PrintInvoiceData,
-} from "../../../Store/Action/InvoiceAction/index";
+} from "../../../Redux/InvoiceRedux/InvoiceThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
 import UsePagination from "../../../Helpers/pagination/Pagination";
-import { DeleteInvoice } from "../../../Store/Action/InvoiceAction/index";
+import { DeleteInvoice } from "../../../Redux/InvoiceRedux/InvoiceThunk";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function InvoiceList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
+
   const InvoiceData = useSelector((state) => state?.InvoiceData);
+  console.log("InvoiceData", InvoiceData);
   let limit = 4;
   const [open, setOpen] = useState(false);
   const data = [];
-  console.log("successLoginData", successLoginData?.LoginData);
+
   const [pageNumber, setPageNumber] = useState();
   const [search, setSearch] = useState();
   const [shorting, setShorting] = useState();

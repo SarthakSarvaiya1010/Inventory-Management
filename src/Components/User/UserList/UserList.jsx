@@ -70,6 +70,7 @@ function UserList() {
     successLoginData.LoginData.statusCode,
   ]);
 
+  console.log("successLoginDatasuccessLoginData", successLoginData);
   // eslint-disable-next-line array-callback-return
   User.UserData.map((e) => {
     let elements = {};

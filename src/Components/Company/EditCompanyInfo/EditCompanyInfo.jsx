@@ -11,7 +11,7 @@ import {
 import UseForm from "../../EditForm/UseForm";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../../../Helpers/Header/Header";
-import { CompanyInfoByIdAction } from "../../../Store/Action/CompanyAction/index";
+import { CompanyInfoByIdAction } from "../../../Redux/CompanyRedux/CompanyThunk";
 import { useParams } from "react-router";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
@@ -22,7 +22,7 @@ function EditCompanyInfo() {
 
   const CompanyInfoData = useSelector((state) => state?.CompanyInfo);
   let CompanyInfo = CompanyInfoData?.CompanyInfoId || {};
-  console.log("CompanyInfo=======>", CompanyInfo);
+  console.log("CompanyInfo=======>", CompanyInfoData);
 
   const dispatch = useDispatch();
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));

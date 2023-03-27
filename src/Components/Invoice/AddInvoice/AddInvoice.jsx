@@ -377,11 +377,11 @@ function AddInvoice(props) {
                         label="Customer Gst No"
                         variant="standard"
                         sx={{ width: 1 }}
-                        value={
-                          CustomerListData?.tin_no === ""
-                            ? ""
-                            : CustomerListData?.tin_no
-                        }
+                        // value={
+                        //   CustomerListData?.tin_no === ""
+                        //     ? ""
+                        //     : CustomerListData?.tin_no
+                        // }
                       />
                       <br />
 

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 import useForm from "../../EditForm/UseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductEditAction } from "../../../Store/Action/ProductAction/index";
+import { ProductEditAction } from "../../../Redux/ProductRedux/ProductThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
 

@@ -9,7 +9,7 @@ import {
 import Stack from "@mui/material/Stack";
 import "./Login.css";
 import Button from "@mui/material/Button";
-import { userLogin } from "../../../Store/Action/AuthAction/index";
+import { userLogin } from "../../../Redux/AuthSlice";
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
@@ -54,11 +54,10 @@ function Login(props) {
 
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   // const NavigateItemName = window.localStorage.getItem("NavigateItemName");
 
   useEffect(() => {
-    if (successLoginData.LoginData.statusCode === "200" && test) {
+    if (successLoginData?.LoginData?.statusCode === "200" && test) {
       localStorage.setItem(
         "LoginData",
         JSON.stringify(successLoginData.LoginData)
@@ -66,10 +65,10 @@ function Login(props) {
       localStorage.setItem("AuthError", "Authorization");
       showToastMessage();
       setTimeout(() => {
-        if (successLoginData.LoginData.role_id === 2) {
+        if (successLoginData?.LoginData?.role_id === 2) {
           navigate("/productlist");
         } else {
-          if (successLoginData.LoginData.role_id === 1) {
+          if (successLoginData?.LoginData?.role_id === 1) {
             navigate("/userlist");
           }
         }
@@ -89,8 +88,8 @@ function Login(props) {
   }, [
     navigate,
     successLoginData?.FailedLoginData,
-    successLoginData.LoginData,
-    successLoginData.LoginData.statusCode,
+    successLoginData?.LoginData,
+    successLoginData?.LoginData?.statusCode,
     test,
   ]);
   // useEffect(() => {

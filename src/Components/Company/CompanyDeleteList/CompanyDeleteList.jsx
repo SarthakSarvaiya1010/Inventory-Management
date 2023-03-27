@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   PermanentCompanyDeleteAction,
   DeleteCompanyInfoAction,
-} from "../../../Store/Action/CompanyAction/index";
+} from "../../../Redux/CompanyRedux/CompanyThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";

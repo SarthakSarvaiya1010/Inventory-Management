@@ -10,7 +10,7 @@ import {
 import {
   ProductAddAction,
   ProductEditDataAction,
-} from "../../Store/Action/ProductAction";
+} from "../../Redux/ProductRedux/ProductThunk";
 import {
   CustomerEditDataAction,
   CustomerAddAction,

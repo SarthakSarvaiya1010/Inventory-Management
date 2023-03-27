@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   ProductDeleteListAction,
   PermanentProductDelete,
-} from "../../../Store/Action/ProductAction/index";
+} from "../../../Redux/ProductRedux/ProductThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
@@ -26,10 +26,6 @@ function DeletedProductList() {
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [search, setSearch] = useState();
   const productData = useSelector((state) => state?.ProductList);
-
-  useEffect(() => {
-    dispatch(ProductDeleteListAction());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(

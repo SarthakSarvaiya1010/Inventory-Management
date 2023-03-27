@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   TaxDelectListAction,
   PermanentTaxDeleteAction,
-} from "../../../Store/Action/TaxAction/index";
+} from "../../../Redux/TaxRedux/TaxThunk";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import CircularProgress from "@mui/material/CircularProgress";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";

@@ -61,7 +61,6 @@ const InvoiceReducer = (state = initialstate, action) => {
         InvoicePdf: action.payload,
       };
     case GET_DELETED_INVOICE:
-      console.log("actionpayload,", action.payload);
       return {
         ...state,
         DeletedInvoiceList: action.payload,

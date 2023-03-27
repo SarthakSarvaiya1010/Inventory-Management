@@ -45,7 +45,6 @@ export const userListAction = (data) => async (dispatch) => {
 };
 export const userGetByuuidAction = (user_uuid) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  console.log("user_uuid", user_uuid);
   try {
     const userList = await axios.get(
       `https://inventory-management-backend.onrender.com/users/${user_uuid}`,

@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomerEditAction } from "../../../Store/Action/CustomerAction/index";
+import { CustomerEditAction } from "../../../Redux/CustomerRedux/CustomerThunk";
 
 import UseForm from "../../EditForm/UseForm";
 

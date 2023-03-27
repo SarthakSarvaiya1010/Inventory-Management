@@ -23,7 +23,6 @@ function ProductListPage() {
   };
   useEffect(() => {
     if (productData?.SuccessMessageProductDelete?.statusCode === "200") {
-      alert("done");
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
         navigate("/productlist");

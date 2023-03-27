@@ -55,7 +55,6 @@ const CustomerListReducer = (state = initialstate, action) => {
         ErrorMessage: action.payload,
       };
     case CUSTOMER_DELETED_LIST:
-      console.log("12345", action.payload);
       return {
         ...state,
         customerDeletedList: action.payload,

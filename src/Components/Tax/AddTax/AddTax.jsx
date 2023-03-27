@@ -18,7 +18,7 @@ import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 import UseForm from "../../EditForm/UseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { TaxEditAction } from "../../../Store/Action/TaxAction/index";
+import { TaxEditAction } from "../../../Redux/TaxRedux/TaxThunk";
 
 function AddTax() {
   const navigate = useNavigate();
