@@ -54,10 +54,9 @@ function SetPassword() {
     dispatch(resetPasswordlinkcheck(id));
   }, [dispatch, id]);
   useEffect(() => {
-    if (SetPasswordMassge.passwordLinkStatus.statusCode === "400") {
+    if (SetPasswordMassge?.passwordLinkStatus?.statusCode === "400") {
       setLinkstatus(true);
       setOpen(false);
-      alert("hello");
     }
   }, [SetPasswordMassge.passwordLinkStatus.statusCode]);
 
