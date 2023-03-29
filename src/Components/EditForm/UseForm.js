@@ -14,16 +14,13 @@ import {
 import {
   CustomerEditDataAction,
   CustomerAddAction,
-} from "../../Store/Action/CustomerAction/index";
+} from "../../Redux/CustomerRedux/CustomerThunk";
 import {
   CompanyInfoEditAction,
   AddCompanyInfoAction,
-} from "../../Store/Action/CompanyAction/index";
-import {
-  UserAddAction,
-  UserEditAction,
-} from "../../Store/Action/UserAction/index";
-import { TaxAddAction, TaxInfoEditAction } from "../../Store/Action/TaxAction";
+} from "../../Redux/CompanyRedux/CompanyThunk";
+import { UserAddAction, UserEditAction } from "../../Redux/UserReduk/UserThunk";
+import { TaxAddAction, TaxInfoEditAction } from "../../Redux/TaxRedux/TaxThunk";
 
 const useForm = (defaultData, image) => {
   const dispatch = useDispatch();
@@ -49,6 +46,7 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("product_type", values?.product_type);
     formAddUserData.append("description", values?.description);
     formAddUserData.append("hsn", values?.hsn);
+    formAddUserData.append("unit", values?.unit);
     formAddUserData.append("weight", values?.weight);
     formAddUserData.append("image_src", image ? image : null);
     if (Object.keys(errors).length === 0) {

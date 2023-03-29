@@ -24,7 +24,7 @@ export const InvoiceListAction = createAsyncThunk(
   }
 );
 export const GetinvoiceAddPageAction = createAsyncThunk(
-  "userAction/invoiceAdd",
+  "userAction/GetinvoiceAddPage",
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {

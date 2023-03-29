@@ -3,7 +3,6 @@ import {
   TextField,
   DialogContent,
   DialogTitle,
-  Typography,
   Dialog,
   Stack,
   Box,
@@ -29,7 +28,6 @@ function ResetPassword() {
 
   const ResetPasswordMassge = useSelector((state) => state?.UserLoginReducer);
   const [email, setEmail] = useState(null);
-  const [buttonDisbel, setButtonDisbel] = useState(null);
   const LoginInfo = {
     email: email,
   };

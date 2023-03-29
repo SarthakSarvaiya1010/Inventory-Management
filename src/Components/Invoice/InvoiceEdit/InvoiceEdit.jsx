@@ -36,7 +36,7 @@ import {
   GetinvoiceAddPageAction,
   GetinvoiceEditDataAction,
   UpdateInvoiceData,
-} from "../../../Store/Action/InvoiceAction";
+} from "../../../Redux/InvoiceRedux/InvoiceThunk";
 import { InvoiceEditValidate } from "../InvoiceFormValidation";
 import { useParams } from "react-router";
 import { convert } from "../../../Helpers/misc";
@@ -438,8 +438,9 @@ function InvoiceEdit(props) {
                           <TableCell>SR_NO</TableCell>
                           <TableCell>ITEM DESCIPTION</TableCell>
                           <TableCell>HSN</TableCell>
-                          <TableCell>NET WEIGHT[IN GRAMS]</TableCell>
+                          <TableCell>NET WEIGHT</TableCell>
                           <TableCell>RATE</TableCell>
+                          <TableCell>Per</TableCell>
                           <TableCell>AMOUNT</TableCell>
                           <TableCell>
                             <Box
@@ -596,6 +597,35 @@ function InvoiceEdit(props) {
                                   testData?.productlistdata[ind - 1]?.rate
                                 }
                                 value={product[ind - 1]?.rate}
+                                onChange={(e) =>
+                                  handleChangeProduct(
+                                    "rate " + ind,
+                                    parseFloat(e.target.value)
+                                  )
+                                }
+                              />
+                              <p style={{ color: "red", margin: 0 }}>
+                                {!product[ind - 1]?.rate ? errors?.rate : ""}
+                              </p>
+                            </TableCell>
+                            <TableCell>
+                              <TextField
+                                id="standard-basic-7"
+                                label="Par"
+                                variant="standard"
+                                type="number"
+                                name={`unit ${ind}`}
+                                error={
+                                  !product[ind - 1]?.unit
+                                    ? errors?.unit
+                                      ? true
+                                      : null
+                                    : ""
+                                }
+                                defaultValue={
+                                  testData?.productlistdata[ind - 1]?.unit
+                                }
+                                value={product[ind - 1]?.unit}
                                 onChange={(e) =>
                                   handleChangeProduct(
                                     "rate " + ind,

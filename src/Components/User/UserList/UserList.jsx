@@ -10,7 +10,7 @@ import {
   userListAction,
   userDeleteAction,
   userGetByuuidAction,
-} from "../../../Store/Action/UserAction/index";
+} from "../../../Redux/UserReduk/UserThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { quickLogin } from "../../../Store/Action/AuthAction";

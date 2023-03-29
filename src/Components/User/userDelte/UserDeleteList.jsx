@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { userDelteListAction } from "../../../Store/Action/UserAction/index";
+import { userDelteListAction } from "../../../Redux/UserReduk/UserThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 

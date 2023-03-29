@@ -137,6 +137,33 @@ function AddProduct() {
                   <p style={{ color: "red" }}>{errors?.product_type}</p>
                   <br />
                   <TextField
+                    name="unit"
+                    error={errors?.unit ? true : null}
+                    id="outlined-select-currency-native"
+                    select
+                    label="Unit"
+                    defaultValue={id ? Product_data?.unit : ""}
+                    SelectProps={{
+                      native: true,
+                    }}
+                    onChange={(e) => handleOnchange(e)}
+                  >
+                    <option value={null}>
+                      <em>None</em>
+                    </option>
+                    <option value={"kilogram"}>
+                      <em>Kilogram</em>
+                    </option>
+                    <option value={"gram"}>
+                      <em>Gram</em>
+                    </option>
+                    <option value={"nos"}>
+                      <em>Nos</em>
+                    </option>
+                  </TextField>
+                  <p style={{ color: "red" }}>{errors?.unit}</p>
+                  <br />
+                  <TextField
                     name="weight"
                     error={errors?.weight ? true : null}
                     required

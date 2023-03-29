@@ -33,7 +33,6 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
       state.TaxList = data;
     },
     [TaxListAction.rejected]: (state, payload) => {

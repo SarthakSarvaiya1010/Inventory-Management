@@ -7,6 +7,9 @@ export function ProductValidate(values, Product_data) {
   if (!values?.product_type) {
     errors.product_type = "product type is required";
   }
+  if (!values?.unit) {
+    errors.unit = "unit is required";
+  }
   if (!values?.weight) {
     errors.weight = "weight is required";
   }
