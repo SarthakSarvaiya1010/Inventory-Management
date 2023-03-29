@@ -38,7 +38,7 @@ export const TaxEditAction = createAsyncThunk(
   }
 );
 export const TaxDelectListAction = createAsyncThunk(
-  "userAction/TaxDelect",
+  "userAction/TaxDelectList",
   async (_, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -66,7 +66,7 @@ export const TaxDeleteAction = createAsyncThunk(
   }
 );
 export const TaxAddAction = createAsyncThunk(
-  "userAction/TaxDelect",
+  "userAction/TaxAdd",
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -80,7 +80,7 @@ export const TaxAddAction = createAsyncThunk(
   }
 );
 export const TaxInfoEditAction = createAsyncThunk(
-  "userAction/TaxDelect",
+  "userAction/TaxInfoEdit",
   async (data, Tax_id, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {

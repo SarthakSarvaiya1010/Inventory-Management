@@ -50,7 +50,7 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
+      state.loder = false;
       state.UserDataByuuid = data;
     },
     [userGetByuuidAction.rejected]: (state, payload) => {
