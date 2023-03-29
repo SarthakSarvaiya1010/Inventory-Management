@@ -151,7 +151,7 @@ const useForm = (defaultData, image) => {
 
     if (Object.keys(errors).length === 0) {
       if (Object.keys(defaultData).length > 0) {
-        dispatch(UserEditAction(formAddUserData, defaultData?.user_uuid));
+        dispatch(UserEditAction(formAddUserData, defaultData));
       } else {
         dispatch(UserAddAction(formAddUserData));
       }

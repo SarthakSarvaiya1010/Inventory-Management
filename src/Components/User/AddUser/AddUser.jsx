@@ -61,7 +61,7 @@ function AddUser() {
     image
   );
 
-  console.log("values", values, "valueserrorsvalues", errors);
+  console.log("values", values, "valueserrorsvalues", User_data);
 
   const handleCancle = () => {
     console.log("done");

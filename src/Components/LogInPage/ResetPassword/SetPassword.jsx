@@ -57,6 +57,7 @@ function SetPassword() {
     if (SetPasswordMassge.passwordLinkStatus.statusCode === "400") {
       setLinkstatus(true);
       setOpen(false);
+      alert("hello");
     }
   }, [SetPasswordMassge.passwordLinkStatus.statusCode]);
 

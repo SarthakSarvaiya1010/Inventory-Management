@@ -55,7 +55,7 @@ function Login(props) {
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   // const NavigateItemName = window.localStorage.getItem("NavigateItemName");
-
+  console.log("successLoginData", successLoginData?.FailedLoginData);
   useEffect(() => {
     if (successLoginData?.LoginData?.statusCode === "200" && test) {
       localStorage.setItem(

@@ -91,8 +91,9 @@ export const UserEditAction = createAsyncThunk(
   "userAction/UserEditList",
   async (data, user_uuid, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    console.log("user_uuidUserEditList", user_uuid);
     try {
-      const res = await api.put(`/edit/users/${user_uuid}`, data, {
+      const res = await api.put(`/edit/users/${user_uuid?.user_uuid}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
       });
       return res;
