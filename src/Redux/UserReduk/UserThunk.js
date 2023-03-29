@@ -24,7 +24,7 @@ export const userListAction = createAsyncThunk(
   }
 );
 export const userGetByuuidAction = createAsyncThunk(
-  "userAction/CompanyList",
+  "userAction/userGetByuuid",
   async (user_uuid, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -38,7 +38,7 @@ export const userGetByuuidAction = createAsyncThunk(
   }
 );
 export const userDelteListAction = createAsyncThunk(
-  "userAction/CompanyList",
+  "userAction/userDelteList",
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -60,7 +60,7 @@ export const userDelteListAction = createAsyncThunk(
   }
 );
 export const userDeleteAction = createAsyncThunk(
-  "userAction/CompanyList",
+  "userAction/userDelete",
   async (user_id, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -74,7 +74,7 @@ export const userDeleteAction = createAsyncThunk(
   }
 );
 export const UserAddAction = createAsyncThunk(
-  "userAction/CompanyList",
+  "userAction/UserAddList",
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -88,7 +88,7 @@ export const UserAddAction = createAsyncThunk(
   }
 );
 export const UserEditAction = createAsyncThunk(
-  "userAction/CompanyList",
+  "userAction/UserEditList",
   async (data, user_uuid, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
