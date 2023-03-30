@@ -67,10 +67,11 @@ export const CustomerEditAction = createAsyncThunk(
 );
 export const CustomerEditDataAction = createAsyncThunk(
   "userAction/CustomerEditData",
-  async (data, id, thunkAPI) => {
+  async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    const Customer_id = localStorage.getItem("Customer_id");
     try {
-      const res = await api.put(`/edit/customers/${id}`, data, {
+      const res = await api.put(`/edit/customers/${Customer_id}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
       });
       return res;

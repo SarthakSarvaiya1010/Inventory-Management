@@ -81,8 +81,9 @@ export const TaxAddAction = createAsyncThunk(
 );
 export const TaxInfoEditAction = createAsyncThunk(
   "userAction/TaxInfoEdit",
-  async (data, Tax_id, thunkAPI) => {
+  async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    const Tax_id = localStorage.getItem("Tax_id");
     try {
       const res = await api.put(`/edit/tax/${Tax_id}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },

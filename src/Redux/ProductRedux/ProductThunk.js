@@ -104,8 +104,9 @@ export const ProductEditAction = createAsyncThunk(
 );
 export const ProductEditDataAction = createAsyncThunk(
   "userAction/ProductAdd",
-  async (data, Product_id, thunkAPI) => {
+  async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    const Product_id = localStorage.getItem("product_id");
     try {
       const res = await api.put(`/edit/products/${Product_id}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },

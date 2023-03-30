@@ -51,12 +51,8 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("image_src", image ? image : null);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.product_id) {
-        dispatch(
-          ProductEditDataAction(
-            formAddUserData,
-            parseInt(defaultData.product_id)
-          )
-        );
+        dispatch(ProductEditDataAction(formAddUserData));
+        localStorage.setItem("product_id", parseInt(defaultData.product_id));
       } else {
         dispatch(ProductAddAction(formAddUserData));
       }
@@ -79,12 +75,8 @@ const useForm = (defaultData, image) => {
 
     if (Object.keys(errors).length === 0) {
       if (defaultData?.length) {
-        dispatch(
-          CompanyInfoEditAction(
-            formAddUserData,
-            parseInt(defaultData?.company_id)
-          )
-        );
+        dispatch(CompanyInfoEditAction(formAddUserData));
+        localStorage.setItem("company_id", parseInt(defaultData?.company_id));
       } else {
         dispatch(
           AddCompanyInfoAction(
@@ -107,9 +99,8 @@ const useForm = (defaultData, image) => {
     data["tin_no"] = values.tin_no;
     if (Object.keys(errors).length === 0) {
       if (defaultData?.customer_id) {
-        dispatch(
-          CustomerEditDataAction(data, parseInt(defaultData?.customer_id))
-        );
+        dispatch(CustomerEditDataAction(data));
+        localStorage.getItem("customer_id", parseInt(defaultData?.customer_id));
       } else {
         dispatch(CustomerAddAction(data));
       }
@@ -129,7 +120,8 @@ const useForm = (defaultData, image) => {
     console.log("data", data);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.tax_id) {
-        dispatch(TaxInfoEditAction(data, defaultData?.tax_id));
+        dispatch(TaxInfoEditAction(data));
+        localStorage.setItem("Tax_id", defaultData?.tax_id);
       } else {
         dispatch(TaxAddAction(data));
       }
@@ -152,6 +144,7 @@ const useForm = (defaultData, image) => {
     if (Object.keys(errors).length === 0) {
       if (Object.keys(defaultData).length > 0) {
         dispatch(UserEditAction(formAddUserData, defaultData));
+        localStorage.setItem("user_uuid", defaultData?.user_uuid);
       } else {
         dispatch(UserAddAction(formAddUserData));
       }
