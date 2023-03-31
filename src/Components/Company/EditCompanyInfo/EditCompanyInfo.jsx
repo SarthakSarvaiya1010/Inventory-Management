@@ -22,7 +22,6 @@ function EditCompanyInfo() {
 
   const CompanyInfoData = useSelector((state) => state?.CompanyInfo);
   let CompanyInfo = CompanyInfoData?.CompanyInfoId || {};
-  console.log("CompanyInfo=======>", CompanyInfoData);
 
   const dispatch = useDispatch();
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
@@ -46,7 +45,6 @@ function EditCompanyInfo() {
     CompanyInfo,
     image
   );
-  console.log("errors", errors, CompanyInfo);
 
   const hedalImgChage = (event) => {
     const [file] = event.target.files;

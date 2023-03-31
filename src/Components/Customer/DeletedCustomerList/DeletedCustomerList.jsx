@@ -25,7 +25,6 @@ function DeletedCustomerList() {
 
   const CustomerData = useSelector((state) => state?.CustomerList);
 
-  console.log("data", CustomerData.customerDeletedList);
   useEffect(() => {
     if (
       CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode === "200"
@@ -47,17 +46,13 @@ function DeletedCustomerList() {
     data.push(test);
   });
   const headalEdit = (data) => {
-    console.log(data, CustomerData?.CoustomerList[data - 1]);
-
     navigate(
       `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
     );
   };
   const searchHeadal = (e) => {
-    console.log(e.target.value, "e.target.value");
     setSearch(e.target.value);
   };
-  console.log("search", search);
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(

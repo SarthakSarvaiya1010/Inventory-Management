@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
 import Container from "@mui/material/Container";
@@ -7,75 +6,57 @@ import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  PermanentCompanyDeleteAction,
-  DeleteCompanyInfoAction,
-} from "../../../Redux/CompanyRedux/CompanyThunk";
+  TaxListAction,
+  TaxDeleteAction,
+} from "../../../Redux/TaxRedux/TaxThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
-function CompanyDeleteList() {
+function StockReportList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const CompanyInfo = useSelector((state) => state?.CompanyInfo);
-  let limit = 4;
+  const successLoginData = useSelector((state) => state?.UserLoginReducer);
+  const TaxData = useSelector((state) => state?.TaxData);
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
-  const [shortingIcon, setShortingIcon] = useState("Sr. No");
-  const data = [];
+  const [shortingIcon, setShortingIcon] = useState("Sr.No");
   const [open, setOpen] = useState(false);
+  let limit = 4;
+  const data = [];
 
-  useEffect(() => {
-    if (CompanyInfo?.SuccessProductDeleteData?.statusCode === "200") {
-      window.location.reload();
-    }
-  }, [CompanyInfo?.SuccessProductDeleteData?.statusCode]);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+  // eslint-disable-next-line array-callback-return
+  TaxData?.TaxList.map((e) => {
+    let elements = {};
+    elements["Sr.No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
+    elements["Tax Name"] = e.tax_name;
+    elements["Tax Rate [ In % ]"] = e.tax_rate;
+    elements["Tax Country"] = e.tax_country;
+    elements["Active"] = e.isactive;
+    data.push(elements);
+  });
+
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(TaxDeleteAction(TaxData?.TaxList[open - 1]?.tax_id));
+  };
+
+  const headalEdit = (data) => {
+    navigate(`/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`);
+  };
 
   useEffect(() => {
     dispatch(
-      DeleteCompanyInfoAction({
+      TaxListAction({
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-  // eslint-disable-next-line array-callback-return
-  CompanyInfo?.DeleteCompanyInfo?.map((e) => {
-    let elements = {};
-    elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
-    elements["Company Name"] = e.company_name;
-    elements["Website"] = e.website;
-    elements["Mobile no."] = e.mobile_no;
-    // elements["Phone no."] = e.phone_no;
-    elements["Tin GST no"] = e.tin_gst_no;
-    // elements["Fax no"] = e.fax_no;
-
-    data.push(elements);
-  });
-
-  const headalEdit = (data) => {
-    localStorage.setItem(
-      "NavigateItemName",
-      `/company/edit/${CompanyInfo.DeleteCompanyInfo[data - 1]?.company_id}`
-    );
-
-    navigate(
-      `/company/edit/${CompanyInfo.DeleteCompanyInfo[data - 1]?.company_id}`
-    );
-  };
-
-  const finalDelete = () => {
-    setOpen(false);
-    dispatch(
-      PermanentCompanyDeleteAction(
-        CompanyInfo?.DeleteCompanyInfo[open - 1]?.company_id
-      )
-    );
-    window.location.reload();
-  };
 
   const searchHeadal = (e) => {
     setSearch(e.target.value);
@@ -83,15 +64,13 @@ function CompanyDeleteList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        DeleteCompanyInfoAction({
-          search: search,
-          limit: limit,
-          pageNumber: pageNumber,
-        })
+        TaxListAction(
+          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
+          { search: search, limit: limit, pageNumber: pageNumber }
+        )
       );
     }
   };
-
   const headalShorting = (data_a) => {
     shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
     switch (data_a) {
@@ -102,32 +81,32 @@ function CompanyDeleteList() {
           setShorting("sr_no");
         }
         return "done";
-      case "Company Name":
-        if (shorting === "ASC/company_name") {
-          setShorting("DESC/company_name");
+      case "Tax Name":
+        if (shorting === "tax_name") {
+          setShorting(null);
         } else {
-          setShorting("ASC/company_name");
+          setShorting("tax_name");
         }
         return "done";
-      case "Website":
-        if (shorting === "ASC/website") {
-          setShorting("DESC/website");
+      case "Tax Rate [ In % ]":
+        if (shorting === "tax_rate") {
+          setShorting(null);
         } else {
-          setShorting("ASC/website");
+          setShorting("tax_rate");
         }
         return "done";
-      case "Mobile no.":
-        if (shorting === "ASC/mobile_no") {
-          setShorting("DESC/mobile_no");
+      case "Tax Country":
+        if (shorting === "tax_country") {
+          setShorting(null);
         } else {
-          setShorting("ASC/mobile_no");
+          setShorting("tax_country");
         }
         return "done";
-      case "Tin GST no":
-        if (shorting === "ASC/tin_gst_no") {
-          setShorting("DESC/tin_gst_no");
+      case "Active":
+        if (shorting === "isactive") {
+          setShorting(null);
         } else {
-          setShorting("ASC/tin_gst_no");
+          setShorting("isactive");
         }
         return "done";
       default:
@@ -135,24 +114,23 @@ function CompanyDeleteList() {
         return " state";
     }
   };
-
   return (
     <div>
       <DialogBox
         setOpen={setOpen}
         open={open}
-        DialogText={"Are you sure you want to Delete this Company?"}
+        DialogText={"Are you sure you want to Delete this Tax?"}
         finalDelete={finalDelete}
       />
-      {CompanyInfo?.DeleteCompanyInfo?.length ? (
-        <Container fixed sx={{ Width: 100 }}>
+      {TaxData?.TaxList.length ? (
+        <Container fixed>
           <Header
-            name={"Delete Company List"}
+            name={"Tax List"}
             SearchBar={true}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
           />
-          <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
+          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
               direction="row"
               justifyContent="flex-end"
@@ -165,11 +143,11 @@ function CompanyDeleteList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "/companylist");
-                  navigate("/companylist");
+                  localStorage.setItem("NavigateItemName", "addtax");
+                  navigate("/addtax");
                 }}
               >
-                Back
+                add new tax
               </Button>
 
               <Button
@@ -177,14 +155,13 @@ function CompanyDeleteList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "/addcompany");
-                  navigate("/addcompany");
+                  localStorage.setItem("NavigateItemName", "deletedtax");
+                  navigate("/deletedtax");
                 }}
               >
-                add Company
+                view deleted Tax
               </Button>
             </Stack>
-
             <Table
               data={data}
               headalEdit={headalEdit}
@@ -203,9 +180,10 @@ function CompanyDeleteList() {
             >
               <UsePagination
                 countNumbuer={Math.ceil(
-                  CompanyInfo?.DeleteCompanyInfo[0]?.total_count / limit
+                  TaxData?.TaxList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
+                currentPage={pageNumber}
               />
             </Stack>
           </Container>
@@ -225,4 +203,4 @@ function CompanyDeleteList() {
   );
 }
 
-export default CompanyDeleteList;
+export default StockReportList;

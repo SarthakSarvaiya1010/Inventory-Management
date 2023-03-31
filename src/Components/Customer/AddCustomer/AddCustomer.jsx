@@ -24,13 +24,10 @@ function AddCustomer() {
 
   const CustomerEditData = useSelector((state) => state?.CustomerList);
   const Customer_data = CustomerEditData.customerEdit[0];
-  console.log("Customer_data", Customer_data);
 
   const { customerhandleSubmit, values, errors, handleOnchange } = UseForm(
     Customer_data ? Customer_data : []
   );
-
-  console.log(values);
 
   const handleCancle = () => {
     navigate("/customer_list");

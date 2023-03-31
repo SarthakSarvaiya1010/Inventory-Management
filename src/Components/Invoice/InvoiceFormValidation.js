@@ -1,5 +1,4 @@
 export function InvoiceValidate(values, addtable) {
-  console.log("values======>", values, addtable);
   let errors = {};
   if (!values?.bill_no) {
     errors.bill_no = "bill_no is required";
@@ -30,7 +29,6 @@ export function InvoiceValidate(values, addtable) {
 }
 
 export function InvoiceEditValidate(values) {
-  console.log("values======>", values);
   let errors = {};
   if (!values?.bill_no) {
     errors.bill_no = "bill_no is required";
@@ -47,12 +45,6 @@ export function InvoiceEditValidate(values) {
 
   // eslint-disable-next-line array-callback-return
   values?.productdata?.map((data, index) => {
-    console.log(
-      "indexinformvalidation",
-      index,
-      "values?.productdata[index]?.weight",
-      values?.productdata[index]?.weight
-    );
     if (
       !values?.productdata[index]?.weight ||
       values?.productdata[index]?.weight === "NaN"

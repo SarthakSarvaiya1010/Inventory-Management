@@ -36,7 +36,7 @@ import {
   AddInvoiceData,
   GetinvoiceAddPageAction,
 } from "../../../Redux/InvoiceRedux/InvoiceThunk";
-import { InvoiceValidate } from "../InvoiceFormValidation";
+import { InvoiceValidate } from "../../Invoice/InvoiceFormValidation";
 import { convert } from "../../../Helpers/misc";
 import { ToWords } from "to-words";
 import { Transition } from "../../../Helpers/BootstrapButton/BootstrapButton";
@@ -53,7 +53,7 @@ const commonStyles = {
   p: 2,
   border: 1,
 };
-function AddInvoice(props) {
+function AddPurchaseBill(props) {
   const { sucessMessage } = props;
   const dispatch = useDispatch();
   const toWords = new ToWords();
@@ -276,29 +276,52 @@ function AddInvoice(props) {
     <div>
       {InvoicePageData?.GetInvoicePagData[0]?.CustomerList.length ? (
         <Container>
-          <Header name={"AddInvoice"} SearchBar={false} />
+          <Header name={"AddPurchaseBill"} SearchBar={false} />
           <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
             <Box
               sx={{
                 ...commonStyles,
                 borderColor: "grey.400",
-                textAlign: "center",
+                textAlign: "right",
                 borderRadius: "10px",
+                flexWrap: "wrap",
                 display: "flex",
               }}
             >
-              <Box sx={{ marginLeft: "auto" }}>
+              <Box sx={{ textAlign: "center", width: "100%" }}>
                 <Typography
                   sx={{ color: "#008080", fontWeight: "bold", fontSize: 17 }}
                 >
-                  Tax Invoice
+                  Purchase Bill
                 </Typography>
+              </Box>
+
+              <Box sx={{ textAlign: "left", width: "50%" }}>
+                <Typography>Buyer</Typography>
                 <Typography sx={{ fontWeight: "bold", m: 1 }}>
                   SILVER PLACE
                 </Typography>
                 <Typography>Nikol , Ahmedabad</Typography>
+
+                <Typography
+                  sx={{ color: "#008080", fontWeight: "bold", fontSize: 14 }}
+                >
+                  Phone: 9727434537
+                </Typography>
+                <Typography
+                  sx={{ color: "#008080", fontWeight: "bold", fontSize: 14 }}
+                >
+                  Mobile: 9727434537
+                </Typography>
               </Box>
-              <Box sx={{ marginLeft: "30%" }}>
+
+              <Box sx={{ width: "50%" }}>
+                <Typography>Seller</Typography>
+                <Typography sx={{ fontWeight: "bold", m: 1 }}>
+                  SILVER PLACE
+                </Typography>
+                <Typography>Nikol , Ahmedabad</Typography>
+
                 <Typography
                   sx={{ color: "#008080", fontWeight: "bold", fontSize: 14 }}
                 >
@@ -320,22 +343,12 @@ function AddInvoice(props) {
                 <Grid item xs={6}>
                   <Item>
                     <Stack>
-                      <Button
-                        // disabled={product[addtable - 1]?.product_id ? "" : true}
-                        variant="contained"
-                        color="success"
-                        sx={{ width: "35%" }}
-                        onClick={() => {
-                          setOpen(true);
-                        }}
-                      >
-                        Add Custumer
-                      </Button>
                       <br />
                       <FormControl variant="standard" sx={{ width: 1 }}>
                         <InputLabel id="demo-simple-select-standard-label">
                           Mobile no
                         </InputLabel>
+                        <br />
                         <Select
                           error={errors?.customer_id ? true : null}
                           labelId="demo-simple-select-standard-label"
@@ -374,6 +387,7 @@ function AddInvoice(props) {
                               : CustomerListData?.address
                           }
                         />
+                        <br />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_address}
                         </p>
@@ -466,6 +480,7 @@ function AddInvoice(props) {
                           <TableCell>NET WEIGHT</TableCell>
                           <TableCell>RATE</TableCell>
                           <TableCell>Per</TableCell>
+                          <TableCell>Quantity</TableCell>
                           <TableCell>AMOUNT</TableCell>
                           <TableCell>
                             <Box
@@ -645,7 +660,7 @@ function AddInvoice(props) {
                                       : ""
                                   }
                                   id="standard-basic-7"
-                                  label="Par"
+                                  label="Per"
                                   variant="standard"
                                   type="number"
                                   name={`unit ${ind}`}
@@ -659,7 +674,36 @@ function AddInvoice(props) {
                                   }
                                 />
                                 <p style={{ color: "red", margin: 0 }}>
-                                  {!product[ind - 1]?.rate ? errors?.rate : ""}
+                                  {!product[ind - 1]?.unit ? errors?.unit : ""}
+                                </p>
+                              </TableCell>
+                              <TableCell>
+                                <TextField
+                                  error={
+                                    !product[ind - 1]?.rate
+                                      ? errors?.rate
+                                        ? true
+                                        : null
+                                      : ""
+                                  }
+                                  id="standard-basic-7"
+                                  label="Quantity"
+                                  variant="standard"
+                                  type="number"
+                                  name={`quantity ${ind}`}
+                                  sx={{ width: 100 }}
+                                  value={product[ind - 1]?.quantity}
+                                  onChange={(e) =>
+                                    handleChangeProduct(
+                                      "quantity " + ind,
+                                      parseFloat(e.target.value)
+                                    )
+                                  }
+                                />
+                                <p style={{ color: "red", margin: 0 }}>
+                                  {!product[ind - 1]?.quantity
+                                    ? errors?.quantity
+                                    : ""}
                                 </p>
                               </TableCell>
                               <TableCell colSpan={1}>
@@ -751,6 +795,7 @@ function AddInvoice(props) {
                               value={totalrate ? totalrate.toFixed(2) : 0}
                             />
                           </TableCell>
+                          <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}>
                             <TextField
@@ -930,7 +975,7 @@ function AddInvoice(props) {
                 sx={{ marginTop: 4 }}
                 onClick={() => handleAddInvoiceData()}
               >
-                Create And Print
+                Create
               </Button>
               <Dialog
                 open={open}
@@ -972,4 +1017,5 @@ function AddInvoice(props) {
     </div>
   );
 }
-export default AddInvoice;
+
+export default AddPurchaseBill;

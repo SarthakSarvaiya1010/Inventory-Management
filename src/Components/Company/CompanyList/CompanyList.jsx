@@ -19,7 +19,7 @@ function CompanyList() {
   const dispatch = useDispatch();
 
   const CompanyInfo = useSelector((state) => state?.CompanyInfo);
-  console.log("Companyinfo");
+
   let limit = 4;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
@@ -27,8 +27,6 @@ function CompanyList() {
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
   const [open, setOpen] = useState(false);
-
-  console.log("productData", CompanyInfo, "test");
 
   useEffect(() => {
     if (CompanyInfo?.SuccessProductDeleteData?.statusCode === "200") {
@@ -91,8 +89,6 @@ function CompanyList() {
       );
     }
   };
-  console.log(search);
-  console.log("setShortingData", shorting);
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);

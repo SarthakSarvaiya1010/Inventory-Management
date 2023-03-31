@@ -41,11 +41,9 @@ function AdminSideBar(props) {
     localStorage.setItem("ItemName", text);
     switch (text) {
       case "User":
-        localStorage.setItem("NavigateItemName", "userlist");
         return navigate("/userlist");
 
       case "Company":
-        localStorage.setItem("NavigateItemName", "companylist");
         return navigate("/companylist");
 
       default:

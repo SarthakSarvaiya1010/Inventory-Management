@@ -18,7 +18,7 @@ export const userLogin = createAsyncThunk(
       const res = await api.post(`/login`, data);
       return res;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 );
@@ -29,18 +29,20 @@ export const resetPassword = createAsyncThunk(
       const res = await api.post(`/resetpassword`, data);
       return res;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 );
 export const setPassword = createAsyncThunk(
   "userAction/setPassword",
-  async (id, data, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const res = await api.post(`setpassword/${id}`, data);
+      const Password_id = localStorage.getItem("Password_id");
+
+      const res = await api.post(`setpassword/${Password_id}`, data);
       return res;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 );
@@ -62,7 +64,7 @@ export const resetPasswordlinkcheck = createAsyncThunk(
       const res = await api.get(`/resetpasswordTimeCheck/${id}`);
       return res;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 );
@@ -75,20 +77,22 @@ const UserLoginSlice = createSlice({
     [userLogin.pending]: (state) => {
       state.isLoading = true;
     },
+    [userLogin.rejected]: (state, payload) => {
+      const {
+        payload: { data },
+      } = payload;
+      state.FailedLoginData = data;
+    },
     [userLogin.fulfilled]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },
       } = payload;
-
-      state.LoginData = data;
-    },
-    [userLogin.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.FailedLoginData = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.FailedLoginData = payload?.payload?.response?.data;
+      } else {
+        state.LoginData = data;
+      }
     },
     [resetPassword.pending]: (state) => {
       state.isLoading = true;
@@ -98,8 +102,11 @@ const UserLoginSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.ResetPasswordMassge = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.FailedLoginData = payload?.payload?.response?.data;
+      } else {
+        state.ResetPasswordMassge = data;
+      }
     },
     [resetPassword.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -116,15 +123,18 @@ const UserLoginSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.setPassword = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.FailedLoginData = payload?.payload?.response?.data;
+      } else {
+        state.setPassword = data;
+      }
     },
     [setPassword.rejected]: (state, payload) => {
       state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.FailedLoginData = data;
+      // const {
+      // payload: { data },
+      // } = payload;
+      // state.FailedLoginData = data;
     },
     [quickLogin.pending]: (state) => {
       state.isLoading = true;
@@ -153,7 +163,11 @@ const UserLoginSlice = createSlice({
         payload: { data },
       } = payload;
 
-      state.passwordLinkStatus = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.FailedLoginData = payload?.payload?.response?.data;
+      } else {
+        state.passwordLinkStatus = data;
+      }
     },
     [resetPasswordlinkcheck.rejected]: (state, payload) => {
       state.isLoading = false;

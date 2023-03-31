@@ -12,7 +12,7 @@ import {
 import { Transition } from "../../../Helpers/BootstrapButton/BootstrapButton";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setPassword } from "../../../Store/Action/AuthAction";
+import { setPassword } from "../../../Redux/AuthSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { resetPasswordlinkcheck } from "../../../Redux/AuthSlice";
@@ -54,11 +54,11 @@ function SetPassword() {
     dispatch(resetPasswordlinkcheck(id));
   }, [dispatch, id]);
   useEffect(() => {
-    if (SetPasswordMassge?.passwordLinkStatus?.statusCode === "400") {
+    if (SetPasswordMassge?.FailedLoginData?.statusCode === "400") {
       setLinkstatus(true);
       setOpen(false);
     }
-  }, [SetPasswordMassge.passwordLinkStatus.statusCode]);
+  }, [SetPasswordMassge?.FailedLoginData?.statusCode]);
 
   const ResendLink = () => {
     navigate("/resetpassword");
@@ -69,7 +69,8 @@ function SetPassword() {
     if (password) {
       if (password?.length > 6) {
         if (confrompassword === password) {
-          dispatch(setPassword(id, LoginInfo));
+          localStorage.setItem("Password_id", id);
+          dispatch(setPassword(LoginInfo));
         } else {
           setError({
             confirmpassword: "Confrompassword is not match",
@@ -113,7 +114,11 @@ function SetPassword() {
             >
               <div className="img-container">
                 <div className="img-session">
-                  <img alt="#" src="../linkexpie.png"></img>
+                  <img
+                    alt="#"
+                    src="../linkexpie.png"
+                    style={{ height: "40vh" }}
+                  ></img>
                 </div>
               </div>
               <div style={{ width: "50%" }}>

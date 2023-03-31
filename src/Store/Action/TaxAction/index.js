@@ -148,7 +148,6 @@ export const TaxAddAction = (data) => async (dispatch) => {
 };
 export const TaxInfoEditAction = (data, Tax_id) => async (dispatch) => {
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  console.log("data", data);
   try {
     const TaxInfoEdit = await axios.put(
       `https://inventory-management-backend.onrender.com/edit/tax/${Tax_id}`,

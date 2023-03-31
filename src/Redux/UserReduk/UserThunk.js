@@ -98,7 +98,7 @@ export const UserEditAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 );

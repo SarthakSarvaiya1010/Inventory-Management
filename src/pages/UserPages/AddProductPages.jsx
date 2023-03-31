@@ -26,25 +26,17 @@ function AddProductPage() {
     if (ProductEditData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "productlist");
         navigate("/productlist");
       }, 2000);
     }
-  }, [
-    ProductEditData?.SucessMessage?.message,
-    ProductEditData?.SucessMessage?.statusCode,
-    navigate,
-  ]);
+  }, [ProductEditData?.SucessMessage?.statusCode, navigate]);
 
   useEffect(() => {
     if (ProductEditData?.ErrorMessage?.data?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [
-    ProductEditData?.ErrorMessage?.data?.statusCode,
-    ProductEditData?.ErrorMessage?.data?.message,
-  ]);
-  console.log("ProductEditData?.ErrorMessage?.data?.message", ProductEditData);
+  }, [ProductEditData?.ErrorMessage?.data?.statusCode]);
+
   return (
     <div>
       <SanckBar

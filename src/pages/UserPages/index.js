@@ -14,3 +14,5 @@ export { default as EditInvoicePage } from "./EditInvoicePage";
 export { default as CompanyInfoPage } from "./CompanyInfoPage";
 export { default as ResetPasswordPage } from "./ResetPasswordPage";
 export { default as SetPasswordPage } from "./SetPasswordPage";
+export { default as PurchaseBillPage } from "./PurchaseBillPage";
+export { default as AddPurchaseBillPage } from "./AddPurchaseBillPage";

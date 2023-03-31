@@ -41,12 +41,10 @@ export default function Header(props) {
   };
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const AuthErrorData = useSelector((state) => state?.UserLoginReducer);
-  console.log("successLoginData", successLoginData);
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
   const { openManu, setOpenManu } = props;
-  console.log("AuthErrorData", AuthErrorData?.AuthError?.message);
   useEffect(() => {
     if (AuthErrorData?.AuthError?.message === "Authorization error") {
       setOpen(true);

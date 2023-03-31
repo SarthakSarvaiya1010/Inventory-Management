@@ -36,7 +36,6 @@ const useForm = (defaultData, image) => {
       setvalues(defaultData);
     }
   }, [defaultData]);
-  console.log("values==>", values);
 
   const producthandleSubmit = () => {
     setFindErrors("ProductError");
@@ -117,7 +116,6 @@ const useForm = (defaultData, image) => {
     data["isactive"] = values?.isactive
       ? values?.isactive
       : defaultData?.isactive || "NO";
-    console.log("data", data);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.tax_id) {
         dispatch(TaxInfoEditAction(data));
@@ -128,7 +126,6 @@ const useForm = (defaultData, image) => {
     }
   };
   const UserhandleSubmit = () => {
-    console.log(" defaultData", defaultData);
     setFindErrors("UserValidate");
     setErrors(UserValidate(values, defaultData));
     const formAddUserData = new FormData();
@@ -143,8 +140,8 @@ const useForm = (defaultData, image) => {
 
     if (Object.keys(errors).length === 0) {
       if (Object.keys(defaultData).length > 0) {
-        dispatch(UserEditAction(formAddUserData, defaultData));
         localStorage.setItem("user_uuid", defaultData?.user_uuid);
+        dispatch(UserEditAction(formAddUserData, defaultData));
       } else {
         dispatch(UserAddAction(formAddUserData));
       }

@@ -53,9 +53,9 @@ export default function CustomizedTables(props) {
     LoginIconShow,
     headallogin,
   } = props;
-  console.log(data, "headalEdit", Object.keys(data).length, ShortingHide);
+
   const column = data.length ? Object.keys(data[0]) : null;
-  console.log("data======>", data);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -67,7 +67,6 @@ export default function CustomizedTables(props) {
               },
             }}
           >
-            {console.log("ShortingHide", ShortingHide)}
             {column?.map((data) => (
               <StyledTableCell align="center">
                 {data}

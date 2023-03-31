@@ -41,14 +41,6 @@ export default function UsePagination(props) {
               </button>
             );
           } else {
-            console.log(
-              "pagetypepagetype",
-              page,
-              type,
-              selected,
-              items.length,
-              disabled
-            );
             children = (
               <button
                 disabled={0 === page || disabled ? true : null}

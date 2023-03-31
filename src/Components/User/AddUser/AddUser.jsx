@@ -36,7 +36,7 @@ function AddUser() {
   const CompanyListData = CompanyInfo?.CompanyInfo;
 
   const { id } = params;
-  console.log("id==========>", id);
+
   const imageUploader = React.useRef(null);
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
@@ -61,11 +61,7 @@ function AddUser() {
     image
   );
 
-  console.log("values", values, "valueserrorsvalues", User_data);
-
   const handleCancle = () => {
-    console.log("done");
-    localStorage.setItem("NavigateItemName", "userlist");
     navigate("/userlist");
   };
 
@@ -84,7 +80,6 @@ function AddUser() {
     }
     setImage(file);
   };
-  console.log("User_data.loder", User);
   return (
     <div>
       {!User?.loder || !id ? (
@@ -194,9 +189,10 @@ function AddUser() {
                   <p style={{ color: "red" }}>{errors?.address}</p>
                   <br />
                   <TextField
-                    id="outlined-email-text"
                     label="Email"
+                    id="outlined-email-text"
                     name="email"
+                    required
                     autoComplete="off"
                     type="text"
                     defaultValue={id ? User_data.email : ""}

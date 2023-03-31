@@ -28,7 +28,7 @@ function AddTax() {
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const { id } = params;
   const Tax_data = TaxData?.TaxEdit;
-  console.log("Tax_data======>", Tax_data);
+
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const accessTokenData =
     successLoginData?.LoginData?.accessToken || accessToken?.accessToken;

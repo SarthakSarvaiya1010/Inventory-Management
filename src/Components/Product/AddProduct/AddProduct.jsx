@@ -25,7 +25,6 @@ function AddProduct() {
   const params = useParams();
   const ProductEditData = useSelector((state) => state?.ProductList);
   const { id } = params;
-  console.log("ProductEditData", ProductEditData);
   const imageUploader = React.useRef(null);
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
@@ -41,8 +40,6 @@ function AddProduct() {
     Product_data,
     image
   );
-
-  console.log("values", values);
 
   const handleCancle = () => {
     localStorage.setItem("NavigateItemName", "productlist");
@@ -164,11 +161,25 @@ function AddProduct() {
                   <p style={{ color: "red" }}>{errors?.unit}</p>
                   <br />
                   <TextField
+                    name="quantity"
+                    error={errors?.weight ? true : null}
+                    required
+                    type="number"
+                    label="Quantity "
+                    defaultValue={id ? Product_data.quantity : ""}
+                    variant="outlined"
+                    onChange={(e) => handleOnchange(e)}
+                    value={values?.quantity}
+                    autoComplete="off"
+                  />
+                  <p style={{ color: "red" }}>{errors?.quantity}</p>
+                  <br />
+                  <TextField
                     name="weight"
                     error={errors?.weight ? true : null}
                     required
                     type="number"
-                    label="Weight [In Grams]"
+                    label="Weight"
                     defaultValue={id ? Product_data.weight : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}

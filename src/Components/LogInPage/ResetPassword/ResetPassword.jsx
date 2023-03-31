@@ -12,12 +12,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { Transition } from "../../../Helpers/BootstrapButton/BootstrapButton";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { resetPassword } from "../../../Store/Action/AuthAction";
+import { resetPassword } from "../../../Redux/AuthSlice";
 import { useNavigate } from "react-router";
 
 function ResetPassword() {
+  const ResetPasswordMassge = useSelector((state) => state?.UserLoginReducer);
   const showToastMessage = () => {
-    toast.success("Link is send !", {
+    toast.success("Link is send in your email !", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
+    });
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const showToastErroMessage = () => {
+    toast.error(`${ResetPasswordMassge?.FailedLoginData?.message}`, {
       position: toast.POSITION.TOP_CENTER,
       autoClose: 2000,
     });
@@ -26,8 +34,8 @@ function ResetPassword() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const ResetPasswordMassge = useSelector((state) => state?.UserLoginReducer);
   const [email, setEmail] = useState(null);
+  const [showToas, setShowToas] = useState(null);
   const LoginInfo = {
     email: email,
   };
@@ -36,11 +44,9 @@ function ResetPassword() {
   };
   const handleSubmit = () => {
     // setButtonDisbel(true);
-    // setTest(true);
+    setShowToas(true);
     dispatch(resetPassword(LoginInfo));
-    console.log("LoginInfo", LoginInfo);
   };
-  console.log("ResetPasswordMassge", ResetPasswordMassge?.ResetPasswordMassge);
 
   useEffect(() => {
     if (ResetPasswordMassge?.ResetPasswordMassge?.status === "success") {
@@ -48,8 +54,21 @@ function ResetPassword() {
       setTimeout(() => {
         navigate("/");
       }, 2000);
+    } else if (
+      ResetPasswordMassge?.FailedLoginData?.status === "failed" &&
+      showToas
+    ) {
+      showToastErroMessage();
+      setShowToas(false);
+      setEmail(null);
     }
-  }, [ResetPasswordMassge?.ResetPasswordMassge?.status, navigate]);
+  }, [
+    ResetPasswordMassge?.FailedLoginData?.status,
+    ResetPasswordMassge?.ResetPasswordMassge?.status,
+    navigate,
+    showToas,
+    showToastErroMessage,
+  ]);
 
   return (
     <div>
@@ -92,7 +111,12 @@ function ResetPassword() {
             spacing={2}
           >
             <Button
-              disabled={!email}
+              disabled={
+                !email ||
+                ResetPasswordMassge?.ResetPasswordMassge?.status ===
+                  "success" ||
+                ResetPasswordMassge?.isLoading
+              }
               variant="contained"
               color="success"
               onClick={handleSubmit}

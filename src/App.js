@@ -20,6 +20,8 @@ import {
   CompanyInfoPage,
   ResetPasswordPage,
   SetPasswordPage,
+  PurchaseBillPage,
+  AddPurchaseBillPage,
 } from "./pages/UserPages/index";
 import {
   HomePageAdmin,
@@ -37,6 +39,7 @@ import { Box } from "@mui/material";
 import "./App.css";
 import ViewDeletedInvoiceList from "./Components/Invoice/ViewDeletedInvoice/ViewDeletedInvoiceList";
 import Protected from "./pages/Protected/Protected";
+import StockReportPage from "./pages/UserPages/StockReportPage";
 
 const outerTheme = createTheme({
   palette: {
@@ -93,6 +96,9 @@ const route = [
   { path: "/addinvoice", element: <AddInvoicePage /> },
   { path: "/viewdeletedinvoice", element: <ViewDeletedInvoiceList /> },
   { path: "/company_info", element: <CompanyInfoPage /> },
+  { path: "/purchasebill", element: <PurchaseBillPage /> },
+  { path: "/addpurchasebill", element: <AddPurchaseBillPage /> },
+  { path: "/stock_report", element: <StockReportPage /> },
 ];
 const adminroute = [
   { path: "/homepage", element: <HomePageAdmin /> },
@@ -121,10 +127,7 @@ function App() {
       : "not"
   );
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  console.log(
-    "!!user && user?.roles?.includes(user)",
-    !!user && user?.roles?.includes("user")
-  );
+
   useEffect(() => {
     if (
       successLoginData?.LoginData?.role_id === 2 ||

@@ -57,6 +57,8 @@ function SideBar(props) {
         return navigate("customer_list");
       case "Company Info":
         return navigate("/company_info");
+      case "Purchase Bill":
+        return navigate("/purchasebill");
       default:
         return "done";
     }
@@ -94,6 +96,7 @@ function SideBar(props) {
               "Product Type",
               "Tax",
               "Invoice",
+              "Purchase Bill",
               "Stock Report",
               "Customer",
               "Company Info",

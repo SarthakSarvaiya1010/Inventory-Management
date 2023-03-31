@@ -33,12 +33,7 @@ function CustomerList() {
     test["Email Id"] = e.email;
     data.push(test);
   });
-  console.log("CustomerData", CustomerData);
   const headalEdit = (data) => {
-    localStorage.setItem(
-      "NavigateItemName",
-      `customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
-    );
     navigate(
       `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
     );
@@ -51,7 +46,6 @@ function CustomerList() {
     );
   };
   const searchHeadal = (e) => {
-    console.log(e.target.value, "e.target.value");
     setSearch(e.target.value);
   };
   const onKeyDown = (e) => {
