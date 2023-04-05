@@ -24,6 +24,29 @@ export const PurchaseBillListAction = createAsyncThunk(
     }
   }
 );
+export const PurchaseBillDeleteListAction = createAsyncThunk(
+  "userAction/PurchaseBillDeleteListAction",
+  async (data, thunkAPI) => {
+    const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    try {
+      const res = await api.get(`/purchasebilldeletelist`, {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+);
 export const AddIPurchaseBill = createAsyncThunk(
   "userAction/AddInvoice",
   async (data, thunkAPI) => {

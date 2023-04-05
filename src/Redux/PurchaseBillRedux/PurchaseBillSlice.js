@@ -4,6 +4,7 @@ import {
   AddIPurchaseBill,
   GetPurchaseEditDataAction,
   UpdatePurchaseData,
+  PurchaseBillDeleteListAction,
 } from "./PurchaseBillThank";
 
 const initialState = {
@@ -12,7 +13,7 @@ const initialState = {
   Loader: false,
   GetInvoicePagData: [],
   PurchaseEdit: [],
-  DeletedInvoiceList: [],
+  DeletedpurchaseList: [],
   DeletedInvoiceLoader: false,
   SucessMessageOfInvoiceDelete: [],
   SucessMessage: [],
@@ -98,6 +99,29 @@ const PurchaseBillSlice = createSlice({
       }
     },
     [UpdatePurchaseData.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+
+    [PurchaseBillDeleteListAction.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [PurchaseBillDeleteListAction.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.DeletedpurchaseList = data;
+      }
+    },
+    [PurchaseBillDeleteListAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },

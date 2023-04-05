@@ -225,7 +225,7 @@ function EditPurchaseBill(props) {
   };
   const UpdatedData = {
     bill_no: testData?.bill_no,
-    invoice_date: convert(testData?.invoice_date),
+    purchase_date: convert(testData?.purchase_date),
     customer_id: CustomerListData
       ? CustomerListData.customer_id
       : testData?.customer_id,
@@ -279,7 +279,7 @@ function EditPurchaseBill(props) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       finalinvoicedata = {
         bill_no: testData[0]?.bill_no,
-        invoice_date: convert(new Date()),
+        purchase_date: convert(new Date()),
         customer_id: CustomerListData ? CustomerListData?.customer_id : "",
         taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
         sgst: parseFloat(SGST),
@@ -476,7 +476,7 @@ function EditPurchaseBill(props) {
                         <DatePicker
                           label="Date"
                           value={testData[0]?.date}
-                          defaultValue={testData?.invoice_date}
+                          defaultValue={testData?.purchase_date}
                           name="date"
                           onChange={(e) => handleChange(e)}
                           renderInput={(params) => <TextField {...params} />}

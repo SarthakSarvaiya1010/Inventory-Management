@@ -7,14 +7,14 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { PurchaseBillListAction } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
+import { PurchaseBillDeleteListAction } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { DeleteInvoice } from "../../../Redux/InvoiceRedux/InvoiceThunk";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
-function PurchaseBillList() {
+function ViewDeletedPurchaseBillList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -30,7 +30,7 @@ function PurchaseBillList() {
 
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  PurchaseData?.PurchaseBillList?.map((e) => {
+  PurchaseData?.DeletedpurchaseList?.map((e) => {
     let elements = {};
     elements["Sr.No"] = e.sr_no;
     elements["BILL No"] = e.bill_no < 10 ? ` 0${e.bill_no}` : e.bill_no;
@@ -43,7 +43,7 @@ function PurchaseBillList() {
   useEffect(() => {
     if (accessToken?.accessToken) {
       dispatch(
-        PurchaseBillListAction({
+        PurchaseBillDeleteListAction({
           limit: limit,
           pageNumber: pageNumber,
           orderByString: shorting,
@@ -120,7 +120,7 @@ function PurchaseBillList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        PurchaseBillListAction({
+        PurchaseBillDeleteListAction({
           search: search,
           limit: limit,
           pageNumber: pageNumber,
@@ -138,10 +138,10 @@ function PurchaseBillList() {
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
-      {PurchaseData?.PurchaseBillList?.length ? (
+      {PurchaseData?.DeletedpurchaseList?.length ? (
         <Container fixed>
           <Header
-            name={"PurchaseBill List"}
+            name={"Delete PurchaseBillList"}
             SearchBar={true}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
@@ -159,27 +159,28 @@ function PurchaseBillList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/addpurchasebill");
+                  navigate("/purchasebill");
                 }}
               >
-                add Purchase Bill
+                Back
               </Button>
               <Button
                 variant="text"
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  navigate("/viewdeletedpurchase");
+                  navigate("/addpurchasebill");
                 }}
               >
-                view deleted Purchase Bill
+                add Purchase Bill
               </Button>
             </Stack>
 
             <Table
               data={data}
-              headalEdit={headalEdit}
+              hide={true}
               headalDelete={setOpen}
+              headalEdit={headalEdit}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
             />
@@ -194,7 +195,7 @@ function PurchaseBillList() {
             >
               <UsePagination
                 countNumbuer={Math.ceil(
-                  PurchaseData?.PurchaseBillList[0]?.total_count / limit
+                  PurchaseData?.DeletedpurchaseList[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
                 currentPage={pageNumber}
@@ -217,4 +218,4 @@ function PurchaseBillList() {
   );
 }
 
-export default PurchaseBillList;
+export default ViewDeletedPurchaseBillList;

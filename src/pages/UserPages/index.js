@@ -17,3 +17,4 @@ export { default as SetPasswordPage } from "./SetPasswordPage";
 export { default as PurchaseBillPage } from "./PurchaseBillPage";
 export { default as AddPurchaseBillPage } from "./AddPurchaseBillPage";
 export { default as EditPurchaseBillPage } from "./EditPurchaseBillPage";
+export { default as DeletePurchasPage } from "./DeletePurchasPage";
