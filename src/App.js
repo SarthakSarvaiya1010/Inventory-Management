@@ -22,6 +22,7 @@ import {
   SetPasswordPage,
   PurchaseBillPage,
   AddPurchaseBillPage,
+  EditPurchaseBillPage,
 } from "./pages/UserPages/index";
 import {
   HomePageAdmin,
@@ -99,6 +100,7 @@ const route = [
   { path: "/purchasebill", element: <PurchaseBillPage /> },
   { path: "/addpurchasebill", element: <AddPurchaseBillPage /> },
   { path: "/stock_report", element: <StockReportPage /> },
+  { path: "/purchasebill/edit/:id", element: <EditPurchaseBillPage /> },
 ];
 const adminroute = [
   { path: "/homepage", element: <HomePageAdmin /> },

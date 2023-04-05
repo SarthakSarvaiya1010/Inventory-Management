@@ -32,12 +32,17 @@ import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 import { GetinvoiceAddPageAction } from "../../../Redux/InvoiceRedux/InvoiceThunk";
-import { AddIPurchaseBill } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
+import {
+  UpdatePurchaseData,
+  GetPurchaseEditDataAction,
+} from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
 import { InvoiceValidate } from "../../Invoice/InvoiceFormValidation";
 import { convert } from "../../../Helpers/misc";
 import { ToWords } from "to-words";
 import { Transition } from "../../../Helpers/BootstrapButton/BootstrapButton";
 import QuickAddCustomer from "../../Customer/QuickAddCustomer/QuickAddCustomer";
+import { useParams } from "react-router";
+import { InvoiceEditValidate } from "../../Invoice/InvoiceFormValidation";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -50,25 +55,16 @@ const commonStyles = {
   p: 2,
   border: 1,
 };
-function AddPurchaseBill(props) {
-  const { sucessMessage } = props;
+function EditPurchaseBill(props) {
+  const { testData, EditInvoiceSucessMessage } = props;
+
   const dispatch = useDispatch();
+  const params = useParams();
+  const { id } = params;
   const toWords = new ToWords();
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
 
-  const invoivepagedata = JSON.parse(
-    localStorage.getItem("InvoiceAddPageData")
-  );
-  const testData = InvoicePageData?.GetInvoicePagData.length
-    ? InvoicePageData?.GetInvoicePagData
-    : invoivepagedata
-    ? invoivepagedata
-    : [{}];
-  const [CustomerListData, setCustomerListData] = useState({
-    customer_name: "",
-    address: "",
-    gst_no: "",
-  });
+  const [CustomerListData, setCustomerListData] = useState();
 
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
@@ -82,7 +78,7 @@ function AddPurchaseBill(props) {
 
   const [findErrors, setFindErrors] = useState(false);
 
-  if (sucessMessage && disabled) {
+  if (EditInvoiceSucessMessage && disabled) {
     setDisabled(false);
     setProduct([]);
     setCustomerListData(null);
@@ -209,7 +205,8 @@ function AddPurchaseBill(props) {
   };
   useEffect(() => {
     dispatch(GetinvoiceAddPageAction());
-  }, [dispatch]);
+    dispatch(GetPurchaseEditDataAction(id));
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (InvoicePageData?.GetInvoicePagData.length) {
@@ -226,34 +223,56 @@ function AddPurchaseBill(props) {
     );
     setCustomerListData(data);
   };
+  const UpdatedData = {
+    bill_no: testData?.bill_no,
+    invoice_date: convert(testData?.invoice_date),
+    customer_id: CustomerListData
+      ? CustomerListData.customer_id
+      : testData?.customer_id,
+    taxable_amount: totalAmount
+      ? parseFloat(totalAmount.toFixed(2))
+      : testData?.taxable_amount,
+    sgst: SGST ? parseFloat(SGST) : testData?.sgst,
+    cgst: CGST ? parseFloat(CGST) : testData?.cgst,
+    discount: parseFloat(discount) ? parseFloat(discount) : 0,
+    bill_amount: Bill_Amount
+      ? parseFloat(Bill_Amount.toFixed(2))
+      : testData?.bill_amount,
+    productdata: product,
+  };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   let finalinvoicedata;
-  const handleAddInvoiceData = () => {
+  const handleUpdate = () => {
+    const invoice_id = testData?.purchase_id;
     setFindErrors(true);
-    finalinvoicedata = {
-      bill_no: testData[0]?.bill_no,
-      invoice_date: convert(new Date()),
-      customer_id: CustomerListData ? CustomerListData.customer_id : "",
-      taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
-      sgst: parseFloat(SGST),
-      cgst: parseFloat(CGST),
-      discount: parseFloat(discount) ? parseFloat(discount) : 0,
-      bill_amount: parseFloat(Bill_Amount.toFixed(2)),
-      productdata: product,
-    };
-    setErrors(InvoiceValidate(finalinvoicedata, addtable));
+    setErrors(InvoiceEditValidate(UpdatedData, addtable));
     window.scroll(0, 0);
     if (
       Object.keys(errors).length === 0 &&
-      finalinvoicedata?.customer_id &&
-      finalinvoicedata?.productdata?.length > 0
+      UpdatedData?.customer_id &&
+      UpdatedData?.productdata?.length > 0
     ) {
-      dispatch(AddIPurchaseBill(finalinvoicedata));
-      if (finalinvoicedata) {
+      console.log("UpdatedData", UpdatedData);
+      localStorage.setItem("purchaseId", invoice_id);
+      console.log("invoice_id", invoice_id);
+      dispatch(UpdatePurchaseData(UpdatedData));
+
+      if (UpdatedData) {
         setDisabled(true);
       }
     }
   };
+  useEffect(() => {
+    if (
+      testData?.productlistdata?.length &&
+      testData?.productlistdata?.length !== addtable
+    ) {
+      setAddTable(testData?.productlistdata?.length);
+      setProduct(testData?.productlistdata);
+      setDiscount(testData?.discount);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testData?.discount, testData?.productlistdata?.length]);
 
   useEffect(() => {
     if (findErrors) {
@@ -278,12 +297,12 @@ function AddPurchaseBill(props) {
     product,
     addtable,
   ]);
-
+  console.log("testData?.productlistdata?.length && addtable", testData);
   return (
     <div>
-      {InvoicePageData?.GetInvoicePagData[0]?.CustomerList.length ? (
+      {(testData?.productlistdata?.length && addtable) || true ? (
         <Container>
-          <Header name={"AddPurchaseBill"} SearchBar={false} />
+          <Header name={"EditPurchaseBill"} SearchBar={false} />
           <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
             <Box
               sx={{
@@ -363,6 +382,7 @@ function AddPurchaseBill(props) {
                           onChange={(e) => handleChange(e)}
                           label="Mobile_no*"
                           name="customer_mobileNo"
+                          defaultValue={testData?.customer_id}
                         >
                           <MenuItem value={null}>
                             <em>None</em>
@@ -388,11 +408,8 @@ function AddPurchaseBill(props) {
                           variant="standard"
                           multiline
                           sx={{ width: 1 }}
-                          value={
-                            CustomerListData?.address === ""
-                              ? ""
-                              : CustomerListData?.address
-                          }
+                          defaultValue={testData?.customer_address}
+                          value={CustomerListData?.address}
                         />
                         <br />
                         <p style={{ color: "red", margin: 0 }}>
@@ -418,6 +435,7 @@ function AddPurchaseBill(props) {
                           id="standard-basic-2"
                           label="Name "
                           variant="standard"
+                          defaultValue={testData?.customer_name}
                           value={CustomerListData?.customer_name}
                           sx={{ width: 1 }}
                           name="Customer_Name"
@@ -458,6 +476,7 @@ function AddPurchaseBill(props) {
                         <DatePicker
                           label="Date"
                           value={testData[0]?.date}
+                          defaultValue={testData?.invoice_date}
                           name="date"
                           onChange={(e) => handleChange(e)}
                           renderInput={(params) => <TextField {...params} />}
@@ -517,6 +536,10 @@ function AddPurchaseBill(props) {
                       {Array.from({ length: addtable }, (_, i, ind = i + 1) => {
                         return (
                           <TableBody>
+                            {console.log(
+                              product[ind - 1]?.product_id,
+                              "product[ind - 1]?.product_id"
+                            )}
                             <TableRow
                               // key={row.name}
                               sx={{
@@ -550,10 +573,14 @@ function AddPurchaseBill(props) {
                                     }
                                     labelId="demo-simple-select-standard-label"
                                     id="demo-simple-select-standard"
-                                    value={
-                                      product[ind - 1]?.product_id
-                                        ? product[ind - 1]?.product_id
-                                        : null
+                                    // value={
+                                    //   product[ind - 1]?.product_id
+                                    //     ? product[ind - 1]?.product_id
+                                    //     : null
+                                    // }
+                                    defaultValue={
+                                      testData?.productlistdata[ind - 1]
+                                        ?.product_id
                                     }
                                     onChange={(e) =>
                                       handleChangeProduct(
@@ -592,10 +619,13 @@ function AddPurchaseBill(props) {
                                   label="Hsn"
                                   variant="standard"
                                   type="number"
+                                  defaultValue={
+                                    testData?.productlistdata[ind - 1]?.hsn || 0
+                                  }
                                   value={
                                     product[ind - 1]?.hsn
                                       ? product[ind - 1]?.hsn
-                                      : 0
+                                      : null
                                   }
                                   sx={{ width: 70 }}
                                 />
@@ -613,6 +643,9 @@ function AddPurchaseBill(props) {
                                   name={`weight ${ind}`}
                                   label="Weight"
                                   variant="standard"
+                                  defaultValue={
+                                    testData?.productlistdata[ind - 1]?.weight
+                                  }
                                   type="number"
                                   value={product[ind - 1]?.weight}
                                   onChange={(e) =>
@@ -645,6 +678,9 @@ function AddPurchaseBill(props) {
                                   name={`rate ${ind}`}
                                   sx={{ width: 100 }}
                                   value={product[ind - 1]?.rate}
+                                  defaultValue={
+                                    testData?.productlistdata[ind - 1]?.rate
+                                  }
                                   onChange={(e) =>
                                     handleChangeProduct(
                                       "rate " + ind,
@@ -667,6 +703,9 @@ function AddPurchaseBill(props) {
                                     product[ind - 1]?.unit
                                       ? product[ind - 1]?.unit
                                       : ""
+                                  }
+                                  defaultValue={
+                                    testData?.productlistdata[ind - 1]?.unit
                                   }
                                 />
 
@@ -717,6 +756,10 @@ function AddPurchaseBill(props) {
                                     label="Amount"
                                     variant="standard"
                                     sx={{ width: 100 }}
+                                    defaultValue={
+                                      testData?.productlistdata[ind - 1]
+                                        ?.amount || 0
+                                    }
                                     value={
                                       product[ind - 1]?.amount === "NaN"
                                         ? 0
@@ -736,6 +779,10 @@ function AddPurchaseBill(props) {
                                     label="Amount"
                                     variant="standard"
                                     sx={{ width: 100, p: 0 }}
+                                    defaultValue={
+                                      testData?.productlistdata[ind - 1]
+                                        ?.amount || 0
+                                    }
                                     value={
                                       typeof product[ind - 1]?.amount !==
                                       "undefined"
@@ -964,13 +1011,13 @@ function AddPurchaseBill(props) {
                 </Grid>
               </Grid>
               <Button
-                // disabled={product[addtable - 1]?.product_id ? "" : true}
                 variant="contained"
                 color="success"
                 sx={{ marginTop: 4 }}
-                onClick={() => handleAddInvoiceData()}
+                onClick={() => handleUpdate()}
+                // href="https://localhost:3200/Invoice/pdf"
               >
-                Create
+                Update
               </Button>
               <Dialog
                 open={open}
@@ -999,4 +1046,4 @@ function AddPurchaseBill(props) {
   );
 }
 
-export default AddPurchaseBill;
+export default EditPurchaseBill;

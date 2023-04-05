@@ -36,7 +36,6 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      console.log("dataInvoiceListAction", data);
       state.invoiceList = data;
     },
     [InvoiceListAction.rejected]: (state, payload) => {

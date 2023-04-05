@@ -1,33 +1,103 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TaxListAction } from "./TaxThunk";
+import {
+  PurchaseBillListAction,
+  AddIPurchaseBill,
+  GetPurchaseEditDataAction,
+  UpdatePurchaseData,
+} from "./PurchaseBillThank";
 
 const initialState = {
   isLoading: false,
-  TaxList: [],
-  TaxEdit: [],
-  TaxDeletList: [],
-  DeletedTaxLoader: false,
-  loder: false,
-  ErrorMessage: [],
+  PurchaseBillList: [],
+  Loader: false,
+  GetInvoicePagData: [],
+  PurchaseEdit: [],
+  DeletedInvoiceList: [],
+  DeletedInvoiceLoader: false,
+  SucessMessageOfInvoiceDelete: [],
   SucessMessage: [],
-  SuccessDeleteTaxMessage: [],
+  ErrorMessage: [],
 };
-const TaxSlice = createSlice({
+const PurchaseBillSlice = createSlice({
   name: "userAction",
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    [TaxListAction.pending]: (state) => {
+    [PurchaseBillListAction.pending]: (state) => {
       state.isLoading = true;
     },
-    [TaxListAction.fulfilled]: (state, payload) => {
+    [PurchaseBillListAction.fulfilled]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },
       } = payload;
-      state.TaxList = data;
+      state.PurchaseBillList = data;
     },
-    [TaxListAction.rejected]: (state, payload) => {
+    [PurchaseBillListAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [AddIPurchaseBill.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [AddIPurchaseBill.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
+    },
+    [AddIPurchaseBill.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [GetPurchaseEditDataAction.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.PurchaseEdit = data;
+      }
+    },
+    [GetPurchaseEditDataAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+
+    [UpdatePurchaseData.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [UpdatePurchaseData.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
+    },
+    [UpdatePurchaseData.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },
@@ -37,6 +107,6 @@ const TaxSlice = createSlice({
   },
 });
 
-export default TaxSlice.reducer;
+export default PurchaseBillSlice.reducer;
 // eslint-disable-next-line no-empty-pattern
-export const {} = TaxSlice.actions;
+export const {} = PurchaseBillSlice.actions;
