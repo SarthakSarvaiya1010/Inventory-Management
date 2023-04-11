@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import EditPurchaseBill from "../../Components/PurchaseBill/EditPurchaseBill/EditPurchaseBill";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { GetinvoiceAddPageAction } from "../../Redux/InvoiceRedux/InvoiceThunk";
-import { GetPurchaseEditDataAction } from "../../Redux/PurchaseBillRedux/PurchaseBillThank";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -13,24 +11,18 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function EditPurchaseBillPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
   const PurchaseData = useSelector((state) => state?.PurchaseData);
-  console.log("PurchaseDataPurchaseData", PurchaseData);
   const invoivepagedata = JSON.parse(
-    localStorage.getItem("InvoiceEditPageData")
+    localStorage.getItem("PurchaseAddPageData")
   );
+  console.log("PurchaseData?.PurchaseEdit", PurchaseData?.PurchaseEdit);
   const testData = PurchaseData?.PurchaseEdit?.length
     ? PurchaseData?.PurchaseEdit[0]
     : invoivepagedata[0]
     ? invoivepagedata
     : [{}];
 
-  console.log(
-    "PurchaseData?.PurchaseEdit?.length",
-    testData,
-    PurchaseData?.PurchaseEdit
-  );
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -41,13 +33,13 @@ function EditPurchaseBillPage() {
     setState({ ...state, open: false });
   };
   useEffect(() => {
-    if (InvoicePageData?.invoiceEdit.length) {
+    if (PurchaseData?.PurchaseEdit.length) {
       localStorage.setItem(
-        "InvoiceEditPageData",
-        JSON.stringify(InvoicePageData?.invoiceEdit)
+        "PurchaseAddPageData",
+        JSON.stringify(PurchaseData?.PurchaseEdit)
       );
     }
-  }, [InvoicePageData?.invoiceEdit]);
+  }, [PurchaseData?.PurchaseEdit]);
   useEffect(() => {
     if (PurchaseData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
@@ -62,13 +54,6 @@ function EditPurchaseBillPage() {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
   }, [PurchaseData?.ErrorMessage?.data?.statusCode]);
-  const params = useParams();
-  const { id } = params;
-  useEffect(() => {
-    dispatch(GetinvoiceAddPageAction());
-    dispatch(GetPurchaseEditDataAction(id));
-  }, [dispatch, id]);
-
   return (
     <div>
       <Snackbar
@@ -78,13 +63,13 @@ function EditPurchaseBillPage() {
         onClose={handleClose}
         key={vertical + horizontal}
       >
-        {InvoicePageData?.InvoicePdf?.message ? (
+        {PurchaseData?.SucessMessage?.message ? (
           <Alert
             onClose={handleClose}
             severity="success"
             sx={{ width: "100%" }}
           >
-            {InvoicePageData?.InvoicePdf?.message}
+            {PurchaseData?.SucessMessage?.message}
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
@@ -93,12 +78,10 @@ function EditPurchaseBillPage() {
           </Alert>
         )}
       </Snackbar>
-      {testData?.productlistdata?.length ? (
-        <EditPurchaseBill
-          testData={testData}
-          EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
-        />
-      ) : null}
+      <EditPurchaseBill
+        testData={testData}
+        EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
+      />
     </div>
   );
 }

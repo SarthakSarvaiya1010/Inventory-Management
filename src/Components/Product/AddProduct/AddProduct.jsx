@@ -64,7 +64,7 @@ function AddProduct() {
 
   return (
     <div>
-      {!ProductEditData.loder || !id ? (
+      {!ProductEditData.isLoading || !id ? (
         // Object.keys(Product_data).length ? (
         <Container fixed>
           <Header

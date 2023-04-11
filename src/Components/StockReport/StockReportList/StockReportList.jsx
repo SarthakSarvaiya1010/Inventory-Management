@@ -5,10 +5,8 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  TaxListAction,
-  TaxDeleteAction,
-} from "../../../Redux/TaxRedux/TaxThunk";
+import { TaxDeleteAction } from "../../../Redux/TaxRedux/TaxThunk";
+import { StockReportListAction } from "../../../Redux/StockReportRedux/StockReportThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
@@ -19,6 +17,8 @@ function StockReportList() {
 
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const TaxData = useSelector((state) => state?.TaxData);
+  const StockReport = useSelector((state) => state?.StockReport);
+  console.log("StockReport(&*(^&", StockReport?.Stock);
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
@@ -29,13 +29,13 @@ function StockReportList() {
 
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   // eslint-disable-next-line array-callback-return
-  TaxData?.TaxList.map((e) => {
+  StockReport?.Stock.map((e) => {
     let elements = {};
     elements["Sr.No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
-    elements["Tax Name"] = e.tax_name;
-    elements["Tax Rate [ In % ]"] = e.tax_rate;
-    elements["Tax Country"] = e.tax_country;
-    elements["Active"] = e.isactive;
+    elements["Product Name"] = e.product_name;
+    elements["Total Quantity"] = e.quantity;
+    elements["Unit"] = e.unit;
+    elements["HSN"] = e.hsn;
     data.push(elements);
   });
 
@@ -50,7 +50,7 @@ function StockReportList() {
 
   useEffect(() => {
     dispatch(
-      TaxListAction({
+      StockReportListAction({
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
@@ -61,52 +61,56 @@ function StockReportList() {
   const searchHeadal = (e) => {
     setSearch(e.target.value);
   };
+  console.log();
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        TaxListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        StockReportListAction({
+          search: search,
+          limit: limit,
+          pageNumber: pageNumber,
+        })
       );
     }
   };
   const headalShorting = (data_a) => {
-    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
+    shortingIcon === data_a
+      ? setShortingIcon(`D ${data_a}`)
+      : setShortingIcon(data_a);
     switch (data_a) {
-      case "Sr. No":
+      case "Sr.No":
         if (shorting === "sr_no") {
           setShorting(null);
         } else {
           setShorting("sr_no");
         }
         return "done";
-      case "Tax Name":
-        if (shorting === "tax_name") {
-          setShorting(null);
+      case "Product Name":
+        if (shorting === "ASC/product_name") {
+          setShorting("DESC/product_name");
         } else {
-          setShorting("tax_name");
+          setShorting("ASC/product_name");
         }
         return "done";
-      case "Tax Rate [ In % ]":
-        if (shorting === "tax_rate") {
-          setShorting(null);
+      case "Total Quantity":
+        if (shorting === "ASC/quantity") {
+          setShorting("DESC/quantity");
         } else {
-          setShorting("tax_rate");
+          setShorting("ASC/quantity");
         }
         return "done";
-      case "Tax Country":
-        if (shorting === "tax_country") {
-          setShorting(null);
+      case "Unit":
+        if (shorting === "ASC/unit") {
+          setShorting("DESC/unit");
         } else {
-          setShorting("tax_country");
+          setShorting("ASC/unit");
         }
         return "done";
-      case "Active":
-        if (shorting === "isactive") {
-          setShorting(null);
+      case "HSN":
+        if (shorting === "ASC/hsn") {
+          setShorting("DESC/hsn");
         } else {
-          setShorting("isactive");
+          setShorting("ASC/hsn");
         }
         return "done";
       default:
@@ -122,10 +126,10 @@ function StockReportList() {
         DialogText={"Are you sure you want to Delete this Tax?"}
         finalDelete={finalDelete}
       />
-      {TaxData?.TaxList.length ? (
+      {StockReport?.Stock.length ? (
         <Container fixed>
           <Header
-            name={"Tax List"}
+            name={"Stock List"}
             SearchBar={true}
             searchHeadal={searchHeadal}
             onKeyDown={onKeyDown}
@@ -138,7 +142,7 @@ function StockReportList() {
               spacing={4}
               sx={{ p: 4 }}
             >
-              <Button
+              {/* <Button
                 variant="text"
                 color="success"
                 sx={{ fontSize: 16 }}
@@ -147,7 +151,7 @@ function StockReportList() {
                   navigate("/addtax");
                 }}
               >
-                add new tax
+                add new Stock
               </Button>
 
               <Button
@@ -159,8 +163,8 @@ function StockReportList() {
                   navigate("/deletedtax");
                 }}
               >
-                view deleted Tax
-              </Button>
+                view deleted Stock
+              </Button> */}
             </Stack>
             <Table
               data={data}
@@ -168,6 +172,8 @@ function StockReportList() {
               headalDelete={setOpen}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
+              hide={true}
+              actionHide={true}
             />
             <Stack
               sx={{
@@ -180,7 +186,7 @@ function StockReportList() {
             >
               <UsePagination
                 countNumbuer={Math.ceil(
-                  TaxData?.TaxList[0]?.total_count / limit
+                  StockReport?.Stock[0]?.total_count / limit
                 )}
                 PageNumber={setPageNumber}
                 currentPage={pageNumber}

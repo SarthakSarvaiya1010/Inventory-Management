@@ -7,11 +7,14 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { PurchaseBillDeleteListAction } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
+import {
+  PurchaseBillDeleteListAction,
+  PermanentDeletePurchase,
+} from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
 import CircularProgress from "@mui/material/CircularProgress";
 import { convert } from "../../../Helpers/misc";
 import UsePagination from "../../../Helpers/pagination/Pagination";
-import { DeleteInvoice } from "../../../Redux/InvoiceRedux/InvoiceThunk";
+
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function ViewDeletedPurchaseBillList() {
@@ -34,7 +37,7 @@ function ViewDeletedPurchaseBillList() {
     let elements = {};
     elements["Sr.No"] = e.sr_no;
     elements["BILL No"] = e.bill_no < 10 ? ` 0${e.bill_no}` : e.bill_no;
-    elements["Invoice Date"] = convert(e.purchase_date);
+    elements["Purchase Date"] = convert(e.purchase_date);
     elements["Name"] = e.customer_name;
     elements["Total Amount"] = e.bill_amount;
     data.push(elements);
@@ -65,7 +68,9 @@ function ViewDeletedPurchaseBillList() {
   const finalDelete = () => {
     setOpen(false);
     dispatch(
-      DeleteInvoice(PurchaseData.PurchaseBillList[open - 1]?.purchase_id)
+      PermanentDeletePurchase(
+        PurchaseData?.DeletedpurchaseList[open - 1]?.purchase_id
+      )
     );
   };
   const headalShorting = (data_a) => {
@@ -135,7 +140,7 @@ function ViewDeletedPurchaseBillList() {
       <DialogBox
         setOpen={setOpen}
         open={open}
-        DialogText={"Are you sure you want to Delete this invoice?"}
+        DialogText={"Are you sure you want to Delete this PurchaseBill?"}
         finalDelete={finalDelete}
       />
       {PurchaseData?.DeletedpurchaseList?.length ? (

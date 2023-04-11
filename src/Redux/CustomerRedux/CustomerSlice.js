@@ -7,6 +7,7 @@ import {
   CustomerEditDataAction,
   CustomerDeleteAction,
   PermanentCustomerDeleteAction,
+  CustomerNameListAction,
 } from "./CustomerThunk";
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   SucessMessage: [],
   ErrorMessage: [],
   SuccessMessageOfCustomerDeleted: [],
+  customerName: [],
 };
 const CustomerSlice = createSlice({
   name: "userAction",
@@ -146,6 +148,24 @@ const CustomerSlice = createSlice({
       state.SuccessMessageOfCustomerDeleted = data;
     },
     [PermanentCustomerDeleteAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [CustomerNameListAction.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [CustomerNameListAction.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+
+      state.customerName = data;
+    },
+    [CustomerNameListAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },

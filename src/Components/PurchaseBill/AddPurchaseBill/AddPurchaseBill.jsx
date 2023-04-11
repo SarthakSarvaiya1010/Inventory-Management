@@ -31,7 +31,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
-import { GetinvoiceAddPageAction } from "../../../Redux/InvoiceRedux/InvoiceThunk";
+import { GetpurchaseAddPageAction } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
 import { AddIPurchaseBill } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
 import { InvoiceValidate } from "../../Invoice/InvoiceFormValidation";
 import { convert } from "../../../Helpers/misc";
@@ -54,15 +54,15 @@ function AddPurchaseBill(props) {
   const { sucessMessage } = props;
   const dispatch = useDispatch();
   const toWords = new ToWords();
-  const InvoicePageData = useSelector((state) => state?.InvoiceData);
+  const PurchasePageData = useSelector((state) => state?.PurchaseData);
 
-  const invoivepagedata = JSON.parse(
-    localStorage.getItem("InvoiceAddPageData")
+  const PurchaseAddPageData = JSON.parse(
+    localStorage.getItem("PurchaseAddPageData")
   );
-  const testData = InvoicePageData?.GetInvoicePagData.length
-    ? InvoicePageData?.GetInvoicePagData
-    : invoivepagedata
-    ? invoivepagedata
+  const testData = PurchasePageData?.GetPurchasePagData.length
+    ? PurchasePageData?.GetPurchasePagData
+    : PurchaseAddPageData
+    ? PurchaseAddPageData
     : [{}];
   const [CustomerListData, setCustomerListData] = useState({
     customer_name: "",
@@ -112,15 +112,16 @@ function AddPurchaseBill(props) {
     let existingweight = product.filter((ans) => ans?.weight);
     let existingrate = product.filter((ans) => ans?.rate);
     let existingProduct = product.filter((ans) => ans?.product_id);
+    let existingquantity = product.filter((ans) => ans?.quantity);
     let hsn_data;
     let unit_data;
     if (fieldName === "product_id") {
       let hsn_data_1 =
-        InvoicePageData?.GetInvoicePagData[0]?.productList.filter(
+        PurchasePageData?.GetPurchasePagData[0]?.productList.filter(
           (e) => e?.product_id === value
         );
       let unit_data_1 =
-        InvoicePageData?.GetInvoicePagData[0]?.productList.filter(
+        PurchasePageData?.GetPurchasePagData[0]?.productList.filter(
           (e) => e?.product_id === value
         );
       hsn_data = hsn_data_1[0]?.hsn;
@@ -129,26 +130,36 @@ function AddPurchaseBill(props) {
     if (existingweight.length > 0 && fieldName === "weight") {
       existingweight.forEach((f) => {
         product[index].product_id = product[index]?.product_id;
+        product[index].quantity = product[index]?.quantity;
         product[index].hsn = product[index]?.hsn;
         product[index].weight = value;
         product[index].rate = product[index]?.rate;
         product[index].amount =
           value && product[index]?.rate
-            ? parseFloat(value) * parseFloat(product[index]?.rate)
-            : parseFloat(value) * parseFloat(product[index]?.rate);
+            ? parseFloat(value) *
+              parseFloat(product[index]?.rate) *
+              parseFloat(product[index]?.quantity)
+            : parseFloat(value) *
+              parseFloat(product[index]?.rate) *
+              parseFloat(product[index]?.quantity);
       });
       setProduct([...product]);
     } else {
       if (existingrate.length > 0 && fieldName === "rate") {
         existingrate.forEach((f) => {
           product[index].product_id = product[index]?.product_id;
+          product[index].quantity = product[index]?.quantity;
           product[index].hsn = product[index]?.hsn;
           product[index].weight = product[index]?.weight;
           product[index].rate = value;
           product[index].amount =
             value && product[index]?.weight
-              ? parseFloat(product[index]?.weight) * parseFloat(value)
-              : parseFloat(product[index]?.weight) * parseFloat(value);
+              ? parseFloat(product[index]?.weight) *
+                parseFloat(value) *
+                parseFloat(product[index]?.quantity)
+              : parseFloat(product[index]?.weight) *
+                parseFloat(value) *
+                parseFloat(product[index]?.quantity);
         });
         setProduct([...product]);
       } else {
@@ -156,45 +167,67 @@ function AddPurchaseBill(props) {
           existingProduct.forEach((f) => {
             product[index].product_id = value;
             product[index].hsn = hsn_data;
+            product[index].quantity = product[index]?.quantity;
             product[index].unit = unit_data;
             product[index].weight = product[index]?.weight;
             product[index].rate = product[index]?.rate;
           });
           setProduct([...product]);
         } else {
-          if (addtable > 1) {
-            setProduct([
-              ...product,
-              {
-                product_id: product[index]?.product_id,
-                hsn: product[index]?.hsn || hsn_data,
-                unit: product[index]?.unit || unit_data,
-                weight: product[index]?.weight,
-                rate: product[index]?.rate,
-                amount:
-                  product[index]?.weight && product[index]?.rate
-                    ? parseFloat(product[index]?.weight) *
-                      parseFloat(product[index]?.rate)
-                    : 0,
-                [fieldName]: value,
-              },
-            ]);
+          if (existingquantity.length > 0 && fieldName === "quantity") {
+            existingquantity.forEach((f) => {
+              product[index].product_id = product[index]?.product_id;
+              product[index].hsn = product[index]?.hsn;
+              product[index].weight = product[index]?.weight;
+              product[index].rate = product[index]?.rate;
+              product[index].quantity = value;
+              product[index].amount =
+                value && product[index]?.quantity
+                  ? parseFloat(product[index]?.weight) *
+                    parseFloat(value) *
+                    parseFloat(product[index]?.rate)
+                  : parseFloat(product[index]?.weight) *
+                    parseFloat(value) *
+                    parseFloat(product[index]?.rate);
+            });
+            setProduct([...product]);
           } else {
-            setProduct([
-              {
-                product_id: product[0]?.product_id,
-                hsn: product[0]?.hsn || hsn_data,
-                unit: product[0]?.unit || unit_data,
-                weight: product[0]?.weight,
-                rate: product[0]?.rate,
-                amount:
-                  product[0]?.weight && product[0]?.rate
-                    ? parseFloat(product[0]?.weight) *
-                      parseFloat(product[0]?.rate)
-                    : 0,
-                [fieldName]: value,
-              },
-            ]);
+            if (addtable > 1) {
+              setProduct([
+                ...product,
+                {
+                  product_id: product[index]?.product_id,
+                  hsn: product[index]?.hsn || hsn_data,
+                  unit: product[index]?.unit || unit_data,
+                  weight: product[index]?.weight,
+                  rate: product[index]?.rate,
+                  amount:
+                    product[index]?.weight && product[index]?.rate
+                      ? parseFloat(product[index]?.weight) *
+                        parseFloat(product[index]?.rate) *
+                        parseFloat(product[index]?.quantity)
+                      : 0,
+                  [fieldName]: value,
+                },
+              ]);
+            } else {
+              setProduct([
+                {
+                  product_id: product[0]?.product_id,
+                  hsn: product[0]?.hsn || hsn_data,
+                  unit: product[0]?.unit || unit_data,
+                  weight: product[0]?.weight,
+                  rate: product[0]?.rate,
+                  amount:
+                    product[0]?.weight && product[0]?.rate
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.rate) *
+                        parseFloat(product[index]?.quantity)
+                      : 0,
+                  [fieldName]: value,
+                },
+              ]);
+            }
           }
         }
       }
@@ -208,20 +241,20 @@ function AddPurchaseBill(props) {
     product.splice(index, 1);
   };
   useEffect(() => {
-    dispatch(GetinvoiceAddPageAction());
+    dispatch(GetpurchaseAddPageAction());
   }, [dispatch]);
 
   useEffect(() => {
-    if (InvoicePageData?.GetInvoicePagData.length) {
+    if (PurchasePageData?.GetPurchasePagData.length) {
       localStorage.setItem(
-        "InvoiceAddPageData",
-        JSON.stringify(InvoicePageData?.GetInvoicePagData)
+        "PurchaseAddPageData",
+        JSON.stringify(PurchasePageData?.GetPurchasePagData)
       );
     }
-  }, [InvoicePageData?.GetInvoicePagData]);
+  }, [PurchasePageData?.GetPurchasePagData]);
 
   const handleChange = (event) => {
-    const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
+    const data = PurchasePageData?.GetPurchasePagData[0]?.CustomerList?.find(
       (e) => e.customer_id === event.target.value
     );
     setCustomerListData(data);
@@ -281,7 +314,7 @@ function AddPurchaseBill(props) {
 
   return (
     <div>
-      {InvoicePageData?.GetInvoicePagData[0]?.CustomerList.length ? (
+      {PurchasePageData?.GetPurchasePagData[0]?.CustomerList.length ? (
         <Container>
           <Header name={"AddPurchaseBill"} SearchBar={false} />
           <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
@@ -367,7 +400,7 @@ function AddPurchaseBill(props) {
                           <MenuItem value={null}>
                             <em>None</em>
                           </MenuItem>
-                          {InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.map(
+                          {PurchasePageData?.GetPurchasePagData[0]?.CustomerList?.map(
                             (e, index) => {
                               return (
                                 <MenuItem value={e.customer_id} key={index}>
@@ -487,6 +520,7 @@ function AddPurchaseBill(props) {
                           <TableCell>NET WEIGHT</TableCell>
                           <TableCell>RATE</TableCell>
                           <TableCell>Per</TableCell>
+                          <TableCell>Quantity</TableCell>
                           <TableCell>AMOUNT</TableCell>
                           <TableCell>
                             <Box
@@ -550,6 +584,7 @@ function AddPurchaseBill(props) {
                                     }
                                     labelId="demo-simple-select-standard-label"
                                     id="demo-simple-select-standard"
+                                    // sx={{ width: 200 }}
                                     value={
                                       product[ind - 1]?.product_id
                                         ? product[ind - 1]?.product_id
@@ -566,7 +601,7 @@ function AddPurchaseBill(props) {
                                     <MenuItem value="">
                                       <em>None</em>
                                     </MenuItem>
-                                    {InvoicePageData?.GetInvoicePagData[0]?.productList?.map(
+                                    {PurchasePageData?.GetPurchasePagData[0]?.productList?.map(
                                       (e, index) => {
                                         return (
                                           <MenuItem
@@ -674,11 +709,11 @@ function AddPurchaseBill(props) {
                                   {!product[ind - 1]?.unit ? errors?.unit : ""}
                                 </p>
                               </TableCell>
-                              {/* <TableCell>
+                              <TableCell>
                                 <TextField
                                   error={
-                                    !product[ind - 1]?.rate
-                                      ? errors?.rate
+                                    !product[ind - 1]?.quantity
+                                      ? errors?.quantity
                                         ? true
                                         : null
                                       : ""
@@ -688,7 +723,7 @@ function AddPurchaseBill(props) {
                                   variant="standard"
                                   type="number"
                                   name={`quantity ${ind}`}
-                                  sx={{ width: 100 }}
+                                  sx={{ width: 70 }}
                                   value={product[ind - 1]?.quantity}
                                   onChange={(e) =>
                                     handleChangeProduct(
@@ -702,7 +737,7 @@ function AddPurchaseBill(props) {
                                     ? errors?.quantity
                                     : ""}
                                 </p>
-                              </TableCell> */}
+                              </TableCell>
                               <TableCell colSpan={1}>
                                 {product.length > ind - 1 ? (
                                   <TextField
@@ -792,6 +827,7 @@ function AddPurchaseBill(props) {
                               value={totalrate ? totalrate.toFixed(2) : 0}
                             />
                           </TableCell>
+                          <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}>
                             <TextField

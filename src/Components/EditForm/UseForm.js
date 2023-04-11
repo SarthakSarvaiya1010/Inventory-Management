@@ -37,6 +37,7 @@ const useForm = (defaultData, image) => {
     }
   }, [defaultData]);
 
+  // console.log("defaultData", defaultData?.product_id);
   const producthandleSubmit = () => {
     setFindErrors("ProductError");
     setErrors(ProductValidate(values, defaultData));
@@ -47,6 +48,7 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("hsn", values?.hsn);
     formAddUserData.append("unit", values?.unit);
     formAddUserData.append("weight", values?.weight);
+    formAddUserData.append("quantity", values?.quantity);
     formAddUserData.append("image_src", image ? image : null);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.product_id) {

@@ -5,17 +5,20 @@ import {
   GetPurchaseEditDataAction,
   UpdatePurchaseData,
   PurchaseBillDeleteListAction,
+  DeletePurchase,
+  GetpurchaseAddPageAction,
+  PermanentDeletePurchase,
 } from "./PurchaseBillThank";
 
 const initialState = {
   isLoading: false,
   PurchaseBillList: [],
   Loader: false,
-  GetInvoicePagData: [],
+  GetPurchasePagData: [],
   PurchaseEdit: [],
   DeletedpurchaseList: [],
   DeletedInvoiceLoader: false,
-  SucessMessageOfInvoiceDelete: [],
+  SucessMessageOfPurchaseDelete: [],
   SucessMessage: [],
   ErrorMessage: [],
 };
@@ -33,6 +36,8 @@ const PurchaseBillSlice = createSlice({
         payload: { data },
       } = payload;
       state.PurchaseBillList = data;
+      state.PurchaseEdit = [];
+      state.SucessMessage = [];
     },
     [PurchaseBillListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -46,7 +51,6 @@ const PurchaseBillSlice = createSlice({
     },
     [AddIPurchaseBill.fulfilled]: (state, payload) => {
       state.isLoading = false;
-
       const {
         payload: { data },
       } = payload;
@@ -122,6 +126,72 @@ const PurchaseBillSlice = createSlice({
       }
     },
     [PurchaseBillDeleteListAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [DeletePurchase.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [DeletePurchase.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessageOfPurchaseDelete = data;
+      }
+    },
+    [DeletePurchase.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [PermanentDeletePurchase.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [PermanentDeletePurchase.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessageOfPurchaseDelete = data;
+      }
+    },
+    [PermanentDeletePurchase.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [GetpurchaseAddPageAction.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [GetpurchaseAddPageAction.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.GetPurchasePagData = data;
+      }
+    },
+    [GetpurchaseAddPageAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },

@@ -6,6 +6,7 @@ import {
   PermanentProductDelete,
   ProductAddAction,
   ProductEditDataAction,
+  ProductEditAction,
 } from "./ProductThunk";
 
 const initialState = {
@@ -33,6 +34,7 @@ const ProductSlice = createSlice({
       } = payload;
 
       state.productList = data;
+      state.SucessMessage = [];
     },
     [ProductListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -122,6 +124,23 @@ const ProductSlice = createSlice({
       state.SucessMessage = data;
     },
     [ProductEditDataAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [ProductEditAction.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [ProductEditAction.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.productEdit = data;
+    },
+    [ProductEditAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },

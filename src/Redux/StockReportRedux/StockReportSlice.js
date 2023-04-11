@@ -3,9 +3,9 @@ import { StockReportListAction } from "./StockReportThunk";
 
 const initialState = {
   isLoading: false,
-  TaxList: [],
+  Stock: [],
 };
-const TaxSlice = createSlice({
+const StockReportSlice = createSlice({
   name: "userAction",
   initialState: initialState,
   reducers: {},
@@ -18,7 +18,7 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.TaxList = data;
+      state.Stock = data;
     },
     [StockReportListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -30,6 +30,6 @@ const TaxSlice = createSlice({
   },
 });
 
-export default TaxSlice.reducer;
+export default StockReportSlice.reducer;
 // eslint-disable-next-line no-empty-pattern
-export const {} = TaxSlice.actions;
+export const {} = StockReportSlice.actions;

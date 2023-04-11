@@ -114,37 +114,54 @@ function AddInvoice(props) {
     let existingweight = product.filter((ans) => ans?.weight);
     let existingrate = product.filter((ans) => ans?.rate);
     let existingProduct = product.filter((ans) => ans?.product_id);
+    let existingquantity = product.filter((ans) => ans?.quantity);
     let hsn_data;
+    let unit_data;
     if (fieldName === "product_id") {
       let hsn_data_1 =
         InvoicePageData?.GetInvoicePagData[0]?.productList.filter(
           (e) => e?.product_id === value
         );
+      let unit_data_1 =
+        InvoicePageData?.GetInvoicePagData[0]?.productList.filter(
+          (e) => e?.product_id === value
+        );
       hsn_data = hsn_data_1[0]?.hsn;
+      unit_data = unit_data_1[0]?.unit;
     }
     if (existingweight.length > 0 && fieldName === "weight") {
       existingweight.forEach((f) => {
         product[index].product_id = product[index]?.product_id;
+        product[index].quantity = product[index]?.quantity;
         product[index].hsn = product[index]?.hsn;
         product[index].weight = value;
         product[index].rate = product[index]?.rate;
         product[index].amount =
           value && product[index]?.rate
-            ? parseFloat(value) * parseFloat(product[index]?.rate)
-            : parseFloat(value) * parseFloat(product[index]?.rate);
+            ? parseFloat(value) *
+              parseFloat(product[index]?.rate) *
+              parseFloat(product[index]?.quantity)
+            : parseFloat(value) *
+              parseFloat(product[index]?.rate) *
+              parseFloat(product[index]?.quantity);
       });
       setProduct([...product]);
     } else {
       if (existingrate.length > 0 && fieldName === "rate") {
         existingrate.forEach((f) => {
           product[index].product_id = product[index]?.product_id;
+          product[index].quantity = product[index]?.quantity;
           product[index].hsn = product[index]?.hsn;
           product[index].weight = product[index]?.weight;
           product[index].rate = value;
           product[index].amount =
             value && product[index]?.weight
-              ? parseFloat(product[index]?.weight) * parseFloat(value)
-              : parseFloat(product[index]?.weight) * parseFloat(value);
+              ? parseFloat(product[index]?.weight) *
+                parseFloat(value) *
+                parseFloat(product[index]?.quantity)
+              : parseFloat(product[index]?.weight) *
+                parseFloat(value) *
+                parseFloat(product[index]?.quantity);
         });
         setProduct([...product]);
       } else {
@@ -152,42 +169,67 @@ function AddInvoice(props) {
           existingProduct.forEach((f) => {
             product[index].product_id = value;
             product[index].hsn = hsn_data;
+            product[index].quantity = product[index]?.quantity;
+            product[index].unit = unit_data;
             product[index].weight = product[index]?.weight;
             product[index].rate = product[index]?.rate;
           });
           setProduct([...product]);
         } else {
-          if (addtable > 1) {
-            setProduct([
-              ...product,
-              {
-                product_id: product[index]?.product_id,
-                hsn: product[index]?.hsn || hsn_data,
-                weight: product[index]?.weight,
-                rate: product[index]?.rate,
-                amount:
-                  product[index]?.weight && product[index]?.rate
-                    ? parseFloat(product[index]?.weight) *
-                      parseFloat(product[index]?.rate)
-                    : 0,
-                [fieldName]: value,
-              },
-            ]);
+          if (existingquantity.length > 0 && fieldName === "quantity") {
+            existingquantity.forEach((f) => {
+              product[index].product_id = product[index]?.product_id;
+              product[index].hsn = product[index]?.hsn;
+              product[index].weight = product[index]?.weight;
+              product[index].rate = product[index]?.rate;
+              product[index].quantity = value;
+              product[index].amount =
+                value && product[index]?.quantity
+                  ? parseFloat(product[index]?.weight) *
+                    parseFloat(value) *
+                    parseFloat(product[index]?.rate)
+                  : parseFloat(product[index]?.weight) *
+                    parseFloat(value) *
+                    parseFloat(product[index]?.rate);
+            });
+            setProduct([...product]);
           } else {
-            setProduct([
-              {
-                product_id: product[0]?.product_id,
-                hsn: product[0]?.hsn || hsn_data,
-                weight: product[0]?.weight,
-                rate: product[0]?.rate,
-                amount:
-                  product[0]?.weight && product[0]?.rate
-                    ? parseFloat(product[0]?.weight) *
-                      parseFloat(product[0]?.rate)
-                    : 0,
-                [fieldName]: value,
-              },
-            ]);
+            if (addtable > 1) {
+              setProduct([
+                ...product,
+                {
+                  product_id: product[index]?.product_id,
+                  hsn: product[index]?.hsn || hsn_data,
+                  unit: product[index]?.unit || unit_data,
+                  weight: product[index]?.weight,
+                  rate: product[index]?.rate,
+                  amount:
+                    product[index]?.weight && product[index]?.rate
+                      ? parseFloat(product[index]?.weight) *
+                        parseFloat(product[index]?.rate) *
+                        parseFloat(product[index]?.quantity)
+                      : 0,
+                  [fieldName]: value,
+                },
+              ]);
+            } else {
+              setProduct([
+                {
+                  product_id: product[0]?.product_id,
+                  hsn: product[0]?.hsn || hsn_data,
+                  unit: product[0]?.unit || unit_data,
+                  weight: product[0]?.weight,
+                  rate: product[0]?.rate,
+                  amount:
+                    product[0]?.weight && product[0]?.rate
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.rate) *
+                        parseFloat(product[index]?.quantity)
+                      : 0,
+                  [fieldName]: value,
+                },
+              ]);
+            }
           }
         }
       }
@@ -271,7 +313,7 @@ function AddInvoice(props) {
     product,
     addtable,
   ]);
-
+  console.log("product)*()&*", product, product[0]?.unit);
   return (
     <div>
       {InvoicePageData?.GetInvoicePagData[0]?.CustomerList.length ? (
@@ -466,6 +508,7 @@ function AddInvoice(props) {
                           <TableCell>NET WEIGHT</TableCell>
                           <TableCell>RATE</TableCell>
                           <TableCell>Per</TableCell>
+                          <TableCell>Quantity</TableCell>
                           <TableCell>AMOUNT</TableCell>
                           <TableCell>
                             <Box
@@ -647,10 +690,13 @@ function AddInvoice(props) {
                                   id="standard-basic-7"
                                   label="Par"
                                   variant="standard"
-                                  type="number"
                                   name={`unit ${ind}`}
                                   sx={{ width: 100 }}
-                                  value={product[ind - 1]?.unit}
+                                  value={
+                                    product[ind - 1]?.unit
+                                      ? product[ind - 1]?.unit
+                                      : ""
+                                  }
                                   onChange={(e) =>
                                     handleChangeProduct(
                                       "unit " + ind,
@@ -660,6 +706,35 @@ function AddInvoice(props) {
                                 />
                                 <p style={{ color: "red", margin: 0 }}>
                                   {!product[ind - 1]?.rate ? errors?.rate : ""}
+                                </p>
+                              </TableCell>
+                              <TableCell>
+                                <TextField
+                                  error={
+                                    !product[ind - 1]?.quantity
+                                      ? errors?.quantity
+                                        ? true
+                                        : null
+                                      : ""
+                                  }
+                                  id="standard-basic-7"
+                                  label="Quantity"
+                                  variant="standard"
+                                  type="number"
+                                  name={`quantity ${ind}`}
+                                  sx={{ width: 70 }}
+                                  value={product[ind - 1]?.quantity}
+                                  onChange={(e) =>
+                                    handleChangeProduct(
+                                      "quantity " + ind,
+                                      parseFloat(e.target.value)
+                                    )
+                                  }
+                                />
+                                <p style={{ color: "red", margin: 0 }}>
+                                  {!product[ind - 1]?.quantity
+                                    ? errors?.quantity
+                                    : ""}
                                 </p>
                               </TableCell>
                               <TableCell colSpan={1}>
@@ -751,6 +826,7 @@ function AddInvoice(props) {
                               value={totalrate ? totalrate.toFixed(2) : 0}
                             />
                           </TableCell>
+                          <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}>
                             <TextField

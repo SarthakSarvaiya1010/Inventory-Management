@@ -61,7 +61,7 @@ export const ProductDeleteAction = createAsyncThunk(
   }
 );
 export const PermanentProductDelete = createAsyncThunk(
-  "userAction/ProductDelete",
+  "userAction/PermanentProduct",
   async (Product_id, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -89,7 +89,7 @@ export const ProductAddAction = createAsyncThunk(
   }
 );
 export const ProductEditAction = createAsyncThunk(
-  "userAction/ProductAdd",
+  "userAction/ProductEdit",
   async (Product_id, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -103,7 +103,7 @@ export const ProductEditAction = createAsyncThunk(
   }
 );
 export const ProductEditDataAction = createAsyncThunk(
-  "userAction/ProductAdd",
+  "userAction/ProductEditData",
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const Product_id = localStorage.getItem("product_id");

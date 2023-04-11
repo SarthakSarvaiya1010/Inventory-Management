@@ -7,6 +7,7 @@ import InvoiceSlice from "./Redux/InvoiceRedux/InvoiceSlice";
 import CompanySlice from "./Redux/CompanyRedux/CompanySlice";
 import UserSlice from "./Redux/UserReduk/UserSlice";
 import PurchaseBillSlice from "./Redux/PurchaseBillRedux/PurchaseBillSlice";
+import StockReportSlice from "./Redux/StockReportRedux/StockReportSlice";
 export const store = configureStore({
   reducer: {
     ProductList: ProductSlice,
@@ -17,5 +18,6 @@ export const store = configureStore({
     CompanyInfo: CompanySlice,
     User: UserSlice,
     PurchaseData: PurchaseBillSlice,
+    StockReport: StockReportSlice,
   },
 });

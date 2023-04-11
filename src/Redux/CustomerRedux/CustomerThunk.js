@@ -94,6 +94,20 @@ export const CustomerDeleteAction = createAsyncThunk(
     }
   }
 );
+export const CustomerNameListAction = createAsyncThunk(
+  "userAction/CustomerNameList",
+  async (id, thunkAPI) => {
+    const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    try {
+      const res = await api.get(`/customersname`, {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const PermanentCustomerDeleteAction = createAsyncThunk(
   "userAction/PermanentCustomer",
   async (id, thunkAPI) => {

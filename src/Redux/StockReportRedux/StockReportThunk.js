@@ -6,7 +6,7 @@ export const StockReportListAction = createAsyncThunk(
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
-      const res = await api.get(`/StockRepor`, {
+      const res = await api.get(`/stockreport`, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
         params: data
           ? {

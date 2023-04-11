@@ -31,7 +31,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
-import { GetinvoiceAddPageAction } from "../../../Redux/InvoiceRedux/InvoiceThunk";
+import { GetpurchaseAddPageAction } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
+
 import {
   UpdatePurchaseData,
   GetPurchaseEditDataAction,
@@ -62,11 +63,12 @@ function EditPurchaseBill(props) {
   const params = useParams();
   const { id } = params;
   const toWords = new ToWords();
-  const InvoicePageData = useSelector((state) => state?.InvoiceData);
+
+  const PurchasePageData = useSelector((state) => state?.PurchaseData);
 
   const [CustomerListData, setCustomerListData] = useState();
-
-  const [addtable, setAddTable] = useState(1);
+  const [dateData, setDateData] = useState();
+  const [addtable, setAddTable] = useState(0);
   const [product, setProduct] = useState([]);
   const [open, setOpen] = useState(null);
   const [discount, setDiscount] = useState();
@@ -112,11 +114,11 @@ function EditPurchaseBill(props) {
     let unit_data;
     if (fieldName === "product_id") {
       let hsn_data_1 =
-        InvoicePageData?.GetInvoicePagData[0]?.productList.filter(
+        PurchasePageData?.GetPurchasePagData[0]?.productList.filter(
           (e) => e?.product_id === value
         );
       let unit_data_1 =
-        InvoicePageData?.GetInvoicePagData[0]?.productList.filter(
+        PurchasePageData?.GetPurchasePagData[0]?.productList.filter(
           (e) => e?.product_id === value
         );
       hsn_data = hsn_data_1[0]?.hsn;
@@ -204,28 +206,28 @@ function EditPurchaseBill(props) {
     product.splice(index, 1);
   };
   useEffect(() => {
-    dispatch(GetinvoiceAddPageAction());
+    dispatch(GetpurchaseAddPageAction());
     dispatch(GetPurchaseEditDataAction(id));
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (InvoicePageData?.GetInvoicePagData.length) {
+    if (PurchasePageData?.GetPurchasePagData.length) {
       localStorage.setItem(
         "InvoiceAddPageData",
-        JSON.stringify(InvoicePageData?.GetInvoicePagData)
+        JSON.stringify(PurchasePageData?.GetPurchasePagData)
       );
     }
-  }, [InvoicePageData?.GetInvoicePagData]);
+  }, [PurchasePageData?.GetPurchasePagData]);
 
   const handleChange = (event) => {
-    const data = InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.find(
+    const data = PurchasePageData?.GetPurchasePagData[0]?.CustomerList?.find(
       (e) => e.customer_id === event.target.value
     );
     setCustomerListData(data);
   };
   const UpdatedData = {
     bill_no: testData?.bill_no,
-    purchase_date: convert(testData?.purchase_date),
+    purchase_date: convert(dateData ? dateData : testData?.purchase_date),
     customer_id: CustomerListData
       ? CustomerListData.customer_id
       : testData?.customer_id,
@@ -240,6 +242,8 @@ function EditPurchaseBill(props) {
       : testData?.bill_amount,
     productdata: product,
   };
+
+  console.log("UpdatedData", UpdatedData);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   let finalinvoicedata;
   const handleUpdate = () => {
@@ -262,6 +266,10 @@ function EditPurchaseBill(props) {
       }
     }
   };
+  const handleChangeDate = (event) => {
+    console.log(event.$d);
+    setDateData(event.$d);
+  };
   useEffect(() => {
     if (
       testData?.productlistdata?.length &&
@@ -279,7 +287,7 @@ function EditPurchaseBill(props) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       finalinvoicedata = {
         bill_no: testData[0]?.bill_no,
-        purchase_date: convert(new Date()),
+        purchase_date: convert(dateData ? dateData : testData?.purchase_date),
         customer_id: CustomerListData ? CustomerListData?.customer_id : "",
         taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
         sgst: parseFloat(SGST),
@@ -297,10 +305,9 @@ function EditPurchaseBill(props) {
     product,
     addtable,
   ]);
-  console.log("testData?.productlistdata?.length && addtable", testData);
   return (
     <div>
-      {(testData?.productlistdata?.length && addtable) || true ? (
+      {testData?.productlistdata?.length && addtable ? (
         <Container>
           <Header name={"EditPurchaseBill"} SearchBar={false} />
           <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
@@ -387,7 +394,7 @@ function EditPurchaseBill(props) {
                           <MenuItem value={null}>
                             <em>None</em>
                           </MenuItem>
-                          {InvoicePageData?.GetInvoicePagData[0]?.CustomerList?.map(
+                          {PurchasePageData?.GetPurchasePagData[0]?.CustomerList?.map(
                             (e, index) => {
                               return (
                                 <MenuItem value={e.customer_id} key={index}>
@@ -475,10 +482,10 @@ function EditPurchaseBill(props) {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           label="Date"
-                          value={testData[0]?.date}
+                          value={dateData}
                           defaultValue={testData?.purchase_date}
                           name="date"
-                          onChange={(e) => handleChange(e)}
+                          onChange={(e) => handleChangeDate(e)}
                           renderInput={(params) => <TextField {...params} />}
                         />
                       </LocalizationProvider>
@@ -506,6 +513,7 @@ function EditPurchaseBill(props) {
                           <TableCell>NET WEIGHT</TableCell>
                           <TableCell>RATE</TableCell>
                           <TableCell>Per</TableCell>
+                          <TableCell>Quantity</TableCell>
                           <TableCell>AMOUNT</TableCell>
                           <TableCell>
                             <Box
@@ -593,7 +601,7 @@ function EditPurchaseBill(props) {
                                     <MenuItem value="">
                                       <em>None</em>
                                     </MenuItem>
-                                    {InvoicePageData?.GetInvoicePagData[0]?.productList?.map(
+                                    {PurchasePageData?.GetPurchasePagData[0]?.productList?.map(
                                       (e, index) => {
                                         return (
                                           <MenuItem

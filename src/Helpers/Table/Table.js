@@ -52,6 +52,7 @@ export default function CustomizedTables(props) {
     headalPrint,
     LoginIconShow,
     headallogin,
+    actionHide,
   } = props;
 
   const column = data.length ? Object.keys(data[0]) : null;
@@ -108,7 +109,9 @@ export default function CustomizedTables(props) {
                 )}
               </StyledTableCell>
             ))}
-            <StyledTableCell align="center">Action</StyledTableCell>
+            {!actionHide ? (
+              <StyledTableCell align="center">Action</StyledTableCell>
+            ) : null}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -131,85 +134,94 @@ export default function CustomizedTables(props) {
                     {row[v]}
                   </StyledTableCell>
                 ))}
-                <StyledTableCell align="center">
-                  {LoginIconShow ? (
-                    <>
-                      <IconButton onClick={() => headallogin(index)}>
-                        <LoginIcon
-                          style={{ color: "darkpink" }}
-                          fontSize="17px"
-                        />
-                        <Typography
-                          variant="h6"
-                          component="text"
-                          sx={{
-                            fontSize: "17px",
-                            marginLeft: "5px",
-                            color: "green",
-                          }}
-                        >
-                          Login
-                        </Typography>
-                      </IconButton>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  {printIcon ? (
-                    <>
-                      <IconButton onClick={() => headalPrint(index)}>
-                        <PrintIcon
-                          style={{ color: "darkpink" }}
-                          fontSize="17px"
-                        />
-                        <Typography
-                          variant="h6"
-                          component="text"
-                          sx={{
-                            fontSize: "17px",
-                            marginLeft: "5px",
-                            color: "green",
-                          }}
-                        >
-                          Print
-                        </Typography>
-                      </IconButton>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  {!hide ? (
-                    <>
-                      <IconButton onClick={() => headalEdit(index)}>
-                        <EditIcon style={{ color: "green" }} fontSize="17px" />
-                        <Typography
-                          variant="h6"
-                          component="text"
-                          sx={{
-                            fontSize: "17px",
-                            marginLeft: "5px",
-                            color: "green",
-                          }}
-                        >
-                          Edit
-                        </Typography>
-                      </IconButton>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  <IconButton onClick={() => headalDelete(index)}>
-                    <DeleteIcon style={{ color: "red" }} fontSize="17px" />
+                {!actionHide ? (
+                  <StyledTableCell align="center">
+                    {LoginIconShow ? (
+                      <>
+                        <IconButton onClick={() => headallogin(index)}>
+                          <LoginIcon
+                            style={{ color: "darkpink" }}
+                            fontSize="17px"
+                          />
+                          <Typography
+                            variant="h6"
+                            component="text"
+                            sx={{
+                              fontSize: "17px",
+                              marginLeft: "5px",
+                              color: "green",
+                            }}
+                          >
+                            Login
+                          </Typography>
+                        </IconButton>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    {printIcon ? (
+                      <>
+                        <IconButton onClick={() => headalPrint(index)}>
+                          <PrintIcon
+                            style={{ color: "darkpink" }}
+                            fontSize="17px"
+                          />
+                          <Typography
+                            variant="h6"
+                            component="text"
+                            sx={{
+                              fontSize: "17px",
+                              marginLeft: "5px",
+                              color: "green",
+                            }}
+                          >
+                            Print
+                          </Typography>
+                        </IconButton>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    {!hide ? (
+                      <>
+                        <IconButton onClick={() => headalEdit(index)}>
+                          <EditIcon
+                            style={{ color: "green" }}
+                            fontSize="17px"
+                          />
+                          <Typography
+                            variant="h6"
+                            component="text"
+                            sx={{
+                              fontSize: "17px",
+                              marginLeft: "5px",
+                              color: "green",
+                            }}
+                          >
+                            Edit
+                          </Typography>
+                        </IconButton>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    <IconButton onClick={() => headalDelete(index)}>
+                      <DeleteIcon style={{ color: "red" }} fontSize="17px" />
 
-                    <Typography
-                      variant="h6"
-                      component="text"
-                      sx={{ fontSize: "17px", marginLeft: "5px", color: "red" }}
-                    >
-                      Delete
-                    </Typography>
-                  </IconButton>
-                </StyledTableCell>
+                      <Typography
+                        variant="h6"
+                        component="text"
+                        sx={{
+                          fontSize: "17px",
+                          marginLeft: "5px",
+                          color: "red",
+                        }}
+                      >
+                        Delete
+                      </Typography>
+                    </IconButton>
+                  </StyledTableCell>
+                ) : null}
               </StyledTableRow>
             );
           })}
