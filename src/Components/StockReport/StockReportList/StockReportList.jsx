@@ -15,7 +15,6 @@ function StockReportList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const TaxData = useSelector((state) => state?.TaxData);
   const StockReport = useSelector((state) => state?.StockReport);
   console.log("StockReport(&*(^&", StockReport?.Stock);
@@ -27,7 +26,6 @@ function StockReportList() {
   let limit = 4;
   const data = [];
 
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   // eslint-disable-next-line array-callback-return
   StockReport?.Stock.map((e) => {
     let elements = {};
