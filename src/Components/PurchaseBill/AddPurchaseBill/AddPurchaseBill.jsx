@@ -76,6 +76,7 @@ function AddPurchaseBill(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
+  const [Payment, setPayment] = useState();
   const handleClose = () => {
     setOpen(false);
   };
@@ -244,6 +245,10 @@ function AddPurchaseBill(props) {
     dispatch(GetpurchaseAddPageAction());
   }, [dispatch]);
 
+  const handleChangePayment = (name, value) => {
+    console.log(name, value);
+    setPayment(value);
+  };
   useEffect(() => {
     if (PurchasePageData?.GetPurchasePagData.length) {
       localStorage.setItem(
@@ -259,6 +264,7 @@ function AddPurchaseBill(props) {
     );
     setCustomerListData(data);
   };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   let finalinvoicedata;
   const handleAddInvoiceData = () => {
@@ -273,6 +279,7 @@ function AddPurchaseBill(props) {
       discount: parseFloat(discount) ? parseFloat(discount) : 0,
       bill_amount: parseFloat(Bill_Amount.toFixed(2)),
       productdata: product,
+      payment: Payment ? Payment : 0,
     };
     setErrors(InvoiceValidate(finalinvoicedata, addtable));
     window.scroll(0, 0);
@@ -1008,6 +1015,32 @@ function AddPurchaseBill(props) {
               >
                 Create
               </Button>
+
+              <FormControl
+                variant="standard"
+                sx={{ width: 240, marginTop: 2, marginLeft: 4 }}
+              >
+                <InputLabel id="demo-simple-select-standard-label">
+                  Payment
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  // sx={{ width: 200 }}
+                  defaultValue={0}
+                  onChange={(e) =>
+                    handleChangePayment("payment", e.target.value)
+                  }
+                  label="Payment"
+                >
+                  <MenuItem value={1}>
+                    <em>Yes</em>
+                  </MenuItem>
+                  <MenuItem value={0}>
+                    <em>No</em>
+                  </MenuItem>
+                </Select>
+              </FormControl>
               <Dialog
                 open={open}
                 TransitionComponent={Transition}

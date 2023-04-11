@@ -54,6 +54,7 @@ function PurchaseBillList() {
     elements["Purchase Date"] = convert(e.purchase_date);
     elements["Name"] = e.customer_name;
     elements["Total Amount"] = e.bill_amount;
+    elements["Payment"] = e.payment === 1 ? "YES" : "NO";
     data.push(elements);
   });
 

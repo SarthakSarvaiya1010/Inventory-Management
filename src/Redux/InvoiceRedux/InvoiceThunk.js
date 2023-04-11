@@ -125,10 +125,11 @@ export const PermanentDeleteInvoice = createAsyncThunk(
 );
 export const UpdateInvoiceData = createAsyncThunk(
   "userAction/UpdateInvoice",
-  async (invoice_id, thunkAPI) => {
+  async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    const invoice_id = localStorage.getItem("invoice_id");
     try {
-      const res = await api.put(`/UpdateInvoiceData/${invoice_id}`, {
+      const res = await api.put(`/UpdateInvoiceData/${invoice_id}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
       });
       return res;

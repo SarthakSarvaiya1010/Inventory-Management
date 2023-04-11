@@ -265,6 +265,7 @@ function InvoiceEdit(props) {
       : testData?.taxable_amount,
     sgst: SGST ? parseFloat(SGST) : testData?.sgst,
     cgst: CGST ? parseFloat(CGST) : testData?.cgst,
+    company_id: 1,
     discount: parseFloat(discount) ? parseFloat(discount) : 0,
     bill_amount: Bill_Amount
       ? parseFloat(Bill_Amount.toFixed(2))
@@ -284,7 +285,8 @@ function InvoiceEdit(props) {
       UpdatedData?.productdata?.length > 0
     ) {
       console.log("UpdatedData", UpdatedData);
-      dispatch(UpdateInvoiceData(invoice_id, UpdatedData));
+      localStorage.setItem("invoice_id", parseInt(invoice_id));
+      dispatch(UpdateInvoiceData(UpdatedData));
 
       if (UpdatedData) {
         setDisabled(true);

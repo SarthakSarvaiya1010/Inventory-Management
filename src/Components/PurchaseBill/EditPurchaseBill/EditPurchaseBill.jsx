@@ -74,6 +74,7 @@ function EditPurchaseBill(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
+  const [Payment, setPayment] = useState();
   const handleClose = () => {
     setOpen(false);
   };
@@ -241,6 +242,12 @@ function EditPurchaseBill(props) {
       ? parseFloat(Bill_Amount.toFixed(2))
       : testData?.bill_amount,
     productdata: product,
+    company_id: 1,
+    payment: Payment,
+  };
+  const handleChangePayment = (name, value) => {
+    console.log(name, value);
+    setPayment(value);
   };
 
   console.log("UpdatedData", UpdatedData);
@@ -278,6 +285,7 @@ function EditPurchaseBill(props) {
       setAddTable(testData?.productlistdata?.length);
       setProduct(testData?.productlistdata);
       setDiscount(testData?.discount);
+      setPayment(testData?.payment);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testData?.discount, testData?.productlistdata?.length]);
@@ -305,6 +313,7 @@ function EditPurchaseBill(props) {
     product,
     addtable,
   ]);
+
   return (
     <div>
       {testData?.productlistdata?.length && addtable ? (
@@ -1027,6 +1036,31 @@ function EditPurchaseBill(props) {
               >
                 Update
               </Button>
+              <FormControl
+                variant="standard"
+                sx={{ width: 240, marginTop: 2, marginLeft: 4 }}
+              >
+                <InputLabel id="demo-simple-select-standard-label">
+                  Payment
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  // sx={{ width: 200 }}
+                  defaultValue={testData.payment}
+                  onChange={(e) =>
+                    handleChangePayment("payment", e.target.value)
+                  }
+                  label="Payment"
+                >
+                  <MenuItem value={1}>
+                    <em>Yes</em>
+                  </MenuItem>
+                  <MenuItem value={0}>
+                    <em>No</em>
+                  </MenuItem>
+                </Select>
+              </FormControl>
               <Dialog
                 open={open}
                 TransitionComponent={Transition}
