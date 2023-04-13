@@ -53,10 +53,17 @@ function PurchaseBillList() {
     elements["BILL No"] = e.bill_no < 10 ? ` 0${e.bill_no}` : e.bill_no;
     elements["Purchase Date"] = convert(e.purchase_date);
     elements["Name"] = e.customer_name;
-    elements["Total Amount"] = e.bill_amount;
+    // elements["Total Amount"] = e.bill_amount;
     elements["Payment"] = e.payment === 1 ? "YES" : "NO";
     data.push(elements);
   });
+
+  const headalPayment = (data) => {
+    console.log("(*&&*(^()", data);
+    navigate(
+      `/paymentmode/${PurchaseData.PurchaseBillList[data - 1]?.purchase_id}`
+    );
+  };
 
   useEffect(() => {
     if (accessToken?.accessToken) {
@@ -265,6 +272,8 @@ function PurchaseBillList() {
                 headalDelete={setOpen}
                 headalShorting={headalShorting}
                 ShortingHide={shortingIcon}
+                headalPayment={headalPayment}
+                PaymentIconShow={true}
               />
               <Stack
                 sx={{

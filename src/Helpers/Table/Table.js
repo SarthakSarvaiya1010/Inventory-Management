@@ -15,6 +15,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import PrintIcon from "@mui/icons-material/Print";
 import LoginIcon from "@mui/icons-material/Login";
+import PaymentIcon from "@mui/icons-material/Payment";
 // import IconButton from "@material-ui/core/IconButton";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -53,6 +54,8 @@ export default function CustomizedTables(props) {
     LoginIconShow,
     headallogin,
     actionHide,
+    headalPayment,
+    PaymentIconShow,
   } = props;
 
   const column = data.length ? Object.keys(data[0]) : null;
@@ -153,6 +156,29 @@ export default function CustomizedTables(props) {
                             }}
                           >
                             Login
+                          </Typography>
+                        </IconButton>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    {PaymentIconShow ? (
+                      <>
+                        <IconButton onClick={() => headalPayment(index)}>
+                          <PaymentIcon
+                            style={{ color: "#D5A10C" }}
+                            fontSize="17px"
+                          />
+                          <Typography
+                            variant="h6"
+                            component="text"
+                            sx={{
+                              fontSize: "17px",
+                              marginLeft: "5px",
+                              color: "#D5A10C",
+                            }}
+                          >
+                            Payment
                           </Typography>
                         </IconButton>
                       </>

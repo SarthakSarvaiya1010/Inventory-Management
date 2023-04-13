@@ -313,7 +313,12 @@ function EditPurchaseBill(props) {
     product,
     addtable,
   ]);
-
+  console.log(
+    "testData?.productlistdata?.length && addtable",
+    testData,
+    addtable,
+    testData?.productlistdata
+  );
   return (
     <div>
       {testData?.productlistdata?.length && addtable ? (
@@ -472,7 +477,7 @@ function EditPurchaseBill(props) {
                         id="standard-basic-3"
                         label="Bill No"
                         variant="standard"
-                        value={testData[0]?.bill_no || 0}
+                        value={testData?.bill_no || testData[0]?.bill_no || 0}
                         sx={{ width: 1 }}
                         name="bill_no"
                         onChange={(e) => handleChange(e)}
@@ -553,10 +558,6 @@ function EditPurchaseBill(props) {
                       {Array.from({ length: addtable }, (_, i, ind = i + 1) => {
                         return (
                           <TableBody>
-                            {console.log(
-                              product[ind - 1]?.product_id,
-                              "product[ind - 1]?.product_id"
-                            )}
                             <TableRow
                               // key={row.name}
                               sx={{
