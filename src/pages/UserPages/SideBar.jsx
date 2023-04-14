@@ -59,6 +59,8 @@ function SideBar(props) {
         return navigate("/company_info");
       case "Purchase Bill":
         return navigate("/purchasebill");
+      case "Bank Info":
+        return navigate("/bank_info");
       default:
         return "done";
     }
@@ -98,6 +100,7 @@ function SideBar(props) {
               "Invoice",
               "Purchase Bill",
               "Stock Report",
+              "Bank Info",
               "Customer",
               "Company Info",
             ].map((text, index) => (

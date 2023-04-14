@@ -18,3 +18,6 @@ export { default as PurchaseBillPage } from "./PurchaseBillPage";
 export { default as AddPurchaseBillPage } from "./AddPurchaseBillPage";
 export { default as EditPurchaseBillPage } from "./EditPurchaseBillPage";
 export { default as DeletePurchasPage } from "./DeletePurchasPage";
+export { default as BankInfoPage } from "./BankInfoPage";
+export { default as AddBankPage } from "./AddBankPage";
+export { default as PaymentModePage } from "./PaymentModePage";

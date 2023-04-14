@@ -24,6 +24,9 @@ import {
   AddPurchaseBillPage,
   EditPurchaseBillPage,
   DeletePurchasPage,
+  BankInfoPage,
+  AddBankPage,
+  PaymentModePage,
 } from "./pages/UserPages/index";
 import {
   HomePageAdmin,
@@ -42,7 +45,6 @@ import "./App.css";
 import ViewDeletedInvoiceList from "./Components/Invoice/ViewDeletedInvoice/ViewDeletedInvoiceList";
 import Protected from "./pages/Protected/Protected";
 import StockReportPage from "./pages/UserPages/StockReportPage";
-import PaymentMode from "./Components/PurchaseBill/PaymentMode/PaymentMode";
 
 const outerTheme = createTheme({
   palette: {
@@ -104,7 +106,9 @@ const route = [
   { path: "/stock_report", element: <StockReportPage /> },
   { path: "/purchasebill/edit/:id", element: <EditPurchaseBillPage /> },
   { path: "/viewdeletedpurchase", element: <DeletePurchasPage /> },
-  { path: "/paymentmode/:id", element: <PaymentMode /> },
+  { path: "/paymentmode/:id", element: <PaymentModePage /> },
+  { path: "/bank_info", element: <BankInfoPage /> },
+  { path: "/addbank", element: <AddBankPage /> },
 ];
 const adminroute = [
   { path: "/homepage", element: <HomePageAdmin /> },

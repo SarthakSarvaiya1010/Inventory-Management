@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import AddInvoice from "../../Components/Invoice/AddInvoice/AddInvoice";
 import { useSelector } from "react-redux";
@@ -12,7 +12,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function AddInvoicePage() {
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
-  console.log("InvoicePageData?.InvoicePdf", InvoicePageData?.InvoicePdf);
+  const [pdfOpen, setpdfOpen] = useState(true);
   const navigate = useNavigate();
   const [state, setState] = React.useState({
     open: false,
@@ -30,14 +30,15 @@ function AddInvoicePage() {
       setTimeout(() => {
         navigate("/invoice_list");
         window.location.reload();
-      }, 4000);
+      }, 2000);
     }
   }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
   var b64;
   if (InvoicePageData?.InvoicePdf?.invoicePdf) {
     b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
   }
-  if (b64) {
+  if (b64 && pdfOpen) {
+    setpdfOpen(false);
     var obj = document.createElement("object");
     obj.style.width = "100%";
     obj.style.height = "1000pt";
@@ -54,7 +55,7 @@ function AddInvoicePage() {
           encodeURI(b64) +
           "'></iframe>"
       );
-    }, 2000);
+    }, 1000);
   }
   return (
     <div>

@@ -67,7 +67,7 @@ function InvoiceEdit(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
-  console.log("errors", errors, "product", product);
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [findErrors, setFindErrors] = useState(null);
   if (EditInvoiceSucessMessage && disabled) {
     setDisabled(false);
@@ -253,7 +253,7 @@ function InvoiceEdit(props) {
       }
     }
   };
-
+  let user_id = accessToken?.user_id;
   const UpdatedData = {
     bill_no: testData?.bill_no,
     invoice_date: convert(testData?.invoice_date),
@@ -271,6 +271,7 @@ function InvoiceEdit(props) {
       ? parseFloat(Bill_Amount.toFixed(2))
       : testData?.bill_amount,
     productdata: product,
+    user_id: user_id,
   };
 
   // Handle Update Data

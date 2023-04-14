@@ -38,6 +38,7 @@ import {
   AddBankInfoAction,
   BankInfoBypurchase_idAction,
 } from "../../../Redux/BankRedux/BankThunk";
+import { BankInfoListAction } from "../../../Redux/BankInfoRedux/BankInfoThunk";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -59,6 +60,10 @@ function PaymentMode(props) {
   const PurchasePageData = useSelector((state) => state?.PurchaseData);
   const PurchaseData = useSelector((state) => state?.PurchaseData);
   const BankData = useSelector((state) => state?.BankData);
+  const BankInfoData = useSelector((state) => state?.BankInfoData);
+
+  console.log("BankInfoData)&&-0", BankData);
+
   //   const invoivepagedata = JSON.parse(
   //     localStorage.getItem("InvoiceEditPageData")
   //   );
@@ -103,6 +108,7 @@ function PaymentMode(props) {
     dispatch(GetpurchaseAddPageAction());
     dispatch(GetPurchaseEditDataAction(id));
     dispatch(BankInfoBypurchase_idAction(id));
+    dispatch(BankInfoListAction());
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -123,7 +129,7 @@ function PaymentMode(props) {
 
   const handleUpdate = () => {
     let data = {
-      bank_name: "demo",
+      bank_name: Payment?.bank_name,
       chaque_no: Payment?.chaque_no,
       fullpayment: Payment?.partial_full_payment === "full" ? 1 : 0,
       purchase_id: testData?.purchase_id,
@@ -138,17 +144,14 @@ function PaymentMode(props) {
         ? parseInt(BankData?.BankInfoBypurchase_id?.remainingamount) -
           (Payment?.amout || BankData?.BankInfoBypurchase_id?.remainingamount)
         : parseInt(testData?.bill_amount) -
-          (Payment?.amout ||
-            BankData?.BankInfoBypurchase_id?.remainingamount ||
-            testData?.bill_amount),
+          parseInt(
+            Payment?.amout ||
+              BankData?.BankInfoBypurchase_id?.remainingamount ||
+              testData?.bill_amount
+          ),
     };
-    if (!Payment?.partial_full_payment) {
-      setErrors({ payment_full: "please select" });
-    }
+    console.log("data()&*&_)&", data);
 
-    if (!Payment?.payment_mode) {
-      setErrors({ payment: "please select" });
-    }
     if (showchaque) {
       if (Payment?.chaque_no) {
         if (showAmout) {
@@ -177,6 +180,14 @@ function PaymentMode(props) {
       } else {
         setErrors({ amout: "eneter amout" });
       }
+    } else if (!Payment?.bank_name) {
+      setErrors({ bank_name: "please select" });
+    } else if (!Payment?.partial_full_payment) {
+      setErrors({ payment_full: "please select" });
+    } else if (!Payment?.payment_mode) {
+      setErrors({ payment: "please select" });
+    } else {
+      dispatch(AddBankInfoAction(data));
     }
   };
 
@@ -389,9 +400,9 @@ function PaymentMode(props) {
                       <TableHead>
                         <TableRow>
                           <TableCell> Amout</TableCell>
-                          <TableCell>Payment Status</TableCell>
                           <TableCell>Remaining Amount</TableCell>
                           <TableCell>Paid Amount</TableCell>
+                          <TableCell>Select Bank</TableCell>
                           <TableCell>Payment Mode</TableCell>
                           <TableCell>Partial/Full Payment</TableCell>
                           {showchaque ? <TableCell>Chaque No</TableCell> : null}
@@ -425,22 +436,7 @@ function PaymentMode(props) {
                           >
                             {testData?.bill_amount}
                           </TableCell>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            sx={{
-                              width: 150,
-                              color:
-                                testData?.payment === 1
-                                  ? "green"
-                                  : testData?.payment === 0 ||
-                                    !testData?.payment
-                                  ? "red"
-                                  : "black",
-                            }}
-                          >
-                            {testData?.payment === 1 ? "YES" : "No"}
-                          </TableCell>
+
                           <TableCell
                             component="th"
                             scope="row"
@@ -463,6 +459,45 @@ function PaymentMode(props) {
                             }}
                           >
                             {BankData?.BankInfoBypurchase_id?.paidamount || 0}
+                          </TableCell>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            sx={{
+                              width: 200,
+                            }}
+                          >
+                            <FormControl variant="standard" sx={{ width: 150 }}>
+                              <InputLabel id="demo-simple-select-standard-label">
+                                Select Bank
+                              </InputLabel>
+                              <Select
+                                error={errors?.bank_name ? true : null}
+                                labelId="demo-simple-select-standard-label"
+                                id="demo-simple-select-standard"
+                                onChange={(e) =>
+                                  handleChangeProduct(
+                                    "bank_name",
+                                    e.target.value
+                                  )
+                                }
+                                label="Select Bank"
+                              >
+                                <MenuItem value="">
+                                  <em>non</em>
+                                </MenuItem>
+                                {BankInfoData?.BankInfoList?.map((e, index) => {
+                                  return (
+                                    <MenuItem value={e.bank_name} key={index}>
+                                      {e.bank_name}
+                                    </MenuItem>
+                                  );
+                                })}
+                              </Select>
+                              <p style={{ color: "red", margin: 0 }}>
+                                {errors?.bank_name}
+                              </p>
+                            </FormControl>
                           </TableCell>
                           <TableCell
                             component="th"

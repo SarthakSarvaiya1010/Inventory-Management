@@ -78,6 +78,7 @@ function AddInvoice(props) {
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
+  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const handleClose = () => {
     setOpen(false);
   };
@@ -264,6 +265,7 @@ function AddInvoice(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   let finalinvoicedata;
   const handleAddInvoiceData = () => {
+    let user_id = accessToken?.user_id;
     setFindErrors(true);
     finalinvoicedata = {
       bill_no: testData[0]?.bill_no,
@@ -275,6 +277,7 @@ function AddInvoice(props) {
       discount: parseFloat(discount) ? parseFloat(discount) : 0,
       bill_amount: parseFloat(Bill_Amount.toFixed(2)),
       productdata: product,
+      user_id: user_id,
     };
     setErrors(InvoiceValidate(finalinvoicedata, addtable));
     window.scroll(0, 0);
