@@ -37,6 +37,8 @@ const InvoiceSlice = createSlice({
         payload: { data },
       } = payload;
       state.invoiceList = data;
+      state.InvoicePdf = [];
+      state.SucessMessageOfInvoiceDelete = [];
     },
     [InvoiceListAction.rejected]: (state, payload) => {
       state.isLoading = false;

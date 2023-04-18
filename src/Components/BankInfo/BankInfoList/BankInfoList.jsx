@@ -6,14 +6,13 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ProductListAction,
-  ProductDeleteAction,
-} from "../../../Redux/ProductRedux/ProductThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import DialogBox from "../../../Helpers/DialogBox/DialogBox";
-import { BankInfoListAction } from "../../../Redux/BankInfoRedux/BankInfoThunk";
+import {
+  BankInfoDeleteDataAction,
+  BankInfoListAction,
+} from "../../../Redux/BankInfoRedux/BankInfoThunk";
 
 function BankInfoList() {
   const navigate = useNavigate(null);
@@ -21,10 +20,10 @@ function BankInfoList() {
   const [open, setOpen] = useState(false);
 
   const BankInfoData = useSelector((state) => state?.BankInfoData);
-  console.log("BankInfoData", BankInfoData);
+
   let limit = 4;
   const [search, setSearch] = useState(null);
-  const [pageNumber, setPageNumber] = useState(null);
+  const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState(null);
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
@@ -50,7 +49,7 @@ function BankInfoList() {
 
   const headalEdit = (data) => {
     navigate(
-      `/product/edit/${BankInfoData?.BankInfoList[data - 1]?.bank_info_no}`
+      `/bank/edit/${BankInfoData?.BankInfoList[data - 1]?.bank_info_no}`
     );
   };
 
@@ -62,7 +61,9 @@ function BankInfoList() {
   const finalDelete = () => {
     setOpen(false);
     dispatch(
-      ProductDeleteAction(BankInfoData?.BankInfoList[open - 1]?.bank_info_no)
+      BankInfoDeleteDataAction(
+        BankInfoData?.BankInfoList[open - 1]?.bank_info_no
+      )
     );
   };
 
@@ -72,7 +73,7 @@ function BankInfoList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        ProductListAction({
+        BankInfoListAction({
           search: search,
           limit: limit,
           pageNumber: pageNumber,
@@ -153,11 +154,10 @@ function BankInfoList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "deletedproduct");
-                    navigate("/deletedproduct");
+                    navigate("/updatebalance");
                   }}
                 >
-                  view deleted bank
+                  Update Bank Balance
                 </Button>
               </Stack>
               {BankInfoData?.BankInfoList?.length ? (

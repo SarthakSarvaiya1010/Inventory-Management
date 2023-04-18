@@ -21,3 +21,4 @@ export { default as DeletePurchasPage } from "./DeletePurchasPage";
 export { default as BankInfoPage } from "./BankInfoPage";
 export { default as AddBankPage } from "./AddBankPage";
 export { default as PaymentModePage } from "./PaymentModePage";
+export { default as UpdateBalancePage } from "./UpdateBalancePage";

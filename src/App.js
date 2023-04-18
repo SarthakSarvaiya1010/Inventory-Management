@@ -27,6 +27,7 @@ import {
   BankInfoPage,
   AddBankPage,
   PaymentModePage,
+  UpdateBalancePage,
 } from "./pages/UserPages/index";
 import {
   HomePageAdmin,
@@ -109,6 +110,8 @@ const route = [
   { path: "/paymentmode/:id", element: <PaymentModePage /> },
   { path: "/bank_info", element: <BankInfoPage /> },
   { path: "/addbank", element: <AddBankPage /> },
+  { path: "/bank/edit/:id", element: <AddBankPage /> },
+  { path: "/updatebalance", element: <UpdateBalancePage /> },
 ];
 const adminroute = [
   { path: "/homepage", element: <HomePageAdmin /> },

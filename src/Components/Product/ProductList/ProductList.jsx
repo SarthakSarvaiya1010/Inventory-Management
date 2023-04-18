@@ -22,7 +22,7 @@ function ProductList() {
   const products = useSelector((state) => state?.ProductList?.productList);
   let limit = 4;
   const [search, setSearch] = useState(null);
-  const [pageNumber, setPageNumber] = useState(null);
+  const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState(null);
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];

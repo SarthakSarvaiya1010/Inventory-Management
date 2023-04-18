@@ -10,7 +10,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 function AddBankPage() {
   const BankInfoData = useSelector((state) => state?.BankInfoData);
-  console.log("BankInfoData?.ErrorMessage", BankInfoData);
   const navigate = useNavigate();
   const [state, setState] = React.useState({
     open: false,
@@ -44,7 +43,6 @@ function AddBankPage() {
         state={state}
         setState={setState}
       />
-
       <Snackbar
         autoHideDuration={2000}
         anchorOrigin={{ vertical, horizontal }}

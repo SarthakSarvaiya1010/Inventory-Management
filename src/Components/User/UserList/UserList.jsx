@@ -28,8 +28,6 @@ function UserList() {
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const data = [];
 
-  console.log("UserUserUser==>", User.UserDataByuuid, "test");
-
   useEffect(() => {
     dispatch(
       userListAction({

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import InvoiceEdit from "../../Components/Invoice/InvoiceEdit/InvoiceEdit";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function EditInvoicePage() {
   const navigate = useNavigate();
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
+  const [pdfOpen, setpdfOpen] = useState(true);
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -52,7 +53,8 @@ export default function EditInvoicePage() {
   if (InvoicePageData?.InvoicePdf?.invoicePdf) {
     b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
   }
-  if (b64) {
+  if (b64 && pdfOpen) {
+    setpdfOpen(false);
     var obj = document.createElement("object");
     obj.style.width = "100%";
     obj.style.height = "1000pt";
