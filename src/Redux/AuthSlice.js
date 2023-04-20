@@ -54,6 +54,7 @@ export const quickLogin = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

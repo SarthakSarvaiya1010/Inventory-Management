@@ -13,7 +13,7 @@ import {
 } from "../../../Redux/UserReduk/UserThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
-import { quickLogin } from "../../../Store/Action/AuthAction";
+import { quickLogin } from "../../../Redux/AuthSlice";
 
 function UserList() {
   const navigate = useNavigate();
