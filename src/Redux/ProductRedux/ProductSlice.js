@@ -32,9 +32,13 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.productList = data;
-      state.SucessMessage = [];
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = [];
+        state.productList = data;
+      }
+      console.log("payload", payload?.payload?.response?.data);
     },
     [ProductListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -104,13 +108,18 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.productEdit = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.productEdit = data;
+      }
     },
     [ProductAddAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },
       } = payload;
+
       state.ErrorMessage = data;
     },
     [ProductEditDataAction.pending]: (state) => {
@@ -121,7 +130,11 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.SucessMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [ProductEditDataAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -138,7 +151,11 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.productEdit = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.productEdit = data;
+      }
     },
     [ProductEditAction.rejected]: (state, payload) => {
       state.isLoading = false;
