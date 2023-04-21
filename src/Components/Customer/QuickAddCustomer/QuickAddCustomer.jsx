@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import {
   Button,
@@ -8,14 +8,80 @@ import {
   Stack,
 } from "@mui/material";
 import UseForm from "../../EditForm/UseForm";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import SanckBar from "../../../Helpers/SanckBar/SanckBar";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function QuickAddCustomer(props) {
   const { setOpen } = props;
 
   const { customerhandleSubmit, values, errors, handleOnchange } = UseForm([]);
 
+  const CustomerData = useSelector((state) => state?.CustomerList);
+  console.log("CustomerData)*(&", CustomerData.SucessMessage, errors);
+  const navigate = useNavigate();
+
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+  useEffect(() => {
+    if (CustomerData.SucessMessage.statusCode === "200") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
+      setTimeout(() => {
+        navigate("/addinvoice");
+        window.location.reload();
+        setOpen(false);
+      }, 2000);
+    }
+  }, [CustomerData.SucessMessage.statusCode, navigate, setOpen]);
+
+  useEffect(() => {
+    if (CustomerData?.ErrorMessage?.data?.statusCode === "400") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
+    }
+  }, [CustomerData?.ErrorMessage?.data?.statusCode]);
   return (
     <div>
+      <SanckBar
+        alertMessage={CustomerData?.SucessMessage?.message}
+        alertErrorMessage={CustomerData?.ErrorMessage?.data?.message}
+        state={state}
+        setState={setState}
+      />
+
+      <Snackbar
+        autoHideDuration={2000}
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        {CustomerData?.SucessMessage?.message ? (
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {CustomerData?.SucessMessage?.message}
+          </Alert>
+        ) : (
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {CustomerData?.ErrorMessage?.data?.message}
+          </Alert>
+        )}
+      </Snackbar>
       <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
         <DialogContent>
           <br />
@@ -47,7 +113,9 @@ function QuickAddCustomer(props) {
                 autoComplete="off"
                 onChange={(e) => handleOnchange(e)}
               />
-              <p style={{ color: "red" }}>{errors?.customer_name}</p>
+              <p style={{ color: "red", fontSize: 12 }}>
+                {errors?.customer_name}
+              </p>
               <br />
               <TextField
                 required
@@ -59,7 +127,7 @@ function QuickAddCustomer(props) {
                 type="textarea"
                 onChange={(e) => handleOnchange(e)}
               />
-              <p style={{ color: "red" }}>{errors?.address}</p>
+              <p style={{ color: "red", fontSize: 12 }}>{errors?.address}</p>
               <br />
               <TextField
                 type="text"
@@ -82,16 +150,18 @@ function QuickAddCustomer(props) {
                 value={values?.hsn}
                 autoComplete="off"
               />
-              <p style={{ color: "red" }}>{errors?.mobile_no}</p>
+              <p style={{ color: "red", fontSize: 12 }}>{errors?.mobile_no}</p>
               <br />
               <TextField
-                name="email"
                 required
+                error={errors?.email ? true : null}
+                name="email"
                 id="outlined-Email"
                 label="Email id"
                 autoComplete="off"
                 onChange={(e) => handleOnchange(e)}
               />
+              <p style={{ color: "red", fontSize: 12 }}>{errors?.email}</p>
             </Stack>
           </Box>
           <br />

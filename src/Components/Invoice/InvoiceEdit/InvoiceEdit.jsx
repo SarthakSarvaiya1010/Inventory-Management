@@ -394,6 +394,7 @@ function InvoiceEdit(props) {
                           {errors?.customer_id}
                         </p>
                         <br />
+                        <br />
                         <TextField
                           error={errors?.customer_address ? true : null}
                           id="standard-basic"
@@ -418,6 +419,7 @@ function InvoiceEdit(props) {
                           name="Customer_Gst_No"
                           onChange={(e) => handleChange(e)}
                         />
+                        <br />
                         <br />
                         <TextField
                           error={errors?.customer_name ? true : null}
@@ -452,7 +454,19 @@ function InvoiceEdit(props) {
                         }
                         sx={{ width: 1 }}
                         name="bill_no"
-                        onChange={(e) => handleChange(e)}
+                      />
+
+                      <TextField
+                        id="standard-basic-3"
+                        label="Deliver Note"
+                        variant="standard"
+                        value={
+                          testData?.bill_no > 9
+                            ? testData?.bill_no
+                            : `0${testData?.bill_no}` || 0
+                        }
+                        sx={{ width: 1 }}
+                        name="challan_no"
                       />
                       <br />
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -465,7 +479,7 @@ function InvoiceEdit(props) {
                           renderInput={(params) => <TextField {...params} />}
                         />
                       </LocalizationProvider>
-                      <br />
+
                       <TextField
                         id="standard-basic-4"
                         label="Gst_No"

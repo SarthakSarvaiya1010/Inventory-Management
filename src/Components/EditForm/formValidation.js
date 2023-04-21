@@ -24,7 +24,7 @@ export function CustomerValidate(values, data) {
   let errors = {};
 
   if (!values?.customer_name) {
-    errors.customer_name = " Customer name is required";
+    errors.customer_name = " Customer Name is required";
   }
 
   if (!values?.mobile_no) {
@@ -39,6 +39,11 @@ export function CustomerValidate(values, data) {
 
   if (!values?.address) {
     errors.address = "Adress is  required";
+  }
+  if (!values?.email) {
+    errors.email = "Email id is missing";
+  } else if (!/\S+@\S+\.\S+/.test(values?.email)) {
+    errors.email = "Email address is invalid";
   }
 
   return errors;
@@ -68,7 +73,7 @@ export function CompanyValidate(values) {
   }
 
   if (!values?.company_name) {
-    errors.company_name = "Company Name is required";
+    errors.company_name = "company name is required";
   }
 
   if (!values?.image_src) {
