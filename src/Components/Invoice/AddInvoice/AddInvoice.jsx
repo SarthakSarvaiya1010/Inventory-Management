@@ -74,6 +74,7 @@ function AddInvoice(props) {
 
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
+  console.log("product()*-", product);
   const [open, setOpen] = useState(null);
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
@@ -755,7 +756,9 @@ function AddInvoice(props) {
                                     variant="standard"
                                     sx={{ width: 100 }}
                                     value={
-                                      product[ind - 1]?.amount === "NaN"
+                                      isNaN(
+                                        parseFloat(product[ind - 1]?.amount)
+                                      )
                                         ? 0
                                         : product[ind - 1]?.amount?.toFixed(2)
                                     }
@@ -838,7 +841,11 @@ function AddInvoice(props) {
                               variant="standard"
                               defaultValue={0}
                               sx={{ width: 120 }}
-                              value={totalAmount?.toFixed(2)}
+                              value={
+                                isNaN(parseFloat(totalAmount))
+                                  ? 0
+                                  : totalAmount?.toFixed(2)
+                              }
                             />
                           </TableCell>
                         </TableRow>
