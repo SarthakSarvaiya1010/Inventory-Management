@@ -7,6 +7,7 @@ import {
   Stack,
   Box,
   Button,
+  CircularProgress,
 } from "@mui/material";
 // import { Transition } from "../../Helpers/BootstrapButton/BootstrapButton";
 import { Transition } from "../../../Helpers/BootstrapButton/BootstrapButton";
@@ -29,6 +30,7 @@ function SetPassword() {
 
   const dispatch = useDispatch();
 
+  console.log("SetPasswordMassge", SetPasswordMassge.isLoading);
   const LoginInfo = {
     password: password,
   };
@@ -86,24 +88,15 @@ function SetPassword() {
 
   return (
     <div>
-      {linkstatus ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+      {!SetPasswordMassge.isLoading ? (
+        linkstatus ? (
           <div
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              flexDirection: "column",
             }}
-            className="login-wrapper"
           >
-            <h2 className="reset">Reset Password Link Expired</h2>
             <div
               style={{
                 display: "flex",
@@ -111,129 +104,154 @@ function SetPassword() {
                 alignItems: "center",
                 flexDirection: "column",
               }}
+              className="login-wrapper"
             >
-              <div className="img-container">
-                <div className="img-session">
-                  <img
-                    alt="#"
-                    src="../linkexpie.png"
-                    style={{ height: "40vh" }}
-                  ></img>
-                </div>
-              </div>
-              <div style={{ width: "50%" }}>
-                <h6>
-                  Hi, there your magic reset password link has expired, because
-                  you haven't used it. Reset Password link expires in every 10
-                  minutes and can only be used once. You can create one by
-                  clicking on Request button too.
-                </h6>
-              </div>
-              <button className="linkEx-btn" onClick={ResendLink}>
-                Forget Password
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <Dialog
-          open={open}
-          TransitionComponent={Transition}
-          keepMounted
-          onClose={handleClose}
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogContent>
-            <ToastContainer />
-            <Stack direction="row" justifyContent="center" alignItems="center">
-              <DialogTitle>SetPassword</DialogTitle>
-            </Stack>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "50ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <Stack direction="column" spacing={2}>
-                <TextField
-                  required
-                  id="outlined-Email"
-                  label="Password"
-                  type="password"
-                  autoComplete="off"
-                  onChange={(e) => setpassWord(e.target.value)}
-                  error={error?.password ? true : null}
-                  // defaultValue="Hello World"
-                />
-                {error?.password ? (
-                  <>
-                    <b
-                      style={{
-                        color: "red",
-                        fontSize: "15px",
-                        marginLeft: "10px",
-                        marginTop: "0px",
-                      }}
-                    >
-                      {error?.password}
-                    </b>
-                    <br />
-                  </>
-                ) : null}
-                <TextField
-                  required
-                  id="outlined-Email"
-                  label="Confrom Password"
-                  autoComplete="off"
-                  type="password"
-                  onChange={(e) => setConfrompassword(e.target.value)}
-                  error={error?.confirmpassword ? true : null}
-                  // defaultValue="Hello World"
-                />
-                {error?.confirmpassword ? (
-                  <>
-                    <b
-                      style={{
-                        color: "red",
-                        fontSize: "15px",
-                        marginLeft: "10px",
-                        marginTop: "0px",
-                      }}
-                    >
-                      {error?.confirmpassword}
-                    </b>
-                    <br />
-                  </>
-                ) : null}
-              </Stack>
-            </Box>
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => {
-                  setOpen(false);
+              <h2 className="reset">Reset Password Link Expired</h2>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
                 }}
               >
-                cancel
-              </Button>
-            </Stack>
-          </DialogContent>
-        </Dialog>
+                <div className="img-container">
+                  <div className="img-session">
+                    <img
+                      alt="#"
+                      src="../linkexpie.png"
+                      style={{ height: "40vh" }}
+                    ></img>
+                  </div>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <h6>
+                    Hi, there your magic reset password link has expired,
+                    because you haven't used it. Reset Password link expires in
+                    every 10 minutes and can only be used once. You can create
+                    one by clicking on Request button too.
+                  </h6>
+                </div>
+                <button className="linkEx-btn" onClick={ResendLink}>
+                  Forget Password
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleClose}
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogContent>
+              <ToastContainer />
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <DialogTitle>SetPassword</DialogTitle>
+              </Stack>
+              <Box
+                component="form"
+                sx={{
+                  "& .MuiTextField-root": { m: 1, width: "50ch" },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <Stack direction="column" spacing={2}>
+                  <TextField
+                    required
+                    id="outlined-Email"
+                    label="Password"
+                    type="password"
+                    autoComplete="off"
+                    onChange={(e) => setpassWord(e.target.value)}
+                    error={error?.password ? true : null}
+                    // defaultValue="Hello World"
+                  />
+                  {error?.password ? (
+                    <>
+                      <b
+                        style={{
+                          color: "red",
+                          fontSize: "15px",
+                          marginLeft: "10px",
+                          marginTop: "0px",
+                        }}
+                      >
+                        {error?.password}
+                      </b>
+                      <br />
+                    </>
+                  ) : null}
+                  <TextField
+                    required
+                    id="outlined-Email"
+                    label="Confrom Password"
+                    autoComplete="off"
+                    type="password"
+                    onChange={(e) => setConfrompassword(e.target.value)}
+                    error={error?.confirmpassword ? true : null}
+                    // defaultValue="Hello World"
+                  />
+                  {error?.confirmpassword ? (
+                    <>
+                      <b
+                        style={{
+                          color: "red",
+                          fontSize: "15px",
+                          marginLeft: "10px",
+                          marginTop: "0px",
+                        }}
+                      >
+                        {error?.confirmpassword}
+                      </b>
+                      <br />
+                    </>
+                  ) : null}
+                </Stack>
+              </Box>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+              >
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  cancel
+                </Button>
+              </Stack>
+            </DialogContent>
+          </Dialog>
+        )
+      ) : (
+        <Stack
+          sx={{ color: "grey.500", height: "80vh" }}
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="success" size="5rem" />
+        </Stack>
       )}
     </div>
   );
