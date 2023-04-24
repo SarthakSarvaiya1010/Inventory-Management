@@ -121,7 +121,7 @@ export function UserValidate(values) {
     errors.address = "Address is required";
   }
   if (!values?.mobile_no) {
-    errors.mobile_no = "mobile number is missing ";
+    errors.mobile_no = "mobile number is required ";
   } else if (
     !/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(
       parseInt(values?.mobile_no)
@@ -131,7 +131,7 @@ export function UserValidate(values) {
   }
 
   if (!values?.email) {
-    errors.email = "Email id is missing";
+    errors.email = "Email id is required";
   } else if (!/\S+@\S+\.\S+/.test(values?.email)) {
     errors.email = "Email address is invalid";
   }
