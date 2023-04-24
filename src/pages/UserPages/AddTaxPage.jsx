@@ -12,7 +12,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function AddTaxPage() {
   const TaxData = useSelector((state) => state?.TaxData);
   const navigate = useNavigate();
-  console.log("TaxData=======>", TaxData);
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -34,15 +33,16 @@ function AddTaxPage() {
   }, [TaxData?.SucessMessage?.statusCode, navigate]);
 
   useEffect(() => {
-    if (TaxData?.ErrorMessage?.data?.statusCode === 400) {
+    if (TaxData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [TaxData?.ErrorMessage?.data?.statusCode]);
+  }, [TaxData?.ErrorMessage?.statusCode]);
+  console.log("TaxData?.ErrorMessage?.data?.statusCode", TaxData?.ErrorMessage);
   return (
     <div>
       {" "}
       <Snackbar
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         anchorOrigin={{ vertical, horizontal }}
         open={open}
         onClose={handleClose}
@@ -58,8 +58,8 @@ function AddTaxPage() {
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            {TaxData?.ErrorMessage?.data?.message
-              ? TaxData?.ErrorMessage?.data?.message
+            {TaxData?.ErrorMessage?.message
+              ? TaxData?.ErrorMessage?.message
               : "Opps Something Went wrong"}
           </Alert>
         )}

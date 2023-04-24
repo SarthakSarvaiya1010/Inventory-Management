@@ -116,7 +116,7 @@ function CustomerList() {
         DialogText={"Are you sure you want to Remove Customer?"}
         finalDelete={finalDelete}
       />
-      {CustomerData?.CoustomerList?.length ? (
+      {!CustomerData?.isLoading ? (
         <Container fixed>
           <Header
             name={"Customer List"}

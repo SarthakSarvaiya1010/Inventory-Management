@@ -108,8 +108,11 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SucessMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [TaxAddAction.rejected]: (state, payload) => {
       state.isLoading = false;

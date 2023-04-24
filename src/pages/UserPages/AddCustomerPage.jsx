@@ -41,6 +41,7 @@ function AddCustomerPage() {
     Customers?.ErrorMessage?.data?.statusCode,
     Customers?.ErrorMessage?.data?.message,
   ]);
+  console.log("Customers", Customers);
   return (
     <div>
       <Snackbar

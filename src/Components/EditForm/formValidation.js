@@ -56,11 +56,11 @@ export function TaxValidate(values, data) {
   }
 
   if (!values?.tax_rate) {
-    errors.tax_rate = "Tax_Rate  is required";
+    errors.tax_rate = "tax rate  is required";
   }
 
   if (!values?.tax_country) {
-    errors.tax_country = "tax_country is required";
+    errors.tax_country = "tax country is required";
   }
 
   return errors;

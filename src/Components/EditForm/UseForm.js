@@ -98,6 +98,7 @@ const useForm = (defaultData, image) => {
     data["email"] = values?.email;
     data["address"] = values?.address;
     data["tin_no"] = values.tin_no;
+    console.log("Object.keys(errors).length", Object.keys(errors).length);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.customer_id) {
         dispatch(CustomerEditDataAction(data));

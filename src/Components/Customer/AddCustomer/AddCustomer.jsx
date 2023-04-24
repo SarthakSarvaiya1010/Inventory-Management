@@ -38,6 +38,7 @@ function AddCustomer() {
       dispatch(CustomerEditAction(id));
     }
   }, [dispatch, id]);
+  console.log("errors", errors);
   return (
     <div>
       {!CustomerEditData.loder || !id ? (
