@@ -415,7 +415,10 @@ function AddPurchaseBill(props) {
                     <Stack>
                       <br />
                       <FormControl variant="standard" sx={{ width: 1 }}>
-                        <InputLabel id="demo-simple-select-standard-label">
+                        <InputLabel
+                          id="demo-simple-select-standard-label"
+                          error={errors?.customer_id ? true : null}
+                        >
                           Mobile no
                         </InputLabel>
                         <br />
@@ -452,7 +455,8 @@ function AddPurchaseBill(props) {
                           multiline
                           sx={{ width: 1 }}
                           value={
-                            CustomerListData?.address === ""
+                            CustomerListData?.address === "" ||
+                            !CustomerListData?.address
                               ? ""
                               : CustomerListData?.address
                           }
@@ -467,11 +471,12 @@ function AddPurchaseBill(props) {
                           label="Customer Gst No"
                           variant="standard"
                           sx={{ width: 1 }}
-                          // value={
-                          //   CustomerListData?.tin_no === ""
-                          //     ? ""
-                          //     : CustomerListData?.tin_no
-                          // }
+                          value={
+                            CustomerListData?.tin_no === "" ||
+                            !CustomerListData?.tin_no
+                              ? ""
+                              : CustomerListData?.tin_no
+                          }
                         />
                         <br />
                         <br />
@@ -481,10 +486,14 @@ function AddPurchaseBill(props) {
                           id="standard-basic-2"
                           label="Name "
                           variant="standard"
-                          value={CustomerListData?.customer_name}
+                          value={
+                            CustomerListData?.customer_name === "" ||
+                            !CustomerListData?.customer_name
+                              ? ""
+                              : CustomerListData?.customer_name
+                          }
                           sx={{ width: 1 }}
                           name="Customer_Name"
-                          onChange={(e) => handleChange(e)}
                         />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_name}
@@ -524,6 +533,7 @@ function AddPurchaseBill(props) {
                           name="date"
                           onChange={(e) => handleChange(e)}
                           renderInput={(params) => <TextField {...params} />}
+                          disabled
                         />
                       </LocalizationProvider>
                       <br />
@@ -534,6 +544,7 @@ function AddPurchaseBill(props) {
                         sx={{ width: 1 }}
                         name="Gst_No"
                         value={"24BWOPP9863M2ZF"}
+                        disabled
                         // onChange={(e) => handleChange(e)}
                       />
                     </Stack>

@@ -115,7 +115,7 @@ function DeletedProductList() {
       PermanentProductDelete(productData.productDeletList[open - 1]?.product_id)
     );
   };
-
+  console.log("productData?.Loader", productData?.productDeletList);
   return (
     <div>
       <DialogBox
@@ -124,7 +124,7 @@ function DeletedProductList() {
         DialogText={"Are you sure you want to Delete this Product?"}
         finalDelete={finalDelete}
       />
-      {!productData?.Loader ? (
+      {!productData?.isLoading ? (
         productData?.productDeletList?.length ? (
           <Container fixed>
             <Header
