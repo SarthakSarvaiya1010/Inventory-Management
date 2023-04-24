@@ -515,6 +515,7 @@ function AddInvoice(props) {
                           name="date"
                           onChange={(e) => handleChange(e)}
                           renderInput={(params) => <TextField {...params} />}
+                          disabled
                         />
                       </LocalizationProvider>
                       <br />
@@ -525,6 +526,7 @@ function AddInvoice(props) {
                         sx={{ width: 1 }}
                         name="Gst_No"
                         value={"24BWOPP9863M2ZF"}
+                        disabled
                         // onChange={(e) => handleChange(e)}
                       />
                     </Stack>
