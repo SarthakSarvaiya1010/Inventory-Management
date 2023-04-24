@@ -106,6 +106,7 @@ function AddPurchaseBill(props) {
         parseFloat(CGST) -
         (discount ? discount : 0)
       : 0;
+
   const handleChangeProduct = (name, value) => {
     let nameIndex = name.split(" ", 2);
     let index = parseInt(nameIndex[1]) - 1;
@@ -202,6 +203,7 @@ function AddPurchaseBill(props) {
                   unit: product[index]?.unit || unit_data,
                   weight: product[index]?.weight,
                   rate: product[index]?.rate,
+                  quantity: product[index]?.quantity || 0,
                   amount:
                     product[index]?.weight && product[index]?.rate
                       ? parseFloat(product[index]?.weight) *
@@ -214,16 +216,37 @@ function AddPurchaseBill(props) {
             } else {
               setProduct([
                 {
-                  product_id: product[0]?.product_id,
-                  hsn: product[0]?.hsn || hsn_data,
-                  unit: product[0]?.unit || unit_data,
-                  weight: product[0]?.weight,
-                  rate: product[0]?.rate,
+                  product_id: product[0]?.product_id || 0,
+                  hsn: product[0]?.hsn || hsn_data || 0,
+                  unit: product[0]?.unit || unit_data || 0,
+                  weight: product[0]?.weight || 0,
+                  rate: product[0]?.rate || 0,
+                  quantity: product[0]?.quantity || 0,
                   amount:
-                    product[0]?.weight && product[0]?.rate
+                    product[0]?.weight &&
+                    product[0]?.rate &&
+                    product[0]?.quantity
                       ? parseFloat(product[0]?.weight) *
                         parseFloat(product[0]?.rate) *
-                        parseFloat(product[index]?.quantity)
+                        parseFloat(product[0]?.quantity)
+                      : product[0]?.weight &&
+                        product[0]?.rate &&
+                        fieldName === "quantity"
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.rate) *
+                        value
+                      : product[0]?.weight &&
+                        product[0]?.quantity &&
+                        fieldName === "rate"
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.quantity) *
+                        value
+                      : product[0]?.rate &&
+                        product[0]?.quantity &&
+                        fieldName === "weight"
+                      ? parseFloat(product[0]?.quantity) *
+                        parseFloat(product[0]?.rate) *
+                        value
                       : 0,
                   [fieldName]: value,
                 },
@@ -434,7 +457,7 @@ function AddPurchaseBill(props) {
                               : CustomerListData?.address
                           }
                         />
-                        <br />
+
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_address}
                         </p>
@@ -481,7 +504,7 @@ function AddPurchaseBill(props) {
                         value={testData[0]?.bill_no || 0}
                         sx={{ width: 1 }}
                         name="bill_no"
-                        onChange={(e) => handleChange(e)}
+                        disabled
                       />
                       <br />
                       <TextField
@@ -491,7 +514,7 @@ function AddPurchaseBill(props) {
                         value={testData[0]?.bill_no || 0}
                         sx={{ width: 1 }}
                         name="challan_no"
-                        onChange={(e) => handleChange(e)}
+                        disabled
                       />
                       <br />
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -656,7 +679,11 @@ function AddPurchaseBill(props) {
                                   label="Weight"
                                   variant="standard"
                                   type="number"
-                                  value={product[ind - 1]?.weight}
+                                  value={
+                                    product[ind - 1]?.weight
+                                      ? product[ind - 1]?.weight
+                                      : null
+                                  }
                                   onChange={(e) =>
                                     handleChangeProduct(
                                       "weight " + ind,
@@ -686,7 +713,11 @@ function AddPurchaseBill(props) {
                                   type="number"
                                   name={`rate ${ind}`}
                                   sx={{ width: 100 }}
-                                  value={product[ind - 1]?.rate}
+                                  value={
+                                    product[ind - 1]?.rate
+                                      ? product[ind - 1]?.rate
+                                      : null
+                                  }
                                   onChange={(e) =>
                                     handleChangeProduct(
                                       "rate " + ind,
@@ -731,7 +762,11 @@ function AddPurchaseBill(props) {
                                   type="number"
                                   name={`quantity ${ind}`}
                                   sx={{ width: 70 }}
-                                  value={product[ind - 1]?.quantity}
+                                  value={
+                                    product[ind - 1]?.quantity
+                                      ? product[ind - 1]?.quantity
+                                      : null
+                                  }
                                   onChange={(e) =>
                                     handleChangeProduct(
                                       "quantity " + ind,
