@@ -38,6 +38,7 @@ const CustomerSlice = createSlice({
       } = payload;
       state.CoustomerList = data;
       state.SucessMessage = [];
+      state.ErrorMessage = [];
     },
     [CustomerListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -111,8 +112,11 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SucessMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [CustomerEditDataAction.rejected]: (state, payload) => {
       state.isLoading = false;

@@ -28,20 +28,13 @@ function AddCustomerPage() {
         navigate("/customer_list");
       }, 2000);
     }
-  }, [
-    Customers?.SucessMessage?.message,
-    Customers?.SucessMessage?.statusCode,
-    navigate,
-  ]);
+  }, [Customers?.SucessMessage?.statusCode, navigate]);
   useEffect(() => {
-    if (Customers?.ErrorMessage?.data?.statusCode === 400) {
+    if (Customers?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [
-    Customers?.ErrorMessage?.data?.statusCode,
-    Customers?.ErrorMessage?.data?.message,
-  ]);
-  console.log("Customers", Customers);
+  }, [Customers?.ErrorMessage?.statusCode]);
+  console.log("Customers*(&*(", Customers);
   return (
     <div>
       <Snackbar
@@ -61,7 +54,7 @@ function AddCustomerPage() {
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            {Customers?.ErrorMessage?.data?.message}
+            {Customers?.ErrorMessage?.message}
           </Alert>
         )}
       </Snackbar>

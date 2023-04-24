@@ -63,6 +63,7 @@ export const CustomerEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -70,7 +71,8 @@ export const CustomerEditDataAction = createAsyncThunk(
   "userAction/CustomerEditData",
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-    const Customer_id = localStorage.getItem("Customer_id");
+    const Customer_id = localStorage.getItem("customer_id");
+    console.log("Customer_id*()_", Customer_id);
     try {
       const res = await api.put(`/edit/customers/${Customer_id}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
@@ -78,6 +80,7 @@ export const CustomerEditDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

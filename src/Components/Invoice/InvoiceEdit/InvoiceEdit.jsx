@@ -69,6 +69,12 @@ function InvoiceEdit(props) {
   const [errors, setErrors] = useState({});
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [findErrors, setFindErrors] = useState(null);
+  console.log(
+    "InvoicePageData*)-9",
+    InvoicePageData.isLoading,
+    testData?.productlistdata
+  );
+
   if (EditInvoiceSucessMessage && disabled) {
     setDisabled(false);
   }
@@ -99,7 +105,7 @@ function InvoiceEdit(props) {
     totalweight += sum.weight;
     totalrate += sum.rate;
   });
-  console.log("totalAmount==>", totalAmount, typeof totalAmount);
+  console.log("totalAmount==>", totalAmount, testData?.productlistdata);
   let SGST = totalAmount
     ? ((1.5 / 100) * totalAmount).toFixed(2) === "0.00"
       ? null
@@ -144,11 +150,6 @@ function InvoiceEdit(props) {
     }
     if (existingweight.length > 0 && fieldName === "weight") {
       existingweight.forEach((f) => {
-        console.log(
-          "product()&*",
-          product[index].product_id,
-          product[index]?.product_id
-        );
         product[index].product_id = product[index]?.product_id;
         product[index].quantity = product[index]?.quantity;
         product[index].hsn = product[index]?.hsn;
@@ -221,6 +222,7 @@ function InvoiceEdit(props) {
                   unit: product[index]?.unit || unit_data,
                   weight: product[index]?.weight,
                   rate: product[index]?.rate,
+                  quantity: product[index]?.quantity || 0,
                   amount:
                     product[index]?.weight && product[index]?.rate
                       ? parseFloat(product[index]?.weight) *
@@ -233,16 +235,37 @@ function InvoiceEdit(props) {
             } else {
               setProduct([
                 {
-                  product_id: product[0]?.product_id,
-                  hsn: product[0]?.hsn || hsn_data,
-                  unit: product[0]?.unit || unit_data,
-                  weight: product[0]?.weight,
-                  rate: product[0]?.rate,
+                  product_id: product[0]?.product_id || 0,
+                  hsn: product[0]?.hsn || hsn_data || 0,
+                  unit: product[0]?.unit || unit_data || 0,
+                  weight: product[0]?.weight || 0,
+                  rate: product[0]?.rate || 0,
+                  quantity: product[0]?.quantity || 0,
                   amount:
-                    product[0]?.weight && product[0]?.rate
+                    product[0]?.weight &&
+                    product[0]?.rate &&
+                    product[0]?.quantity
                       ? parseFloat(product[0]?.weight) *
                         parseFloat(product[0]?.rate) *
-                        parseFloat(product[index]?.quantity)
+                        parseFloat(product[0]?.quantity)
+                      : product[0]?.weight &&
+                        product[0]?.rate &&
+                        fieldName === "quantity"
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.rate) *
+                        value
+                      : product[0]?.weight &&
+                        product[0]?.quantity &&
+                        fieldName === "rate"
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.quantity) *
+                        value
+                      : product[0]?.rate &&
+                        product[0]?.quantity &&
+                        fieldName === "weight"
+                      ? parseFloat(product[0]?.quantity) *
+                        parseFloat(product[0]?.rate) *
+                        value
                       : 0,
                   [fieldName]: value,
                 },
@@ -318,7 +341,7 @@ function InvoiceEdit(props) {
 
   return (
     <div>
-      {testData?.productlistdata?.length && addtable ? (
+      {!InvoicePageData.isLoadind ? (
         <Container>
           <Header name={"EditInvoice"} SearchBar={false} />
           <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
@@ -501,7 +524,7 @@ function InvoiceEdit(props) {
                           <TableCell>HSN</TableCell>
                           <TableCell>NET WEIGHT</TableCell>
                           <TableCell>RATE</TableCell>
-                          <TableCell>Per</TableCell>
+                          <TableCell>Par</TableCell>
                           <TableCell>Quantity</TableCell>
                           <TableCell>AMOUNT</TableCell>
                           <TableCell>
@@ -687,7 +710,11 @@ function InvoiceEdit(props) {
                                 defaultValue={
                                   testData?.productlistdata[ind - 1]?.unit
                                 }
-                                value={product[ind - 1]?.unit}
+                                value={
+                                  product[ind - 1]?.unit
+                                    ? product[ind - 1]?.unit
+                                    : ""
+                                }
                                 onChange={(e) =>
                                   handleChangeProduct(
                                     "rate " + ind,
@@ -714,7 +741,11 @@ function InvoiceEdit(props) {
                                 type="number"
                                 name={`quantity ${ind}`}
                                 sx={{ width: 70 }}
-                                value={product[ind - 1]?.quantity}
+                                value={
+                                  product[ind - 1]?.quantity
+                                    ? product[ind - 1]?.quantity
+                                    : ""
+                                }
                                 onChange={(e) =>
                                   handleChangeProduct(
                                     "quantity " + ind,
@@ -728,7 +759,7 @@ function InvoiceEdit(props) {
                                   : ""}
                               </p>
                             </TableCell>
-                            <TableCell colSpan={2}>
+                            <TableCell colSpan={1}>
                               {product.length > ind - 1 ? (
                                 <TextField
                                   id="standard-basic-8"
@@ -819,7 +850,7 @@ function InvoiceEdit(props) {
                             />
                           </TableCell>
                           <TableCell colSpan={2}></TableCell>
-                          <TableCell colSpan={2}>
+                          <TableCell colSpan={1}>
                             <TextField
                               id="standard-basic-02"
                               label="Total Amount"

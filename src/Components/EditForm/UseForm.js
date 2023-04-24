@@ -102,7 +102,11 @@ const useForm = (defaultData, image) => {
     if (Object.keys(errors).length === 0) {
       if (defaultData?.customer_id) {
         dispatch(CustomerEditDataAction(data));
-        localStorage.getItem("customer_id", parseInt(defaultData?.customer_id));
+        console.log(
+          "parseInt(defaultData?.customer_id)",
+          parseInt(defaultData?.customer_id)
+        );
+        localStorage.setItem("customer_id", parseInt(defaultData?.customer_id));
       } else {
         dispatch(CustomerAddAction(data));
       }

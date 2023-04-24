@@ -38,10 +38,9 @@ function AddCustomer() {
       dispatch(CustomerEditAction(id));
     }
   }, [dispatch, id]);
-  console.log("errors", errors);
   return (
     <div>
-      {!CustomerEditData.loder || !id ? (
+      {!CustomerEditData.isLoading || !id ? (
         Customer_data || !id ? (
           <Container fixed>
             <Header
@@ -115,6 +114,8 @@ function AddCustomer() {
                     />
                     <p style={{ color: "red" }}>{errors?.mobile_no}</p>
                     <TextField
+                      error={errors?.email ? true : null}
+                      required
                       name="email"
                       id="outlined-Email"
                       label="Email id"
@@ -122,6 +123,7 @@ function AddCustomer() {
                       onChange={(e) => handleOnchange(e)}
                       defaultValue={id ? Customer_data?.email : ""}
                     />
+                    <p style={{ color: "red" }}>{errors?.email}</p>
                   </Stack>
                 </Box>
                 <br />

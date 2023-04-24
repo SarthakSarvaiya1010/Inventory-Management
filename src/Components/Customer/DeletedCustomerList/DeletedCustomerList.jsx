@@ -25,6 +25,8 @@ function DeletedCustomerList() {
 
   const CustomerData = useSelector((state) => state?.CustomerList);
 
+  console.log("CustomerData", CustomerData?.isLoading);
+
   useEffect(() => {
     if (
       CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode === "200"
@@ -131,7 +133,7 @@ function DeletedCustomerList() {
         DialogText={"Are you sure you want to Delete this customer?"}
         finalDelete={finalDelete}
       />
-      {!CustomerData?.Loader ? (
+      {!CustomerData?.isLoading ? (
         CustomerData?.customerDeletedList?.length ? (
           <Container fixed>
             <Header

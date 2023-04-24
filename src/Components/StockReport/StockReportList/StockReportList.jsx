@@ -20,7 +20,7 @@ function StockReportList() {
 
   const TaxData = useSelector((state) => state?.TaxData);
   const StockReport = useSelector((state) => state?.StockReport);
-  console.log("StockReport(&*(^&", StockReport?.Stock);
+  console.log("StockReport(&*(^&", StockReport);
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
@@ -127,7 +127,7 @@ function StockReportList() {
         DialogText={"Are you sure you want to Delete this Tax?"}
         finalDelete={finalDelete}
       />
-      {StockReport?.Stock.length ? (
+      {!StockReport?.isLoading ? (
         <Container fixed>
           <Header
             name={"Stock List"}
