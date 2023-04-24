@@ -338,6 +338,8 @@ function AddInvoice(props) {
     product,
     addtable,
   ]);
+
+  console.log("CustomerListData", CustomerListData);
   console.log("product)*()&*", product, product[0]?.unit);
   return (
     <div>
@@ -436,7 +438,8 @@ function AddInvoice(props) {
                           multiline
                           sx={{ width: 1 }}
                           value={
-                            CustomerListData?.address === ""
+                            CustomerListData?.address === "" ||
+                            !CustomerListData?.address
                               ? ""
                               : CustomerListData?.address
                           }
@@ -450,11 +453,12 @@ function AddInvoice(props) {
                           label="Customer Gst No"
                           variant="standard"
                           sx={{ width: 1 }}
-                          // value={
-                          //   CustomerListData?.tin_no === ""
-                          //     ? ""
-                          //     : CustomerListData?.tin_no
-                          // }
+                          value={
+                            CustomerListData?.tin_no === "" ||
+                            !CustomerListData?.tin_no
+                              ? ""
+                              : CustomerListData?.tin_no
+                          }
                         />
                         <br />
                         <br />
@@ -464,10 +468,14 @@ function AddInvoice(props) {
                           id="standard-basic-2"
                           label="Name "
                           variant="standard"
-                          value={CustomerListData?.customer_name}
+                          value={
+                            CustomerListData?.customer_name === "" ||
+                            !CustomerListData?.customer_name
+                              ? ""
+                              : CustomerListData?.customer_name
+                          }
                           sx={{ width: 1 }}
                           name="Customer_Name"
-                          onChange={(e) => handleChange(e)}
                         />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_name}
