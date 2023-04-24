@@ -41,7 +41,7 @@ export function CustomerValidate(values, data) {
     errors.address = "Adress is  required";
   }
   if (!values?.email) {
-    errors.email = "Email id is missing";
+    errors.email = "Email id is required";
   } else if (!/\S+@\S+\.\S+/.test(values?.email)) {
     errors.email = "Email address is invalid";
   }

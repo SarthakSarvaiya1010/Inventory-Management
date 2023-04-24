@@ -162,7 +162,7 @@ function AddProduct() {
                   <br />
                   <TextField
                     name="quantity"
-                    error={errors?.weight ? true : null}
+                    error={errors?.quantity ? true : null}
                     required
                     type="number"
                     label="Quantity "

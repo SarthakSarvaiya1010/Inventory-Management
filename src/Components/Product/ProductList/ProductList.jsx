@@ -131,7 +131,7 @@ function ProductList() {
         DialogText={"Are you sure you want to Delete this Product?"}
         finalDelete={finalDelete}
       />
-      {products?.length ? (
+      {!productData.isLoading ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header
             name={"Product List"}
