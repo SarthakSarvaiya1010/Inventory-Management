@@ -37,13 +37,13 @@ import {
   UpdatePurchaseData,
   GetPurchaseEditDataAction,
 } from "../../../Redux/PurchaseBillRedux/PurchaseBillThank";
-import { InvoiceValidate } from "../../Invoice/InvoiceFormValidation";
+// import { InvoiceValidate } from "../../Invoice/InvoiceFormValidation";
 import { convert } from "../../../Helpers/misc";
 import { ToWords } from "to-words";
 import { Transition } from "../../../Helpers/BootstrapButton/BootstrapButton";
 import QuickAddCustomer from "../../Customer/QuickAddCustomer/QuickAddCustomer";
 import { useParams } from "react-router";
-import { InvoiceEditValidate } from "../../Invoice/InvoiceFormValidation";
+import { PurcharsEditValidate } from "../../Invoice/InvoiceFormValidation";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -68,7 +68,7 @@ function EditPurchaseBill(props) {
 
   const [CustomerListData, setCustomerListData] = useState();
   const [dateData, setDateData] = useState();
-  const [addtable, setAddTable] = useState(0);
+  const [addtable, setAddTable] = useState();
   const [product, setProduct] = useState([]);
   const [open, setOpen] = useState(null);
   const [discount, setDiscount] = useState();
@@ -111,6 +111,7 @@ function EditPurchaseBill(props) {
     let existingweight = product.filter((ans) => ans?.weight);
     let existingrate = product.filter((ans) => ans?.rate);
     let existingProduct = product.filter((ans) => ans?.product_id);
+    let existingquantity = product.filter((ans) => ans?.quantity);
     let hsn_data;
     let unit_data;
     if (fieldName === "product_id") {
@@ -128,26 +129,36 @@ function EditPurchaseBill(props) {
     if (existingweight.length > 0 && fieldName === "weight") {
       existingweight.forEach((f) => {
         product[index].product_id = product[index]?.product_id;
+        product[index].quantity = product[index]?.quantity;
         product[index].hsn = product[index]?.hsn;
         product[index].weight = value;
         product[index].rate = product[index]?.rate;
         product[index].amount =
           value && product[index]?.rate
-            ? parseFloat(value) * parseFloat(product[index]?.rate)
-            : parseFloat(value) * parseFloat(product[index]?.rate);
+            ? parseFloat(value) *
+              parseFloat(product[index]?.rate) *
+              parseFloat(product[index]?.quantity)
+            : parseFloat(value) *
+              parseFloat(product[index]?.rate) *
+              parseFloat(product[index]?.quantity);
       });
       setProduct([...product]);
     } else {
       if (existingrate.length > 0 && fieldName === "rate") {
         existingrate.forEach((f) => {
           product[index].product_id = product[index]?.product_id;
+          product[index].quantity = product[index]?.quantity;
           product[index].hsn = product[index]?.hsn;
           product[index].weight = product[index]?.weight;
           product[index].rate = value;
           product[index].amount =
             value && product[index]?.weight
-              ? parseFloat(product[index]?.weight) * parseFloat(value)
-              : parseFloat(product[index]?.weight) * parseFloat(value);
+              ? parseFloat(product[index]?.weight) *
+                parseFloat(value) *
+                parseFloat(product[index]?.quantity)
+              : parseFloat(product[index]?.weight) *
+                parseFloat(value) *
+                parseFloat(product[index]?.quantity);
         });
         setProduct([...product]);
       } else {
@@ -155,45 +166,89 @@ function EditPurchaseBill(props) {
           existingProduct.forEach((f) => {
             product[index].product_id = value;
             product[index].hsn = hsn_data;
+            product[index].quantity = product[index]?.quantity;
             product[index].unit = unit_data;
             product[index].weight = product[index]?.weight;
             product[index].rate = product[index]?.rate;
           });
           setProduct([...product]);
         } else {
-          if (addtable > 1) {
-            setProduct([
-              ...product,
-              {
-                product_id: product[index]?.product_id,
-                hsn: product[index]?.hsn || hsn_data,
-                unit: product[index]?.unit || unit_data,
-                weight: product[index]?.weight,
-                rate: product[index]?.rate,
-                amount:
-                  product[index]?.weight && product[index]?.rate
-                    ? parseFloat(product[index]?.weight) *
-                      parseFloat(product[index]?.rate)
-                    : 0,
-                [fieldName]: value,
-              },
-            ]);
+          if (existingquantity.length > 0 && fieldName === "quantity") {
+            existingquantity.forEach((f) => {
+              product[index].product_id = product[index]?.product_id;
+              product[index].hsn = product[index]?.hsn;
+              product[index].weight = product[index]?.weight;
+              product[index].rate = product[index]?.rate;
+              product[index].quantity = value;
+              product[index].amount =
+                value && product[index]?.quantity
+                  ? parseFloat(product[index]?.weight) *
+                    parseFloat(value) *
+                    parseFloat(product[index]?.rate)
+                  : parseFloat(product[index]?.weight) *
+                    parseFloat(value) *
+                    parseFloat(product[index]?.rate);
+            });
+            setProduct([...product]);
           } else {
-            setProduct([
-              {
-                product_id: product[0]?.product_id,
-                hsn: product[0]?.hsn || hsn_data,
-                unit: product[0]?.unit || unit_data,
-                weight: product[0]?.weight,
-                rate: product[0]?.rate,
-                amount:
-                  product[0]?.weight && product[0]?.rate
-                    ? parseFloat(product[0]?.weight) *
-                      parseFloat(product[0]?.rate)
-                    : 0,
-                [fieldName]: value,
-              },
-            ]);
+            if (addtable > 1) {
+              setProduct([
+                ...product,
+                {
+                  product_id: product[index]?.product_id,
+                  hsn: product[index]?.hsn || hsn_data,
+                  unit: product[index]?.unit || unit_data,
+                  weight: product[index]?.weight,
+                  rate: product[index]?.rate,
+                  quantity: product[index]?.quantity || 0,
+                  amount:
+                    product[index]?.weight && product[index]?.rate
+                      ? parseFloat(product[index]?.weight) *
+                        parseFloat(product[index]?.rate) *
+                        parseFloat(product[index]?.quantity)
+                      : 0,
+                  [fieldName]: value,
+                },
+              ]);
+            } else {
+              setProduct([
+                {
+                  product_id: product[0]?.product_id || 0,
+                  hsn: product[0]?.hsn || hsn_data || 0,
+                  unit: product[0]?.unit || unit_data || 0,
+                  weight: product[0]?.weight || 0,
+                  rate: product[0]?.rate || 0,
+                  quantity: product[0]?.quantity || 0,
+                  amount:
+                    product[0]?.weight &&
+                    product[0]?.rate &&
+                    product[0]?.quantity
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.rate) *
+                        parseFloat(product[0]?.quantity)
+                      : product[0]?.weight &&
+                        product[0]?.rate &&
+                        fieldName === "quantity"
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.rate) *
+                        value
+                      : product[0]?.weight &&
+                        product[0]?.quantity &&
+                        fieldName === "rate"
+                      ? parseFloat(product[0]?.weight) *
+                        parseFloat(product[0]?.quantity) *
+                        value
+                      : product[0]?.rate &&
+                        product[0]?.quantity &&
+                        fieldName === "weight"
+                      ? parseFloat(product[0]?.quantity) *
+                        parseFloat(product[0]?.rate) *
+                        value
+                      : 0,
+                  [fieldName]: value,
+                },
+              ]);
+            }
           }
         }
       }
@@ -230,7 +285,7 @@ function EditPurchaseBill(props) {
     bill_no: testData?.bill_no,
     purchase_date: convert(dateData ? dateData : testData?.purchase_date),
     customer_id: CustomerListData
-      ? CustomerListData.customer_id
+      ? CustomerListData?.customer_id
       : testData?.customer_id,
     taxable_amount: totalAmount
       ? parseFloat(totalAmount.toFixed(2))
@@ -250,22 +305,29 @@ function EditPurchaseBill(props) {
     setPayment(value);
   };
 
-  console.log("UpdatedData", UpdatedData);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  let finalinvoicedata;
+
   const handleUpdate = () => {
     const invoice_id = testData?.purchase_id;
     setFindErrors(true);
-    setErrors(InvoiceEditValidate(UpdatedData, addtable));
+    setErrors(PurcharsEditValidate(UpdatedData, addtable));
     window.scroll(0, 0);
+    console.log(
+      UpdatedData.purchase_date,
+      testData,
+      "test()*()",
+      Object.keys(errors).length === 0,
+      errors,
+      UpdatedData?.customer_id,
+      UpdatedData?.productdata?.length > 0
+    );
     if (
       Object.keys(errors).length === 0 &&
       UpdatedData?.customer_id &&
       UpdatedData?.productdata?.length > 0
     ) {
-      console.log("UpdatedData", UpdatedData);
       localStorage.setItem("purchaseId", invoice_id);
-      console.log("invoice_id", invoice_id);
+
       dispatch(UpdatePurchaseData(UpdatedData));
 
       if (UpdatedData) {
@@ -273,6 +335,11 @@ function EditPurchaseBill(props) {
       }
     }
   };
+  useEffect(() => {
+    setErrors(PurcharsEditValidate(UpdatedData, addtable));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [findErrors, CustomerListData?.customer_id, product]);
+
   const handleChangeDate = (event) => {
     console.log(event.$d);
     setDateData(event.$d);
@@ -290,30 +357,6 @@ function EditPurchaseBill(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testData?.discount, testData?.productlistdata?.length]);
 
-  useEffect(() => {
-    if (findErrors) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      finalinvoicedata = {
-        bill_no: testData[0]?.bill_no,
-        purchase_date: convert(dateData ? dateData : testData?.purchase_date),
-        customer_id: CustomerListData ? CustomerListData?.customer_id : "",
-        taxable_amount: totalAmount ? totalAmount.toFixed(2) : 0,
-        sgst: parseFloat(SGST),
-        cgst: parseFloat(CGST),
-        discount: parseFloat(discount) ? parseFloat(discount) : 0,
-        bill_amount: parseFloat(Bill_Amount.toFixed(2)),
-        productdata: product,
-      };
-      setErrors(InvoiceValidate(finalinvoicedata, addtable));
-    }
-  }, [
-    findErrors,
-    finalinvoicedata,
-    CustomerListData?.customer_id,
-    product,
-    addtable,
-  ]);
-  console.log("testData?.productlistdata?.length && addtable", testData);
   return (
     <div>
       {testData?.productlistdata?.length && addtable ? (
@@ -399,6 +442,7 @@ function EditPurchaseBill(props) {
                           label="Mobile_no*"
                           name="customer_mobileNo"
                           defaultValue={testData?.customer_id}
+                          disabled
                         >
                           <MenuItem value={null}>
                             <em>None</em>
@@ -425,7 +469,8 @@ function EditPurchaseBill(props) {
                           multiline
                           sx={{ width: 1 }}
                           defaultValue={testData?.customer_address}
-                          value={CustomerListData?.address}
+                          value={CustomerListData?.address || null}
+                          disabled
                         />
                         <br />
                         <p style={{ color: "red", margin: 0 }}>
@@ -437,11 +482,13 @@ function EditPurchaseBill(props) {
                           label="Customer Gst No"
                           variant="standard"
                           sx={{ width: 1 }}
-                          // value={
-                          //   CustomerListData?.tin_no === ""
-                          //     ? ""
-                          //     : CustomerListData?.tin_no
-                          // }
+                          value={
+                            CustomerListData?.tin_no === "" ||
+                            !CustomerListData?.tin_no
+                              ? ""
+                              : CustomerListData?.tin_no
+                          }
+                          disabled
                         />
                         <br />
                         <br />
@@ -455,7 +502,7 @@ function EditPurchaseBill(props) {
                           value={CustomerListData?.customer_name}
                           sx={{ width: 1 }}
                           name="Customer_Name"
-                          onChange={(e) => handleChange(e)}
+                          disabled
                         />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_name}
@@ -475,7 +522,7 @@ function EditPurchaseBill(props) {
                         value={testData?.bill_no || testData[0]?.bill_no || 0}
                         sx={{ width: 1 }}
                         name="bill_no"
-                        onChange={(e) => handleChange(e)}
+                        disabled
                       />
                       <br />
                       <TextField
@@ -485,7 +532,7 @@ function EditPurchaseBill(props) {
                         value={testData?.bill_no || testData[0]?.bill_no || 0}
                         sx={{ width: 1 }}
                         name="challan_no"
-                        onChange={(e) => handleChange(e)}
+                        disabled
                       />
                       <br />
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -496,6 +543,7 @@ function EditPurchaseBill(props) {
                           name="date"
                           onChange={(e) => handleChangeDate(e)}
                           renderInput={(params) => <TextField {...params} />}
+                          disabled
                         />
                       </LocalizationProvider>
                       <br />
@@ -506,7 +554,7 @@ function EditPurchaseBill(props) {
                         sx={{ width: 1 }}
                         name="Gst_No"
                         value={"24BWOPP9863M2ZF"}
-                        // onChange={(e) => handleChange(e)}
+                        disabled
                       />
                     </Stack>
                   </Item>
@@ -516,7 +564,7 @@ function EditPurchaseBill(props) {
                     <Table aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell>SR_NO</TableCell>
+                          <TableCell>SR NO</TableCell>
                           <TableCell>ITEM DESCIPTION</TableCell>
                           <TableCell>HSN</TableCell>
                           <TableCell>NET WEIGHT</TableCell>
@@ -571,7 +619,7 @@ function EditPurchaseBill(props) {
                               <TableCell>
                                 <FormControl
                                   variant="standard"
-                                  sx={{ width: 240 }}
+                                  sx={{ width: 200 }}
                                 >
                                   <InputLabel id="demo-simple-select-standard-label">
                                     Select Product
@@ -602,6 +650,11 @@ function EditPurchaseBill(props) {
                                       )
                                     }
                                     label="Select Product"
+                                    disabled={
+                                      testData?.productlistdata?.length >= ind
+                                        ? true
+                                        : false
+                                    }
                                   >
                                     <MenuItem value="">
                                       <em>None</em>
@@ -632,6 +685,9 @@ function EditPurchaseBill(props) {
                                   label="Hsn"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   defaultValue={
                                     testData?.productlistdata[ind - 1]?.hsn || 0
                                   }
@@ -641,6 +697,11 @@ function EditPurchaseBill(props) {
                                       : null
                                   }
                                   sx={{ width: 70 }}
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
                                 />
                               </TableCell>
                               <TableCell>
@@ -660,14 +721,22 @@ function EditPurchaseBill(props) {
                                     testData?.productlistdata[ind - 1]?.weight
                                   }
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   value={product[ind - 1]?.weight}
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
                                   onChange={(e) =>
                                     handleChangeProduct(
                                       "weight " + ind,
                                       parseFloat(e.target.value)
                                     )
                                   }
-                                  sx={{ w: 40 }}
+                                  sx={{ width: 80 }}
                                 />
                                 <p style={{ color: "red", margin: 0 }}>
                                   {!product[ind - 1]?.weight
@@ -688,8 +757,16 @@ function EditPurchaseBill(props) {
                                   label="Rate"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
                                   name={`rate ${ind}`}
-                                  sx={{ width: 100 }}
+                                  sx={{ width: 80 }}
                                   value={product[ind - 1]?.rate}
                                   defaultValue={
                                     testData?.productlistdata[ind - 1]?.rate
@@ -710,6 +787,11 @@ function EditPurchaseBill(props) {
                                   id="standard-basic-17"
                                   label="Per"
                                   variant="standard"
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
                                   name={`unit ${ind}`}
                                   sx={{ width: 70 }}
                                   value={
@@ -726,7 +808,7 @@ function EditPurchaseBill(props) {
                                   {!product[ind - 1]?.unit ? errors?.unit : ""}
                                 </p>
                               </TableCell>
-                              {/* <TableCell>
+                              <TableCell>
                                 <TextField
                                   error={
                                     !product[ind - 1]?.rate
@@ -739,8 +821,16 @@ function EditPurchaseBill(props) {
                                   label="Quantity"
                                   variant="standard"
                                   type="number"
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   name={`quantity ${ind}`}
-                                  sx={{ width: 100 }}
+                                  sx={{ width: 80 }}
                                   value={product[ind - 1]?.quantity}
                                   onChange={(e) =>
                                     handleChangeProduct(
@@ -754,7 +844,7 @@ function EditPurchaseBill(props) {
                                     ? errors?.quantity
                                     : ""}
                                 </p>
-                              </TableCell> */}
+                              </TableCell>
                               <TableCell colSpan={1}>
                                 {product.length > ind - 1 ? (
                                   <TextField
@@ -768,7 +858,12 @@ function EditPurchaseBill(props) {
                                     id="standard-basic-8"
                                     label="Amount"
                                     variant="standard"
-                                    sx={{ width: 100 }}
+                                    disabled={
+                                      testData?.productlistdata?.length >= ind
+                                        ? true
+                                        : false
+                                    }
+                                    sx={{ width: 80 }}
                                     defaultValue={
                                       testData?.productlistdata[ind - 1]
                                         ?.amount || 0
@@ -790,8 +885,13 @@ function EditPurchaseBill(props) {
                                     }
                                     id="standard-basic-8"
                                     label="Amount"
+                                    disabled={
+                                      testData?.productlistdata?.length >= ind
+                                        ? true
+                                        : false
+                                    }
                                     variant="standard"
-                                    sx={{ width: 100, p: 0 }}
+                                    sx={{ width: 80, p: 0 }}
                                     defaultValue={
                                       testData?.productlistdata[ind - 1]
                                         ?.amount || 0
@@ -811,7 +911,7 @@ function EditPurchaseBill(props) {
                                 </p>
                               </TableCell>
                               <TableCell>
-                                {i > 0 ? (
+                                {ind > testData?.productlistdata?.length ? (
                                   <Button
                                     variant="outlined"
                                     color="error"
@@ -840,7 +940,7 @@ function EditPurchaseBill(props) {
                               label="Total weight"
                               variant="standard"
                               value={totalweight ? totalweight.toFixed(2) : 0}
-                              sx={{ width: 100 }}
+                              sx={{ width: 80 }}
                             />
                           </TableCell>
                           <TableCell colSpan={1}>
@@ -848,10 +948,11 @@ function EditPurchaseBill(props) {
                               id="standard-basic-01"
                               label="Total rate"
                               variant="standard"
-                              sx={{ width: 100 }}
+                              sx={{ width: 80 }}
                               value={totalrate ? totalrate.toFixed(2) : 0}
                             />
                           </TableCell>
+                          <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}></TableCell>
                           <TableCell colSpan={1}>
                             <TextField
@@ -859,7 +960,7 @@ function EditPurchaseBill(props) {
                               label="Total Amount"
                               variant="standard"
                               defaultValue={0}
-                              sx={{ width: 120 }}
+                              sx={{ width: 100 }}
                               value={totalAmount?.toFixed(2)}
                             />
                           </TableCell>

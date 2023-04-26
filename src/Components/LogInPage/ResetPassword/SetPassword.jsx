@@ -147,7 +147,7 @@ function SetPassword() {
             aria-describedby="alert-dialog-slide-description"
           >
             <DialogContent>
-              <ToastContainer />
+              <ToastContainer limit={1} />
               <Stack
                 direction="row"
                 justifyContent="center"

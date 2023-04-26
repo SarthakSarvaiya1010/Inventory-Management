@@ -23,7 +23,6 @@ function InvoiceList() {
   const dispatch = useDispatch();
 
   const InvoiceData = useSelector((state) => state?.InvoiceData);
-  console.log("InvoiceData", InvoiceData);
   let limit = 4;
   const [open, setOpen] = useState(false);
   const data = [];
@@ -213,7 +212,7 @@ function InvoiceList() {
         finalDelete={finalDelete}
       />
 
-      {InvoiceData?.invoiceList?.length ? (
+      {!InvoiceData?.isLoading ? (
         <Container fixed>
           <Header
             name={"InvoiceList"}
@@ -255,16 +254,21 @@ function InvoiceList() {
                 view deleted invoice
               </Button>
             </Stack>
-
-            <Table
-              data={data}
-              headalEdit={headalEdit}
-              headalDelete={setOpen}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
-              printIcon={true}
-              headalPrint={headalPrint}
-            />
+            {InvoiceData?.invoiceList?.length ? (
+              <Table
+                data={data}
+                headalEdit={headalEdit}
+                headalDelete={setOpen}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+                printIcon={true}
+                headalPrint={headalPrint}
+              />
+            ) : (
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of search Invoice
+              </h1>
+            )}
             <Stack
               sx={{
                 margin: "10px",

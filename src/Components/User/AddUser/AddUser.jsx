@@ -113,6 +113,7 @@ function AddUser() {
                     autoComplete="off"
                     defaultValue={id ? User_data?.name : ""}
                     onChange={(e) => handleOnchange(e)}
+                    value={values?.name}
                   />
                   <p style={{ color: "red" }}>{errors?.name}</p>
                   <br />
@@ -120,6 +121,9 @@ function AddUser() {
                     error={errors?.mobile_no ? true : null}
                     required
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     name="mobile_no"
                     label="Mobile No"
                     defaultValue={id ? User_data.mobile_no : ""}
@@ -164,6 +168,7 @@ function AddUser() {
                       native: true,
                     }}
                     onChange={(e) => handleOnchange(e)}
+                    value={values?.role_id}
                   >
                     <option>Select The Role </option>
                     {Role?.map((option) => (
@@ -197,11 +202,12 @@ function AddUser() {
                     type="text"
                     defaultValue={id ? User_data.email : ""}
                     onChange={(e) => handleOnchange(e)}
+                    value={values?.email}
                   />
                   <p style={{ color: "red" }}>{errors?.email}</p>
                   <br />
                   <TextField
-                    error={errors?.hsn ? true : null}
+                    error={errors?.password ? true : null}
                     required
                     type="password"
                     name="password"
@@ -209,12 +215,12 @@ function AddUser() {
                     defaultValue={id ? User_data.password : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
-                    value={values?.hsn}
+                    value={values?.password}
                     autoComplete="off"
                   />
                   <br />
                   <TextField
-                    error={errors?.hsn ? true : null}
+                    error={errors?.confrom_password ? true : null}
                     required
                     type="password"
                     name="confrom_password"
@@ -225,7 +231,7 @@ function AddUser() {
                     value={values?.confrom_password}
                     autoComplete="off"
                   />
-                  <p style={{ color: "red" }}>{errors?.hsn}</p>
+                  <p style={{ color: "red" }}>{errors?.confrom_password}</p>
                   <br />
                   <img
                     alt=""
@@ -302,7 +308,7 @@ function AddUser() {
               </Stack>
               <br />
             </DialogContent>
-            <ToastContainer />
+            <ToastContainer limit={1} />
           </Container>
         </Container>
       ) : (

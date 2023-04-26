@@ -91,8 +91,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.InvoicePdf = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.InvoicePdf = data;
+      }
     },
     [AddInvoiceData.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -163,8 +166,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.InvoicePdf = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.InvoicePdf = data;
+      }
     },
     [UpdateInvoiceData.rejected]: (state, payload) => {
       state.isLoading = false;

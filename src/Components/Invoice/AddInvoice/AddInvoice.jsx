@@ -54,7 +54,7 @@ const commonStyles = {
   border: 1,
 };
 function AddInvoice(props) {
-  const { sucessMessage } = props;
+  const { sucessMessage, disabled } = props;
   const dispatch = useDispatch();
   const toWords = new ToWords();
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
@@ -74,10 +74,9 @@ function AddInvoice(props) {
 
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
-  console.log("product()*-", product);
   const [open, setOpen] = useState(null);
   const [discount, setDiscount] = useState();
-  const [disabled, setDisabled] = useState(false);
+
   const [errors, setErrors] = useState({});
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const handleClose = () => {
@@ -87,7 +86,6 @@ function AddInvoice(props) {
   const [findErrors, setFindErrors] = useState(false);
 
   if (sucessMessage && disabled) {
-    setDisabled(false);
     setProduct([]);
     setCustomerListData(null);
   }
@@ -309,9 +307,6 @@ function AddInvoice(props) {
       finalinvoicedata?.productdata?.length > 0
     ) {
       dispatch(AddInvoiceData(finalinvoicedata));
-      if (finalinvoicedata) {
-        setDisabled(true);
-      }
     }
   };
 
@@ -592,7 +587,7 @@ function AddInvoice(props) {
                               <TableCell>
                                 <FormControl
                                   variant="standard"
-                                  sx={{ width: 240 }}
+                                  sx={{ width: 200 }}
                                 >
                                   <InputLabel id="demo-simple-select-standard-label">
                                     Select Product
@@ -649,6 +644,9 @@ function AddInvoice(props) {
                                   label="Hsn"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   value={
                                     product[ind - 1]?.hsn
                                       ? product[ind - 1]?.hsn
@@ -671,6 +669,9 @@ function AddInvoice(props) {
                                   label="Weight"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   value={
                                     product[ind - 1]?.weight
                                       ? product[ind - 1]?.weight
@@ -703,8 +704,11 @@ function AddInvoice(props) {
                                   label="Rate"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   name={`rate ${ind}`}
-                                  sx={{ width: 100 }}
+                                  sx={{ width: 80 }}
                                   value={
                                     product[ind - 1]?.rate
                                       ? product[ind - 1]?.rate
@@ -734,7 +738,7 @@ function AddInvoice(props) {
                                   label="Par"
                                   variant="standard"
                                   name={`unit ${ind}`}
-                                  sx={{ width: 100 }}
+                                  sx={{ width: 80 }}
                                   value={
                                     product[ind - 1]?.unit
                                       ? product[ind - 1]?.unit
@@ -764,8 +768,11 @@ function AddInvoice(props) {
                                   label="Quantity"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   name={`quantity ${ind}`}
-                                  sx={{ width: 70 }}
+                                  sx={{ width: 80 }}
                                   value={
                                     product[ind - 1]?.quantity
                                       ? product[ind - 1]?.quantity
@@ -797,7 +804,7 @@ function AddInvoice(props) {
                                     id="standard-basic-8"
                                     label="Amount"
                                     variant="standard"
-                                    sx={{ width: 100 }}
+                                    sx={{ width: 80 }}
                                     value={
                                       isNaN(
                                         parseFloat(product[ind - 1]?.amount)
@@ -818,7 +825,7 @@ function AddInvoice(props) {
                                     id="standard-basic-8"
                                     label="Amount"
                                     variant="standard"
-                                    sx={{ width: 100, p: 0 }}
+                                    sx={{ width: 80, p: 0 }}
                                     value={
                                       typeof product[ind - 1]?.amount !==
                                       "undefined"
@@ -871,7 +878,7 @@ function AddInvoice(props) {
                               id="standard-basic-01"
                               label="Total rate"
                               variant="standard"
-                              sx={{ width: 100 }}
+                              sx={{ width: 80 }}
                               value={totalrate ? totalrate.toFixed(2) : 0}
                             />
                           </TableCell>
@@ -883,7 +890,7 @@ function AddInvoice(props) {
                               label="Total Amount"
                               variant="standard"
                               defaultValue={0}
-                              sx={{ width: 120 }}
+                              sx={{ width: 80 }}
                               value={
                                 isNaN(parseFloat(totalAmount))
                                   ? 0

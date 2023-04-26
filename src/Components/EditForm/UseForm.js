@@ -42,18 +42,18 @@ const useForm = (defaultData, image) => {
     setFindErrors("ProductError");
     setErrors(ProductValidate(values, defaultData));
     const formAddUserData = new FormData();
-    formAddUserData.append("product_name", values?.product_name);
-    formAddUserData.append("product_type", values?.product_type);
-    formAddUserData.append("description", values?.description);
-    formAddUserData.append("hsn", values?.hsn);
-    formAddUserData.append("unit", values?.unit);
-    formAddUserData.append("weight", values?.weight);
-    formAddUserData.append("quantity", values?.quantity);
-    formAddUserData.append("image_src", image ? image : null);
+    formAddUserData.append("product_name", values?.product_name || "");
+    formAddUserData.append("product_type", values?.product_type || "");
+    formAddUserData.append("description", values?.description || "");
+    formAddUserData.append("hsn", values?.hsn || "");
+    formAddUserData.append("unit", values?.unit || "");
+    formAddUserData.append("weight", values?.weight || "");
+    formAddUserData.append("quantity", values?.quantity || "");
+    formAddUserData.append("image_src", image ? image : "");
     if (Object.keys(errors).length === 0) {
       if (defaultData?.product_id) {
-        dispatch(ProductEditDataAction(formAddUserData));
         localStorage.setItem("product_id", parseInt(defaultData.product_id));
+        dispatch(ProductEditDataAction(formAddUserData));
       } else {
         dispatch(ProductAddAction(formAddUserData));
       }
@@ -76,8 +76,8 @@ const useForm = (defaultData, image) => {
 
     if (Object.keys(errors).length === 0) {
       if (defaultData?.length) {
-        dispatch(CompanyInfoEditAction(formAddUserData));
         localStorage.setItem("company_id", parseInt(defaultData?.company_id));
+        dispatch(CompanyInfoEditAction(formAddUserData));
       } else {
         dispatch(
           AddCompanyInfoAction(
@@ -101,12 +101,8 @@ const useForm = (defaultData, image) => {
     console.log("Object.keys(errors).length", Object.keys(errors).length);
     if (Object.keys(errors).length === 0) {
       if (defaultData?.customer_id) {
-        dispatch(CustomerEditDataAction(data));
-        console.log(
-          "parseInt(defaultData?.customer_id)",
-          parseInt(defaultData?.customer_id)
-        );
         localStorage.setItem("customer_id", parseInt(defaultData?.customer_id));
+        dispatch(CustomerEditDataAction(data));
       } else {
         dispatch(CustomerAddAction(data));
       }
@@ -125,8 +121,8 @@ const useForm = (defaultData, image) => {
       : defaultData?.isactive || "NO";
     if (Object.keys(errors).length === 0) {
       if (defaultData?.tax_id) {
-        dispatch(TaxInfoEditAction(data));
         localStorage.setItem("Tax_id", defaultData?.tax_id);
+        dispatch(TaxInfoEditAction(data));
       } else {
         dispatch(TaxAddAction(data));
       }
@@ -162,7 +158,7 @@ const useForm = (defaultData, image) => {
       setErrors(CustomerValidate(values, defaultData));
     }
     if (findErrors === "TaxError") {
-      setErrors(TaxValidate(values, defaultData));
+      setErrors(TaxValidate(values));
     }
     if (findErrors === "CompanyError") {
       setErrors(CompanyValidate(values));

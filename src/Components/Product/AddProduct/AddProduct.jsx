@@ -61,7 +61,7 @@ function AddProduct() {
     }
     setImage(file);
   };
-
+  console.log("Product_data.quantity", Product_data.quantity);
   return (
     <div>
       {!ProductEditData.isLoading || !id ? (
@@ -96,6 +96,7 @@ function AddProduct() {
                     label="Product Name"
                     autoComplete="off"
                     defaultValue={id ? Product_data?.product_name : ""}
+                    value={values?.product_name}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <p style={{ color: "red" }}>{errors?.product_name}</p>
@@ -107,6 +108,7 @@ function AddProduct() {
                     autoComplete="off"
                     type="textarea"
                     defaultValue={id ? Product_data.description : ""}
+                    value={values?.description}
                     onChange={(e) => handleOnchange(e)}
                   />
                   <br />
@@ -120,6 +122,7 @@ function AddProduct() {
                     SelectProps={{
                       native: true,
                     }}
+                    value={values?.product_type}
                     onChange={(e) => handleOnchange(e)}
                   >
                     <option value={null}>
@@ -144,6 +147,7 @@ function AddProduct() {
                       native: true,
                     }}
                     onChange={(e) => handleOnchange(e)}
+                    value={values?.unit}
                   >
                     <option value={null}>
                       <em>None</em>
@@ -165,6 +169,9 @@ function AddProduct() {
                     error={errors?.quantity ? true : null}
                     required
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     label="Quantity "
                     defaultValue={id ? Product_data.quantity : ""}
                     variant="outlined"
@@ -179,6 +186,9 @@ function AddProduct() {
                     error={errors?.weight ? true : null}
                     required
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     label="Weight"
                     defaultValue={id ? Product_data.weight : ""}
                     variant="outlined"
@@ -192,6 +202,9 @@ function AddProduct() {
                     error={errors?.hsn ? true : null}
                     required
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     name="hsn"
                     label="HSN"
                     defaultValue={id ? Product_data.hsn : ""}
@@ -202,18 +215,6 @@ function AddProduct() {
                   />
                   <p style={{ color: "red" }}>{errors?.hsn}</p>
                   <br />
-                  {/* <TextField
-                    error={errors?.hsn ? true : null}
-                    required
-                    type="number"
-                    name="image_src"
-                    label="image"
-                    defaultValue={id ? Product_data.hsn : ""}
-                    variant="outlined"
-                    onChange={(e) => handleOnchange(e)}
-                    value={values?.hsn}
-                    autoComplete="off"
-                  /> */}
                   <img
                     alt=""
                     ref={uploadedImage}

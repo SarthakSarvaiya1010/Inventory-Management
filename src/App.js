@@ -199,9 +199,10 @@ function App() {
                     // </Protected>
                   }
                 />
-                {route.map((route) => {
+                {route.map((route, index) => {
                   return (
                     <Route
+                      key={index}
                       path={route.path}
                       element={
                         <Protected
@@ -214,9 +215,10 @@ function App() {
                     ></Route>
                   );
                 })}
-                {adminroute.map((route) => {
+                {adminroute.map((route, index) => {
                   return (
                     <Route
+                      key={index}
                       path={route.path}
                       element={
                         <Protected

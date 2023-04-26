@@ -7,14 +7,21 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export default function PositionedSnackbar(props) {
   const { alertMessage, alertErrorMessage, state, setState } = props;
-  
+
   const { vertical, horizontal, open } = state;
-  
+
   const handleClose = () => {
-      setState({ ...state, open: false });
-    };
-    let AlertText = alertMessage ? alertMessage : alertErrorMessage;
-    console.log("AlertText",AlertText,"alertMessage",alertMessage,"alertErrorMessage",alertErrorMessage );
+    setState({ ...state, open: false });
+  };
+  let AlertText = alertMessage ? alertMessage : alertErrorMessage;
+  console.log(
+    "AlertText",
+    AlertText,
+    "alertMessage",
+    alertMessage,
+    "alertErrorMessage",
+    alertErrorMessage
+  );
   return (
     <div>
       <Snackbar

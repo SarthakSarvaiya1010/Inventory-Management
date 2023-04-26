@@ -137,7 +137,7 @@ export default function ViewDeletedInvoiceList() {
         DialogText={"Are you sure you want to Delete this invoice?"}
         finalDelete={finalDelete}
       />
-      {!DeletedInvoiceList?.Loader ? (
+      {!DeletedInvoiceList?.isLoading ? (
         DeletedInvoiceList?.DeletedInvoiceList?.length ? (
           <Container fixed>
             <Header

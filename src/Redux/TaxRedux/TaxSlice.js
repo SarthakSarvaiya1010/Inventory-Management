@@ -50,8 +50,11 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.TaxList = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.TaxEdit = data;
+      }
     },
     [TaxEditAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -68,10 +71,13 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.TaxDeletList = data;
-      state.loder = false;
-      state.DeletedTaxLoader = true;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.TaxDeletList = data;
+        state.loder = false;
+        state.DeletedTaxLoader = true;
+      }
     },
     [TaxDelectListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -88,10 +94,13 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.TaxDeletList = data;
-      state.loder = false;
-      state.DeletedTaxLoader = true;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.TaxDeletList = data;
+        state.loder = false;
+        state.DeletedTaxLoader = true;
+      }
     },
     [TaxDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -129,8 +138,11 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SucessMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [TaxInfoEditAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -147,8 +159,11 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SuccessDeleteTaxMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SuccessDeleteTaxMessage = data;
+      }
     },
     [PermanentTaxDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;

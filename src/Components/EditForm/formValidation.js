@@ -144,3 +144,16 @@ export function UserValidate(values) {
 
   return errors;
 }
+export function BankValidate(values) {
+  console.log("values()*", values);
+  let errors = {};
+
+  if (!values?.bank_name) {
+    errors.bank_name = "Bank name is required";
+  }
+  if (!values?.balance) {
+    errors.balance = "Balance is required";
+  }
+
+  return errors;
+}

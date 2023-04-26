@@ -17,17 +17,15 @@ function TaxList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const TaxData = useSelector((state) => state?.TaxData);
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
-  const [shorting, setShorting] = useState();
+  const [shorting, setShorting] = useState(null);
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
   const [open, setOpen] = useState(false);
   let limit = 4;
   const data = [];
 
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   // eslint-disable-next-line array-callback-return
   TaxData?.TaxList.map((e) => {
     let elements = {};
@@ -45,10 +43,6 @@ function TaxList() {
   };
 
   const headalEdit = (data) => {
-    localStorage.setItem(
-      "NavigateItemName",
-      `/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`
-    );
     navigate(`/tax/edit/${TaxData?.TaxList[data - 1]?.tax_id}`);
   };
 
@@ -68,10 +62,7 @@ function TaxList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        TaxListAction(
-          successLoginData?.LoginData?.accessToken || accessToken?.accessToken,
-          { search: search, limit: limit, pageNumber: pageNumber }
-        )
+        TaxListAction({ search: search, limit: limit, pageNumber: pageNumber })
       );
     }
   };
@@ -118,7 +109,7 @@ function TaxList() {
         return " state";
     }
   };
-
+  console.log("TaxData", TaxData, TaxData?.TaxList.length);
   return (
     <div>
       <DialogBox
@@ -127,7 +118,7 @@ function TaxList() {
         DialogText={"Are you sure you want to Delete this Tax?"}
         finalDelete={finalDelete}
       />
-      {TaxData?.TaxList.length ? (
+      {!TaxData?.isLoading ? (
         <Container fixed>
           <Header
             name={"Tax List"}
@@ -167,13 +158,19 @@ function TaxList() {
                 view deleted Tax
               </Button>
             </Stack>
-            <Table
-              data={data}
-              headalEdit={headalEdit}
-              headalDelete={setOpen}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
-            />
+            {TaxData?.TaxList.length ? (
+              <Table
+                data={data}
+                headalEdit={headalEdit}
+                headalDelete={setOpen}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+              />
+            ) : (
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of search Tax
+              </h1>
+            )}
             <Stack
               sx={{
                 margin: "10px",

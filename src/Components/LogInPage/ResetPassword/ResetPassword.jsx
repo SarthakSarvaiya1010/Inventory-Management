@@ -80,7 +80,7 @@ function ResetPassword() {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogContent>
-          <ToastContainer />
+          <ToastContainer limit={1} />
           <Stack direction="row" justifyContent="center" alignItems="center">
             <DialogTitle>ResetPassword</DialogTitle>
           </Stack>

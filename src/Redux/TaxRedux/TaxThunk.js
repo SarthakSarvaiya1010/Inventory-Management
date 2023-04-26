@@ -20,11 +20,12 @@ export const TaxListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
 export const TaxEditAction = createAsyncThunk(
-  "userAction/TaxList",
+  "userAction/TaxEditAction",
   async (Tax_id, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -34,6 +35,7 @@ export const TaxEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -48,6 +50,7 @@ export const TaxDelectListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -62,6 +65,7 @@ export const TaxDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -85,6 +89,7 @@ export const TaxInfoEditAction = createAsyncThunk(
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const Tax_id = localStorage.getItem("Tax_id");
+    console.log("Tax_id", Tax_id);
     try {
       const res = await api.put(`/edit/tax/${Tax_id}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
@@ -92,6 +97,7 @@ export const TaxInfoEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -106,6 +112,7 @@ export const PermanentTaxDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

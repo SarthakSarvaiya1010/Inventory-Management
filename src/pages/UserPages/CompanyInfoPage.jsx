@@ -32,7 +32,8 @@ function CompanyInfoPage() {
   }, [CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode, navigate]);
   useEffect(() => {
     if (
-      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode === 400
+      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode ===
+      "400"
     ) {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }

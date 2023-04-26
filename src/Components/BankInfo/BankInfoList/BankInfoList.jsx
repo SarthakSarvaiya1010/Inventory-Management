@@ -123,114 +123,74 @@ function BankInfoList() {
         finalDelete={finalDelete}
       />
       {!BankInfoData?.isLoading ? (
-        BankInfoData?.BankInfoList?.length ? (
-          <Container fixed sx={{ Width: 100 }}>
-            <Header
-              name={"Bank Info List"}
-              SearchBar={true}
-              searchHeadal={searchHeadal}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
-              >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/addbank");
-                  }}
-                >
-                  add bank
-                </Button>
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/updatebalance");
-                  }}
-                >
-                  Update Bank Balance
-                </Button>
-              </Stack>
-              {BankInfoData?.BankInfoList?.length ? (
-                <Table
-                  data={data}
-                  headalEdit={headalEdit}
-                  headalDelete={headalDelete}
-                  headalShorting={headalShorting}
-                  ShortingHide={shortingIcon}
-                />
-              ) : (
-                <Stack
-                  sx={{ color: "grey.500", height: "80vh" }}
-                  spacing={2}
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <CircularProgress color="success" size="5rem" />
-                </Stack>
-              )}
-              <Stack
-                sx={{
-                  margin: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  padding: "20px  0 20px 20px",
+        <Container fixed sx={{ Width: 100 }}>
+          <Header
+            name={"Bank Info List"}
+            SearchBar={true}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
+          <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              spacing={4}
+              sx={{ p: 4 }}
+            >
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/addbank");
                 }}
               >
-                <UsePagination
-                  countNumbuer={Math.ceil(
-                    BankInfoData?.BankInfoList[0]?.total_count / limit
-                  )}
-                  PageNumber={setPageNumber}
-                  currentPage={pageNumber}
-                />
-              </Stack>
-            </Container>
-          </Container>
-        ) : (
-          <Container fixed>
-            <Header
-              name={"Deleted Tax List"}
-              SearchBar={false}
-              searchHeadal={searchHeadal}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
+                add bank
+              </Button>
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/updatebalance");
+                }}
               >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/addbank");
-                  }}
-                >
-                  add bank
-                </Button>
-              </Stack>
-              <h1 style={{ color: "red", textAlign: "center", padding: "5px" }}>
-                No Any Record OF bank Info
+                Update Bank Balance
+              </Button>
+            </Stack>
+            {BankInfoData?.BankInfoList?.length ? (
+              <Table
+                data={data}
+                headalEdit={headalEdit}
+                headalDelete={headalDelete}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+              />
+            ) : (
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of search Bank
               </h1>
-            </Container>
+            )}
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  BankInfoData?.BankInfoList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+                currentPage={pageNumber}
+              />
+            </Stack>
           </Container>
-        )
+        </Container>
       ) : (
         <Stack
           sx={{ color: "grey.500", height: "80vh" }}

@@ -32,7 +32,7 @@ function AddCustomer() {
   const handleCancle = () => {
     navigate("/customer_list");
   };
-
+  console.log("values)(*", values);
   useEffect(() => {
     if (id) {
       dispatch(CustomerEditAction(id));
@@ -71,7 +71,8 @@ function AddCustomer() {
                       id="outlined-Product"
                       label="Customer Name"
                       autoComplete="off"
-                      defaultValue={id ? Customer_data?.customer_name : ""}
+                      defaultValue={id ? Customer_data?.customer_name : null}
+                      value={values?.customer_name}
                       onChange={(e) => handleOnchange(e)}
                     />
                     <p style={{ color: "red" }}>{errors?.customer_name}</p>
@@ -85,7 +86,8 @@ function AddCustomer() {
                       autoComplete="off"
                       type="textarea"
                       onChange={(e) => handleOnchange(e)}
-                      defaultValue={id ? Customer_data?.address : ""}
+                      value={values?.address}
+                      defaultValue={id ? Customer_data?.address : null}
                     />
                     <p style={{ color: "red" }}>{errors?.address}</p>
                     <br />
@@ -95,22 +97,25 @@ function AddCustomer() {
                       label="customer Tin No"
                       variant="outlined"
                       onChange={(e) => handleOnchange(e)}
-                      value={values?.weight}
+                      value={values?.tin_no}
                       autoComplete="off"
-                      defaultValue={id ? Customer_data?.tin_no : ""}
+                      defaultValue={id ? Customer_data?.tin_no : null}
                     />
                     <br />
                     <TextField
                       error={errors?.mobile_no ? true : null}
                       required
                       type="number"
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                       name="mobile_no"
                       label="Mobile No"
                       variant="outlined"
                       onChange={(e) => handleOnchange(e)}
-                      value={values?.hsn}
+                      value={values?.mobile_no}
                       autoComplete="off"
-                      defaultValue={id ? Customer_data?.mobile_no : ""}
+                      defaultValue={id ? Customer_data?.mobile_no : null}
                     />
                     <p style={{ color: "red" }}>{errors?.mobile_no}</p>
                     <TextField
@@ -121,7 +126,8 @@ function AddCustomer() {
                       label="Email id"
                       autoComplete="off"
                       onChange={(e) => handleOnchange(e)}
-                      defaultValue={id ? Customer_data?.email : ""}
+                      value={values?.email}
+                      defaultValue={id ? Customer_data?.email : null}
                     />
                     <p style={{ color: "red" }}>{errors?.email}</p>
                   </Stack>

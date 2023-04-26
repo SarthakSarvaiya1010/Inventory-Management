@@ -35,7 +35,7 @@ function PurchaseBillList() {
   const [CustomerListData, setCustomerListData] = useState();
   const PurchaseData = useSelector((state) => state?.PurchaseData);
   const CustomerData = useSelector((state) => state?.CustomerList);
-  console.log("CustomerData", CustomerData.customerName);
+
   let limit = 4;
   const [open, setOpen] = useState(false);
   const data = [];
@@ -59,7 +59,6 @@ function PurchaseBillList() {
   });
 
   const headalPayment = (data) => {
-    console.log("(*&&*(^()", data);
     navigate(
       `/paymentmode/${PurchaseData.PurchaseBillList[data - 1]?.purchase_id}`
     );
@@ -183,89 +182,104 @@ function PurchaseBillList() {
         finalDelete={finalDelete}
       />
       {!PurchaseData?.isLoading ? (
-        PurchaseData?.PurchaseBillList?.length ? (
-          <Container fixed>
-            <Header
-              name={"PurchaseBill List"}
-              SearchBar={true}
-              searchHeadal={searchHeadal}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
+        <Container fixed>
+          <Header
+            name={"PurchaseBill List"}
+            SearchBar={true}
+            searchHeadal={searchHeadal}
+            onKeyDown={onKeyDown}
+          />
+          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              spacing={4}
+              sx={{ p: 4 }}
+            >
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/addpurchasebill");
+                }}
               >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/addpurchasebill");
-                  }}
-                >
-                  add Purchase Bill
-                </Button>
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/viewdeletedpurchase");
-                  }}
-                >
-                  view deleted Purchase Bill
-                </Button>
-              </Stack>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 2 }}
+                add Purchase Bill
+              </Button>
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/viewdeletedpurchase");
+                }}
               >
-                <FormControl variant="standard" sx={{ width: 240 }}>
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Customer Name
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard-01"
-                    onChange={(e) => handleChange(e)}
-                    label="Customer Name"
-                    name="customer_mobileNo"
-                    value={customer_data}
-                    sx={{ width: 200 }}
-                  >
-                    <MenuItem value={null}>
-                      <em>None</em>
-                    </MenuItem>
+                view deleted Purchase Bill
+              </Button>
+            </Stack>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              spacing={4}
+              sx={{ p: 2 }}
+            >
+              <FormControl variant="standard" sx={{ width: 240 }}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Customer Name
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard-01"
+                  onChange={(e) => handleChange(e)}
+                  label="Customer Name"
+                  name="customer_mobileNo"
+                  value={customer_data}
+                  sx={{ width: 200 }}
+                >
+                  <MenuItem value={null}>
+                    <em>None</em>
+                  </MenuItem>
 
-                    {CustomerData.customerName?.map((e, index) => {
-                      return (
-                        <MenuItem value={e.customer_name} key={index}>
-                          {e.customer_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
+                  {CustomerData.customerName?.map((e, index) => {
+                    return (
+                      <MenuItem value={e.customer_name} key={index}>
+                        {e.customer_name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
 
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Date"
-                    value={CustomerListData}
-                    // defaultValue={testData?.invoice_date}
-                    name="date"
-                    onChange={(e) => handleChangeDate(e)}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </Stack>
-
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Date"
+                  value={CustomerListData}
+                  // defaultValue={testData?.invoice_date}
+                  name="date"
+                  onChange={(e) => handleChangeDate(e)}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <Button
+                onClick={() => {
+                  // window.location.reload();
+                  dispatch(
+                    PurchaseBillListAction({
+                      limit: limit,
+                      pageNumber: pageNumber,
+                      orderByString: shorting,
+                    })
+                  );
+                  setCustomer_data();
+                  setCustomerListData();
+                }}
+              >
+                Reset
+              </Button>
+            </Stack>
+            {PurchaseData?.PurchaseBillList?.length ? (
               <Table
                 data={data}
                 headalEdit={headalEdit}
@@ -275,115 +289,30 @@ function PurchaseBillList() {
                 headalPayment={headalPayment}
                 PaymentIconShow={true}
               />
-              <Stack
-                sx={{
-                  margin: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  padding: "20px  0 20px 20px",
-                }}
-              >
-                <UsePagination
-                  countNumbuer={Math.ceil(
-                    PurchaseData?.PurchaseBillList[0]?.total_count / limit
-                  )}
-                  PageNumber={setPageNumber}
-                  currentPage={pageNumber}
-                />
-              </Stack>
-            </Container>
-          </Container>
-        ) : (
-          <Container fixed>
-            <Header
-              name={"PurchaseBill List"}
-              SearchBar={true}
-              searchHeadal={searchHeadal}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
-              >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/addpurchasebill");
-                  }}
-                >
-                  add Purchase Bill
-                </Button>
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/viewdeletedpurchase");
-                  }}
-                >
-                  view deleted Purchase Bill
-                </Button>
-              </Stack>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 2 }}
-              >
-                <FormControl variant="standard" sx={{ width: 240 }}>
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Customer Name
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard-01"
-                    onChange={(e) => handleChange(e)}
-                    label="Customer Name"
-                    name="customer_mobileNo"
-                    value={customer_data}
-                    sx={{ width: 200 }}
-                  >
-                    <MenuItem value={null}>
-                      <em>None</em>
-                    </MenuItem>
-
-                    {CustomerData.customerName?.map((e, index) => {
-                      return (
-                        <MenuItem value={e.customer_name} key={index}>
-                          {e.customer_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Date"
-                    value={CustomerListData}
-                    // defaultValue={testData?.invoice_date}
-                    name="date"
-                    onChange={(e) => handleChangeDate(e)}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </Stack>
-              <br />
-              <h1 style={{ color: "red", textAlign: "center", padding: "5px" }}>
-                No Any Record OF Purchase Bill
+            ) : (
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of search PurchaseBill
               </h1>
-              <br />
-            </Container>
+            )}
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  PurchaseData?.PurchaseBillList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+                currentPage={pageNumber}
+              />
+            </Stack>
           </Container>
-        )
+        </Container>
       ) : (
         <Stack
           sx={{ color: "grey.500", height: "80vh" }}

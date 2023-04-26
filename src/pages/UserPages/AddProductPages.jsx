@@ -32,16 +32,19 @@ function AddProductPage() {
   }, [ProductEditData?.SucessMessage?.statusCode, navigate]);
 
   useEffect(() => {
-    if (ProductEditData?.ErrorMessage?.data?.statusCode === "400") {
+    if (ProductEditData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [ProductEditData?.ErrorMessage?.data?.statusCode]);
-
+  }, [ProductEditData?.ErrorMessage?.statusCode]);
+  console.log(
+    "ProductEditData?.ErrorMessage?.statusCode",
+    ProductEditData?.ErrorMessage
+  );
   return (
     <div>
       <SanckBar
         alertMessage={ProductEditData?.SucessMessage?.message}
-        alertErrorMessage={ProductEditData?.ErrorMessage?.data?.message}
+        alertErrorMessage={ProductEditData?.ErrorMessage?.message}
         state={state}
         setState={setState}
       />
@@ -63,7 +66,7 @@ function AddProductPage() {
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            {ProductEditData?.ErrorMessage?.data?.message}
+            {ProductEditData?.ErrorMessage?.message}
           </Alert>
         )}
       </Snackbar>

@@ -72,6 +72,7 @@ function AddPurchaseBill(props) {
 
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
+  console.log("product(*&", product);
   const [open, setOpen] = useState(null);
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);
@@ -460,6 +461,7 @@ function AddPurchaseBill(props) {
                               ? ""
                               : CustomerListData?.address
                           }
+                          disabled
                         />
 
                         <p style={{ color: "red", margin: 0 }}>
@@ -477,6 +479,7 @@ function AddPurchaseBill(props) {
                               ? ""
                               : CustomerListData?.tin_no
                           }
+                          disabled
                         />
                         <br />
                         <br />
@@ -494,6 +497,7 @@ function AddPurchaseBill(props) {
                           }
                           sx={{ width: 1 }}
                           name="Customer_Name"
+                          disabled
                         />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_name}
@@ -668,6 +672,9 @@ function AddPurchaseBill(props) {
                                   label="Hsn"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   value={
                                     product[ind - 1]?.hsn
                                       ? product[ind - 1]?.hsn
@@ -690,6 +697,9 @@ function AddPurchaseBill(props) {
                                   label="Weight"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   value={
                                     product[ind - 1]?.weight
                                       ? product[ind - 1]?.weight
@@ -722,6 +732,9 @@ function AddPurchaseBill(props) {
                                   label="Rate"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   name={`rate ${ind}`}
                                   sx={{ width: 100 }}
                                   value={
@@ -771,6 +784,9 @@ function AddPurchaseBill(props) {
                                   label="Quantity"
                                   variant="standard"
                                   type="number"
+                                  InputProps={{
+                                    inputProps: { min: 0 },
+                                  }}
                                   name={`quantity ${ind}`}
                                   sx={{ width: 70 }}
                                   value={

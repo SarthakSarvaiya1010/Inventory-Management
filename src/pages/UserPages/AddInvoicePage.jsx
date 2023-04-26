@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
+import SanckBar from "../../Helpers/SanckBar/SanckBar";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -13,6 +14,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function AddInvoicePage() {
   const InvoicePageData = useSelector((state) => state?.InvoiceData);
   const [pdfOpen, setpdfOpen] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate();
   const [state, setState] = React.useState({
     open: false,
@@ -27,12 +29,21 @@ function AddInvoicePage() {
   useEffect(() => {
     if (InvoicePageData?.InvoicePdf?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
+      setDisabled(true);
       setTimeout(() => {
         navigate("/invoice_list");
         window.location.reload();
       }, 2000);
     }
   }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
+
+  useEffect(() => {
+    if (InvoicePageData?.ErrorMessage?.statusCode === "400") {
+      setState({ open: true, vertical: "top", horizontal: "center" });
+    }
+  }, [InvoicePageData?.ErrorMessage?.statusCode]);
+  console.log("InvoicePageData()*_)", InvoicePageData?.ErrorMessage?.message);
+
   var b64;
   if (InvoicePageData?.InvoicePdf?.invoicePdf) {
     b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
@@ -59,8 +70,14 @@ function AddInvoicePage() {
   }
   return (
     <div>
+      <SanckBar
+        alertMessage={InvoicePageData?.SucessMessage?.message}
+        alertErrorMessage={InvoicePageData?.ErrorMessage?.message}
+        state={state}
+        setState={setState}
+      />
       <Snackbar
-        autoHideDuration={4000}
+        autoHideDuration={2000}
         anchorOrigin={{ vertical, horizontal }}
         open={open}
         onClose={handleClose}
@@ -77,10 +94,14 @@ function AddInvoicePage() {
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
             {/* {Customers?.ErrorMessage?.data?.message} */}
+            {InvoicePageData?.ErrorMessage?.message}
           </Alert>
         )}
       </Snackbar>
-      <AddInvoice sucessMessage={InvoicePageData?.InvoicePdf?.statusCode} />
+      <AddInvoice
+        sucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
+        disabled={disabled}
+      />
     </div>
   );
 }

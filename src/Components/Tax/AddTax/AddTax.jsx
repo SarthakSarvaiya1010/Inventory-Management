@@ -25,26 +25,21 @@ function AddTax() {
   const dispatch = useDispatch();
   const params = useParams();
   const TaxData = useSelector((state) => state?.TaxData);
-  const successLoginData = useSelector((state) => state?.UserLoginReducer);
+
   const { id } = params;
   const Tax_data = TaxData?.TaxEdit;
-
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-  const accessTokenData =
-    successLoginData?.LoginData?.accessToken || accessToken?.accessToken;
 
   useEffect(() => {
     if (id) {
       dispatch(TaxEditAction(id));
     }
-  }, [accessTokenData, dispatch, id, successLoginData.LoginData.accessToken]);
+  }, [dispatch, id]);
 
   const { TaxhandleSubmit, values, errors, handleOnchange } = UseForm(
-    Tax_data[0] ? Tax_data[0] : []
+    Tax_data.length ? Tax_data[0] : []
   );
 
   const handleCancle = () => {
-    console.log("done");
     localStorage.setItem("NavigateItemName", "tax_list");
     navigate("/tax_list");
     // window.location.reload();
@@ -52,7 +47,7 @@ function AddTax() {
 
   return (
     <div>
-      {!TaxData.loder || !id ? (
+      {!TaxData.isLoading || !id ? (
         Tax_data?.length || !id ? (
           // Object.keys(Product_data).length ? (
           <Container fixed>
@@ -83,6 +78,7 @@ function AddTax() {
                       autoComplete="off"
                       defaultValue={id ? TaxData?.TaxEdit[0]?.tax_name : ""}
                       onChange={(e) => handleOnchange(e)}
+                      value={values?.tax_name}
                     />
                     <p style={{ color: "red" }}>{errors?.tax_name}</p>
                     <br />
@@ -90,6 +86,9 @@ function AddTax() {
                       error={errors?.tax_rate ? true : null}
                       required
                       type="number"
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                       name="tax_rate"
                       label="Tax Rate [ In % ]"
                       defaultValue={id ? TaxData?.TaxEdit[0]?.tax_rate : ""}
@@ -110,6 +109,7 @@ function AddTax() {
                       autoComplete="off"
                       defaultValue={id ? TaxData?.TaxEdit[0]?.tax_country : ""}
                       onChange={(e) => handleOnchange(e)}
+                      value={values?.tax_country}
                     />
                     <p style={{ color: "red" }}>{errors?.tax_country}</p>
                     <FormControl>
@@ -122,6 +122,7 @@ function AddTax() {
                         name="isactive"
                         defaultValue={id ? TaxData?.TaxEdit[0]?.isactive : "NO"}
                         onChange={(e) => handleOnchange(e)}
+                        value={values?.isactive}
                       >
                         <FormControlLabel
                           value="YES"
@@ -145,23 +146,14 @@ function AddTax() {
                   alignItems="center"
                   spacing={2}
                 >
-                  {id ? (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={TaxhandleSubmit}
-                    >
-                      Update
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={TaxhandleSubmit}
-                    >
-                      Submit
-                    </Button>
-                  )}
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={TaxhandleSubmit}
+                  >
+                    {id ? "Update" : "Submit"}
+                  </Button>
+
                   <Button
                     variant="outlined"
                     color="error"

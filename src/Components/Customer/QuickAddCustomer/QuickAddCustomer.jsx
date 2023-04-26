@@ -15,7 +15,15 @@ import MuiAlert from "@mui/material/Alert";
 import SanckBar from "../../../Helpers/SanckBar/SanckBar";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return (
+    <MuiAlert
+      elevation={6}
+      ref={ref}
+      variant="filled"
+      {...props}
+      snackMessage={"Wrong info"}
+    />
+  );
 });
 
 function QuickAddCustomer(props) {
@@ -143,6 +151,9 @@ function QuickAddCustomer(props) {
                 error={errors?.mobile_no ? true : null}
                 required
                 type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
                 name="mobile_no"
                 label="Mobile No"
                 variant="outlined"

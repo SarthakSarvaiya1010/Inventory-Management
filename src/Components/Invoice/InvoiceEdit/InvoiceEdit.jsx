@@ -278,7 +278,7 @@ function InvoiceEdit(props) {
   };
   let user_id = accessToken?.user_id;
   const UpdatedData = {
-    bill_no: testData?.bill_no,
+    bill_no: parseInt(testData?.bill_no),
     invoice_date: convert(testData?.invoice_date),
     customer_id: CustomerListData
       ? CustomerListData.customer_id
@@ -308,7 +308,6 @@ function InvoiceEdit(props) {
       UpdatedData?.customer_id &&
       UpdatedData?.productdata?.length > 0
     ) {
-      console.log("UpdatedData", UpdatedData);
       localStorage.setItem("invoice_id", parseInt(invoice_id));
       dispatch(UpdateInvoiceData(UpdatedData));
 
@@ -332,7 +331,6 @@ function InvoiceEdit(props) {
     console.log(event.$d);
     setDateData(event.$d);
   };
-  console.log("dateData", product);
 
   const handleDelete = (index) => {
     setAddTable((prev) => prev - 1);
@@ -341,7 +339,9 @@ function InvoiceEdit(props) {
 
   return (
     <div>
-      {!InvoicePageData.isLoadind ? (
+      {!InvoicePageData.isLoadind &&
+      testData?.productlistdata?.length &&
+      addtable ? (
         <Container>
           <Header name={"EditInvoice"} SearchBar={false} />
           <Container sx={{ backgroundColor: "#EAEFF2", p: 2 }}>
@@ -427,8 +427,7 @@ function InvoiceEdit(props) {
                           multiline
                           defaultValue={testData?.customer_address}
                           sx={{ width: 1 }}
-                          onChange={(e) => handleChange(e)}
-                          value={CustomerListData?.address}
+                          value={testData?.customer_address}
                         />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_address}
@@ -440,7 +439,13 @@ function InvoiceEdit(props) {
                           variant="standard"
                           sx={{ width: 1 }}
                           name="Customer_Gst_No"
-                          onChange={(e) => handleChange(e)}
+                          value={
+                            CustomerListData?.tin_no === "" ||
+                            !CustomerListData?.tin_no
+                              ? ""
+                              : CustomerListData?.tin_no
+                          }
+                          disable
                         />
                         <br />
                         <br />
@@ -452,8 +457,7 @@ function InvoiceEdit(props) {
                           defaultValue={testData?.customer_name}
                           sx={{ width: 1 }}
                           name="customer_name"
-                          value={CustomerListData?.customer_name}
-                          onChange={(e) => handleChange(e)}
+                          value={testData?.customer_name}
                         />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_name}
@@ -468,7 +472,7 @@ function InvoiceEdit(props) {
                     <Stack spacing={2}>
                       <TextField
                         id="standard-basic-3"
-                        label="Bill_no"
+                        label="Bill no"
                         variant="standard"
                         value={
                           testData?.bill_no > 9
@@ -477,6 +481,7 @@ function InvoiceEdit(props) {
                         }
                         sx={{ width: 1 }}
                         name="bill_no"
+                        disable
                       />
 
                       <TextField
@@ -490,6 +495,7 @@ function InvoiceEdit(props) {
                         }
                         sx={{ width: 1 }}
                         name="challan_no"
+                        disable
                       />
                       <br />
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -560,7 +566,6 @@ function InvoiceEdit(props) {
                               sx={{ width: "10px" }}
                             >
                               {ind}
-                              {console.log("index", ind)}
                             </TableCell>
                             <TableCell>
                               <FormControl
@@ -627,6 +632,9 @@ function InvoiceEdit(props) {
                                 label="Hsn"
                                 variant="standard"
                                 type="number"
+                                InputProps={{
+                                  inputProps: { min: 0 },
+                                }}
                                 defaultValue={
                                   testData?.productlistdata[ind - 1]?.hsn || 0
                                 }
@@ -641,6 +649,9 @@ function InvoiceEdit(props) {
                                 sx={{ width: 100 }}
                                 variant="standard"
                                 type="number"
+                                InputProps={{
+                                  inputProps: { min: 0 },
+                                }}
                                 error={
                                   !product[ind - 1]?.weight
                                     ? errors?.weight
@@ -671,6 +682,9 @@ function InvoiceEdit(props) {
                                 label="Rate"
                                 variant="standard"
                                 type="number"
+                                InputProps={{
+                                  inputProps: { min: 0 },
+                                }}
                                 name={`rate ${ind}`}
                                 error={
                                   !product[ind - 1]?.rate
@@ -739,6 +753,9 @@ function InvoiceEdit(props) {
                                 label="Quantity"
                                 variant="standard"
                                 type="number"
+                                InputProps={{
+                                  inputProps: { min: 0 },
+                                }}
                                 name={`quantity ${ind}`}
                                 sx={{ width: 70 }}
                                 value={

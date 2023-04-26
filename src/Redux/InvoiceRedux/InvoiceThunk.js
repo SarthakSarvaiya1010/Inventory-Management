@@ -42,6 +42,7 @@ export const GetinvoiceAddPageAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -70,6 +71,7 @@ export const AddInvoiceData = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -135,6 +137,7 @@ export const UpdateInvoiceData = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

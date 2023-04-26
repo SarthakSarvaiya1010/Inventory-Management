@@ -154,14 +154,19 @@ function CustomerList() {
                 view deleted Customer
               </Button>
             </Stack>
-
-            <Table
-              data={data}
-              headalEdit={headalEdit}
-              headalDelete={setOpen}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
-            />
+            {CustomerData?.CoustomerList?.length ? (
+              <Table
+                data={data}
+                headalEdit={headalEdit}
+                headalDelete={setOpen}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+              />
+            ) : (
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of search Coustomer
+              </h1>
+            )}
             <Stack
               sx={{
                 margin: "10px",

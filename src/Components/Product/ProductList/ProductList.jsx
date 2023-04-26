@@ -179,15 +179,11 @@ function ProductList() {
                 ShortingHide={shortingIcon}
               />
             ) : (
-              <Stack
-                sx={{ color: "grey.500", height: "80vh" }}
-                spacing={2}
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <CircularProgress color="success" size="5rem" />
-              </Stack>
+              <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+                <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                  No any record found of search Product
+                </h1>
+              </Container>
             )}
             <Stack
               sx={{

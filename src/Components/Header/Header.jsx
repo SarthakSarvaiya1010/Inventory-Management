@@ -128,7 +128,7 @@ export default function Header(props) {
                 >
                   Log out
                 </Typography>
-                <ToastContainer />
+                <ToastContainer limit={1} />
               </>
             ) : (
               <div>

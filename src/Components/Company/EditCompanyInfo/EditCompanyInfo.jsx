@@ -110,6 +110,9 @@ function EditCompanyInfo() {
                     error={errors?.phone_no ? true : null}
                     id="outlined-select-currency-native"
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     name="phone_no"
                     label="Phone No."
                     defaultValue={parseInt(CompanyInfo?.phone_no)}
@@ -121,6 +124,9 @@ function EditCompanyInfo() {
                     error={errors?.mobile_no ? true : null}
                     required
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     name="mobile_no"
                     label="Mobile No."
                     defaultValue={parseInt(CompanyInfo?.mobile_no)}
@@ -178,6 +184,9 @@ function EditCompanyInfo() {
                     error={errors?.fax_no ? true : null}
                     required
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     name="fax_no"
                     label="Fax No."
                     defaultValue={CompanyInfo?.fax_no}
@@ -241,7 +250,7 @@ function EditCompanyInfo() {
                   </Button>
                 </Stack>
               </Box>
-              <ToastContainer />
+              <ToastContainer limit={1} />
             </DialogContent>
           </Container>
         </Container>

@@ -119,6 +119,7 @@ function StockReportList() {
         return " state";
     }
   };
+  console.log("StockReport", StockReport);
   return (
     <div>
       <DialogBox
@@ -142,40 +143,23 @@ function StockReportList() {
               alignItems="flex-end"
               spacing={4}
               sx={{ p: 4 }}
-            >
-              {/* <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  localStorage.setItem("NavigateItemName", "addtax");
-                  navigate("/addtax");
-                }}
-              >
-                add new Stock
-              </Button>
+            ></Stack>
 
-              <Button
-                variant="text"
-                color="success"
-                sx={{ fontSize: 16 }}
-                onClick={() => {
-                  localStorage.setItem("NavigateItemName", "deletedtax");
-                  navigate("/deletedtax");
-                }}
-              >
-                view deleted Stock
-              </Button> */}
-            </Stack>
-            <Table
-              data={data}
-              headalEdit={headalEdit}
-              headalDelete={setOpen}
-              headalShorting={headalShorting}
-              ShortingHide={shortingIcon}
-              hide={true}
-              actionHide={true}
-            />
+            {StockReport?.Stock?.length ? (
+              <Table
+                data={data}
+                headalEdit={headalEdit}
+                headalDelete={setOpen}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
+                hide={true}
+                actionHide={true}
+              />
+            ) : (
+              <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
+                No any record found of search Stock
+              </h1>
+            )}
             <Stack
               sx={{
                 margin: "10px",

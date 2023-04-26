@@ -16,6 +16,7 @@ import {
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import { BankValidate } from "../../EditForm/formValidation";
 
 function AddBank() {
   const navigate = useNavigate();
@@ -23,10 +24,11 @@ function AddBank() {
   const params = useParams();
   const [values, setvalues] = useState(null);
   const [errors, setErrors] = useState({});
+  const [findErrors, setFindErrors] = useState(null);
   const BankInfoData = useSelector((state) => state?.BankInfoData);
   const BankInfoDataEdit = BankInfoData?.BankInfoEdit;
   const { id } = params;
-
+  console.log("errors*&(", errors);
   useEffect(() => {
     if (id) {
       dispatch(BankInfoEditAction(id));
@@ -52,21 +54,38 @@ function AddBank() {
       }),
     []
   );
+  useEffect(() => {
+    if (findErrors === "BankInfo") {
+      setErrors(BankValidate(values));
+    }
+  }, [findErrors, values]);
 
   const producthandleSubmit = () => {
-    dispatch(AddBankInfoAction(values));
-    setErrors({});
+    setErrors(BankValidate(values));
+    setFindErrors("BankInfo");
+    if (Object.keys(errors).length === 0) {
+      dispatch(AddBankInfoAction(values));
+    }
   };
 
+  useEffect(() => {
+    if (BankInfoDataEdit?.bank_name) {
+      setvalues(BankInfoDataEdit);
+    }
+  }, [BankInfoDataEdit]);
+
   const producthandleUpdate = () => {
+    setErrors(BankValidate(values));
+    setFindErrors("BankInfo");
     let data = {
-      bank_name: values?.bank_name || BankInfoDataEdit?.bank_name,
-      balance: values?.balance || BankInfoDataEdit?.balance,
-      primary_bank: values?.primary_bank || BankInfoDataEdit?.primary_bank,
+      bank_name: values?.bank_name,
+      balance: values?.balance,
+      primary_bank: values?.primary_bank,
     };
-    localStorage.setItem("bank_id", id);
-    dispatch(BankInfoEditDataAction(data));
-    setErrors({});
+    if (Object.keys(errors).length === 0) {
+      localStorage.setItem("bank_id", id);
+      dispatch(BankInfoEditDataAction(data));
+    }
   };
 
   const handleCancle = () => {
@@ -99,23 +118,29 @@ function AddBank() {
                     <TextField
                       name="bank_name"
                       // {...register("product_name")}
+                      required
                       error={errors?.bank_name ? true : null}
                       id="outlined-Product"
                       label="Bank Name"
                       autoComplete="off"
-                      defaultValue={id ? BankInfoDataEdit?.bank_name : ""}
+                      defaultValue={id ? BankInfoDataEdit?.bank_name : null}
                       onChange={(e) => handleOnchange(e)}
+                      value={values?.bank_name}
                     />
                     <p style={{ color: "red" }}>{errors?.bank_name}</p>
                     <br />
                     <TextField
+                      required
                       name="balance"
                       type="number"
-                      error={errors?.bank_name ? true : null}
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
+                      error={errors?.balance ? true : null}
                       id="outlined-Product"
                       label="Balance"
                       autoComplete="off"
-                      defaultValue={id ? BankInfoDataEdit?.balance : ""}
+                      defaultValue={id ? BankInfoDataEdit?.balance : null}
                       onChange={(e) => handleOnchange(e)}
                     />
                     <p style={{ color: "red" }}>{errors?.balance}</p>

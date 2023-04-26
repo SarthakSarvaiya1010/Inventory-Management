@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import {
@@ -17,7 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Login(props) {
   const showToastMessage = () => {
-    toast.success("Login  Success  !", {
+    toast.success("Login  Success !", {
       position: toast.POSITION.TOP_CENTER,
       autoClose: 2000,
     });
@@ -41,21 +42,54 @@ function Login(props) {
   const [email, setEmail] = useState(null);
   const [test, setTest] = useState(null);
   const [buttonDisbel, setButtonDisbel] = useState(null);
+  const [errors, setErrors] = useState({});
   const [password, setpassWord] = useState(null);
   const LoginInfo = {
     email: email,
     password: password,
   };
+
   const handleSubmit = () => {
-    setButtonDisbel(true);
     setTest(true);
-    dispatch(userLogin(LoginInfo));
+    setButtonDisbel(true);
+    validation();
+    if (
+      LoginInfo.password &&
+      LoginInfo.email &&
+      LoginInfo.password.length >= 6 &&
+      /\S+@\S+\.\S+/.test(LoginInfo?.email)
+    ) {
+      dispatch(userLogin(LoginInfo));
+    }
+  };
+
+  const validation = () => {
+    if (!LoginInfo?.email) {
+      setErrors({ email: "Email id is required" });
+      setButtonDisbel(false);
+    } else if (!/\S+@\S+\.\S+/.test(LoginInfo?.email)) {
+      setErrors({
+        email: "Email address is invalid",
+      });
+      setButtonDisbel(false);
+    } else if (!LoginInfo?.password) {
+      setErrors({
+        password: "Password is missing",
+      });
+      setButtonDisbel(false);
+    } else if (LoginInfo?.password?.length < 6) {
+      setErrors({
+        password: "Password must be 6 or more characters",
+      });
+      setButtonDisbel(false);
+    } else {
+      setErrors();
+    }
   };
 
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   // const NavigateItemName = window.localStorage.getItem("NavigateItemName");
-  console.log("successLoginData", successLoginData?.FailedLoginData);
   useEffect(() => {
     if (successLoginData?.LoginData?.statusCode === "200" && test) {
       localStorage.setItem(
@@ -63,18 +97,20 @@ function Login(props) {
         JSON.stringify(successLoginData.LoginData)
       );
       localStorage.setItem("AuthError", "Authorization");
+
       showToastMessage();
+      setTest(false);
       setTimeout(() => {
         if (successLoginData?.LoginData?.role_id === 2) {
           navigate("/productlist");
+          setButtonDisbel(false);
         } else {
           if (successLoginData?.LoginData?.role_id === 1) {
             navigate("/userlist");
+            setButtonDisbel(false);
           }
         }
       }, 2100);
-      setTest(false);
-      setButtonDisbel(false);
     } else if (
       successLoginData?.FailedLoginData?.status === "server_offline" &&
       test
@@ -113,7 +149,7 @@ function Login(props) {
     <div>
       <div>
         <DialogContent>
-          <ToastContainer />
+          <ToastContainer limit={1} />
           <Stack direction="row" justifyContent="center" alignItems="center">
             <DialogTitle>LogIn</DialogTitle>
           </Stack>
@@ -128,22 +164,36 @@ function Login(props) {
             <Stack direction="column" spacing={2}>
               <TextField
                 required
+                error={errors?.email && test ? true : false}
                 id="outlined-Email"
                 label="Email id"
                 autoComplete="off"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  validation();
+                }}
 
                 // defaultValue="Hello World"
               />
+              <p style={{ color: "red", marginLeft: 10, marginTop: 0 }}>
+                {test ? errors?.email : null}
+              </p>
 
               <TextField
                 required
+                error={errors?.password && test ? true : false}
                 id="outlined-password-input"
                 label="Password"
                 type="password"
                 autoComplete="current-password"
-                onChange={(e) => setpassWord(e.target.value)}
+                onChange={(e) => {
+                  setpassWord(e.target.value);
+                  validation();
+                }}
               />
+              <p style={{ color: "red", marginLeft: 10, marginTop: 0 }}>
+                {test ? errors?.password : null}
+              </p>
             </Stack>
             <Typography>
               <a href="/resetpassword">ResetPassword</a>

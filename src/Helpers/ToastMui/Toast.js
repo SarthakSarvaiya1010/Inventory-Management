@@ -12,7 +12,7 @@ function Apped() {
   return (
     <div>
       <button onClick={showToastMessage}>Notify</button>
-      <ToastContainer />
+      <ToastContainer limit={1} />
     </div>
   );
 }

@@ -62,8 +62,6 @@ function PaymentMode(props) {
   const BankData = useSelector((state) => state?.BankData);
   const BankInfoData = useSelector((state) => state?.BankInfoData);
 
-  console.log("BankInfoData)&&-0", BankData);
-
   //   const invoivepagedata = JSON.parse(
   //     localStorage.getItem("InvoiceEditPageData")
   //   );
@@ -86,7 +84,6 @@ function PaymentMode(props) {
   };
 
   const handleChangeProduct = (name, value) => {
-    console.log("name", name, value);
     setPayment({ ...Payment, [name]: value });
     if (value === "chaque") {
       setShowchaque(true);
@@ -195,7 +192,6 @@ function PaymentMode(props) {
     console.log(event.$d);
     setDateData(event.$d);
   };
-  console.log("BankData", BankData.BankInfoBypurchase_id?.paidamount);
   return (
     <div>
       {testData?.productlistdata?.length && !BankData?.isLoading ? (
@@ -308,6 +304,7 @@ function PaymentMode(props) {
                           sx={{ width: 1 }}
                           defaultValue={testData?.customer_address}
                           value={CustomerListData?.address}
+                          disabled
                         />
                         <br />
                         <p style={{ color: "red", margin: 0 }}>
@@ -319,11 +316,13 @@ function PaymentMode(props) {
                           label="Customer Gst No"
                           variant="standard"
                           sx={{ width: 1 }}
-                          // value={
-                          //   CustomerListData?.tin_no === ""
-                          //     ? ""
-                          //     : CustomerListData?.tin_no
-                          // }
+                          value={
+                            CustomerListData?.tin_no === "" ||
+                            !CustomerListData?.tin_no
+                              ? ""
+                              : CustomerListData?.tin_no
+                          }
+                          disabled
                         />
                         <br />
                         <br />
@@ -337,7 +336,7 @@ function PaymentMode(props) {
                           value={CustomerListData?.customer_name}
                           sx={{ width: 1 }}
                           name="Customer_Name"
-                          onChange={(e) => handleChange(e)}
+                          disabled
                         />
                         <p style={{ color: "red", margin: 0 }}>
                           {errors?.customer_name}
@@ -358,7 +357,7 @@ function PaymentMode(props) {
                         value={testData?.bill_no || 0}
                         sx={{ width: 1 }}
                         name="bill_no"
-                        onChange={(e) => handleChange(e)}
+                        disabled
                       />
                       <br />
                       <TextField
@@ -368,7 +367,7 @@ function PaymentMode(props) {
                         value={testData?.bill_no || 0}
                         sx={{ width: 1 }}
                         name="challan_no"
-                        onChange={(e) => handleChange(e)}
+                        disabled
                       />
                       <br />
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -379,6 +378,7 @@ function PaymentMode(props) {
                           name="date"
                           onChange={(e) => handleChangeDate(e)}
                           renderInput={(params) => <TextField {...params} />}
+                          disabled
                         />
                       </LocalizationProvider>
                       <br />
@@ -389,7 +389,7 @@ function PaymentMode(props) {
                         sx={{ width: 1 }}
                         name="Gst_No"
                         value={"24BWOPP9863M2ZF"}
-                        // onChange={(e) => handleChange(e)}
+                        disabled
                       />
                     </Stack>
                   </Item>
@@ -583,6 +583,9 @@ function PaymentMode(props) {
                                 label="Chaque No"
                                 variant="standard"
                                 type="number"
+                                InputProps={{
+                                  inputProps: { min: 0 },
+                                }}
                                 name={`chaque_no`}
                                 sx={{ width: 100 }}
                                 value={Payment?.chaque_no}
@@ -609,6 +612,9 @@ function PaymentMode(props) {
                                 label="Amout"
                                 variant="standard"
                                 type="number"
+                                InputProps={{
+                                  inputProps: { min: 0 },
+                                }}
                                 name={`amout`}
                                 sx={{ width: 100 }}
                                 value={Payment?.amout}
