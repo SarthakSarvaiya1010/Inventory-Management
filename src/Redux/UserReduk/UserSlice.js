@@ -6,6 +6,7 @@ import {
   userDeleteAction,
   UserAddAction,
   UserEditAction,
+  userGetByuuidDataAction,
 } from "./UserThunk";
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   UserData: [],
   UserDeleteList: [],
   UserDataByuuid: [],
+  UserquickData: [],
   SucessMessage: [],
   ErrorMessage: [],
   loder: true,
@@ -32,7 +34,8 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
+      state.ErrorMessage = [];
+      state.SucessMessage = [];
       state.UserData = data;
     },
     [userListAction.rejected]: (state, payload) => {
@@ -50,8 +53,12 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.loder = false;
-      state.UserDataByuuid = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.loder = false;
+        state.UserDataByuuid = data;
+      }
     },
     [userGetByuuidAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -103,7 +110,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.SucessMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [UserAddAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -127,6 +138,27 @@ const CompanySlice = createSlice({
       }
     },
     [UserEditAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [userGetByuuidDataAction.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [userGetByuuidDataAction.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.UserquickData = data;
+      }
+    },
+    [userGetByuuidDataAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },

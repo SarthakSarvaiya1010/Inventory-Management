@@ -35,6 +35,7 @@ const ProductSlice = createSlice({
       if (payload?.payload?.name === "AxiosError") {
         state.ErrorMessage = payload?.payload?.response?.data;
       } else {
+        state.ErrorMessage = [];
         state.SucessMessage = [];
         state.productList = data;
       }

@@ -32,6 +32,7 @@ const BankSlice = createSlice({
         state.ErrorMessage = payload?.payload?.response?.data;
       } else {
         state.BankInfo = data;
+        state.ErrorMessage = [];
         state.SucessMessage = [];
       }
     },

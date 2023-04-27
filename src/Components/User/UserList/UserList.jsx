@@ -10,6 +10,7 @@ import {
   userListAction,
   userDeleteAction,
   userGetByuuidAction,
+  userGetByuuidDataAction,
 } from "../../../Redux/UserReduk/UserThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
@@ -39,10 +40,12 @@ function UserList() {
   }, [dispatch, limit, pageNumber, shorting]);
 
   useEffect(() => {
-    if (Object.keys(User.UserDataByuuid).length) {
+    if (Object.keys(User.UserquickData).length) {
       dispatch(quickLogin(User.UserDataByuuid));
     }
-  }, [User.UserDataByuuid, dispatch, navigate]);
+  }, [User.UserDataByuuid, User.UserquickData, dispatch]);
+
+  console.log("User.UserquickData", User.UserquickData);
   useEffect(() => {
     if (successLoginData.LoginData.statusCode === "200") {
       localStorage.setItem(
@@ -68,7 +71,6 @@ function UserList() {
     successLoginData.LoginData.statusCode,
   ]);
 
-  console.log("successLoginDatasuccessLoginData", User);
   // eslint-disable-next-line array-callback-return
   User.UserData.map((e) => {
     let elements = {};
@@ -84,7 +86,7 @@ function UserList() {
   };
 
   const headallogin = (data) => {
-    dispatch(userGetByuuidAction(User.UserData[data - 1]?.user_uuid));
+    dispatch(userGetByuuidDataAction(User?.UserData[data - 1]?.user_uuid));
   };
 
   const headalDelete = (data) => {
@@ -104,8 +106,6 @@ function UserList() {
       );
     }
   };
-  console.log(search);
-  console.log("setShortingData", shorting);
 
   const headalShorting = (data_a) => {
     shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
@@ -167,7 +167,6 @@ function UserList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "adduser");
                   navigate("/adduser");
                 }}
               >
@@ -179,7 +178,6 @@ function UserList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "userdeletelist");
                   navigate("/userdeletelist");
                 }}
               >

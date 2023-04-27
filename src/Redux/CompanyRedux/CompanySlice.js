@@ -36,6 +36,8 @@ const CompanySlice = createSlice({
       } = payload;
 
       state.CompanyInfo = data;
+      state.ErrorMessage = [];
+      state.SucessMessage = [];
     },
     [CompanyInfoAction.rejected]: (state, payload) => {
       state.isLoading = false;
