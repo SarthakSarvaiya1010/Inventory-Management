@@ -38,6 +38,9 @@ function AddUserPage() {
     if (User?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
+    if (User?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
   }, [User?.ErrorMessage?.statusCode]);
   return (
     <div>
@@ -69,7 +72,8 @@ function AddUserPage() {
           </Alert>
         )}
       </Snackbar>
-      <AddUser />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : <AddUser />}
     </div>
   );
 }

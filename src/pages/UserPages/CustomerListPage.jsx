@@ -34,6 +34,11 @@ function CustomerListPage() {
       }, 2000);
     }
   }, [CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode, navigate]);
+  useEffect(() => {
+    if (CustomerData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [CustomerData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -47,7 +52,7 @@ function CustomerListPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <CustomerList />
+      {openD ? null : <CustomerList />}
     </div>
   );
 }

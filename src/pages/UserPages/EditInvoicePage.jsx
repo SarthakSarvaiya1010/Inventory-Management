@@ -50,7 +50,11 @@ export default function EditInvoicePage() {
       }, 2000);
     }
   }, [InvoicePageData?.InvoicePdf?.statusCode, navigate]);
-
+  useEffect(() => {
+    if (InvoicePageData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [InvoicePageData?.ErrorMessage?.statusCode]);
   var b64;
   if (InvoicePageData?.InvoicePdf?.invoicePdf) {
     b64 = InvoicePageData?.InvoicePdf?.invoicePdf;
@@ -102,10 +106,12 @@ export default function EditInvoicePage() {
         )}
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <InvoiceEdit
-        testData={testData}
-        EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
-      />
+      {openD ? null : (
+        <InvoiceEdit
+          testData={testData}
+          EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
+        />
+      )}
     </div>
   );
 }

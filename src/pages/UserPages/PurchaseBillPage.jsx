@@ -27,7 +27,11 @@ function PurchaseBillPage() {
       window.location.reload();
     }
   }, [PurchaseData?.SucessMessageOfPurchaseDelete?.statusCode]);
-
+  useEffect(() => {
+    if (PurchaseData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [PurchaseData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -41,7 +45,7 @@ function PurchaseBillPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <PurchaseBillLis />
+      {openD ? null : <PurchaseBillLis />}
     </div>
   );
 }

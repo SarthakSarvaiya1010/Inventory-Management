@@ -20,7 +20,6 @@ function StockReportList() {
 
   const TaxData = useSelector((state) => state?.TaxData);
   const StockReport = useSelector((state) => state?.StockReport);
-  console.log("StockReport(&*(^&", StockReport);
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();

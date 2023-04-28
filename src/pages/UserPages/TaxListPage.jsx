@@ -34,11 +34,12 @@ function TaxListPage() {
         window.location.reload();
       }, 2000);
     }
-  }, [
-    TaxData?.SuccessDeleteTaxMessage?.message,
-    TaxData?.SuccessDeleteTaxMessage?.statusCode,
-    navigate,
-  ]);
+  }, [TaxData?.SuccessDeleteTaxMessage?.statusCode, navigate]);
+  useEffect(() => {
+    if (TaxData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [TaxData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -53,7 +54,7 @@ function TaxListPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <TaxList />
+      {openD ? null : <TaxList />}
     </div>
   );
 }

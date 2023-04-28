@@ -27,6 +27,11 @@ function InvoiceListPage() {
       window.location.reload();
     }
   }, [InvoiceData?.SucessMessageOfInvoiceDelete?.statusCode]);
+  useEffect(() => {
+    if (InvoiceData?.ErrorMessage?.data?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [InvoiceData?.ErrorMessage?.data?.statusCode]);
   return (
     <div>
       <Snackbar

@@ -11,7 +11,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function DeleteTaxPage() {
   const TaxData = useSelector((state) => state?.TaxData);
-  console.log("taxdaata=======>", TaxData?.PermanentTaxDeleteData);
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -34,6 +33,11 @@ function DeleteTaxPage() {
     TaxData?.SuccessDeleteTaxMessage?.message,
     TaxData?.SuccessDeleteTaxMessage?.statusCode,
   ]);
+  useEffect(() => {
+    if (TaxData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [TaxData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -48,7 +52,7 @@ function DeleteTaxPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <DeleteTaxList />
+      {openD ? null : <DeleteTaxList />}
     </div>
   );
 }

@@ -28,12 +28,16 @@ function DeletedProductListPage() {
     if (productData?.SuccessMessageProductDelete?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "deletedproduct");
         navigate("/deletedproduct");
         window.location.reload();
       }, 2000);
     }
   }, [productData?.SuccessMessageProductDelete?.statusCode, navigate]);
+  useEffect(() => {
+    if (productData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [productData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -48,7 +52,7 @@ function DeletedProductListPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <DeletedProductList />
+      {openD ? null : <DeletedProductList />}
     </div>
   );
 }

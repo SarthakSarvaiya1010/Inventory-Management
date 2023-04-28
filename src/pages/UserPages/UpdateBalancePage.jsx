@@ -39,7 +39,13 @@ function UpdateBalancePage() {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
   }, [BankInfoData?.ErrorMessage?.statusCode]);
-  console.log("BankInfoData?.ErrorMessage?.data", BankInfoData?.ErrorMessage);
+
+  useEffect(() => {
+    if (BankInfoData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [BankInfoData?.ErrorMessage?.statusCode]);
+
   return (
     <div>
       <Snackbar
@@ -64,7 +70,7 @@ function UpdateBalancePage() {
         )}
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <UpdateBalanceInfo />
+      {openD ? null : <UpdateBalanceInfo />}
     </div>
   );
 }

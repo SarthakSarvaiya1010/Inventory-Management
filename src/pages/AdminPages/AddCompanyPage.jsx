@@ -24,21 +24,23 @@ function AddCompanyPage() {
     if (CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "company_info");
         navigate("/company_info");
       }, 2000);
     }
   }, [CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode, navigate]);
   useEffect(() => {
     if (
-      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode === 400
+      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode ===
+      "400"
     ) {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [
-    CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode,
-    CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.message,
-  ]);
+  }, [CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode]);
+  useEffect(() => {
+    if (CompanyInfoData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [CompanyInfoData?.ErrorMessage?.statusCode]);
   const handleClose = () => {
     setState({ ...state, open: false });
   };
@@ -67,7 +69,8 @@ function AddCompanyPage() {
           </Alert>
         )}
       </Snackbar>
-      <AddCompanyInfo />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : <AddCompanyInfo />}
     </div>
   );
 }

@@ -31,6 +31,11 @@ function DeletePurchasPage() {
       }, 2000);
     }
   }, [PurchaseData?.SucessMessageOfPurchaseDelete?.statusCode]);
+  useEffect(() => {
+    if (PurchaseData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [PurchaseData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -45,7 +50,7 @@ function DeletePurchasPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <ViewDeletedPurchaseBillList />
+      {openD ? null : <ViewDeletedPurchaseBillList />}
     </div>
   );
 }

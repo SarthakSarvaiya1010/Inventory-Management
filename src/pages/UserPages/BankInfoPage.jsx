@@ -32,6 +32,13 @@ function BankInfoPage() {
       }, 2000);
     }
   }, [BankInfoData?.SucessMessage?.statusCode, navigate]);
+
+  useEffect(() => {
+    if (BankInfoData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [BankInfoData?.ErrorMessage?.statusCode]);
+
   return (
     <div>
       <Snackbar
@@ -45,7 +52,7 @@ function BankInfoPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <BankInfoList />
+      {openD ? null : <BankInfoList />}
     </div>
   );
 }

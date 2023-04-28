@@ -37,6 +37,9 @@ function CompanyInfoPage() {
     if (CompanyInfoData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
+    if (CompanyInfoData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
   }, [CompanyInfoData?.ErrorMessage?.statusCode]);
   return (
     <div>
@@ -62,7 +65,7 @@ function CompanyInfoPage() {
         )}
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <EditCompanyInfo />
+      {openD ? null : <EditCompanyInfo />}
     </div>
   );
 }

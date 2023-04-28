@@ -56,6 +56,11 @@ function EditPurchaseBillPage() {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
   }, [PurchaseData?.ErrorMessage?.data?.statusCode]);
+  useEffect(() => {
+    if (PurchaseData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [PurchaseData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -81,10 +86,12 @@ function EditPurchaseBillPage() {
         )}
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <EditPurchaseBill
-        testData={testData}
-        EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
-      />
+      {openD ? null : (
+        <EditPurchaseBill
+          testData={testData}
+          EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
+        />
+      )}
     </div>
   );
 }

@@ -13,7 +13,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function PaymentModePage() {
   const BankData = useSelector((state) => state?.BankData);
-  console.log("BankInfoData?.ErrorMessage", BankData?.ErrorMessage);
   const navigate = useNavigate();
   const [state, setState] = React.useState({
     open: false,
@@ -37,6 +36,11 @@ function PaymentModePage() {
   useEffect(() => {
     if (BankData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
+    }
+  }, [BankData?.ErrorMessage?.statusCode]);
+  useEffect(() => {
+    if (BankData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
     }
   }, [BankData?.ErrorMessage?.statusCode]);
   return (
@@ -70,7 +74,7 @@ function PaymentModePage() {
         )}
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <PaymentMode />
+      {openD ? null : <PaymentMode />}
     </div>
   );
 }

@@ -28,12 +28,16 @@ function DeletedCustomerListPage() {
     if (CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "deletedcustomer");
         navigate("/deletedcustomer");
         window.location.reload();
       }, 2000);
     }
   }, [CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode, navigate]);
+  useEffect(() => {
+    if (CustomerData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [CustomerData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -47,7 +51,7 @@ function DeletedCustomerListPage() {
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
-      <DeletedCustomerList />
+      {openD ? null : <DeletedCustomerList />}
     </div>
   );
 }
