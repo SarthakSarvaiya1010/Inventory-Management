@@ -14,6 +14,7 @@ import { userLogin } from "../../../Redux/AuthSlice";
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import loginValidate from "./loginFormValidation";
 import "react-toastify/dist/ReactToastify.css";
 
 function Login(props) {
@@ -39,51 +40,29 @@ function Login(props) {
   const { setOpen } = props;
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState(null);
   const [test, setTest] = useState(null);
   const [buttonDisbel, setButtonDisbel] = useState(null);
   const [errors, setErrors] = useState({});
-  const [password, setpassWord] = useState(null);
-  const LoginInfo = {
-    email: email,
-    password: password,
-  };
+  const [validateData, setValidatedata] = useState(null);
+
+  const [values, setValues] = useState({});
 
   const handleSubmit = () => {
+    setErrors(loginValidate(values));
+    setValidatedata(true);
+    if (values.email !== "" && values.password !== "") {
+      dispatch(userLogin(values));
+    }
     setTest(true);
     setButtonDisbel(true);
-    validation();
-    if (
-      LoginInfo.password &&
-      LoginInfo.email &&
-      LoginInfo.password.length >= 6 &&
-      /\S+@\S+\.\S+/.test(LoginInfo?.email)
-    ) {
-      dispatch(userLogin(LoginInfo));
-    }
   };
-
-  const validation = () => {
-    if (!LoginInfo?.email) {
-      setErrors({ email: "Email id is required" });
-      setButtonDisbel(false);
-    } else if (!/\S+@\S+\.\S+/.test(LoginInfo?.email)) {
-      setErrors({
-        email: "Email address is invalid",
-      });
-      setButtonDisbel(false);
-    } else if (!LoginInfo?.password) {
-      setErrors({
-        password: "Password is missing",
-      });
-      setButtonDisbel(false);
-    } else if (LoginInfo?.password?.length < 6) {
-      setErrors({
-        password: "Password must be 6 or more characters",
-      });
-      setButtonDisbel(false);
-    } else {
-      setErrors();
+  const handleChange = (event) => {
+    setValues((values) => ({
+      ...values,
+      [event.target.name]: event.target.value,
+    }));
+    if (validateData) {
+      setErrors(loginValidate(values));
     }
   };
 
@@ -167,11 +146,9 @@ function Login(props) {
                 error={errors?.email && test ? true : false}
                 id="outlined-Email"
                 label="Email id"
+                name="email"
                 autoComplete="off"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  validation();
-                }}
+                onChange={handleChange}
 
                 // defaultValue="Hello World"
               />
@@ -185,11 +162,9 @@ function Login(props) {
                 id="outlined-password-input"
                 label="Password"
                 type="password"
+                name="password"
                 autoComplete="current-password"
-                onChange={(e) => {
-                  setpassWord(e.target.value);
-                  validation();
-                }}
+                onChange={handleChange}
               />
               <p style={{ color: "red", marginLeft: 10, marginTop: 0 }}>
                 {test ? errors?.password : null}

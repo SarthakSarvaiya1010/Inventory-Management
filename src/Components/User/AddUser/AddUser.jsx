@@ -41,7 +41,7 @@ function AddUser() {
   const uploadedImage = React.useRef(null);
   const [image, setImage] = React.useState(null);
 
-  const User_data = User.UserDataByuuid;
+  const User_data = User?.UserDataByuuid;
 
   // const showToastMessage = () => {
   //   toast.success("Data Updata  Success  !", {
@@ -56,6 +56,27 @@ function AddUser() {
     dispatch(CompanyInfoAction());
   }, [dispatch, id]);
 
+  // User_data?.length || Object?.keys(User_data)?.length
+  //   ? {
+  //       address: User_data?.address || null,
+  //       company_id: User_data?.company_id || null,
+  //       deleted_flag: User_data?.deleted_flag || null,
+  //       email: User_data?.email || null,
+  //       image_src: User_data?.image_src || null,
+  //       isactive: User_data?.isactive || null,
+  //       mobile_no: User_data?.mobile_no || null,
+  //       name: User_data?.name || null,
+  //       password: User_data?.password || null,
+  //       confrom_password: User_data?.password || null,
+  //       role_id: User_data?.role_id,
+  //       user_uuid: User_data?.user_uuid || null,
+  //     }
+  //   : [];
+
+  console.log(
+    "User_data",
+    User_data?.length || Object?.keys(User_data)?.length
+  );
   const { UserhandleSubmit, values, errors, handleOnchange } = UseForm(
     User_data,
     image

@@ -22,25 +22,18 @@ function CompanyInfoPage() {
     setState({ ...state, open: false });
   };
   useEffect(() => {
-    if (CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode === "200") {
+    if (CompanyInfoData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "company_info");
-        navigate("/company_info");
+        navigate("/companylist");
       }, 2000);
     }
-  }, [CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode, navigate]);
+  }, [CompanyInfoData?.SucessMessage?.statusCode, navigate]);
   useEffect(() => {
-    if (
-      CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode ===
-      "400"
-    ) {
+    if (CompanyInfoData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [
-    CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.statusCode,
-    CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.message,
-  ]);
+  }, [CompanyInfoData?.ErrorMessage?.statusCode]);
   return (
     <div>
       <Snackbar
@@ -50,17 +43,17 @@ function CompanyInfoPage() {
         onClose={handleClose}
         key={vertical + horizontal}
       >
-        {CompanyInfoData?.SucessMessageOfEditCompanyInfo?.message ? (
+        {CompanyInfoData?.SucessMessage?.message ? (
           <Alert
             onClose={handleClose}
             severity="success"
             sx={{ width: "100%" }}
           >
-            {CompanyInfoData?.SucessMessageOfEditCompanyInfo?.message}
+            {CompanyInfoData?.SucessMessage?.message}
           </Alert>
         ) : (
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            {CompanyInfoData?.ErrorMessageOfEditComapanyInfo?.data?.message}
+            {CompanyInfoData?.ErrorMessage?.message}
           </Alert>
         )}
       </Snackbar>

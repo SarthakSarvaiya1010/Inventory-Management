@@ -45,7 +45,7 @@ function EditCompanyInfo() {
     CompanyInfo,
     image
   );
-
+  console.log("errors)_(", errors);
   const hedalImgChage = (event) => {
     const [file] = event.target.files;
 
@@ -233,13 +233,15 @@ function EditCompanyInfo() {
                       <AddIcon /> Upload company logo
                     </Fab>
                   </label>
-                  ;
                 </Stack>
                 <Stack
                   direction="row"
                   justifyContent="center"
                   alignItems="center"
                   spacing={2}
+                  sx={{
+                    marginTop: "15px",
+                  }}
                 >
                   <Button
                     variant="contained"

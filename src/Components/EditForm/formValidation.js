@@ -10,6 +10,9 @@ export function ProductValidate(values, Product_data) {
   if (!values?.unit) {
     errors.unit = "unit is required";
   }
+  if (!values?.quantity) {
+    errors.quantity = "Quantity is required";
+  }
   if (!values?.weight) {
     errors.weight = "weight is required";
   }
@@ -76,9 +79,6 @@ export function CompanyValidate(values) {
     errors.company_name = "company name is required";
   }
 
-  if (!values?.image_src) {
-    errors.image_src = "image  is required";
-  }
   if (!values?.mobile_no) {
     errors.mobile_no = "mobile no is required";
   } else if (
@@ -99,6 +99,9 @@ export function CompanyValidate(values) {
   }
   if (!values?.website) {
     errors.website = "website is required";
+  }
+  if (!values?.fax_no) {
+    errors.fax_no = "fax no is required";
   }
 
   return errors;
@@ -140,6 +143,16 @@ export function UserValidate(values) {
     errors.password = "Password is missing";
   } else if (values?.password?.length < 6) {
     errors.password = "Password must be 6 or more characters";
+  } else if (!values.confrom_password) {
+    errors.confrom_password = "Confirm Password is required";
+  } else if (!values.confrom_password && !values.password) {
+    errors.confrom_password = "Confirm Password is required";
+  } else if (
+    values?.confrom_password
+      ? values?.password !== values.confrom_password
+      : values?.password !== values.password
+  ) {
+    errors.confrom_password = "Confirm password is Not Matched with password";
   }
 
   return errors;

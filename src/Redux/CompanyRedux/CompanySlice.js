@@ -14,8 +14,6 @@ const initialState = {
   CompanyInfo: [],
   DeleteCompanyInfo: [],
   CompanyInfoId: [],
-  SucessMessageOfEditCompanyInfo: [],
-  ErrorMessageOfEditComapanyInfo: [],
   SucessMessage: [],
   ErrorMessage: [],
   loder: true,
@@ -107,7 +105,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.SucessMessageOfEditCompanyInfo = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [CompanyInfoEditAction.rejected]: (state, payload) => {
       state.isLoading = false;

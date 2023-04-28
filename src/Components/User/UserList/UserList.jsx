@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   userListAction,
   userDeleteAction,
-  userGetByuuidAction,
   userGetByuuidDataAction,
 } from "../../../Redux/UserReduk/UserThunk";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -41,7 +40,7 @@ function UserList() {
 
   useEffect(() => {
     if (Object.keys(User.UserquickData).length) {
-      dispatch(quickLogin(User.UserDataByuuid));
+      dispatch(quickLogin(User?.UserquickData));
     }
   }, [User.UserDataByuuid, User.UserquickData, dispatch]);
 
