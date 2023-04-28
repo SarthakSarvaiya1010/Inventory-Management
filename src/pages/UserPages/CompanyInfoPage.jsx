@@ -29,6 +29,7 @@ function CompanyInfoPage() {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
         navigate("/company_info");
+        window.location.reload();
       }, 2000);
     }
   }, [CompanyInfoData?.SucessMessage?.statusCode, navigate]);
