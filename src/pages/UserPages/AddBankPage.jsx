@@ -4,18 +4,22 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
 import SanckBar from "../../Helpers/SanckBar/SanckBar";
+
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 function AddBankPage() {
   const BankInfoData = useSelector((state) => state?.BankInfoData);
   const navigate = useNavigate();
+  const [openD, setOpenD] = React.useState(false);
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
     horizontal: "center",
   });
+
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -32,6 +36,9 @@ function AddBankPage() {
   useEffect(() => {
     if (BankInfoData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
+    }
+    if (BankInfoData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
     }
   }, [BankInfoData?.ErrorMessage?.statusCode]);
 
@@ -64,7 +71,8 @@ function AddBankPage() {
           </Alert>
         )}
       </Snackbar>
-      <AddBank />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : <AddBank />}
     </div>
   );
 }

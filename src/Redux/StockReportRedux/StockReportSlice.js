@@ -18,7 +18,11 @@ const StockReportSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.Stock = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.Stock = data;
+      }
     },
     [StockReportListAction.rejected]: (state, payload) => {
       state.isLoading = false;

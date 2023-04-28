@@ -51,10 +51,12 @@ function Login(props) {
     setErrors(loginValidate(values));
     setValidatedata(true);
     if (values.email !== "" && values.password !== "") {
+      setButtonDisbel(true);
       dispatch(userLogin(values));
+    } else {
+      setButtonDisbel(false);
     }
     setTest(true);
-    setButtonDisbel(true);
   };
   const handleChange = (event) => {
     setValues((values) => ({
@@ -65,7 +67,7 @@ function Login(props) {
       setErrors(loginValidate(values));
     }
   };
-
+  console.log("error)(&*)(", errors);
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   // const NavigateItemName = window.localStorage.getItem("NavigateItemName");

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import AddCustomer from "../../Components/Customer/AddCustomer/AddCustomer";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -17,6 +18,7 @@ function AddCustomerPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -32,6 +34,9 @@ function AddCustomerPage() {
   useEffect(() => {
     if (Customers?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
+    }
+    if (Customers?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
     }
   }, [Customers?.ErrorMessage?.statusCode]);
   console.log("Customers*(&*(", Customers);
@@ -58,7 +63,8 @@ function AddCustomerPage() {
           </Alert>
         )}
       </Snackbar>
-      <AddCustomer />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : <AddCustomer />}
     </div>
   );
 }

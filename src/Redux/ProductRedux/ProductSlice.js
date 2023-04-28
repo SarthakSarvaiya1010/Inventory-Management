@@ -57,7 +57,11 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.SuccessMessageProductDelete = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SuccessMessageProductDelete = data;
+      }
     },
     [ProductDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -74,8 +78,12 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.productDeletList = data;
-      state.DeletedProductListLoader = true;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.productDeletList = data;
+        state.DeletedProductListLoader = true;
+      }
     },
     [ProductDeleteListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -92,7 +100,11 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.SuccessMessageProductDelete = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SuccessMessageProductDelete = data;
+      }
     },
     [PermanentProductDelete.rejected]: (state, payload) => {
       state.isLoading = false;

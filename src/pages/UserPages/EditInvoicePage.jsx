@@ -4,6 +4,7 @@ import InvoiceEdit from "../../Components/Invoice/InvoiceEdit/InvoiceEdit";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -18,6 +19,7 @@ export default function EditInvoicePage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const invoivepagedata = JSON.parse(
     localStorage.getItem("InvoiceEditPageData")
@@ -99,6 +101,7 @@ export default function EditInvoicePage() {
           </Alert>
         )}
       </Snackbar>
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
       <InvoiceEdit
         testData={testData}
         EditInvoiceSucessMessage={InvoicePageData?.InvoicePdf?.statusCode}

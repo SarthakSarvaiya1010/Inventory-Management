@@ -20,6 +20,7 @@ export const CustomerListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -95,12 +96,13 @@ export const CustomerDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
 export const CustomerNameListAction = createAsyncThunk(
   "userAction/CustomerNameList",
-  async (id, thunkAPI) => {
+  async (_, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/customersname`, {
@@ -109,6 +111,7 @@ export const CustomerNameListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -123,6 +126,7 @@ export const PermanentCustomerDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

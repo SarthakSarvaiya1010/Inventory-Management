@@ -36,9 +36,13 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.CoustomerList = data;
-      state.SucessMessage = [];
-      state.ErrorMessage = [];
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.CoustomerList = data;
+        state.SucessMessage = [];
+        state.ErrorMessage = [];
+      }
     },
     [CustomerListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -76,8 +80,11 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.customerDeletedList = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.customerDeletedList = data;
+      }
     },
     [CustomerDelectListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -94,8 +101,11 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.customerEdit = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.customerEdit = data;
+      }
     },
     [CustomerEditAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -133,8 +143,11 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SuccessMessageOfCustomerDeleted = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SuccessMessageOfCustomerDeleted = data;
+      }
     },
     [CustomerDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -151,8 +164,11 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SuccessMessageOfCustomerDeleted = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SuccessMessageOfCustomerDeleted = data;
+      }
     },
     [PermanentCustomerDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -169,8 +185,11 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.customerName = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.customerName = data;
+      }
     },
     [CustomerNameListAction.rejected]: (state, payload) => {
       state.isLoading = false;

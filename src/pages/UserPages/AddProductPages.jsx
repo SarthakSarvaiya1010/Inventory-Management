@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import SanckBar from "../../Helpers/SanckBar/SanckBar";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -18,6 +20,7 @@ function AddProductPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -35,11 +38,11 @@ function AddProductPage() {
     if (ProductEditData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
+    if (ProductEditData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
   }, [ProductEditData?.ErrorMessage?.statusCode]);
-  console.log(
-    "ProductEditData?.ErrorMessage?.statusCode",
-    ProductEditData?.ErrorMessage
-  );
+
   return (
     <div>
       <SanckBar
@@ -70,7 +73,8 @@ function AddProductPage() {
           </Alert>
         )}
       </Snackbar>
-      <AddProduct />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : <AddProduct />}
     </div>
   );
 }

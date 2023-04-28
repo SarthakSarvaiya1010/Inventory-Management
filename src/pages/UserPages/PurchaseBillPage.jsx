@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import PurchaseBillLis from "../../Components/PurchaseBill/PurchaseBillList/PurchaseBillList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -15,6 +16,7 @@ function PurchaseBillPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -38,6 +40,7 @@ function PurchaseBillPage() {
           {PurchaseData?.SucessMessageOfInvoiceDelete?.message}
         </Alert>
       </Snackbar>
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
       <PurchaseBillLis />
     </div>
   );

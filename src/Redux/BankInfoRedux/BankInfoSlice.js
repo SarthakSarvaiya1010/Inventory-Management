@@ -43,7 +43,11 @@ const BankInfoSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.ErrorMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.ErrorMessage = data;
+      }
     },
     [AddBankInfoAction.pending]: (state) => {
       state.isLoading = true;
@@ -64,7 +68,11 @@ const BankInfoSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.ErrorMessage = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.ErrorMessage = data;
+      }
     },
     [BankInfoEditAction.pending]: (state) => {
       state.isLoading = true;

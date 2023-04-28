@@ -20,6 +20,7 @@ export const CompanyInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -42,6 +43,7 @@ export const DeleteCompanyInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -56,6 +58,7 @@ export const CompanyInfoByIdAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -70,6 +73,7 @@ export const AddCompanyInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -85,6 +89,7 @@ export const CompanyInfoEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -99,6 +104,7 @@ export const CompanyDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -116,6 +122,7 @@ export const PermanentCompanyDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

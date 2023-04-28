@@ -35,9 +35,13 @@ const PurchaseBillSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.PurchaseBillList = data;
-      state.PurchaseEdit = [];
-      state.SucessMessage = [];
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.PurchaseBillList = data;
+        state.PurchaseEdit = [];
+        state.SucessMessage = [];
+      }
     },
     [PurchaseBillListAction.rejected]: (state, payload) => {
       state.isLoading = false;

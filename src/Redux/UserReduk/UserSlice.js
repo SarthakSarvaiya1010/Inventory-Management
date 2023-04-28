@@ -34,9 +34,13 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.ErrorMessage = [];
-      state.SucessMessage = [];
-      state.UserData = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.ErrorMessage = [];
+        state.SucessMessage = [];
+        state.UserData = data;
+      }
     },
     [userListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -75,8 +79,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.UserDeleteList = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.UserDeleteList = data;
+      }
     },
     [userDelteListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -93,7 +100,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      console.log("data", data);
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [userDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;

@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProductLisit from "../../Components/Product/ProductList/ProductList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
 import { useNavigate } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -12,7 +13,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function ProductListPage() {
   const productData = useSelector((state) => state?.ProductList);
   const navigate = useNavigate();
-  const [state, setState] = React.useState({
+  const [openD, setOpenD] = React.useState(false);
+  const [state, setState] = useState({
     open: false,
     vertical: "top",
     horizontal: "center",
@@ -30,6 +32,13 @@ function ProductListPage() {
       }, 2000);
     }
   }, [productData?.SuccessMessageProductDelete?.statusCode, navigate]);
+
+  useEffect(() => {
+    if (productData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [productData?.ErrorMessage?.statusCode, navigate]);
+
   return (
     <div>
       <Snackbar
@@ -42,7 +51,8 @@ function ProductListPage() {
           {productData?.SuccessMessageProductDelete?.message}
         </Alert>
       </Snackbar>
-      <ProductLisit />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : <ProductLisit />}
     </div>
   );
 }

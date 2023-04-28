@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import SanckBar from "../../Helpers/SanckBar/SanckBar";
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -18,6 +20,7 @@ function PaymentModePage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -66,6 +69,7 @@ function PaymentModePage() {
           </Alert>
         )}
       </Snackbar>
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
       <PaymentMode />
     </div>
   );

@@ -4,6 +4,8 @@ import AddInvoice from "../../Components/Invoice/AddInvoice/AddInvoice";
 import { useSelector } from "react-redux";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import { useNavigate } from "react-router-dom";
 import SanckBar from "../../Helpers/SanckBar/SanckBar";
 
@@ -21,6 +23,7 @@ function AddInvoicePage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -40,6 +43,9 @@ function AddInvoicePage() {
   useEffect(() => {
     if (InvoicePageData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
+    }
+    if (InvoicePageData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
     }
   }, [InvoicePageData?.ErrorMessage?.statusCode]);
   console.log("InvoicePageData()*_)", InvoicePageData?.ErrorMessage?.message);
@@ -98,10 +104,13 @@ function AddInvoicePage() {
           </Alert>
         )}
       </Snackbar>
-      <AddInvoice
-        sucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
-        disabled={disabled}
-      />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : (
+        <AddInvoice
+          sucessMessage={InvoicePageData?.InvoicePdf?.statusCode}
+          disabled={disabled}
+        />
+      )}
     </div>
   );
 }

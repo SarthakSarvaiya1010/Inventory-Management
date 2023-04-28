@@ -20,6 +20,7 @@ export const InvoiceListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -57,6 +58,7 @@ export const GetinvoiceEditDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -94,6 +96,7 @@ export const GetDeletedInvoiceList = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -108,6 +111,7 @@ export const DeleteInvoice = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -122,6 +126,7 @@ export const PermanentDeleteInvoice = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -152,6 +157,7 @@ export const PrintInvoiceData = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

@@ -74,6 +74,7 @@ export const GetPurchaseEditDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -89,6 +90,7 @@ export const UpdatePurchaseData = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );
@@ -141,6 +143,7 @@ export const GetpurchaseAddPageAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

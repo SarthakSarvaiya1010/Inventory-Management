@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import EditCompanyInfo from "../../Components/Company/EditCompanyInfo/EditCompanyInfo";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -17,6 +19,7 @@ function CompanyInfoPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -25,7 +28,7 @@ function CompanyInfoPage() {
     if (CompanyInfoData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        navigate("/companylist");
+        navigate("/company_info");
       }, 2000);
     }
   }, [CompanyInfoData?.SucessMessage?.statusCode, navigate]);
@@ -57,6 +60,7 @@ function CompanyInfoPage() {
           </Alert>
         )}
       </Snackbar>
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
       <EditCompanyInfo />
     </div>
   );

@@ -36,11 +36,15 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      state.invoiceList = data;
-      state.InvoicePdf = [];
-      state.SucessMessageOfInvoiceDelete = [];
-      state.ErrorMessage = [];
-      state.SucessMessage = [];
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.invoiceList = data;
+        state.InvoicePdf = [];
+        state.SucessMessageOfInvoiceDelete = [];
+        state.ErrorMessage = [];
+        state.SucessMessage = [];
+      }
     },
     [InvoiceListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -57,8 +61,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.GetInvoicePagData = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.GetInvoicePagData = data;
+      }
     },
     [GetinvoiceAddPageAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -75,8 +82,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.invoiceEdit = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.invoiceEdit = data;
+      }
     },
     [GetinvoiceEditDataAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -114,8 +124,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.DeletedInvoiceList = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.DeletedInvoiceList = data;
+      }
     },
     [GetDeletedInvoiceList.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -132,8 +145,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SucessMessageOfInvoiceDelete = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessageOfInvoiceDelete = data;
+      }
     },
     [DeleteInvoice.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -150,8 +166,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.SucessMessageOfInvoiceDelete = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessageOfInvoiceDelete = data;
+      }
     },
     [PermanentDeleteInvoice.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -189,8 +208,11 @@ const InvoiceSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      console.log("dataInvoiceListAction===>", data);
-      state.PrintInvoicePdf = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.PrintInvoicePdf = data;
+      }
     },
     [PrintInvoiceData.rejected]: (state, payload) => {
       state.isLoading = false;

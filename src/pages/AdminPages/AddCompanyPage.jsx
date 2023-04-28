@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import AddCompanyInfo from "../../Components/Company/AddCompany/AddCompanyInfo";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
@@ -17,6 +19,7 @@ function AddCompanyPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   useEffect(() => {
     if (CompanyInfoData?.SucessMessageOfEditCompanyInfo?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });

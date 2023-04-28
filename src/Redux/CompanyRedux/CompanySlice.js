@@ -32,10 +32,13 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.CompanyInfo = data;
-      state.ErrorMessage = [];
-      state.SucessMessage = [];
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.CompanyInfo = data;
+        state.ErrorMessage = [];
+        state.SucessMessage = [];
+      }
     },
     [CompanyInfoAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -52,8 +55,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.DeleteCompanyInfo = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.DeleteCompanyInfo = data;
+      }
     },
     [DeleteCompanyInfoAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -70,8 +76,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      state.CompanyInfoId = data;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.CompanyInfoId = data;
+      }
     },
     [CompanyInfoByIdAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -88,6 +97,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
       console.log("data", data);
     },
     [AddCompanyInfoAction.rejected]: (state, payload) => {
@@ -126,6 +140,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
       console.log("data", data);
     },
     [CompanyDeleteAction.rejected]: (state, payload) => {
@@ -143,7 +162,11 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      console.log("data", data);
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
     },
     [PermanentCompanyDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;

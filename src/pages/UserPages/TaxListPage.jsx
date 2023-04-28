@@ -3,6 +3,8 @@ import TaxList from "../../Components/Tax/TaxList/TaxList";
 import { useSelector } from "react-redux";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import { useNavigate } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -17,6 +19,7 @@ function TaxListPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -49,6 +52,7 @@ function TaxListPage() {
           {TaxData?.SuccessDeleteTaxMessage?.message}
         </Alert>
       </Snackbar>
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
       <TaxList />
     </div>
   );

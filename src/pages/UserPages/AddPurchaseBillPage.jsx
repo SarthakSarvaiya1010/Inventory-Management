@@ -5,6 +5,8 @@ import { useNavigate } from "react-router";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import SanckBar from "../../Helpers/SanckBar/SanckBar";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -19,6 +21,7 @@ function AddPurchaseBillPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -33,10 +36,13 @@ function AddPurchaseBillPage() {
   }, [PurchaseData?.SucessMessage?.statusCode, navigate]);
 
   useEffect(() => {
-    if (PurchaseData?.ErrorMessage?.data?.statusCode === "400") {
+    if (PurchaseData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [PurchaseData?.ErrorMessage?.data?.statusCode]);
+    if (PurchaseData?.ErrorMessage?.statusCode === "403") {
+      setOpenD(true);
+    }
+  }, [PurchaseData?.ErrorMessage?.statusCode]);
 
   return (
     <div>
@@ -68,7 +74,8 @@ function AddPurchaseBillPage() {
           </Alert>
         )}
       </Snackbar>
-      <AddPurchaseBill />
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
+      {openD ? null : <AddPurchaseBill />}
     </div>
   );
 }

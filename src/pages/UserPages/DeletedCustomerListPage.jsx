@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import DeletedCustomerList from "../../Components/Customer/DeletedCustomerList/DeletedCustomerList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -17,6 +19,7 @@ function DeletedCustomerListPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -43,6 +46,7 @@ function DeletedCustomerListPage() {
           {CustomerData?.SuccessMessageOfCustomerDeleted?.message}
         </Alert>
       </Snackbar>
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
       <DeletedCustomerList />
     </div>
   );

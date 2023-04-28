@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import InvoiceList from "../../Components/Invoice/InvoiceList/InvoiceList";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DialogBox from "../../Helpers/DialogBox/SessionDialogBox";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -15,6 +16,7 @@ function InvoiceListPage() {
     vertical: "top",
     horizontal: "center",
   });
+  const [openD, setOpenD] = React.useState(false);
   const { vertical, horizontal, open } = state;
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -37,6 +39,7 @@ function InvoiceListPage() {
           {InvoiceData?.SucessMessageOfInvoiceDelete?.message}
         </Alert>
       </Snackbar>
+      <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
       <InvoiceList />
     </div>
   );
