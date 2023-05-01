@@ -76,7 +76,6 @@ const useForm = (defaultData, image) => {
 
     if (Object.keys(errors).length === 0) {
       if (defaultData?.company_id) {
-        console.log("defaultData?.company_id", defaultData?.company_id);
         localStorage.setItem("company_id", parseInt(defaultData?.company_id));
         dispatch(CompanyInfoEditAction(formAddUserData));
       } else {
@@ -136,23 +135,6 @@ const useForm = (defaultData, image) => {
     formAddUserData.append("mobile_no", values?.mobile_no);
     formAddUserData.append("company_id", parseInt(values?.company_id));
     formAddUserData.append("image_src", image);
-    console.log(
-      "values.password",
-      values.name !== "" &&
-        values.email !== "" &&
-        values.role_id !== "" &&
-        values.password !== "" &&
-        values.mobile_no !== "" &&
-        values.company_id !== "" &&
-        values.confrom_password !== "" &&
-        values?.confrom_password
-        ? values?.password === values.confrom_password
-        : values?.password === values.password,
-      values.password !== "",
-      values.name !== "" && values?.password !== ""
-
-      // values?.confrom_password
-    );
     if (Object.keys(errors).length === 0) {
       if (
         values.name !== "" &&
@@ -163,9 +145,9 @@ const useForm = (defaultData, image) => {
         values.password !== "" &&
         values.company_id !== "" &&
         values.confrom_password !== "" &&
-        values?.confrom_password
-          ? values?.password === values.confrom_password
-          : values?.password === values.password
+        values?.confrom_password !== ""
+        // ? values?.password === values.confrom_password
+        // : values?.password === values.password
       ) {
         if (Object.keys(defaultData).length > 0) {
           localStorage.setItem("user_uuid", defaultData?.user_uuid);

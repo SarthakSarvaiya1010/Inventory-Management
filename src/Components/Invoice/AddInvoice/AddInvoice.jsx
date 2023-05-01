@@ -555,6 +555,7 @@ function AddInvoice(props) {
                                 disabled={
                                   product[addtable - 1]?.product_id &&
                                   product[addtable - 1]?.rate &&
+                                  product[addtable - 1]?.quantity &&
                                   product[addtable - 1]?.weight
                                     ? ""
                                     : true
@@ -735,7 +736,7 @@ function AddInvoice(props) {
                                       : ""
                                   }
                                   id="standard-basic-7"
-                                  label="Par"
+                                  label="Per"
                                   variant="standard"
                                   name={`unit ${ind}`}
                                   sx={{ width: 80 }}
@@ -743,12 +744,6 @@ function AddInvoice(props) {
                                     product[ind - 1]?.unit
                                       ? product[ind - 1]?.unit
                                       : ""
-                                  }
-                                  onChange={(e) =>
-                                    handleChangeProduct(
-                                      "unit " + ind,
-                                      parseFloat(e.target.value)
-                                    )
                                   }
                                 />
                                 <p style={{ color: "red", margin: 0 }}>

@@ -7,8 +7,8 @@ import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  CompanyInfoAction,
   CompanyDeleteAction,
+  CompanyInfoAction,
 } from "../../../Redux/CompanyRedux/CompanyThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";

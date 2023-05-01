@@ -14,6 +14,7 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
 import { quickLogin } from "../../../Redux/AuthSlice";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function UserList() {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ function UserList() {
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
+  const [open, setOpen] = useState(false);
+
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   const data = [];
 
@@ -44,7 +47,6 @@ function UserList() {
     }
   }, [User.UserDataByuuid, User.UserquickData, dispatch]);
 
-  console.log("User.UserquickData", User.UserquickData);
   useEffect(() => {
     if (successLoginData.LoginData.statusCode === "200") {
       localStorage.setItem(
@@ -89,10 +91,14 @@ function UserList() {
   };
 
   const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this Product?")) {
-      dispatch(userDeleteAction(User.UserData[data - 1]?.user_id));
-    }
+    setOpen(data);
+
     // window.location.reload();
+  };
+
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(dispatch(userDeleteAction(User.UserData[open - 1]?.user_uuid)));
   };
 
   const searchHeadal = (e) => {
@@ -107,7 +113,9 @@ function UserList() {
   };
 
   const headalShorting = (data_a) => {
-    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
+    shortingIcon === data_a
+      ? setShortingIcon(`D ${data_a}`)
+      : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
         if (shorting === "sr_no") {
@@ -117,24 +125,24 @@ function UserList() {
         }
         return "done";
       case "Name":
-        if (shorting === "name") {
-          setShorting(null);
+        if (shorting === "ASC/name") {
+          setShorting("DESC/name");
         } else {
-          setShorting("name");
+          setShorting("ASC/name");
         }
         return "done";
       case "Email Id":
-        if (shorting === "email") {
-          setShorting(null);
+        if (shorting === "ASC/email") {
+          setShorting("DESC/email");
         } else {
-          setShorting("email");
+          setShorting("ASC/email");
         }
         return "done";
       case "Mobile no":
-        if (shorting === "mobile_no") {
-          setShorting(null);
+        if (shorting === "ASC/mobile_no") {
+          setShorting("DESC/mobile_no");
         } else {
-          setShorting("mobile_no");
+          setShorting("ASC/mobile_no");
         }
         return "done";
       default:
@@ -145,6 +153,12 @@ function UserList() {
 
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this User?"}
+        finalDelete={finalDelete}
+      />
       {User?.UserData?.length ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header

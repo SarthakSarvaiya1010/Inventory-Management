@@ -143,9 +143,10 @@ export function UserValidate(values) {
     errors.password = "Password is missing";
   } else if (values?.password?.length < 6) {
     errors.password = "Password must be 6 or more characters";
-  } else if (!values.confrom_password) {
+  }
+  if (!values?.confrom_password) {
     errors.confrom_password = "Confirm Password is required";
-  } else if (!values.confrom_password && !values.password) {
+  } else if (!values.confrom_password) {
     errors.confrom_password = "Confirm Password is required";
   } else if (
     values?.confrom_password

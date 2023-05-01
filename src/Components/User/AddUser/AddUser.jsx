@@ -73,10 +73,6 @@ function AddUser() {
   //     }
   //   : [];
 
-  console.log(
-    "User_data",
-    User_data?.length || Object?.keys(User_data)?.length
-  );
   const { UserhandleSubmit, values, errors, handleOnchange } = UseForm(
     User_data,
     image
@@ -216,6 +212,7 @@ function AddUser() {
                   <br />
                   <TextField
                     label="Email"
+                    error={errors?.email ? true : null}
                     id="outlined-email-text"
                     name="email"
                     required
@@ -239,6 +236,7 @@ function AddUser() {
                     value={values?.password}
                     autoComplete="off"
                   />
+                  <p style={{ color: "red" }}>{errors?.password}</p>
                   <br />
                   <TextField
                     error={errors?.confrom_password ? true : null}
@@ -246,7 +244,7 @@ function AddUser() {
                     type="password"
                     name="confrom_password"
                     label="Confrom Password"
-                    defaultValue={id ? User_data.password : ""}
+                    defaultValue={id ? User_data?.confrom_password : ""}
                     variant="outlined"
                     onChange={(e) => handleOnchange(e)}
                     value={values?.confrom_password}

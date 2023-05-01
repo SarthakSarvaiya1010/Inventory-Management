@@ -7,6 +7,7 @@ import {
   UserAddAction,
   UserEditAction,
   userGetByuuidDataAction,
+  userDeletepermanentAction,
 } from "./UserThunk";
 
 const initialState = {
@@ -170,6 +171,27 @@ const CompanySlice = createSlice({
       }
     },
     [userGetByuuidDataAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
+    [userDeletepermanentAction.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [userDeletepermanentAction.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      if (payload?.payload?.name === "AxiosError") {
+        state.ErrorMessage = payload?.payload?.response?.data;
+      } else {
+        state.SucessMessage = data;
+      }
+    },
+    [userDeletepermanentAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },

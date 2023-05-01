@@ -102,7 +102,6 @@ const CompanySlice = createSlice({
       } else {
         state.SucessMessage = data;
       }
-      console.log("data", data);
     },
     [AddCompanyInfoAction.rejected]: (state, payload) => {
       state.isLoading = false;

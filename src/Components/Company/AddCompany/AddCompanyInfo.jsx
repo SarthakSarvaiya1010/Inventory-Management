@@ -43,7 +43,7 @@ function AddCompanyInfo() {
   return (
     <div>
       <Container fixed>
-        <Header name={"Add Company "} SearchBar={false} />
+        <Header name={"Add Company  "} SearchBar={false} />
         <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
           <DialogContent>
             <Box
@@ -73,6 +73,7 @@ function AddCompanyInfo() {
                 <br />
                 <TextField
                   error={errors?.website ? true : null}
+                  required
                   id="outlined-Product"
                   label="Website"
                   name="website"
@@ -90,6 +91,7 @@ function AddCompanyInfo() {
                     inputProps: { min: 0 },
                   }}
                   name="phone_no"
+                  required
                   label="Phone No."
                   onChange={(e) => handleOnchange(e)}
                 ></TextField>
@@ -106,7 +108,7 @@ function AddCompanyInfo() {
                   label="Mobile No."
                   variant="outlined"
                   onChange={(e) => handleOnchange(e)}
-                  value={values?.weight}
+                  value={values?.mobile_no}
                   autoComplete="off"
                 />
                 <p style={{ color: "red" }}>{errors?.mobile_no}</p>
@@ -146,7 +148,7 @@ function AddCompanyInfo() {
                   label="Terms & Condition"
                   variant="outlined"
                   onChange={(e) => handleOnchange(e)}
-                  value={values?.hsn}
+                  value={values?.terms_condition}
                   autoComplete="off"
                 />
                 <p style={{ color: "red" }}>{errors?.terms_condition}</p>
@@ -210,7 +212,7 @@ function AddCompanyInfo() {
                   color="success"
                   onClick={companyhandleSubmit}
                 >
-                  Update
+                  Add Company
                 </Button>
               </Stack>
             </Box>

@@ -78,7 +78,7 @@ export const userDelteListAction = createAsyncThunk(
   }
 );
 export const userDeleteAction = createAsyncThunk(
-  "userAction/userDelete",
+  "userAction/userDeleteAct",
   async (user_id, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -92,8 +92,23 @@ export const userDeleteAction = createAsyncThunk(
     }
   }
 );
+export const userDeletepermanentAction = createAsyncThunk(
+  "userAction/userDeleteAct",
+  async (user_id, thunkAPI) => {
+    const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    try {
+      const res = await api.delete(`/permanent/delete/users/${user_id}`, {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+);
 export const UserAddAction = createAsyncThunk(
-  "userAction/UserAddList",
+  "userAction/UserAddListAC",
   async (data, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {

@@ -301,7 +301,6 @@ function EditPurchaseBill(props) {
     payment: Payment,
   };
   const handleChangePayment = (name, value) => {
-    console.log(name, value);
     setPayment(value);
   };
 
@@ -312,15 +311,7 @@ function EditPurchaseBill(props) {
     setFindErrors(true);
     setErrors(PurcharsEditValidate(UpdatedData, addtable));
     window.scroll(0, 0);
-    console.log(
-      UpdatedData.purchase_date,
-      testData,
-      "test()*()",
-      Object.keys(errors).length === 0,
-      errors,
-      UpdatedData?.customer_id,
-      UpdatedData?.productdata?.length > 0
-    );
+
     if (
       Object.keys(errors).length === 0 &&
       UpdatedData?.customer_id &&
@@ -341,7 +332,6 @@ function EditPurchaseBill(props) {
   }, [findErrors, CustomerListData?.customer_id, product]);
 
   const handleChangeDate = (event) => {
-    console.log(event.$d);
     setDateData(event.$d);
   };
   useEffect(() => {

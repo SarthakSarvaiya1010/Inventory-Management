@@ -6,15 +6,20 @@ import Container from "@mui/material/Container";
 import { Stack, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { userDelteListAction } from "../../../Redux/UserReduk/UserThunk";
+import {
+  userDeletepermanentAction,
+  userDelteListAction,
+} from "../../../Redux/UserReduk/UserThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
+import DialogBox from "../../../Helpers/DialogBox/DialogBox";
 
 function UserDeleteList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [open, setOpen] = useState(false);
   const User = useSelector((state) => state?.User);
+
   let limit = 4;
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
@@ -34,7 +39,6 @@ function UserDeleteList() {
 
   // eslint-disable-next-line array-callback-return
   User.UserDeleteList.map((e) => {
-    console.log("eeeeeeeee=>", e);
     let elements = {};
     elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     elements["Name"] = e.name;
@@ -44,18 +48,17 @@ function UserDeleteList() {
   });
 
   const headalEdit = (data) => {
-    localStorage.setItem(
-      "NavigateItemName",
-      `/user/edit/${User.UserDeleteList[data - 1]?.user_uuid}`
-    );
     navigate(`/user/edit/${User.UserDeleteList[data - 1]?.user_uuid}`);
   };
 
   const headalDelete = (data) => {
-    if (window.confirm("Are you sure you want to Delete this User?")) {
-      // dispatch(userDeleteAction(User.UserDeleteList[data - 1]?.user_uuid));
-    }
-    // window.location.reload();
+    setOpen(data);
+  };
+  const finalDelete = () => {
+    setOpen(false);
+    dispatch(
+      userDeletepermanentAction(User.UserDeleteList[open - 1]?.user_uuid)
+    );
   };
 
   const searchHeadal = (e) => {
@@ -83,25 +86,25 @@ function UserDeleteList() {
           setShorting("sr_no");
         }
         return "done";
-      case "Product Name":
-        if (shorting === "product_name") {
-          setShorting(null);
+      case "Name":
+        if (shorting === "ASC/name") {
+          setShorting("DESC/name");
         } else {
-          setShorting("product_name");
+          setShorting("ASC/name");
         }
         return "done";
-      case "HSN":
-        if (shorting === "hsn") {
-          setShorting(null);
+      case "Email Id":
+        if (shorting === "ASC/email") {
+          setShorting("DESC/email");
         } else {
-          setShorting("hsn");
+          setShorting("ASC/email");
         }
         return "done";
-      case "Weight [ In Grams ]":
-        if (shorting === "weight") {
-          setShorting(null);
+      case "Mobile no":
+        if (shorting === "ASC/mobile_no") {
+          setShorting("DESC/mobile_no");
         } else {
-          setShorting("weight");
+          setShorting("ASC/mobile_no");
         }
         return "done";
       default:
@@ -112,6 +115,12 @@ function UserDeleteList() {
 
   return (
     <div>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        DialogText={"Are you sure you want to Delete this User?"}
+        finalDelete={finalDelete}
+      />
       {!User?.Loader ? (
         User?.UserDeleteList?.length ? (
           <Container fixed sx={{ Width: 100 }}>

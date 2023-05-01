@@ -602,6 +602,11 @@ function InvoiceEdit(props) {
                                     testData?.productlistdata[ind - 1]
                                       ?.product_id
                                   }
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
                                 >
                                   <MenuItem value="">
                                     <em>None</em>
@@ -638,6 +643,11 @@ function InvoiceEdit(props) {
                                 defaultValue={
                                   testData?.productlistdata[ind - 1]?.hsn || 0
                                 }
+                                disabled={
+                                  testData?.productlistdata?.length >= ind
+                                    ? true
+                                    : false
+                                }
                                 value={product[ind - 1]?.hsn || 0}
                               />
                             </TableCell>
@@ -668,6 +678,11 @@ function InvoiceEdit(props) {
                                     "weight " + ind,
                                     parseFloat(e.target.value)
                                   )
+                                }
+                                disabled={
+                                  testData?.productlistdata?.length >= ind
+                                    ? true
+                                    : false
                                 }
                               />
                               <p style={{ color: "red", margin: 0 }}>
@@ -703,6 +718,11 @@ function InvoiceEdit(props) {
                                     parseFloat(e.target.value)
                                   )
                                 }
+                                disabled={
+                                  testData?.productlistdata?.length >= ind
+                                    ? true
+                                    : false
+                                }
                               />
                               <p style={{ color: "red", margin: 0 }}>
                                 {!product[ind - 1]?.rate ? errors?.rate : ""}
@@ -729,11 +749,10 @@ function InvoiceEdit(props) {
                                     ? product[ind - 1]?.unit
                                     : ""
                                 }
-                                onChange={(e) =>
-                                  handleChangeProduct(
-                                    "rate " + ind,
-                                    parseFloat(e.target.value)
-                                  )
+                                disabled={
+                                  testData?.productlistdata?.length >= ind
+                                    ? true
+                                    : false
                                 }
                               />
                               <p style={{ color: "red", margin: 0 }}>
@@ -769,6 +788,11 @@ function InvoiceEdit(props) {
                                     parseFloat(e.target.value)
                                   )
                                 }
+                                disabled={
+                                  testData?.productlistdata?.length >= ind
+                                    ? true
+                                    : false
+                                }
                               />
                               <p style={{ color: "red", margin: 0 }}>
                                 {!product[ind - 1]?.quantity
@@ -798,6 +822,11 @@ function InvoiceEdit(props) {
                                       ? 0
                                       : product[ind - 1]?.amount?.toFixed(2)
                                   }
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
                                 />
                               ) : (
                                 <TextField
@@ -816,6 +845,11 @@ function InvoiceEdit(props) {
                                       ?.amount || 0
                                   }
                                   value={product[ind - 1]?.amount?.toFixed(2)}
+                                  disabled={
+                                    testData?.productlistdata?.length >= ind
+                                      ? true
+                                      : false
+                                  }
                                 />
                               )}
                               <p style={{ color: "red", margin: 0 }}>
