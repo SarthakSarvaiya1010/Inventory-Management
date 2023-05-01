@@ -24,15 +24,6 @@ function CompanyListPage() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-  useEffect(() => {
-    if (CompanyInfo?.SucessMessage?.statusCode === "200") {
-      setState({ open: true, vertical: "top", horizontal: "center" });
-      setTimeout(() => {
-        navigate("/companylist");
-        window.location.reload();
-      }, 2000);
-    }
-  }, [CompanyInfo?.SucessMessage?.statusCode, navigate]);
 
   useEffect(() => {
     if (CompanyInfo?.ErrorMessage?.statusCode === "403") {

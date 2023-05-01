@@ -25,7 +25,7 @@ function AddUserPage() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-  console.log("User?.SucessMessage", User?.SucessMessage);
+
   useEffect(() => {
     if (User?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });

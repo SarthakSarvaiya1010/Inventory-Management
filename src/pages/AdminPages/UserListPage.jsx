@@ -23,15 +23,6 @@ function UserListPage() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-  useEffect(() => {
-    if (User?.SucessMessage?.statusCode === "200") {
-      setState({ open: true, vertical: "top", horizontal: "center" });
-      setTimeout(() => {
-        navigate("/userlist");
-        window.location.reload();
-      }, 2000);
-    }
-  }, [User?.SucessMessage?.statusCode, navigate]);
 
   useEffect(() => {
     if (User?.ErrorMessage?.statusCode === "403") {

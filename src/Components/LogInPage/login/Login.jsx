@@ -67,7 +67,7 @@ function Login(props) {
       setErrors(loginValidate(values));
     }
   };
-  console.log("error)(&*)(", errors);
+
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
   // const NavigateItemName = window.localStorage.getItem("NavigateItemName");

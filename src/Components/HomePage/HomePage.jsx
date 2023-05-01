@@ -2,14 +2,6 @@ import React from "react";
 import { Typography } from "@mui/material";
 
 function HomePage() {
-  // let logindata = localStorage.getItem("LoginData");
-  // useEffect(() => {
-  //   localStorage.clear();
-  //   if (logindata) {
-  //     localStorage.clear();
-  //     window.location.reload();
-  //   }
-  // }, [logindata]);
   return (
     <div>
       <Typography paragraph>
