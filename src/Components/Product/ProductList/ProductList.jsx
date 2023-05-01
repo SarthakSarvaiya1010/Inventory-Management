@@ -27,7 +27,6 @@ function ProductList() {
   const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const data = [];
 
-  console.log("productData*_&*_&", productData);
   useEffect(() => {
     dispatch(
       ProductListAction({

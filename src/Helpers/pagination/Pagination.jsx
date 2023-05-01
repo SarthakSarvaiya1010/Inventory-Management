@@ -63,7 +63,6 @@ export default function UsePagination(props) {
             <li
               key={index}
               onClick={() => {
-                console.log("children", page);
                 PageNumber(page);
                 localStorage.setItem("PageNumber", page);
               }}

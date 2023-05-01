@@ -18,6 +18,7 @@ const initialState = {
   UserquickData: [],
   SucessMessage: [],
   ErrorMessage: [],
+  SuccessDeleteUserMessage: [],
   loder: true,
   Loader: false,
 };
@@ -38,8 +39,6 @@ const CompanySlice = createSlice({
       if (payload?.payload?.name === "AxiosError") {
         state.ErrorMessage = payload?.payload?.response?.data;
       } else {
-        state.ErrorMessage = [];
-        state.SucessMessage = [];
         state.UserData = data;
       }
     },
@@ -104,7 +103,7 @@ const CompanySlice = createSlice({
       if (payload?.payload?.name === "AxiosError") {
         state.ErrorMessage = payload?.payload?.response?.data;
       } else {
-        state.SucessMessage = data;
+        state.SuccessDeleteUserMessage = data;
       }
     },
     [userDeleteAction.rejected]: (state, payload) => {

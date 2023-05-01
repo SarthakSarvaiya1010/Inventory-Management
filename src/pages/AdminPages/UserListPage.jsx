@@ -25,6 +25,22 @@ function UserListPage() {
   };
 
   useEffect(() => {
+    if (
+      User?.SuccessDeleteUserMessage?.statusCode === "200" ||
+      User?.SucessMessage?.statusCode === "200"
+    ) {
+      setState({ open: true, vertical: "top", horizontal: "center" });
+      setTimeout(() => {
+        navigate("/userlist");
+        window.location.reload();
+      }, 2000);
+    }
+  }, [
+    User?.SuccessDeleteUserMessage?.statusCode,
+    User?.SucessMessage?.statusCode,
+    navigate,
+  ]);
+  useEffect(() => {
     if (User?.ErrorMessage?.statusCode === "403") {
       setOpenD(true);
     }

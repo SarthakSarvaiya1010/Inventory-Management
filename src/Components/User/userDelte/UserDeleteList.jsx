@@ -121,7 +121,7 @@ function UserDeleteList() {
         DialogText={"Are you sure you want to Delete this User?"}
         finalDelete={finalDelete}
       />
-      {!User?.Loader ? (
+      {!User?.isLoading ? (
         User?.UserDeleteList?.length ? (
           <Container fixed sx={{ Width: 100 }}>
             <Header
@@ -143,7 +143,6 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "adduser");
                     navigate("/adduser");
                   }}
                 >
@@ -155,7 +154,6 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "userlist");
                     navigate("/userlist");
                   }}
                 >
@@ -210,7 +208,6 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "adduser");
                     navigate("/adduser");
                   }}
                 >
@@ -222,7 +219,6 @@ function UserDeleteList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "userlist");
                     navigate("/userlist");
                   }}
                 >

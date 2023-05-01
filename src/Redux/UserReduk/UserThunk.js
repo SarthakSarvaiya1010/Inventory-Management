@@ -78,7 +78,7 @@ export const userDelteListAction = createAsyncThunk(
   }
 );
 export const userDeleteAction = createAsyncThunk(
-  "userAction/userDeleteAct",
+  "userAction/userDeleteActD",
   async (user_id, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {

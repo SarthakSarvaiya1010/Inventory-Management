@@ -159,7 +159,7 @@ function UserList() {
         DialogText={"Are you sure you want to Delete this User?"}
         finalDelete={finalDelete}
       />
-      {User?.UserData?.length ? (
+      {!User?.isLoading ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header
             name={"User List"}

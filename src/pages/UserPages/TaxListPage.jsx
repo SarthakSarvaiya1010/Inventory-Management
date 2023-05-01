@@ -29,7 +29,6 @@ function TaxListPage() {
     if (TaxData?.SuccessDeleteTaxMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "tax_list");
         navigate("/tax_list");
         window.location.reload();
       }, 2000);

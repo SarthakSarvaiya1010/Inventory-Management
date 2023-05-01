@@ -15,14 +15,6 @@ export default function PositionedSnackbar(props) {
     setState({ ...state, open: false });
   };
   let AlertText = alertMessage ? alertMessage : alertErrorMessage;
-  console.log(
-    "AlertText",
-    AlertText,
-    "alertMessage",
-    alertMessage,
-    "alertErrorMessage",
-    alertErrorMessage
-  );
   return (
     <div>
       <Snackbar
