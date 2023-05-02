@@ -212,7 +212,7 @@ function AddCompanyInfo() {
                   color="success"
                   onClick={companyhandleSubmit}
                 >
-                  Add Company
+                  Submit
                 </Button>
               </Stack>
             </Box>

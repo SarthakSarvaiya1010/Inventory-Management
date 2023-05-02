@@ -90,6 +90,12 @@ export function CompanyValidate(values) {
   }
   if (!values?.phone_no) {
     errors.phone_no = "phone no is required";
+  } else if (
+    !/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(
+      parseInt(values?.phone_no)
+    )
+  ) {
+    errors.phone_no = "mobile number is invalid";
   }
   if (!values?.terms_condition) {
     errors.terms_condition = "terms condition is required";

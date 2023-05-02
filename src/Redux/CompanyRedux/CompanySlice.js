@@ -144,7 +144,6 @@ const CompanySlice = createSlice({
       } else {
         state.SucessMessage = data;
       }
-      console.log("data", data);
     },
     [CompanyDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;

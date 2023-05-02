@@ -25,10 +25,7 @@ function UserListPage() {
   };
 
   useEffect(() => {
-    if (
-      User?.SuccessDeleteUserMessage?.statusCode === "200" ||
-      User?.SucessMessage?.statusCode === "200"
-    ) {
+    if (User?.SuccessDeleteUserMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
         navigate("/userlist");
@@ -54,7 +51,7 @@ function UserListPage() {
         key={vertical + horizontal}
       >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          {User?.SucessMessage?.message}
+          {User?.SuccessDeleteUserMessage?.message}
         </Alert>
       </Snackbar>
       <DialogBox open={openD} DialogText={"Session is expired please logIn"} />
