@@ -32,20 +32,17 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.ErrorMessage = [];
-        state.SucessMessage = [];
-        state.productList = data;
-      }
-      console.log("payload", payload?.payload?.response?.data);
+
+      state.ErrorMessage = [];
+      state.SucessMessage = [];
+      state.productList = data;
     },
     [ProductListAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },
       } = payload;
+
       state.ErrorMessage = data;
     },
 
@@ -57,11 +54,8 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SuccessMessageProductDelete = data;
-      }
+
+      state.SuccessMessageProductDelete = data;
     },
     [ProductDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -78,12 +72,9 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.productDeletList = data;
-        state.DeletedProductListLoader = true;
-      }
+
+      state.productDeletList = data;
+      state.DeletedProductListLoader = true;
     },
     [ProductDeleteListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -100,83 +91,68 @@ const ProductSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SuccessMessageProductDelete = data;
-      }
-    },
-    [PermanentProductDelete.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [ProductAddAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [ProductAddAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [ProductAddAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
 
-      state.ErrorMessage = data;
+      state.SuccessMessageProductDelete = data;
     },
-    [ProductEditDataAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [ProductEditDataAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [ProductEditDataAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [ProductEditAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [ProductEditAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.productEdit = data;
-      }
-    },
-    [ProductEditAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
+  },
+  [PermanentProductDelete.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [ProductAddAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [ProductAddAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [ProductAddAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [ProductEditDataAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [ProductEditDataAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [ProductEditDataAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [ProductEditAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [ProductEditAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.productEdit = data;
+  },
+  [ProductEditAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
   },
 });
 

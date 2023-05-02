@@ -61,9 +61,6 @@ function UserDeleteList() {
     );
   };
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -127,7 +124,9 @@ function UserDeleteList() {
             <Header
               name={"Delete User List"}
               SearchBar={true}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
@@ -192,7 +191,9 @@ function UserDeleteList() {
             <Header
               name={"Delete User List"}
               SearchBar={false}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>

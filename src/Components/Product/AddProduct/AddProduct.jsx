@@ -41,11 +41,6 @@ function AddProduct() {
     image
   );
 
-  const handleCancle = () => {
-    localStorage.setItem("NavigateItemName", "productlist");
-    navigate("/productlist");
-  };
-
   const hedalImgChage = (event) => {
     const [file] = event.target.files;
 
@@ -61,7 +56,7 @@ function AddProduct() {
     }
     setImage(file);
   };
-  console.log("Product_data.quantity", Product_data.quantity);
+
   return (
     <div>
       {!ProductEditData.isLoading || !id ? (
@@ -283,7 +278,9 @@ function AddProduct() {
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={() => handleCancle()}
+                  onClick={() => {
+                    navigate("/productlist");
+                  }}
                 >
                   cancel
                 </Button>

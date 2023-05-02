@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const StockReportListAction = createAsyncThunk(
   "userAction/StockReportList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/stockreport`, {
@@ -20,7 +20,7 @@ export const StockReportListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

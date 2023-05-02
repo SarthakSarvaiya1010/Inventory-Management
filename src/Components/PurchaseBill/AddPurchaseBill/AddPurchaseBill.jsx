@@ -72,7 +72,6 @@ function AddPurchaseBill(props) {
 
   const [addtable, setAddTable] = useState(1);
   const [product, setProduct] = useState([]);
-  console.log("product(*&", product);
   const [open, setOpen] = useState(null);
   const [discount, setDiscount] = useState();
   const [disabled, setDisabled] = useState(false);

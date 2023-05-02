@@ -29,7 +29,6 @@ function AddTaxPage() {
     if (TaxData?.SucessMessage?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "tax_list");
         navigate("/tax_list");
       }, 2000);
     }

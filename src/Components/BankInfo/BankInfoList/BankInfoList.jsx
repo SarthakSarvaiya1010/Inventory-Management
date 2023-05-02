@@ -47,17 +47,6 @@ function BankInfoList() {
     data.push(elements);
   });
 
-  const headalEdit = (data) => {
-    navigate(
-      `/bank/edit/${BankInfoData?.BankInfoList[data - 1]?.bank_info_no}`
-    );
-  };
-
-  const headalDelete = (data) => {
-    setOpen(data);
-
-    // window.location.reload();
-  };
   const finalDelete = () => {
     setOpen(false);
     dispatch(
@@ -67,9 +56,6 @@ function BankInfoList() {
     );
   };
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -127,7 +113,9 @@ function BankInfoList() {
           <Header
             name={"Bank Info List"}
             SearchBar={true}
-            searchHeadal={searchHeadal}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
             onKeyDown={onKeyDown}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
@@ -162,8 +150,16 @@ function BankInfoList() {
             {BankInfoData?.BankInfoList?.length ? (
               <Table
                 data={data}
-                headalEdit={headalEdit}
-                headalDelete={headalDelete}
+                headalEdit={(data) => {
+                  navigate(
+                    `/bank/edit/${
+                      BankInfoData?.BankInfoList[data - 1]?.bank_info_no
+                    }`
+                  );
+                }}
+                headalDelete={(data) => {
+                  setOpen(data);
+                }}
                 headalShorting={headalShorting}
                 ShortingHide={shortingIcon}
               />

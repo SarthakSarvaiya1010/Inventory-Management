@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const ProductListAction = createAsyncThunk(
   "userAction/ProductList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/products`, {
@@ -20,13 +20,14 @@ export const ProductListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      // return rejectWithValue(error?.response);
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const ProductDeleteListAction = createAsyncThunk(
   "userAction/DelteProductList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/delete/products`, {
@@ -43,14 +44,14 @@ export const ProductDeleteListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 
 export const ProductDeleteAction = createAsyncThunk(
   "userAction/ProductDelete",
-  async (Product_id, thunkAPI) => {
+  async (Product_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/delete/products/${Product_id}`, {
@@ -59,13 +60,13 @@ export const ProductDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const PermanentProductDelete = createAsyncThunk(
   "userAction/PermanentProduct",
-  async (Product_id, thunkAPI) => {
+  async (Product_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/permanent/delete/products/${Product_id}`, {
@@ -74,13 +75,13 @@ export const PermanentProductDelete = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const ProductAddAction = createAsyncThunk(
   "userAction/ProductAdd",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.post(`products`, data, {
@@ -89,13 +90,13 @@ export const ProductAddAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const ProductEditAction = createAsyncThunk(
-  "userAction/ProductEdit",
-  async (Product_id, thunkAPI) => {
+  "userAction/ProductEditQ",
+  async (Product_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/products/${Product_id}`, {
@@ -104,13 +105,13 @@ export const ProductEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const ProductEditDataAction = createAsyncThunk(
   "userAction/ProductEditData",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const Product_id = localStorage.getItem("product_id");
     try {
@@ -120,7 +121,7 @@ export const ProductEditDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

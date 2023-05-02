@@ -45,9 +45,7 @@ function CustomerList() {
       CustomerDeleteAction(CustomerData.CoustomerList[open - 1]?.customer_id)
     );
   };
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
+
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -121,7 +119,9 @@ function CustomerList() {
           <Header
             name={"Customer List"}
             SearchBar={true}
-            searchHeadal={searchHeadal}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
             onKeyDown={onKeyDown}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>

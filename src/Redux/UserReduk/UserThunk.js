@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const userListAction = createAsyncThunk(
   "userAction/CompanyList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/users`, {
@@ -20,13 +20,13 @@ export const userListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const userGetByuuidAction = createAsyncThunk(
   "userAction/userGetByuuid",
-  async (user_uuid, thunkAPI) => {
+  async (user_uuid, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/users/${user_uuid}`, {
@@ -35,13 +35,13 @@ export const userGetByuuidAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const userGetByuuidDataAction = createAsyncThunk(
   "userAction/userGetByuuidData",
-  async (user_uuid, thunkAPI) => {
+  async (user_uuid, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/users/${user_uuid}`, {
@@ -50,13 +50,13 @@ export const userGetByuuidDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const userDelteListAction = createAsyncThunk(
   "userAction/userDelteList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/delete/users`, {
@@ -73,13 +73,13 @@ export const userDelteListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const userDeleteAction = createAsyncThunk(
   "userAction/userDeleteActD",
-  async (user_id, thunkAPI) => {
+  async (user_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/delete/users/${user_id}`, {
@@ -88,13 +88,13 @@ export const userDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const userDeletepermanentAction = createAsyncThunk(
   "userAction/userDeleteAct",
-  async (user_id, thunkAPI) => {
+  async (user_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/permanent/delete/users/${user_id}`, {
@@ -103,13 +103,13 @@ export const userDeletepermanentAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const UserAddAction = createAsyncThunk(
   "userAction/UserAddListAC",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.post(`/users`, data, {
@@ -118,13 +118,13 @@ export const UserAddAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const UserEditAction = createAsyncThunk(
   "userAction/UserEditDataAct",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const user_uuid = localStorage.getItem("user_uuid");
     try {
@@ -133,7 +133,7 @@ export const UserEditAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

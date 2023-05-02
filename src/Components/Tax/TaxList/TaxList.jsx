@@ -56,9 +56,6 @@ function TaxList() {
     );
   }, [dispatch, limit, pageNumber, shorting]);
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -109,7 +106,6 @@ function TaxList() {
         return " state";
     }
   };
-  console.log("TaxData", TaxData, TaxData?.TaxList.length);
   return (
     <div>
       <DialogBox
@@ -123,7 +119,9 @@ function TaxList() {
           <Header
             name={"Tax List"}
             SearchBar={true}
-            searchHeadal={searchHeadal}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
             onKeyDown={onKeyDown}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -139,7 +137,6 @@ function TaxList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "addtax");
                   navigate("/addtax");
                 }}
               >
@@ -151,7 +148,6 @@ function TaxList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "deletedtax");
                   navigate("/deletedtax");
                 }}
               >

@@ -45,9 +45,6 @@ function DeletedTaxList() {
     dispatch(TaxDelectListAction({ limit: limit, pageNumber: pageNumber }));
   }, [dispatch, limit, pageNumber]);
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -61,14 +58,9 @@ function DeletedTaxList() {
   };
 
   const finalDelete = () => {
-    console.log(
-      "TaxData?.TaxDeletList[data - 1]?.tax_id",
-      TaxData?.TaxDeletList[data]
-    );
     setOpen(false);
     dispatch(PermanentTaxDeleteAction(TaxData?.TaxDeletList[open - 1]?.tax_id));
   };
-
   return (
     <div>
       <DialogBox
@@ -77,118 +69,77 @@ function DeletedTaxList() {
         DialogText={"Are you sure you want to Delete this Tax?"}
         finalDelete={finalDelete}
       />
-      {!TaxData?.loder ? (
-        TaxData?.TaxDeletList?.length ? (
-          <Container fixed>
-            <Header
-              name={"Deleted Tax List"}
-              SearchBar={true}
-              searchHeadal={searchHeadal}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
+      {!TaxData?.isLoading ? (
+        <Container fixed>
+          <Header
+            name={"Deleted Tax List"}
+            SearchBar={true}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
+            onKeyDown={onKeyDown}
+          />
+          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              spacing={4}
+              sx={{ p: 4 }}
+            >
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/tax_list");
+                }}
               >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    localStorage.setItem("NavigateItemName", "tax_list");
-                    navigate("/tax_list");
-                  }}
-                >
-                  back
-                </Button>
+                back
+              </Button>
 
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    localStorage.setItem("NavigateItemName", "addtax");
-                    navigate("/addtax");
-                  }}
-                >
-                  add Tax
-                </Button>
-              </Stack>
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/addtax");
+                }}
+              >
+                add Tax
+              </Button>
+            </Stack>
+            {TaxData?.TaxDeletList?.length ? (
               <Table
                 data={data}
                 headalDelete={setOpen}
                 headalEdit={headalEdit}
                 hide={true}
               />
-              <Stack
-                sx={{
-                  margin: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  padding: "20px  0 20px 20px",
-                }}
-              >
-                <UsePagination
-                  countNumbuer={Math.ceil(
-                    TaxData?.TaxDeletList[0]?.total_count / limit
-                  )}
-                  PageNumber={setPageNumber}
-                  currentPage={pageNumber}
-                />
-              </Stack>
-            </Container>
-          </Container>
-        ) : (
-          <Container fixed>
-            <Header
-              name={"Deleted Tax List"}
-              SearchBar={false}
-              searchHeadal={searchHeadal}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
-              >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    localStorage.setItem("NavigateItemName", "tax_list");
-                    navigate("/tax_list");
-                  }}
-                >
-                  back
-                </Button>
-
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    localStorage.setItem("NavigateItemName", "addtax");
-                    navigate("/addtax");
-                  }}
-                >
-                  add Tax
-                </Button>
-              </Stack>
+            ) : (
               <h1 style={{ color: "red", textAlign: "center", padding: "5px" }}>
                 No Any Record OF Deleted Tax
               </h1>
-            </Container>
+            )}
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  TaxData?.TaxDeletList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+                currentPage={pageNumber}
+              />
+            </Stack>
           </Container>
-        )
+        </Container>
       ) : (
         <Stack
           sx={{ color: "grey.500", height: "80vh" }}

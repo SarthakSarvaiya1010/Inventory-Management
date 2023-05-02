@@ -58,10 +58,6 @@ function StockReportList() {
     );
   }, [dispatch, limit, pageNumber, shorting]);
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
-  console.log();
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -118,7 +114,6 @@ function StockReportList() {
         return " state";
     }
   };
-  console.log("StockReport", StockReport);
   return (
     <div>
       <DialogBox
@@ -132,7 +127,9 @@ function StockReportList() {
           <Header
             name={"Stock List"}
             SearchBar={true}
-            searchHeadal={searchHeadal}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
             onKeyDown={onKeyDown}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>

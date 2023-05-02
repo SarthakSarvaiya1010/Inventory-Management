@@ -58,11 +58,7 @@ const PurchaseBillSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
+      state.SucessMessage = data;
     },
     [AddIPurchaseBill.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -100,11 +96,7 @@ const PurchaseBillSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
+      state.SucessMessage = data;
     },
     [UpdatePurchaseData.rejected]: (state, payload) => {
       state.isLoading = false;

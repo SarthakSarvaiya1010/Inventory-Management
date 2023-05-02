@@ -48,7 +48,6 @@ export default function ViewDeletedInvoiceList() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-  console.log("DeletedInvoiceList", DeletedInvoiceList?.DeletedInvoiceList);
 
   useEffect(() => {
     if (
@@ -68,9 +67,7 @@ export default function ViewDeletedInvoiceList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
+
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -143,7 +140,9 @@ export default function ViewDeletedInvoiceList() {
             <Header
               name={"Delete Invoice List"}
               SearchBar={true}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -159,7 +158,6 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "invoice_list");
                     navigate("/invoice_list");
                   }}
                 >
@@ -171,7 +169,6 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "addinvoice");
                     navigate("/addinvoice");
                   }}
                 >
@@ -224,7 +221,9 @@ export default function ViewDeletedInvoiceList() {
             <Header
               name={"Delete Invoice List"}
               SearchBar={false}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -240,7 +239,6 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "invoice_list");
                     navigate("/invoice_list");
                   }}
                 >
@@ -252,7 +250,6 @@ export default function ViewDeletedInvoiceList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "addinvoice");
                     navigate("/addinvoice");
                   }}
                 >

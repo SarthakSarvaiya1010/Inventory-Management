@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const BankInfoAction = createAsyncThunk(
   "userAction/BankInfo",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/bank`, {
@@ -20,13 +20,13 @@ export const BankInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const AddBankInfoAction = createAsyncThunk(
   "userAction/AddBankInfo",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.post(`/bank`, data, {
@@ -35,13 +35,13 @@ export const AddBankInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const BankInfoBypurchase_idAction = createAsyncThunk(
   "userAction/BankInfoBypurchase_id",
-  async (id, thunkAPI) => {
+  async (id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/bank/${id}`, {
@@ -50,7 +50,7 @@ export const BankInfoBypurchase_idAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const CustomerListAction = createAsyncThunk(
   "userAction/CustomerList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/customers`, {
@@ -20,13 +20,13 @@ export const CustomerListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CustomerAddAction = createAsyncThunk(
   "userAction/CustomerAdd",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.post(`/customers`, data, {
@@ -35,13 +35,13 @@ export const CustomerAddAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CustomerDelectListAction = createAsyncThunk(
   "userAction/CustomerDelect",
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/delete/customers`, {
@@ -55,7 +55,7 @@ export const CustomerDelectListAction = createAsyncThunk(
 );
 export const CustomerEditAction = createAsyncThunk(
   "userAction/CustomerEdit",
-  async (customers_id, thunkAPI) => {
+  async (customers_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/customers/${customers_id}`, {
@@ -64,13 +64,13 @@ export const CustomerEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CustomerEditDataAction = createAsyncThunk(
   "userAction/CustomerEditData",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const Customer_id = localStorage.getItem("customer_id");
     console.log("Customer_id*()_", Customer_id);
@@ -81,13 +81,13 @@ export const CustomerEditDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CustomerDeleteAction = createAsyncThunk(
   "userAction/DeleteAction",
-  async (id, thunkAPI) => {
+  async (id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/delete/customers/${id}`, {
@@ -96,13 +96,13 @@ export const CustomerDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CustomerNameListAction = createAsyncThunk(
   "userAction/CustomerNameList",
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/customersname`, {
@@ -111,13 +111,13 @@ export const CustomerNameListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const PermanentCustomerDeleteAction = createAsyncThunk(
   "userAction/PermanentCustomer",
-  async (id, thunkAPI) => {
+  async (id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/permanent/delete/customers/${id}`, {
@@ -126,7 +126,7 @@ export const PermanentCustomerDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

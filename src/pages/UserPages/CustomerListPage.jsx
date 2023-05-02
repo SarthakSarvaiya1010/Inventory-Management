@@ -28,7 +28,6 @@ function CustomerListPage() {
     if (CustomerData?.SuccessMessageOfCustomerDeleted?.statusCode === "200") {
       setState({ open: true, vertical: "top", horizontal: "center" });
       setTimeout(() => {
-        localStorage.setItem("NavigateItemName", "customer_list");
         navigate("/customer_list");
         window.location.reload();
       }, 2000);

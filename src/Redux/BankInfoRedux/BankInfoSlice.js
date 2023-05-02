@@ -30,134 +30,104 @@ const BankInfoSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.BankInfoList = data;
-        state.BankInfoEdit = [];
-        state.SucessMessage = [];
-      }
+      state.BankInfoList = data;
+      state.BankInfoEdit = [];
+      state.SucessMessage = [];
     },
     [BankInfoListAction.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.ErrorMessage = data;
-      }
-    },
-    [AddBankInfoAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [AddBankInfoAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [AddBankInfoAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.ErrorMessage = data;
-      }
-    },
-    [BankInfoEditAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [BankInfoEditAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.BankInfoEdit = data;
-      }
-    },
-    [BankInfoEditAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
       state.ErrorMessage = data;
     },
-    [BankInfoEditDataAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [BankInfoEditDataAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [BankInfoEditDataAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [BankInfoDeleteDataAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [BankInfoDeleteDataAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [BankInfoDeleteDataAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [UpdateBalanceAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [UpdateBalanceAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [UpdateBalanceAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
+  },
+  [AddBankInfoAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [AddBankInfoAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [AddBankInfoAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.ErrorMessage = data;
+  },
+  [BankInfoEditAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [BankInfoEditAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.BankInfoEdit = data;
+  },
+  [BankInfoEditAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [BankInfoEditDataAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [BankInfoEditDataAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [BankInfoEditDataAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [BankInfoDeleteDataAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [BankInfoDeleteDataAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [BankInfoDeleteDataAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [UpdateBalanceAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [UpdateBalanceAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [UpdateBalanceAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
   },
 });
 

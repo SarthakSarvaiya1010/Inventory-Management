@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const BankInfoListAction = createAsyncThunk(
   "userAction/BankInfoList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     let user_id = accessToken?.user_id;
     try {
@@ -21,13 +21,13 @@ export const BankInfoListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const AddBankInfoAction = createAsyncThunk(
   "userAction/AddBankInfo",
-  async (value, thunkAPI) => {
+  async (value, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     let data = {
       bank_name: value?.bank_name || null,
@@ -42,13 +42,13 @@ export const AddBankInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const BankInfoEditAction = createAsyncThunk(
   "userAction/BankInfoEdit",
-  async (id, thunkAPI) => {
+  async (id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     console.log("()&*()&", id);
     try {
@@ -58,13 +58,13 @@ export const BankInfoEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const BankInfoEditDataAction = createAsyncThunk(
   "userAction/BankInfoEditData",
-  async (value, thunkAPI) => {
+  async (value, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const id = localStorage.getItem("bank_id");
     let data = {
@@ -80,13 +80,13 @@ export const BankInfoEditDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const BankInfoDeleteDataAction = createAsyncThunk(
   "userAction/BankInfoDeleteData",
-  async (id, thunkAPI) => {
+  async (id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
 
     try {
@@ -96,13 +96,13 @@ export const BankInfoDeleteDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const UpdateBalanceAction = createAsyncThunk(
   "userAction/UpdateBalanceAction",
-  async (value, thunkAPI) => {
+  async (value, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     let data = {
       bank_name: value?.bank_name || null,
@@ -116,7 +116,7 @@ export const UpdateBalanceAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

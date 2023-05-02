@@ -36,13 +36,10 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.CoustomerList = data;
-        state.SucessMessage = [];
-        state.ErrorMessage = [];
-      }
+
+      state.CoustomerList = data;
+      state.SucessMessage = [];
+      state.ErrorMessage = [];
     },
     [CustomerListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -59,11 +56,7 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
+      state.SucessMessage = data;
     },
     [CustomerAddAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -80,11 +73,8 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.customerDeletedList = data;
-      }
+
+      state.customerDeletedList = data;
     },
     [CustomerDelectListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -101,103 +91,87 @@ const CustomerSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.customerEdit = data;
-      }
+
+      state.customerEdit = data;
     },
-    [CustomerEditAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [CustomerEditDataAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [CustomerEditDataAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [CustomerEditDataAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [CustomerDeleteAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [CustomerDeleteAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SuccessMessageOfCustomerDeleted = data;
-      }
-    },
-    [CustomerDeleteAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [PermanentCustomerDeleteAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [PermanentCustomerDeleteAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SuccessMessageOfCustomerDeleted = data;
-      }
-    },
-    [PermanentCustomerDeleteAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [CustomerNameListAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [CustomerNameListAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.customerName = data;
-      }
-    },
-    [CustomerNameListAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
+  },
+  [CustomerEditAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [CustomerEditDataAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [CustomerEditDataAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [CustomerEditDataAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [CustomerDeleteAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [CustomerDeleteAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.SuccessMessageOfCustomerDeleted = data;
+  },
+  [CustomerDeleteAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [PermanentCustomerDeleteAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [PermanentCustomerDeleteAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.SuccessMessageOfCustomerDeleted = data;
+  },
+  [PermanentCustomerDeleteAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [CustomerNameListAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [CustomerNameListAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.customerName = data;
+  },
+  [CustomerNameListAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
   },
 });
 

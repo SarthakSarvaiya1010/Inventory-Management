@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const CompanyInfoAction = createAsyncThunk(
   "userAction/CompanyList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/company_info`, {
@@ -20,13 +20,13 @@ export const CompanyInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const DeleteCompanyInfoAction = createAsyncThunk(
   "userAction/DeleteCompany",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/delete/company_info`, {
@@ -43,13 +43,13 @@ export const DeleteCompanyInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CompanyInfoByIdAction = createAsyncThunk(
   "userAction/CompanyInfoById",
-  async (company_id, thunkAPI) => {
+  async (company_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/company_info/${company_id}`, {
@@ -58,13 +58,13 @@ export const CompanyInfoByIdAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const AddCompanyInfoAction = createAsyncThunk(
   "userAction/AddCompanyInfo",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.post(`/add/company_info`, data, {
@@ -73,13 +73,13 @@ export const AddCompanyInfoAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CompanyInfoEditAction = createAsyncThunk(
   "userAction/EditAction",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const company_id = window.localStorage.getItem("company_id");
     try {
@@ -89,13 +89,13 @@ export const CompanyInfoEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const CompanyDeleteAction = createAsyncThunk(
   "userAction/CompanyDeleteAction",
-  async (company_id, thunkAPI) => {
+  async (company_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/delete/company_info/${company_id}`, {
@@ -104,13 +104,13 @@ export const CompanyDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const PermanentCompanyDeleteAction = createAsyncThunk(
   "userAction/PermanentCompany",
-  async (company_id, thunkAPI) => {
+  async (company_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(
@@ -122,7 +122,7 @@ export const PermanentCompanyDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

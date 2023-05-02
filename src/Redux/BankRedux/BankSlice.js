@@ -28,13 +28,10 @@ const BankSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.BankInfo = data;
-        state.ErrorMessage = [];
-        state.SucessMessage = [];
-      }
+
+      state.BankInfo = data;
+      state.ErrorMessage = [];
+      state.SucessMessage = [];
     },
     [BankInfoAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -51,11 +48,7 @@ const BankSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
+      state.SucessMessage = data;
     },
     [AddBankInfoAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -72,19 +65,16 @@ const BankSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.BankInfoBypurchase_id = data;
-      }
+
+      state.BankInfoBypurchase_id = data;
     },
-    [BankInfoBypurchase_idAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
+  },
+  [BankInfoBypurchase_idAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
   },
 });
 

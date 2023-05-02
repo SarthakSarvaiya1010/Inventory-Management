@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const PurchaseBillListAction = createAsyncThunk(
   "userAction/PurchaseBillList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/purchasebill`, {
@@ -21,13 +21,13 @@ export const PurchaseBillListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const PurchaseBillDeleteListAction = createAsyncThunk(
   "userAction/PurchaseBillDeleteListAction",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/purchasebilldeletelist`, {
@@ -44,13 +44,13 @@ export const PurchaseBillDeleteListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const AddIPurchaseBill = createAsyncThunk(
   "userAction/AddInvoice",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.post(`/addpurchasebill`, data, {
@@ -59,13 +59,13 @@ export const AddIPurchaseBill = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const GetPurchaseEditDataAction = createAsyncThunk(
   "userAction/PurchaseEdit",
-  async (Purchase_id, thunkAPI) => {
+  async (Purchase_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/purchaselistbyid/${Purchase_id}`, {
@@ -74,13 +74,13 @@ export const GetPurchaseEditDataAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const UpdatePurchaseData = createAsyncThunk(
   "userAction/UpdatePurchaseData",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const Purchase_id = localStorage.getItem("purchaseId");
     try {
@@ -90,13 +90,13 @@ export const UpdatePurchaseData = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const DeletePurchase = createAsyncThunk(
   "userAction/DeletePurchase",
-  async (purchase_id, thunkAPI) => {
+  async (purchase_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/deletepurchase/${purchase_id}`, {
@@ -105,13 +105,13 @@ export const DeletePurchase = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const PermanentDeletePurchase = createAsyncThunk(
   "userAction/PermanentDeletePurchase",
-  async (purchase_id, thunkAPI) => {
+  async (purchase_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/permanentDeletepurchase/${purchase_id}`, {
@@ -120,13 +120,13 @@ export const PermanentDeletePurchase = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const GetpurchaseAddPageAction = createAsyncThunk(
   "userAction/GetpurchaseAddPageAction",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/getpurchasepage`, {
@@ -143,7 +143,7 @@ export const GetpurchaseAddPageAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

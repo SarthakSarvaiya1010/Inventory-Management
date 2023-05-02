@@ -28,7 +28,6 @@ function UpdateBalanceInfo() {
   const [values, setvalues] = useState(null);
   const [errors, setErrors] = useState({});
   const BankInfoData = useSelector((state) => state?.BankInfoData);
-  console.log("BankInfoData", BankInfoData);
 
   useEffect(() => {
     dispatch(BankInfoListAction());
@@ -62,9 +61,6 @@ function UpdateBalanceInfo() {
     }
   };
 
-  const handleCancle = () => {
-    navigate("/bank_info");
-  };
   return (
     <div>
       {!BankInfoData.isLoading ? (
@@ -144,7 +140,9 @@ function UpdateBalanceInfo() {
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={() => handleCancle()}
+                  onClick={() => {
+                    navigate("/bank_info");
+                  }}
                 >
                   cancel
                 </Button>

@@ -90,20 +90,11 @@ function UserList() {
     dispatch(userGetByuuidDataAction(User?.UserData[data - 1]?.user_uuid));
   };
 
-  const headalDelete = (data) => {
-    setOpen(data);
-
-    // window.location.reload();
-  };
-
   const finalDelete = () => {
     setOpen(false);
     dispatch(dispatch(userDeleteAction(User.UserData[open - 1]?.user_uuid)));
   };
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -164,7 +155,9 @@ function UserList() {
           <Header
             name={"User List"}
             SearchBar={true}
-            searchHeadal={searchHeadal}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
             onKeyDown={onKeyDown}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
@@ -201,7 +194,9 @@ function UserList() {
             <Table
               data={data}
               headalEdit={headalEdit}
-              headalDelete={headalDelete}
+              headalDelete={(data) => {
+                setOpen(data);
+              }}
               headalShorting={headalShorting}
               ShortingHide={shortingIcon}
               LoginIconShow={true}

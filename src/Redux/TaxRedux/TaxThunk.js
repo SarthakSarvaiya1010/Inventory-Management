@@ -3,7 +3,7 @@ import api from "../../utils/api";
 
 export const TaxListAction = createAsyncThunk(
   "userAction/TaxList",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/tax`, {
@@ -20,13 +20,13 @@ export const TaxListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const TaxEditAction = createAsyncThunk(
   "userAction/TaxEditAction",
-  async (Tax_id, thunkAPI) => {
+  async (Tax_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/tax/${Tax_id}`, {
@@ -35,13 +35,13 @@ export const TaxEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const TaxDelectListAction = createAsyncThunk(
   "userAction/TaxDelectList",
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/delete/tax`, {
@@ -50,13 +50,13 @@ export const TaxDelectListAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const TaxDeleteAction = createAsyncThunk(
   "userAction/TaxDelect",
-  async (Tax_id, thunkAPI) => {
+  async (Tax_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/delete/tax/${Tax_id}`, {
@@ -65,13 +65,13 @@ export const TaxDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const TaxAddAction = createAsyncThunk(
   "userAction/TaxAdd",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.post(`/add/tax`, data, {
@@ -80,13 +80,13 @@ export const TaxAddAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const TaxInfoEditAction = createAsyncThunk(
   "userAction/TaxInfoEdit",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const Tax_id = localStorage.getItem("Tax_id");
     console.log("Tax_id", Tax_id);
@@ -97,13 +97,13 @@ export const TaxInfoEditAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const PermanentTaxDeleteAction = createAsyncThunk(
   "userAction/TaxDelect",
-  async (Tax_id, thunkAPI) => {
+  async (Tax_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.delete(`/delete/tax/${Tax_id}`, {
@@ -112,7 +112,7 @@ export const PermanentTaxDeleteAction = createAsyncThunk(
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

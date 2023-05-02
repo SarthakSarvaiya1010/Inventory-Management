@@ -36,11 +36,8 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.UserData = data;
-      }
+
+      state.UserData = data;
     },
     [userListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -57,146 +54,122 @@ const CompanySlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.loder = false;
-        state.UserDataByuuid = data;
-      }
+
+      state.loder = false;
+      state.UserDataByuuid = data;
     },
-    [userGetByuuidAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [userDelteListAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [userDelteListAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.UserDeleteList = data;
-      }
-    },
-    [userDelteListAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [userDeleteAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [userDeleteAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SuccessDeleteUserMessage = data;
-      }
-    },
-    [userDeleteAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [UserAddAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [UserAddAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [UserAddAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [UserEditAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [UserEditAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [UserEditAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [userGetByuuidDataAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [userGetByuuidDataAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.UserquickData = data;
-      }
-    },
-    [userGetByuuidDataAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
-    [userDeletepermanentAction.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [userDeletepermanentAction.fulfilled]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
-    },
-    [userDeletepermanentAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
+  },
+  [userGetByuuidAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [userDelteListAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [userDelteListAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.UserDeleteList = data;
+  },
+  [userDelteListAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [userDeleteAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [userDeleteAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.SuccessDeleteUserMessage = data;
+  },
+  [userDeleteAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [UserAddAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [UserAddAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [UserAddAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [UserEditAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [UserEditAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [UserEditAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [userGetByuuidDataAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [userGetByuuidDataAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+
+    state.UserquickData = data;
+  },
+  [userGetByuuidDataAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
+  },
+  [userDeletepermanentAction.pending]: (state) => {
+    state.isLoading = true;
+  },
+  [userDeletepermanentAction.fulfilled]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.SucessMessage = data;
+  },
+  [userDeletepermanentAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
   },
 });
 

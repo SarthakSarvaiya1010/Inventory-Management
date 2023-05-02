@@ -13,59 +13,59 @@ const initialState = {
 
 export const userLogin = createAsyncThunk(
   "userAction/userlogin",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     try {
       const res = await api.post(`/login`, data);
       return res;
     } catch (error) {
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const resetPassword = createAsyncThunk(
   "userAction/resetPassword",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     try {
       const res = await api.post(`/resetpassword`, data);
       return res;
     } catch (error) {
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const setPassword = createAsyncThunk(
   "userAction/setPassword",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     try {
       const Password_id = localStorage.getItem("Password_id");
 
       const res = await api.post(`setpassword/${Password_id}`, data);
       return res;
     } catch (error) {
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const quickLogin = createAsyncThunk(
   "userAction/quickLogin",
-  async (data, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     try {
       const res = await api.post(`/quicklogin`, data);
       return res;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );
 export const resetPasswordlinkcheck = createAsyncThunk(
   "userAction/resetPasswordlinkcheck",
-  async (id, thunkAPI) => {
+  async (id, { rejectWithValue }, thunkAPI) => {
     try {
       const res = await api.get(`/resetpasswordTimeCheck/${id}`);
       return res;
     } catch (error) {
-      return error;
+      return rejectWithValue(error?.response);
     }
   }
 );

@@ -36,9 +36,7 @@ function DeletedProductList() {
       })
     );
   }, [dispatch, limit, pageNumber, shorting]);
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
+
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -115,7 +113,7 @@ function DeletedProductList() {
       PermanentProductDelete(productData.productDeletList[open - 1]?.product_id)
     );
   };
-  console.log("productData?.Loader", productData?.productDeletList);
+
   return (
     <div>
       <DialogBox
@@ -130,7 +128,9 @@ function DeletedProductList() {
             <Header
               name={"Delete Product List"}
               SearchBar={true}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -146,7 +146,6 @@ function DeletedProductList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "productList");
                     navigate("/productList");
                   }}
                 >
@@ -158,7 +157,6 @@ function DeletedProductList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "addproduct");
                     navigate("/addproduct");
                   }}
                 >
@@ -199,7 +197,9 @@ function DeletedProductList() {
             <Header
               name={"Delete Product List"}
               SearchBar={false}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>

@@ -52,9 +52,7 @@ function DeletedCustomerList() {
       `/customer/edit/${CustomerData?.CoustomerList[data - 1]?.customer_id}`
     );
   };
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
+
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -139,7 +137,9 @@ function DeletedCustomerList() {
             <Header
               name={"Deleted Customer List"}
               SearchBar={true}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -155,7 +155,6 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "customer_list");
                     navigate("/customer_list");
                   }}
                 >
@@ -167,7 +166,6 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "addcustomer");
                     navigate("/addcustomer");
                   }}
                 >
@@ -208,7 +206,9 @@ function DeletedCustomerList() {
             <Header
               name={"Deleted Customer List"}
               SearchBar={true}
-              searchHeadal={searchHeadal}
+              searchHeadal={(e) => {
+                setSearch(e.target.value);
+              }}
               onKeyDown={onKeyDown}
             />
             <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -224,7 +224,6 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "customer_list");
                     navigate("/customer_list");
                   }}
                 >
@@ -236,7 +235,6 @@ function DeletedCustomerList() {
                   color="success"
                   sx={{ fontSize: 16 }}
                   onClick={() => {
-                    localStorage.setItem("NavigateItemName", "addcustomer");
                     navigate("/addcustomer");
                   }}
                 >

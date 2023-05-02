@@ -33,10 +33,7 @@ function CompanyListPage() {
       }, 2000);
     }
   }, [CompanyInfo?.SucessMessage?.statusCode, navigate]);
-  console.log(
-    "CompanyInfo?.SucessMessage?.statusCode",
-    CompanyInfo?.SucessMessage?.statusCode
-  );
+
   useEffect(() => {
     if (CompanyInfo?.ErrorMessage?.statusCode === "403") {
       setOpenD(true);

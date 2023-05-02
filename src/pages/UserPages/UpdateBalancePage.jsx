@@ -38,9 +38,6 @@ function UpdateBalancePage() {
     if (BankInfoData?.ErrorMessage?.statusCode === "400") {
       setState({ open: true, vertical: "top", horizontal: "center" });
     }
-  }, [BankInfoData?.ErrorMessage?.statusCode]);
-
-  useEffect(() => {
     if (BankInfoData?.ErrorMessage?.statusCode === "403") {
       setOpenD(true);
     }

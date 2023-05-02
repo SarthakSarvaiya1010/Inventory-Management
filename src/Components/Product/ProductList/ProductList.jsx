@@ -68,9 +68,6 @@ function ProductList() {
     );
   };
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -135,7 +132,9 @@ function ProductList() {
           <Header
             name={"Product List"}
             SearchBar={true}
-            searchHeadal={searchHeadal}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
             onKeyDown={onKeyDown}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
@@ -151,7 +150,6 @@ function ProductList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "addproduct");
                   navigate("/addproduct");
                 }}
               >
@@ -162,7 +160,6 @@ function ProductList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "deletedproduct");
                   navigate("/deletedproduct");
                 }}
               >

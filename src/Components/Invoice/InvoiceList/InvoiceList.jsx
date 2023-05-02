@@ -115,9 +115,6 @@ function InvoiceList() {
     }
   };
 
-  const searchHeadal = (e) => {
-    setSearch(e.target.value);
-  };
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
@@ -217,7 +214,9 @@ function InvoiceList() {
           <Header
             name={"InvoiceList"}
             SearchBar={true}
-            searchHeadal={searchHeadal}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
             onKeyDown={onKeyDown}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
@@ -233,7 +232,6 @@ function InvoiceList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem("NavigateItemName", "addinvoice");
                   navigate("/addinvoice");
                 }}
               >

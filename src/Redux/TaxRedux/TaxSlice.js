@@ -33,13 +33,10 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.ErrorMessage = [];
-        state.SucessMessage = [];
-        state.TaxList = data;
-      }
+
+      state.ErrorMessage = [];
+      state.SucessMessage = [];
+      state.TaxList = data;
     },
     [TaxListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -56,11 +53,8 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.TaxEdit = data;
-      }
+
+      state.TaxEdit = data;
     },
     [TaxEditAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -77,13 +71,10 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.TaxDeletList = data;
-        state.loder = false;
-        state.DeletedTaxLoader = true;
-      }
+
+      state.TaxDeletList = data;
+      state.loder = false;
+      state.DeletedTaxLoader = true;
     },
     [TaxDelectListAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -100,13 +91,10 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.TaxDeletList = data;
-        state.loder = false;
-        state.DeletedTaxLoader = true;
-      }
+
+      state.TaxDeletList = data;
+      state.loder = false;
+      state.DeletedTaxLoader = true;
     },
     [TaxDeleteAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -123,11 +111,7 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
+      state.SucessMessage = data;
     },
     [TaxAddAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -144,11 +128,7 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SucessMessage = data;
-      }
+      state.SucessMessage = data;
     },
     [TaxInfoEditAction.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -165,19 +145,16 @@ const TaxSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.ErrorMessage = payload?.payload?.response?.data;
-      } else {
-        state.SuccessDeleteTaxMessage = data;
-      }
+
+      state.SuccessDeleteTaxMessage = data;
     },
-    [PermanentTaxDeleteAction.rejected]: (state, payload) => {
-      state.isLoading = false;
-      const {
-        payload: { data },
-      } = payload;
-      state.ErrorMessage = data;
-    },
+  },
+  [PermanentTaxDeleteAction.rejected]: (state, payload) => {
+    state.isLoading = false;
+    const {
+      payload: { data },
+    } = payload;
+    state.ErrorMessage = data;
   },
 });
 
