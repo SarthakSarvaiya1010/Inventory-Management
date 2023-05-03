@@ -69,11 +69,6 @@ function InvoiceEdit(props) {
   const [errors, setErrors] = useState({});
   const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [findErrors, setFindErrors] = useState(null);
-  console.log(
-    "InvoicePageData*)-9",
-    InvoicePageData.isLoading,
-    testData?.productlistdata
-  );
 
   if (EditInvoiceSucessMessage && disabled) {
     setDisabled(false);
@@ -105,7 +100,7 @@ function InvoiceEdit(props) {
     totalweight += sum.weight;
     totalrate += sum.rate;
   });
-  console.log("totalAmount==>", totalAmount, testData?.productlistdata);
+
   let SGST = totalAmount
     ? ((1.5 / 100) * totalAmount).toFixed(2) === "0.00"
       ? null
@@ -116,7 +111,6 @@ function InvoiceEdit(props) {
       ? null
       : ((1.5 / 100) * totalAmount).toFixed(2)
     : null;
-  console.log("SGST,CGST", CGST, typeof CGST);
   const Bill_Amount =
     totalAmount && SGST && CGST
       ? totalAmount +
@@ -328,7 +322,6 @@ function InvoiceEdit(props) {
   };
 
   const handleChangeDate = (event) => {
-    console.log(event.$d);
     setDateData(event.$d);
   };
 

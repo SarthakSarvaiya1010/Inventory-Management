@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import ProductSlice from "./Redux/ProductRedux/ProductSlice";
 import UserLoginSlice from "./Redux/AuthSlice";
 import TaxSlice from "./Redux/TaxRedux/TaxSlice";
@@ -24,4 +24,7 @@ export const store = configureStore({
     BankData: BankSlice,
     BankInfoData: BankInfoSlice,
   },
+  middleware: getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });

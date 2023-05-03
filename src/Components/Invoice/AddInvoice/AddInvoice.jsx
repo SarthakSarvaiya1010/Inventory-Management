@@ -334,8 +334,6 @@ function AddInvoice(props) {
     addtable,
   ]);
 
-  console.log("CustomerListData", CustomerListData);
-  console.log("product)*()&*", product, product[0]?.unit);
   return (
     <div>
       {InvoicePageData?.GetInvoicePagData[0]?.CustomerList.length ? (

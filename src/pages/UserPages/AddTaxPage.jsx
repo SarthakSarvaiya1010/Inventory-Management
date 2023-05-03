@@ -42,10 +42,8 @@ function AddTaxPage() {
       setOpenD(true);
     }
   }, [TaxData?.ErrorMessage?.statusCode]);
-  console.log("TaxData?.ErrorMessage?.data?.statusCode", TaxData?.ErrorMessage);
   return (
     <div>
-      {" "}
       <Snackbar
         autoHideDuration={2000}
         anchorOrigin={{ vertical, horizontal }}

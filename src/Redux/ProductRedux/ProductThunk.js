@@ -19,7 +19,6 @@ export const ProductListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       // return rejectWithValue(error?.response);
       return rejectWithValue(error?.response);
     }
@@ -43,7 +42,6 @@ export const ProductDeleteListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -59,7 +57,6 @@ export const ProductDeleteAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -74,7 +71,6 @@ export const PermanentProductDelete = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -89,7 +85,6 @@ export const ProductAddAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -104,7 +99,6 @@ export const ProductEditAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -120,7 +114,6 @@ export const ProductEditDataAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }

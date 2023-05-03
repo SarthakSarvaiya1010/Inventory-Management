@@ -20,7 +20,6 @@ export const PurchaseBillListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -43,7 +42,6 @@ export const PurchaseBillDeleteListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -58,7 +56,6 @@ export const AddIPurchaseBill = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -73,7 +70,6 @@ export const GetPurchaseEditDataAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -89,7 +85,6 @@ export const UpdatePurchaseData = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -104,7 +99,6 @@ export const DeletePurchase = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -119,7 +113,6 @@ export const PermanentDeletePurchase = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -142,7 +135,6 @@ export const GetpurchaseAddPageAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }

@@ -17,7 +17,6 @@ function EditPurchaseBillPage() {
   const invoivepagedata = JSON.parse(
     localStorage.getItem("PurchaseAddPageData")
   );
-  console.log("PurchaseData?.PurchaseEdit", PurchaseData?.PurchaseEdit);
   const testData = PurchaseData?.PurchaseEdit?.length
     ? PurchaseData?.PurchaseEdit[0]
     : invoivepagedata[0]

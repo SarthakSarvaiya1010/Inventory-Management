@@ -19,7 +19,6 @@ export const CompanyInfoAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -42,7 +41,6 @@ export const DeleteCompanyInfoAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -57,7 +55,6 @@ export const CompanyInfoByIdAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -72,7 +69,6 @@ export const AddCompanyInfoAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -88,7 +84,6 @@ export const CompanyInfoEditAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -103,7 +98,6 @@ export const CompanyDeleteAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -121,7 +115,6 @@ export const PermanentCompanyDeleteAction = createAsyncThunk(
       );
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }

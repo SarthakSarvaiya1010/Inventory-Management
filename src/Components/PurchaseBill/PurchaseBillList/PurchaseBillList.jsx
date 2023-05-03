@@ -163,7 +163,6 @@ function PurchaseBillList() {
     }
   };
   const handleChangeDate = (event) => {
-    console.log("CustomerListData", event.$d);
     setCustomerListData(event.$d);
   };
   const handleChange = (event) => {

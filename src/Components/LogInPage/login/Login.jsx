@@ -70,7 +70,6 @@ function Login(props) {
 
   const navigate = useNavigate();
   const successLoginData = useSelector((state) => state?.UserLoginReducer);
-  // const NavigateItemName = window.localStorage.getItem("NavigateItemName");
   useEffect(() => {
     if (successLoginData?.LoginData?.statusCode === "200" && test) {
       localStorage.setItem(
@@ -109,23 +108,6 @@ function Login(props) {
     successLoginData?.LoginData?.statusCode,
     test,
   ]);
-  // useEffect(() => {
-  //   if (accessToken?.role_id === 2) {
-  //     if (NavigateItemName) {
-  //       navigate(NavigateItemName);
-  //     } else {
-  //       navigate("/productlist");
-  //     }
-  //   } else {
-  //     if (accessToken?.role_id === 1) {
-  //       if (NavigateItemName) {
-  //         navigate(NavigateItemName);
-  //       } else {
-  //         navigate("/userlist");
-  //       }
-  //     }
-  //   }
-  // }, [NavigateItemName, accessToken?.role_id, navigate]);
   return (
     <div>
       <div>

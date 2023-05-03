@@ -39,7 +39,6 @@ function AddCustomerPage() {
       setOpenD(true);
     }
   }, [Customers?.ErrorMessage?.statusCode]);
-  console.log("Customers*(&*(", Customers);
   return (
     <div>
       <Snackbar

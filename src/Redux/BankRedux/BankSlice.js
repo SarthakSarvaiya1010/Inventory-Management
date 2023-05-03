@@ -68,13 +68,13 @@ const BankSlice = createSlice({
 
       state.BankInfoBypurchase_id = data;
     },
-  },
-  [BankInfoBypurchase_idAction.rejected]: (state, payload) => {
-    state.isLoading = false;
-    const {
-      payload: { data },
-    } = payload;
-    state.ErrorMessage = data;
+    [BankInfoBypurchase_idAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
   },
 });
 

@@ -32,7 +32,6 @@ function QuickAddCustomer(props) {
   const { customerhandleSubmit, values, errors, handleOnchange } = UseForm([]);
 
   const CustomerData = useSelector((state) => state?.CustomerList);
-  console.log("CustomerData)*(&", CustomerData.SucessMessage, errors);
   const navigate = useNavigate();
 
   const [state, setState] = React.useState({

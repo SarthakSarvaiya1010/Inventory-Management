@@ -147,7 +147,6 @@ function PaymentMode(props) {
               testData?.bill_amount
           ),
     };
-    console.log("data()&*&_)&", data);
 
     if (showchaque) {
       if (Payment?.chaque_no) {
@@ -189,7 +188,6 @@ function PaymentMode(props) {
   };
 
   const handleChangeDate = (event) => {
-    console.log(event.$d);
     setDateData(event.$d);
   };
   return (

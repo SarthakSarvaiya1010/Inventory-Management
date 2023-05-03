@@ -19,7 +19,6 @@ export const CustomerListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -34,7 +33,6 @@ export const CustomerAddAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -48,9 +46,7 @@ export const CustomerDelectListAction = createAsyncThunk(
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
       });
       return res;
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 );
 export const CustomerEditAction = createAsyncThunk(
@@ -63,7 +59,6 @@ export const CustomerEditAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -73,14 +68,12 @@ export const CustomerEditDataAction = createAsyncThunk(
   async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     const Customer_id = localStorage.getItem("customer_id");
-    console.log("Customer_id*()_", Customer_id);
     try {
       const res = await api.put(`/edit/customers/${Customer_id}`, data, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -95,7 +88,6 @@ export const CustomerDeleteAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -110,7 +102,6 @@ export const CustomerNameListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -125,7 +116,6 @@ export const PermanentCustomerDeleteAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }

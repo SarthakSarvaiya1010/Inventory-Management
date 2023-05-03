@@ -136,7 +136,7 @@ function CompanyDeleteList() {
         DialogText={"Are you sure you want to Delete this Company?"}
         finalDelete={finalDelete}
       />
-      {CompanyInfo?.DeleteCompanyInfo?.length ? (
+      {!CompanyInfo?.isLoading ? (
         <Container fixed sx={{ Width: 100 }}>
           <Header
             name={"Delete Company List"}

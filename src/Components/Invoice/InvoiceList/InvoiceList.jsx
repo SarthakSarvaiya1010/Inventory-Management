@@ -1,6 +1,5 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
-// import data from "../../../dummy/data.json";
 import Table from "../../../Helpers/Table/Table";
 import Header from "../../../Helpers/Header/Header";
 import Container from "@mui/material/Container";
@@ -32,7 +31,6 @@ function InvoiceList() {
   const [shorting, setShorting] = useState();
   const [print, setPrint] = useState();
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   const [disabled, setDisabled] = useState(false);
 
   InvoiceData.invoiceList.map((e) => {
@@ -46,17 +44,15 @@ function InvoiceList() {
   });
 
   useEffect(() => {
-    if (accessToken?.accessToken) {
-      dispatch(
-        InvoiceListAction({
-          limit: limit,
-          pageNumber: pageNumber,
-          orderByString: shorting,
-        })
-      );
-      localStorage.setItem("InvoiceEditPageData", JSON.stringify([{}]));
-    }
-  }, [accessToken?.accessToken, dispatch, pageNumber, shorting, limit]);
+    dispatch(
+      InvoiceListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+      })
+    );
+    localStorage.setItem("InvoiceEditPageData", JSON.stringify([{}]));
+  }, [dispatch, limit, pageNumber, shorting]);
   // eslint-disable-next-line array-callback-return
 
   const headalEdit = (data) => {
@@ -162,7 +158,6 @@ function InvoiceList() {
       dispatch(PrintInvoiceData(data));
     }
   }
-  console.log("InvoicePageData", InvoicePageData, InvoicePageData?.invoiceEdit);
   const headalPrint = (data) => {
     setPrint("PrintInvoiceData");
     dispatch(
@@ -242,10 +237,6 @@ function InvoiceList() {
                 color="success"
                 sx={{ fontSize: 16 }}
                 onClick={() => {
-                  localStorage.setItem(
-                    "NavigateItemName",
-                    "viewdeletedinvoice"
-                  );
                   navigate("/viewdeletedinvoice");
                 }}
               >

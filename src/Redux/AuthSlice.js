@@ -53,7 +53,6 @@ export const quickLogin = createAsyncThunk(
       const res = await api.post(`/quicklogin`, data);
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }

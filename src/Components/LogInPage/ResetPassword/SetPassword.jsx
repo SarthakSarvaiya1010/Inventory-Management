@@ -30,7 +30,6 @@ function SetPassword() {
 
   const dispatch = useDispatch();
 
-  console.log("SetPasswordMassge", SetPasswordMassge.isLoading);
   const LoginInfo = {
     password: password,
   };

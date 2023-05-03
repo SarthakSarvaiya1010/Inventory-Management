@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   userDeletepermanentAction,
-  userDelteListAction,
+  userDeleteListAction,
 } from "../../../Redux/UserReduk/UserThunk";
 import CircularProgress from "@mui/material/CircularProgress";
 import UsePagination from "../../../Helpers/pagination/Pagination";
@@ -29,7 +29,7 @@ function UserDeleteList() {
 
   useEffect(() => {
     dispatch(
-      userDelteListAction({
+      userDeleteListAction({
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
@@ -64,7 +64,7 @@ function UserDeleteList() {
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
       dispatch(
-        userDelteListAction({
+        userDeleteListAction({
           search: search,
           limit: limit,
           pageNumber: pageNumber,

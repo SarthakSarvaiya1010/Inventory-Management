@@ -148,13 +148,13 @@ const TaxSlice = createSlice({
 
       state.SuccessDeleteTaxMessage = data;
     },
-  },
-  [PermanentTaxDeleteAction.rejected]: (state, payload) => {
-    state.isLoading = false;
-    const {
-      payload: { data },
-    } = payload;
-    state.ErrorMessage = data;
+    [PermanentTaxDeleteAction.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.ErrorMessage = data;
+    },
   },
 });
 

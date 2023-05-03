@@ -19,7 +19,6 @@ export const InvoiceListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -42,13 +41,12 @@ export const GetinvoiceAddPageAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
 );
 export const GetinvoiceEditDataAction = createAsyncThunk(
-  "userAction/invoiceEdit",
+  "userAction/invoiceEditData",
   async (Invoice_id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
@@ -57,7 +55,6 @@ export const GetinvoiceEditDataAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -72,7 +69,6 @@ export const AddInvoiceData = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -95,7 +91,6 @@ export const GetDeletedInvoiceList = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -110,7 +105,6 @@ export const DeleteInvoice = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -125,7 +119,6 @@ export const PermanentDeleteInvoice = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -141,7 +134,6 @@ export const UpdateInvoiceData = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -156,7 +148,6 @@ export const PrintInvoiceData = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }

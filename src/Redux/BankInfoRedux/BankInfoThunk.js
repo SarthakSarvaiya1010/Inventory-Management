@@ -20,7 +20,6 @@ export const BankInfoListAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -41,7 +40,6 @@ export const AddBankInfoAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -50,14 +48,12 @@ export const BankInfoEditAction = createAsyncThunk(
   "userAction/BankInfoEdit",
   async (id, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
-    console.log("()&*()&", id);
     try {
       const res = await api.get(`/bankinfoedit/${id}`, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -79,7 +75,6 @@ export const BankInfoEditDataAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -95,7 +90,6 @@ export const BankInfoDeleteDataAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }
@@ -115,7 +109,6 @@ export const UpdateBalanceAction = createAsyncThunk(
       });
       return res;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error?.response);
     }
   }

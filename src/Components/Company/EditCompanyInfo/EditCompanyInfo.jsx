@@ -45,7 +45,7 @@ function EditCompanyInfo() {
     CompanyInfo,
     image
   );
-  console.log("errors)_(", errors);
+
   const hedalImgChage = (event) => {
     const [file] = event.target.files;
 

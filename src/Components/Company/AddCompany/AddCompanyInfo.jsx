@@ -24,7 +24,6 @@ function AddCompanyInfo() {
     test,
     image
   );
-  console.log("errors)_(", errors);
   const hedalImgChage = (event) => {
     const [file] = event.target.files;
 

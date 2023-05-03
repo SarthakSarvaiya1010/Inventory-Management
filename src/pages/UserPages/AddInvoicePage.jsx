@@ -48,7 +48,6 @@ function AddInvoicePage() {
       setOpenD(true);
     }
   }, [InvoicePageData?.ErrorMessage?.statusCode]);
-  console.log("InvoicePageData()*_)", InvoicePageData?.ErrorMessage?.message);
 
   var b64;
   if (InvoicePageData?.InvoicePdf?.invoicePdf) {

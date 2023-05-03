@@ -32,7 +32,7 @@ function AddCustomer() {
   const handleCancle = () => {
     navigate("/customer_list");
   };
-  console.log("values)(*", values);
+
   useEffect(() => {
     if (id) {
       dispatch(CustomerEditAction(id));

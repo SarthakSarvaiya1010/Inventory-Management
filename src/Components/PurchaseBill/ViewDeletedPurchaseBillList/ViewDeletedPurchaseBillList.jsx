@@ -26,7 +26,6 @@ function ViewDeletedPurchaseBillList() {
   let limit = 4;
   const [open, setOpen] = useState(false);
   const data = [];
-  console.log("PurchaseData", PurchaseData);
   const [pageNumber, setPageNumber] = useState();
   const [search, setSearch] = useState();
   const [shorting, setShorting] = useState();

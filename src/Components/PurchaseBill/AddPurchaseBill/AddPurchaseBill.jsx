@@ -269,7 +269,6 @@ function AddPurchaseBill(props) {
   }, [dispatch]);
 
   const handleChangePayment = (name, value) => {
-    console.log(name, value);
     setPayment(value);
   };
   useEffect(() => {

@@ -49,10 +49,6 @@ function ProductList() {
   });
 
   const headalEdit = (data) => {
-    localStorage.setItem(
-      "NavigateItemName",
-      `product/edit/${productData.productList[data - 1]?.product_id}`
-    );
     navigate(`/product/edit/${productData.productList[data - 1]?.product_id}`);
   };
 

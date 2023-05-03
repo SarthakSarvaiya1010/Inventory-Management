@@ -28,7 +28,6 @@ function AddBank() {
   const BankInfoData = useSelector((state) => state?.BankInfoData);
   const BankInfoDataEdit = BankInfoData?.BankInfoEdit;
   const { id } = params;
-  console.log("errors*&(", errors);
   useEffect(() => {
     if (id) {
       dispatch(BankInfoEditAction(id));
@@ -141,6 +140,7 @@ function AddBank() {
                       label="Balance"
                       autoComplete="off"
                       defaultValue={id ? BankInfoDataEdit?.balance : null}
+                      value={values?.balance}
                       onChange={(e) => handleOnchange(e)}
                     />
                     <p style={{ color: "red" }}>{errors?.balance}</p>
@@ -152,7 +152,7 @@ function AddBank() {
                           <Checkbox
                             onChange={(e) => handleOnchange(e)}
                             name="primary_bank"
-                            defaultChecked={BankInfoDataEdit?.primary_bank}
+                            defaultChecked={!!BankInfoDataEdit?.primary_bank}
                           />
                         }
                         label="Primary Bank"

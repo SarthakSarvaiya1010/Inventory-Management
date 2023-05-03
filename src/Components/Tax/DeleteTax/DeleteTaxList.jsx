@@ -22,7 +22,6 @@ function DeletedTaxList() {
   const [open, setOpen] = useState(false);
 
   const headalEdit = (data) => {
-    console.log("data", data, TaxData?.productDeletList[data - 1]);
     navigate(
       `/product/edit/${TaxData?.productDeletList[data - 1]?.product_id}`
     );
