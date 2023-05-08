@@ -29,7 +29,6 @@ function DeletedCustomerList() {
     if (
       CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode === "200"
     ) {
-      alert("Sucessfully Customer Deleted");
       window.location.reload();
     }
   }, [CustomerData?.SuccessPermanentCustomerDeleteData?.statusCode]);

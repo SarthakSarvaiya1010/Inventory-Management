@@ -46,7 +46,6 @@ function PurchaseBillList() {
   const [customer_data, setCustomer_data] = useState();
 
   const [shortingIcon, setShortingIcon] = useState("Sr.No");
-  const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
   PurchaseData?.PurchaseBillList?.map((e) => {
     let elements = {};
     elements["Sr.No"] = e.sr_no;
@@ -65,27 +64,17 @@ function PurchaseBillList() {
   };
 
   useEffect(() => {
-    if (accessToken?.accessToken) {
-      dispatch(
-        PurchaseBillListAction({
-          limit: limit,
-          pageNumber: pageNumber,
-          orderByString: shorting,
-          search: customer_data ? customer_data : null,
-          date: CustomerListData ? CustomerListData : null,
-        })
-      );
-      localStorage.setItem("PurchaseAddPageData", JSON.stringify([{}]));
-    }
-  }, [
-    accessToken?.accessToken,
-    dispatch,
-    pageNumber,
-    shorting,
-    limit,
-    customer_data,
-    CustomerListData,
-  ]);
+    dispatch(
+      PurchaseBillListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+        search: customer_data ? customer_data : null,
+        date: CustomerListData ? CustomerListData : null,
+      })
+    );
+    localStorage.setItem("PurchaseAddPageData", JSON.stringify([{}]));
+  }, [dispatch, pageNumber, shorting, limit, customer_data, CustomerListData]);
   useEffect(() => {
     dispatch(CustomerNameListAction());
   }, [dispatch]);

@@ -21,7 +21,7 @@ function TaxList() {
   const [search, setSearch] = useState();
   const [pageNumber, setPageNumber] = useState();
   const [shorting, setShorting] = useState(null);
-  const [shortingIcon, setShortingIcon] = useState("Sr.No");
+  const [shortingIcon, setShortingIcon] = useState("Sr. No");
   const [open, setOpen] = useState(false);
   let limit = 4;
   const data = [];
@@ -29,7 +29,7 @@ function TaxList() {
   // eslint-disable-next-line array-callback-return
   TaxData?.TaxList.map((e) => {
     let elements = {};
-    elements["Sr.No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
+    elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     elements["Tax Name"] = e.tax_name;
     elements["Tax Rate [ In % ]"] = e.tax_rate;
     elements["Tax Country"] = e.tax_country;
