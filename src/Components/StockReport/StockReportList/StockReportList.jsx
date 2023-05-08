@@ -54,8 +54,10 @@ function StockReportList() {
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
+        search: search || null,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, limit, pageNumber, shorting]);
 
   const onKeyDown = (e) => {
@@ -131,6 +133,7 @@ function StockReportList() {
               setSearch(e.target.value);
             }}
             onKeyDown={onKeyDown}
+            search={search}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack

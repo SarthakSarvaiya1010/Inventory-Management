@@ -39,8 +39,10 @@ function CompanyDeleteList() {
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
+        search: search || null,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, limit, pageNumber, shorting]);
   // eslint-disable-next-line array-callback-return
   CompanyInfo?.DeleteCompanyInfo?.map((e) => {
@@ -145,6 +147,7 @@ function CompanyDeleteList() {
               setSearch(e.target.value);
             }}
             onKeyDown={onKeyDown}
+            search={search}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
             <Stack

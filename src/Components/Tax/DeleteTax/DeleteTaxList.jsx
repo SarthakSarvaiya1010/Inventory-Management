@@ -20,6 +20,8 @@ function DeletedTaxList() {
   const data = [];
   const TaxData = useSelector((state) => state?.TaxData);
   const [open, setOpen] = useState(false);
+  const [shorting, setShorting] = useState(null);
+  const [shortingIcon, setShortingIcon] = useState("Sr.No");
 
   const headalEdit = (data) => {
     navigate(
@@ -41,8 +43,16 @@ function DeletedTaxList() {
   const [pageNumber, setPageNumber] = useState();
 
   useEffect(() => {
-    dispatch(TaxDelectListAction({ limit: limit, pageNumber: pageNumber }));
-  }, [dispatch, limit, pageNumber]);
+    dispatch(
+      TaxDelectListAction({
+        limit: limit,
+        pageNumber: pageNumber,
+        orderByString: shorting,
+        search: search || null,
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, limit, pageNumber, shorting]);
 
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -55,7 +65,44 @@ function DeletedTaxList() {
       );
     }
   };
-
+  const headalShorting = (data_a) => {
+    shortingIcon === data_a
+      ? setShortingIcon(`D ${data_a}`)
+      : setShortingIcon(data_a);
+    switch (data_a) {
+      case "Sr. No":
+        if (shorting === "sr_no") {
+          setShorting(null);
+        } else {
+          setShorting("sr_no");
+        }
+        return "done";
+      case "Tax Name":
+        if (shorting === "ASC/tax_name") {
+          setShorting("DESC/tax_name");
+        } else {
+          setShorting("ASC/tax_name");
+        }
+        return "done";
+      case "Tax Rate [ In % ]":
+        if (shorting === "ASC/tax_rate") {
+          setShorting("DESC/tax_rate");
+        } else {
+          setShorting("ASC/tax_rate");
+        }
+        return "done";
+      case "Tax Country":
+        if (shorting === "ASC/tax_country") {
+          setShorting("DESC/tax_country");
+        } else {
+          setShorting("ASC/tax_country");
+        }
+        return "done";
+      default:
+        setShorting(null);
+        return " state";
+    }
+  };
   const finalDelete = () => {
     setOpen(false);
     dispatch(PermanentTaxDeleteAction(TaxData?.TaxDeletList[open - 1]?.tax_id));
@@ -77,6 +124,7 @@ function DeletedTaxList() {
               setSearch(e.target.value);
             }}
             onKeyDown={onKeyDown}
+            search={search}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack
@@ -113,6 +161,8 @@ function DeletedTaxList() {
                 data={data}
                 headalDelete={setOpen}
                 headalEdit={headalEdit}
+                headalShorting={headalShorting}
+                ShortingHide={shortingIcon}
                 hide={true}
               />
             ) : (

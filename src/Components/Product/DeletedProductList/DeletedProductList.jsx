@@ -33,8 +33,10 @@ function DeletedProductList() {
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
+        search: search || null,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, limit, pageNumber, shorting]);
 
   const onKeyDown = (e) => {
@@ -123,47 +125,47 @@ function DeletedProductList() {
         finalDelete={finalDelete}
       />
       {!productData?.isLoading ? (
-        productData?.productDeletList?.length ? (
-          <Container fixed>
-            <Header
-              name={"Delete Product List"}
-              SearchBar={true}
-              searchHeadal={(e) => {
-                setSearch(e.target.value);
-              }}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
+        <Container fixed>
+          <Header
+            name={"Delete Product List"}
+            SearchBar={true}
+            searchHeadal={(e) => {
+              setSearch(e.target.value);
+            }}
+            onKeyDown={onKeyDown}
+            search={search}
+          />
+          <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              spacing={4}
+              sx={{ p: 4 }}
+            >
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/productList");
+                }}
               >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/productList");
-                  }}
-                >
-                  back
-                </Button>
+                back
+              </Button>
 
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/addproduct");
-                  }}
-                >
-                  add product
-                </Button>
-              </Stack>
-
+              <Button
+                variant="text"
+                color="success"
+                sx={{ fontSize: 16 }}
+                onClick={() => {
+                  navigate("/addproduct");
+                }}
+              >
+                add product
+              </Button>
+            </Stack>
+            {productData?.productDeletList?.length ? (
               <Table
                 data={data}
                 headalEdit={headalEdit}
@@ -172,72 +174,30 @@ function DeletedProductList() {
                 headalShorting={headalShorting}
                 ShortingHide={shortingIcon}
               />
-
-              <Stack
-                sx={{
-                  margin: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  padding: "20px  0 20px 20px",
-                }}
-              >
-                <UsePagination
-                  countNumbuer={Math.ceil(
-                    productData?.productDeletList[0]?.total_count / limit
-                  )}
-                  PageNumber={setPageNumber}
-                  currentPage={pageNumber}
-                />
-              </Stack>
-            </Container>
-          </Container>
-        ) : (
-          <Container fixed>
-            <Header
-              name={"Delete Product List"}
-              SearchBar={false}
-              searchHeadal={(e) => {
-                setSearch(e.target.value);
-              }}
-              onKeyDown={onKeyDown}
-            />
-            <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                spacing={4}
-                sx={{ p: 4 }}
-              >
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/productList");
-                  }}
-                >
-                  back
-                </Button>
-
-                <Button
-                  variant="text"
-                  color="success"
-                  sx={{ fontSize: 16 }}
-                  onClick={() => {
-                    navigate("/addproduct");
-                  }}
-                >
-                  add product
-                </Button>
-              </Stack>
+            ) : (
               <h1 style={{ textAlign: "center", color: "red", margin: 0 }}>
                 No any record found of Deleted Product
               </h1>
-            </Container>
+            )}
+            <Stack
+              sx={{
+                margin: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                padding: "20px  0 20px 20px",
+              }}
+            >
+              <UsePagination
+                countNumbuer={Math.ceil(
+                  productData?.productDeletList[0]?.total_count / limit
+                )}
+                PageNumber={setPageNumber}
+                currentPage={pageNumber}
+              />
+            </Stack>
           </Container>
-        )
+        </Container>
       ) : (
         <Stack
           sx={{ color: "grey.500", height: "80vh" }}

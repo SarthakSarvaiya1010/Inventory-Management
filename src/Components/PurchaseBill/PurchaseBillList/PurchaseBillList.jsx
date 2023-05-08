@@ -186,6 +186,7 @@ function PurchaseBillList() {
               setSearch(e.target.value);
             }}
             onKeyDown={onKeyDown}
+            search={search}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack

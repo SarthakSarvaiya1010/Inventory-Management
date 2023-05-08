@@ -118,6 +118,7 @@ function AddCustomer() {
                       defaultValue={id ? Customer_data?.mobile_no : null}
                     />
                     <p style={{ color: "red" }}>{errors?.mobile_no}</p>
+                    <br />
                     <TextField
                       error={errors?.email ? true : null}
                       required

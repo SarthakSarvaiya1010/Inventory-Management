@@ -9,9 +9,10 @@ import { Transition } from "../../Helpers/BootstrapButton/BootstrapButton";
 import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
+import { userLogout } from "../../Redux/AuthSlice";
 
 const drawerWidth = 240;
 
@@ -44,6 +45,7 @@ export default function Header(props) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
+  const dispatch = useDispatch(null);
   const { openManu, setOpenManu } = props;
   useEffect(() => {
     if (AuthErrorData?.AuthError?.message === "Authorization error") {
@@ -51,6 +53,16 @@ export default function Header(props) {
       localStorage.clear();
     }
   }, [AuthErrorData?.AuthError?.message, navigate]);
+  useEffect(() => {
+    if (AuthErrorData?.SucessMessage?.statusCode === "200") {
+      window.localStorage.clear();
+      showToastMessage();
+      setTimeout(() => {
+        navigate("/");
+        window.location.reload();
+      }, 1000);
+    }
+  }, [AuthErrorData?.SucessMessage?.statusCode, navigate]);
   useEffect(() => {
     if (successLoginData?.LoginData?.statusCode === "200") {
       setTimeout(() => {
@@ -118,12 +130,7 @@ export default function Header(props) {
                   component="div"
                   sx={{ marginLeft: "15px", cursor: "pointer" }}
                   onClick={() => {
-                    showToastMessage();
-                    window.localStorage.clear();
-                    setTimeout(() => {
-                      navigate("/");
-                      window.location.reload();
-                    }, 500);
+                    dispatch(userLogout());
                   }}
                 >
                   Log out

@@ -49,9 +49,11 @@ function InvoiceList() {
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
+        search: search || null,
       })
     );
     localStorage.setItem("InvoiceEditPageData", JSON.stringify([{}]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, limit, pageNumber, shorting]);
   // eslint-disable-next-line array-callback-return
 
@@ -213,6 +215,7 @@ function InvoiceList() {
               setSearch(e.target.value);
             }}
             onKeyDown={onKeyDown}
+            search={search}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack

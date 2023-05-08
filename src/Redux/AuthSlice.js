@@ -6,6 +6,7 @@ const initialState = {
   LoginData: [],
   ResetPasswordMassge: [],
   setPassword: [],
+  SucessMessage: [],
   FailedLoginData: [],
   AuthError: [],
   passwordLinkStatus: [],
@@ -68,6 +69,20 @@ export const resetPasswordlinkcheck = createAsyncThunk(
     }
   }
 );
+export const userLogout = createAsyncThunk(
+  "userAction/userLogout",
+  async (_, { rejectWithValue }, thunkAPI) => {
+    const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
+    try {
+      const res = await api.get(`/logout`, {
+        headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+      });
+      return res;
+    } catch (error) {
+      return rejectWithValue(error?.response);
+    }
+  }
+);
 
 const UserLoginSlice = createSlice({
   name: "userlogin",
@@ -88,11 +103,7 @@ const UserLoginSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.FailedLoginData = payload?.payload?.response?.data;
-      } else {
-        state.LoginData = data;
-      }
+      state.LoginData = data;
     },
     [resetPassword.pending]: (state) => {
       state.isLoading = true;
@@ -102,11 +113,7 @@ const UserLoginSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.FailedLoginData = payload?.payload?.response?.data;
-      } else {
-        state.ResetPasswordMassge = data;
-      }
+      state.ResetPasswordMassge = data;
     },
     [resetPassword.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -123,11 +130,7 @@ const UserLoginSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-      if (payload?.payload?.name === "AxiosError") {
-        state.FailedLoginData = payload?.payload?.response?.data;
-      } else {
-        state.setPassword = data;
-      }
+      state.setPassword = data;
     },
     [setPassword.rejected]: (state, payload) => {
       state.isLoading = false;
@@ -162,14 +165,26 @@ const UserLoginSlice = createSlice({
       const {
         payload: { data },
       } = payload;
-
-      if (payload?.payload?.name === "AxiosError") {
-        state.FailedLoginData = payload?.payload?.response?.data;
-      } else {
-        state.passwordLinkStatus = data;
-      }
+      state.passwordLinkStatus = data;
     },
     [resetPasswordlinkcheck.rejected]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.FailedLoginData = data;
+    },
+    [userLogout.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [userLogout.fulfilled]: (state, payload) => {
+      state.isLoading = false;
+      const {
+        payload: { data },
+      } = payload;
+      state.SucessMessage = data;
+    },
+    [userLogout.rejected]: (state, payload) => {
       state.isLoading = false;
       const {
         payload: { data },

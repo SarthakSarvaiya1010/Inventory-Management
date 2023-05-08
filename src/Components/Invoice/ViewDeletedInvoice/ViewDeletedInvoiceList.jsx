@@ -64,8 +64,10 @@ export default function ViewDeletedInvoiceList() {
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
+        search: search || null,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, limit, pageNumber, shorting]);
 
   const onKeyDown = (e) => {

@@ -54,10 +54,6 @@ function AddUser() {
     image
   );
 
-  const handleCancle = () => {
-    navigate("/userlist");
-  };
-
   const hedalImgChage = (event) => {
     const [file] = event.target.files;
 
@@ -295,7 +291,9 @@ function AddUser() {
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={() => handleCancle()}
+                  onClick={() => {
+                    navigate("/userlist");
+                  }}
                 >
                   cancel
                 </Button>

@@ -33,12 +33,14 @@ function ProductList() {
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
+        search: search || null,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, limit, pageNumber, shorting]);
 
   // eslint-disable-next-line array-callback-return
-  productData.productList.map((e) => {
+  productData?.productList?.map((e) => {
     let elements = {};
     elements["Sr. No"] = e.sr_no < 10 ? ` 0${e.sr_no}` : e.sr_no;
     elements["Product Name"] = e.product_name;
@@ -132,6 +134,7 @@ function ProductList() {
               setSearch(e.target.value);
             }}
             onKeyDown={onKeyDown}
+            search={search}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2", Width: 150 }}>
             <Stack

@@ -52,8 +52,10 @@ function TaxList() {
         limit: limit,
         pageNumber: pageNumber,
         orderByString: shorting,
+        search: search || null,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, limit, pageNumber, shorting]);
 
   const onKeyDown = (e) => {
@@ -64,7 +66,9 @@ function TaxList() {
     }
   };
   const headalShorting = (data_a) => {
-    shortingIcon === data_a ? setShortingIcon(null) : setShortingIcon(data_a);
+    shortingIcon === data_a
+      ? setShortingIcon(`D ${data_a}`)
+      : setShortingIcon(data_a);
     switch (data_a) {
       case "Sr. No":
         if (shorting === "sr_no") {
@@ -74,31 +78,31 @@ function TaxList() {
         }
         return "done";
       case "Tax Name":
-        if (shorting === "tax_name") {
-          setShorting(null);
+        if (shorting === "ASC/tax_name") {
+          setShorting("DESC/tax_name");
         } else {
-          setShorting("tax_name");
+          setShorting("ASC/tax_name");
         }
         return "done";
       case "Tax Rate [ In % ]":
-        if (shorting === "tax_rate") {
-          setShorting(null);
+        if (shorting === "ASC/tax_rate") {
+          setShorting("DESC/tax_rate");
         } else {
-          setShorting("tax_rate");
+          setShorting("ASC/tax_rate");
         }
         return "done";
       case "Tax Country":
-        if (shorting === "tax_country") {
-          setShorting(null);
+        if (shorting === "ASC/tax_country") {
+          setShorting("DESC/tax_country");
         } else {
-          setShorting("tax_country");
+          setShorting("ASC/tax_country");
         }
         return "done";
       case "Active":
-        if (shorting === "isactive") {
-          setShorting(null);
+        if (shorting === "ASC/isactive") {
+          setShorting("DESC/isactive");
         } else {
-          setShorting("isactive");
+          setShorting("ASC/isactive");
         }
         return "done";
       default:
@@ -123,6 +127,7 @@ function TaxList() {
               setSearch(e.target.value);
             }}
             onKeyDown={onKeyDown}
+            search={search}
           />
           <Container fixed sx={{ backgroundColor: "#EAEFF2" }}>
             <Stack

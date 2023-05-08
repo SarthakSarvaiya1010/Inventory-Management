@@ -39,11 +39,19 @@ export const TaxEditAction = createAsyncThunk(
 );
 export const TaxDelectListAction = createAsyncThunk(
   "userAction/TaxDelectList",
-  async (_, { rejectWithValue }, thunkAPI) => {
+  async (data, { rejectWithValue }, thunkAPI) => {
     const accessToken = JSON.parse(window.localStorage.getItem("LoginData"));
     try {
       const res = await api.get(`/delete/tax`, {
         headers: { Authorization: `Bearer ${accessToken?.accessToken}` },
+        params: data
+          ? {
+              searchKeyword: data.search ? data.search : null,
+              limit: data.limit,
+              page: data.pageNumber,
+              orderByString: data.orderByString,
+            }
+          : null,
       });
       return res;
     } catch (error) {
